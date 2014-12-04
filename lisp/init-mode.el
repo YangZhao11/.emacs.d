@@ -71,6 +71,13 @@
   (let ((ess-S-assign " %>% ")
         (ess-smart-S-assign-key "\\"))
     (ess-smart-S-assign)))
+(defun ess-smart-tpipe ()
+  "Similar to ess-smart-S-assign, but insert %T>% instead."
+  (interactive)
+  (let ((ess-S-assign " %T>% ")
+        (ess-smart-S-assign-key "?"))
+    (ess-smart-S-assign)))
+
 
 (defun ess-debug-next-or-eval-line ()
   (interactive)
@@ -83,10 +90,12 @@
 (defun z-ess-mode-symbols ()
   (when (fboundp 'prettify-symbols-mode) ; 24.4 needed
     (setq prettify-symbols-alist
-          (append '(("%>%" . ?↦) ;;⟼
-                    ;;("<-" . ?⟶) ("->" . ?⟵)
-                    ;;("->>" . ?⇒) ;;⟹
-                    ;;("<<-" . ?⇐) ;;⟸
+          (append '(("%>%" . ?↦)
+                    ("%T>%" . ?↧) ;↴
+                    ("%<>%" . ?⇄) ;⇋⇌⇆
+                    ("%$%" . ?⊙)  ;⊕
+                    ("<=" . ?≤)
+                    (">=" . ?≥)
                     ("%in%" . ?∈)
                     ("%*%" . ?×)
                     ("function" ?ƒ))
@@ -100,6 +109,7 @@
     'ess-eval-function-or-paragraph-and-step)
   (define-key ess-mode-map (kbd "C-x <f8>") 'ess-tracebug)
   (define-key ess-mode-map (kbd "\\") 'ess-smart-pipe)
+  (define-key ess-mode-map (kbd "?") 'ess-smart-tpipe)
   (setq ess-tab-complete-in-script t)
   (whitespace-mode 1)
   (z-ess-mode-symbols))

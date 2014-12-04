@@ -1,7 +1,10 @@
 ; -*- coding: utf-8 -*-
 (setq inhibit-startup-screen t)
 (server-start)
-(push "~/.emacs.d/lisp" load-path)
+
+(dolist (dir '("/usr/share/emacs/site-lisp/google" "~/.emacs.d/lisp"))
+  (when (file-exists-p dir)
+    (push dir load-path)))
 
 ;; make elpa packages available
 (require 'package)
@@ -15,6 +18,7 @@
   (require 'google-imports)
   (require 'google-browse)
   (require 'google-go)
+  (require 'google-cc-extras)
 
   ;; code search
   (global-set-key (kbd "M-.") 'codesearch-search)
@@ -53,6 +57,8 @@
       comint-scroll-show-maximum-output nil)
 (temp-buffer-resize-mode 1)
 (fset 'yes-or-no-p 'y-or-n-p)
+(set-frame-font "Menlo-11" 't 't)
+
 ;;(electric-indent-mode t) ; not needed with autopair
 
 ;; --------------------------------------------------
