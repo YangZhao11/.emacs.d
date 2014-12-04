@@ -1,0 +1,8 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: enum
+# key: enum
+# --
+enum ${1:Enum} {
+     ${2:UNKNOWN} = 0;
+     $0
+}

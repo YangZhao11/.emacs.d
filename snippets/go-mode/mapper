@@ -1,0 +1,7 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: mapper
+# key: mapper
+# --
+func Mapper(mio mr.MapIO, ${1:s *session.Session}) {
+  $0
+}

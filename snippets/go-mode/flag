@@ -1,0 +1,5 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: flag
+# key: flag
+# --
+${1:flagVar} = flag.${2:String}("${1:$(s-snake-case yas-text)}", ${3:"Default"}, "${4:doc}")

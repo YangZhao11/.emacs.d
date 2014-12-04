@@ -1,0 +1,5 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: prop
+# key: prop
+# --
+prop.table($0)

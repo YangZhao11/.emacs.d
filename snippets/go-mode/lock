@@ -1,0 +1,6 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: lock
+# key: lock
+# --
+${1:var}.Lock()
+defer ${1}.Unlock()

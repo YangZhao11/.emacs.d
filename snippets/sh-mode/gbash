@@ -1,0 +1,15 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: gbash
+# key: gbash
+# --
+source gbash.sh || exit
+set -e
+
+DEFINE_bool verbose false "Show commands running."
+
+gbash::init_google "$@"
+
+if (( FLAGS_verbose )); then
+  set -x
+fi
+$0

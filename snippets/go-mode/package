@@ -1,0 +1,6 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: package
+# key: package
+# --
+// Package ${1:p} ${0:implements a lingo job.}
+package $1

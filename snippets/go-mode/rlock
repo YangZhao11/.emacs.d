@@ -1,0 +1,6 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: rlock
+# key: rlock
+# --
+${1:var}.RLock()
+defer ${1}.RUnlock()

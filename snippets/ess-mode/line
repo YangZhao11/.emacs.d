@@ -1,0 +1,6 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: line
+# key: line
+# condition: (string= ess-dialect "R")
+# --
+geom_line(${1:aes($2)}$0)

@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: func
+# key: func
+# --
+func ${1:$$(if (not yas-modified-p) "" (concat "(" yas-text ")"))}${2:Fun}(${3:args}) ${4:bool} {
+     $0
+}

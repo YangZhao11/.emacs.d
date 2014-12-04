@@ -1,0 +1,7 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: init
+# key: init
+# --
+def __init__($1):
+    ${1:$(mapconcat (function (lambda (x) (if (string= x "") "" (concat "    self." x " = " x)))) (split-string yas-text ",") "\n")}
+    $0

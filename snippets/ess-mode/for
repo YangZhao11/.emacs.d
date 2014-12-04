@@ -1,0 +1,8 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: for
+# key: for
+# condition: (string= ess-dialect "R")
+# --
+for ($1 in $2) {
+    $0
+}

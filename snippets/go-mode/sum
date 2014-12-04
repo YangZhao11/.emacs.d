@@ -1,0 +1,5 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: sum
+# key: sum
+# --
+${1:datacube} = table.Sum("${1:$(s-snake-case yas-text)}", ${2:&Key\{\}}, ${3:&Val{}})

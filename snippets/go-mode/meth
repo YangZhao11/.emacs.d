@@ -1,0 +1,8 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: meth
+# key: meth
+# expand-env: ((z-method-owner (z-re-backward "func (\\([^()]*\\))" 1)))
+# --
+func (${1:`z-method-owner`}) ${2:Method}(${3:args}) ${4:bool} {
+     $0
+}

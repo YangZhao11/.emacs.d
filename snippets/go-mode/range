@@ -1,0 +1,7 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: range
+# key: range
+# --
+for ${1:_}, ${2:v} := range ${3:array} {
+    $0
+}

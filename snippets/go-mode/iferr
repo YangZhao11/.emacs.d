@@ -1,0 +1,7 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: iferr
+# key: iferr
+# --
+if ${1:err := ${2:Do()}; }err != nil {
+   $0
+}

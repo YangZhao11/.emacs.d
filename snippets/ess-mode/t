@@ -1,0 +1,6 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: t
+# key: t
+# condition: (string= ess-dialect "R")
+# --
+transform($0)

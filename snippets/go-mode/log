@@ -1,0 +1,5 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: log
+# key: log
+# --
+log.${1:Infof$(yas-choose-value '("Errorf" "Fatalf" "Warningf" "Infof"))}("${2:%v}"$0)

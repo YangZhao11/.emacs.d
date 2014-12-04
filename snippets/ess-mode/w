@@ -1,0 +1,6 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: w
+# key: w
+# condition: (string= ess-dialect "R")
+# --
+with($0)

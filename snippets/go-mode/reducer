@@ -1,0 +1,11 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: reducer
+# key: reducer
+# --
+func $1Reducer(re table.ReduceEmitter, key ${2:string}, next func(*${3:*pb}) bool) \{
+     var val $3
+     for next(&val) \{
+         $0
+     \}
+     re.Emit()
+\}

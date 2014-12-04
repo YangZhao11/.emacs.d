@@ -1,0 +1,6 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: f
+# key: f
+# condition: (string= ess-dialect "R")
+# --
+filter($0)

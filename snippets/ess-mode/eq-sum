@@ -1,0 +1,5 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: =sum
+# key: =sum
+# --
+$1 = sum(${1:s})

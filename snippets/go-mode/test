@@ -1,0 +1,20 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: test
+# key: test
+# --
+func Test${1:$(upcase-initials yas-text)}(t *testing.T) {
+     var tests = []struct {
+         ${2:param} ${3:string}
+         want ${4:int}
+     }{
+        {
+        },
+     }
+
+     for _, test := range tests {
+         got := ${1:f}($0)
+         if ${5:$$(yas-choose-value '("got != test.want" "!reflect.DeepEqual(got, test.want)"))} {
+            t.Errorf("For %v, got %v, want %v", test.$2, got, test.want)
+         }
+     }
+}

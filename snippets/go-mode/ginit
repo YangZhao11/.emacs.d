@@ -1,0 +1,7 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: ginit
+# key: ginit
+# --
+google.RegisterInit(func() {
+  $0
+})

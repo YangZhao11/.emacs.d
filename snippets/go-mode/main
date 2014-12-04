@@ -1,0 +1,7 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: main
+# key: main
+# --
+func main() {
+     ${1:google.Init()}$0
+}

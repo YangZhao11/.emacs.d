@@ -1,0 +1,9 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: spec
+# key: spec
+# --
+spec.Default.Inputs = []spec.Input\{\{
+    Source: "${1:logs:processed/sessions:all.${2:sessions$(yas-choose-value '("sessions" "all-sessions" "unfiltered-sessions"))}}",
+    Access: "${3:default}",${4:
+    Sampled: true,}
+\}\}
