@@ -15,6 +15,7 @@
 (package-install 'ido-ubiquitous)
 (package-install 'register-channel)
 (package-install 'ido-vertical-mode)
+(package-install 'magit)
 (package-install 'goto-chg)
 
 (add-to-list 'package-archives
