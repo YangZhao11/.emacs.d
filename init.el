@@ -2,30 +2,19 @@
 (setq inhibit-startup-screen t)
 (server-start)
 
-(dolist (dir '("/usr/share/emacs/site-lisp/google" "~/.emacs.d/lisp"))
-  (when (file-exists-p dir)
-    (push dir load-path)))
-
-;; make elpa packages available
+;; Make elpa packages available
 (require 'package)
 (setq package-enable-at-startup nil)
 (package-initialize)
 
-;; --------------------------------------------------
-;; google specific settings
-(when (require 'google nil t)
-  (setq p4-use-p4config-exclusively t)
-  (require 'google-imports)
-  (require 'google-browse)
-  (require 'google-go)
-  (require 'google-cc-extras)
-
-  ;; code search
-  (global-set-key (kbd "M-.") 'codesearch-search)
-  (global-set-key (kbd "M-,") 'google-open-in-code-search)
-
-  (when (fboundp 'autogen)
-    (add-hook 'find-file-not-found-hooks 'autogen)))
+;; Load platform specific inits, including init-gnu-linux /
+;; init-darwin, init-ns / init-x, init-hostname.
+(push "~/.emacs.d/lisp" load-path)
+(dolist (sub (list
+              (replace-regexp-in-string "/" "-" (symbol-name system-type))
+              (symbol-name window-system)
+              (replace-regexp-in-string "\\..*" "" system-name)))
+  (load (concat "init-" sub) t))
 
 ;; --------------------------------------------------
 ;; Defaults
@@ -39,12 +28,9 @@
       require-final-newline t
       tramp-default-method "ssh"
       text-scale-mode-step 1.1)
-(setq ansi-color-names-vector ["#3F3F3F" "#CC9393" "#7F9F7F" "#F0DFAF" "#8CD0D3" "#DC8CC3" "#93E0E3" "#DCDCCC"])
-(when (eq window-system 'x)
-  (setq browse-url-browser-function 'browse-url-generic
-        browse-url-generic-program "google-chrome"))
+;;(setq ansi-color-names-vector ["#3F3F3F" "#CC9393" "#7F9F7F" "#F0DFAF" "#8CD0D3" "#DC8CC3" "#93E0E3" "#DCDCCC"])
 
-(menu-bar-mode (if (eq window-system 'ns) 1 -1)) ; Mac always has menu bar
+(menu-bar-mode (if (eq system-type 'darwin) 1 -1)) ; Mac always has menu bar
 (tool-bar-mode -1)
 (set-scroll-bar-mode nil)
 (mouse-wheel-mode 1)
@@ -57,9 +43,6 @@
       comint-scroll-show-maximum-output nil)
 (temp-buffer-resize-mode 1)
 (fset 'yes-or-no-p 'y-or-n-p)
-(set-frame-font "Menlo-11" 't 't)
-
-;;(electric-indent-mode t) ; not needed with autopair
 
 ;; --------------------------------------------------
 (require 's)
@@ -83,7 +66,6 @@
       (match-string count))))
 
 ;; --------------------------------------------------
-
 ;; Load subfiles
 
 (load "init-buffer")
