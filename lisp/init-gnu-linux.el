@@ -1,6 +1,6 @@
 ; -*- coding: utf-8 -*-
 ;; needed for self-compiled emacs.
-(push "/usr/share/emacs/site-lisp/google" load-path)
+(add-to-list 'load-path "/usr/share/emacs/site-lisp/google")
 
 ;; --------------------------------------------------
 ;; google specific settings

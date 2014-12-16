@@ -1,0 +1,7 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: eventf
+# key: eventf
+# --
+func event${1:fun}(${2:e *session.Event}) ${3:bool} {
+     $0
+}
