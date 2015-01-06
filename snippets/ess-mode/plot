@@ -1,0 +1,5 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: plot
+# key: plot
+# --
+ggplot(aes(${1:x = date}$0))

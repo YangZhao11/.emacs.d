@@ -93,7 +93,8 @@
           (append '(("%>%" . ?↦)
                     ("%T>%" . ?↧) ;↴
                     ("%<>%" . ?⇄) ;⇋⇌⇆
-                    ;("%$%" . ?⊙)  ;⊕
+                    ;("%$%" . ?⊙)
+                    ("%+%" . ?⊕)        ; ggplot2 has this
                     ("<=" . ?≤)
                     (">=" . ?≥)
                     ("%in%" . ?∈)
@@ -109,7 +110,6 @@
     'ess-eval-function-or-paragraph-and-step)
   (define-key ess-mode-map (kbd "C-x <f8>") 'ess-tracebug)
   (define-key ess-mode-map (kbd "\\") 'ess-smart-pipe)
-  (define-key ess-mode-map (kbd "?") 'ess-smart-tpipe)
   (setq ess-tab-complete-in-script t)
   (whitespace-mode 1)
   (z-ess-mode-symbols))
@@ -127,7 +127,6 @@
   (define-key inferior-ess-mode-map [f7] 'ess-show-R-traceback)
   (define-key inferior-ess-mode-map (kbd "C-x <f8>") 'ess-tracebug)
   (define-key inferior-ess-mode-map (kbd "\\") 'ess-smart-pipe)
-  (define-key inferior-ess-mode-map (kbd "?") 'ess-smart-tpipe)
   (z-ess-mode-symbols))
 (add-hook 'inferior-ess-mode-hook 'z-inferior-ess-mode-hook)
 
