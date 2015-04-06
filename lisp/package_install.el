@@ -17,6 +17,7 @@
 (package-install 'ido-vertical-mode)
 (package-install 'magit)
 (package-install 'goto-chg)
+(package-install 'ace-jump-mode)
 
 (add-to-list 'package-archives
              '("GELPA" . "http://internal-elpa.appspot.com/packages/"))
