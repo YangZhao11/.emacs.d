@@ -4,7 +4,12 @@
 (setq mc/cmds-to-run-for-all
       '(
         autopair-insert-opening
+        autopair-insert-or-skip-quote
+        autopair-newline
+        autopair-skip-close-maybe
         delete-horizontal-space
+        ess-smart-comma
+        ess-yank
         go-mode-insert-and-indent
         ))
 

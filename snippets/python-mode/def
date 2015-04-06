@@ -1,0 +1,14 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: def
+# key: def
+# --
+def ${1:Function}(${2:args}):
+  """$1 $0does something useful.
+
+  More description.
+
+  Args:
+    ${2:$(mapconcat (function (lambda (x) (let ((x (s-trim x)))(if (string= x "") "" (concat "    " x ": "))))) (split-string yas-text ",") "\n")}
+
+  Returns:
+  """

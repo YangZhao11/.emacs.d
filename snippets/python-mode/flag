@@ -1,0 +1,5 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: flag
+# key: flag
+# --
+flags.DEFINE_${1:string}('${2:name}', ${3:'default'}, '${4:doc}')
