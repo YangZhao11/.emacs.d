@@ -146,12 +146,13 @@ storing current frame configuration to register 8."
 (define-key register-channel-mode-map (kbd "M-g 8") 'all-frames-to-messages-buffer)
 
 (require 'ace-jump-mode)
+(setq ace-jump-mode-scope 'frame)
 (global-set-key (kbd "M-g M-g") 'ace-jump-mode)
 (global-set-key (kbd "M-g g") 'ace-jump-mode)
-(global-set-key (kbd "M-g M-h") 'ace-jump-line-mode)
-(global-set-key (kbd "M-g h") 'ace-jump-line-mode)
-(global-set-key (kbd "M-g M-f") 'ace-jump-char-mode)
-(global-set-key (kbd "M-g f") 'ace-jump-char-mode)
+(global-set-key (kbd "M-g M-h") 'ace-jump-char-mode)
+(global-set-key (kbd "M-g h") 'ace-jump-char-mode)
+(global-set-key (kbd "M-g M-j") 'ace-jump-line-mode)
+(global-set-key (kbd "M-g j") 'ace-jump-line-mode)
 (global-set-key (kbd "M-g l") 'goto-line)
 (global-set-key (kbd "M-g M-l") 'goto-line)
 
