@@ -156,6 +156,9 @@ storing current frame configuration to register 8."
 (global-set-key (kbd "M-g l") 'goto-line)
 (global-set-key (kbd "M-g M-l") 'goto-line)
 
+(require 'smartscan)
+(global-smartscan-mode 1)
+
 (defun z-maybe-recompile (&optional arg)
   "recompile if possible"
   (interactive "P")
