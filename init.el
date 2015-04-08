@@ -35,7 +35,7 @@
 (set-scroll-bar-mode nil)
 (mouse-wheel-mode 1)
 (blink-cursor-mode 1)
-;(transient-mark-mode 1)
+(transient-mark-mode -1)
 (global-font-lock-mode 't)
 (show-paren-mode 't)
 (ansi-color-for-comint-mode-on)
