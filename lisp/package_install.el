@@ -19,6 +19,8 @@
 (package-install 'goto-chg)
 (package-install 'ace-jump-mode)
 (package-install 'smartscan)
+(package-install 'ace-jump-zap)
+(package-install 'ace-window)
 
 (add-to-list 'package-archives
              '("GELPA" . "http://internal-elpa.appspot.com/packages/"))

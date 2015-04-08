@@ -11,6 +11,7 @@
         ess-smart-comma
         ess-yank
         go-mode-insert-and-indent
+        kill-sexp
         ))
 
 (setq mc/cmds-to-run-once

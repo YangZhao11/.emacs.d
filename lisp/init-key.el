@@ -47,47 +47,47 @@ other buffer in other window."
 (global-set-key [(shift f12)] 'z-next-buffer-next-window)
 
 (global-set-key (kbd "C-x 9") 'delete-other-windows-vertically)
-(global-set-key (kbd "M-9") (lambda () (interactive)
-                              (other-window -1)))
-(global-set-key (kbd "M-0") 'other-window)
-(defun transpose-windows (arg)
-   "Transpose the buffers shown in two windows."
-   (interactive "p")
-   (let ((selector (if (>= arg 0) 'next-window 'previous-window)))
-     (while (/= arg 0)
-       (let ((this-win (window-buffer))
-             (next-win (window-buffer (funcall selector))))
-         (set-window-buffer (selected-window) next-win)
-         (set-window-buffer (funcall selector) this-win)
-         (select-window (funcall selector)))
-       (setq arg (if (plusp arg) (1- arg) (1+ arg))))))
-(global-set-key (kbd "M-(") (lambda () (interactive)
-                              (transpose-windows -1)))
-(global-set-key (kbd "M-)") 'transpose-windows)
 
-;; set frame font to "Monospace-nn", where nn is the key pressed last
-;; with a lookup in font-size-by-digit. That is, if invoked by "C-x
-;; C-1" frame font will be set to "Monospace-8".
-(setq font-size-by-digit [30 8 9 10 11 12 14 16 19 24])
-(setq frame-font-name-format "Liberation Mono-%d")
-(defun set-frame-font-size-self-digit (&optional arg)
-  (interactive "p")
-  (let* ((char (if (integerp last-command-event)
-                   last-command-event
-                 (get last-command-event 'ascii-character)))
-         (digit (- (logand char ?\177) ?0))
-         (font-size (if (and (> arg 5) (<= arg 30)) arg
-                      (elt font-size-by-digit digit)))
-         (font-name (format frame-font-name-format font-size)))
-    (set-frame-font font-name t)
-    (message "Frame font set to %s" font-name)))
+;; (global-set-key (kbd "M-9") (lambda () (interactive)
+;;                               (other-window -1)))
+;; (global-set-key (kbd "M-0") 'other-window)
+;; (defun transpose-windows (arg)
+;;    "Transpose the buffers shown in two windows."
+;;    (interactive "p")
+;;    (let ((selector (if (>= arg 0) 'next-window 'previous-window)))
+;;      (while (/= arg 0)
+;;        (let ((this-win (window-buffer))
+;;              (next-win (window-buffer (funcall selector))))
+;;          (set-window-buffer (selected-window) next-win)
+;;          (set-window-buffer (funcall selector) this-win)
+;;          (select-window (funcall selector)))
+;;        (setq arg (if (plusp arg) (1- arg) (1+ arg))))))
+;; (global-set-key (kbd "M-(") (lambda () (interactive)
+;;                               (transpose-windows -1)))
+;; (global-set-key (kbd "M-)") 'transpose-windows)
 
-;; This is not used now
-(defun toggle-variable (var)
-  "toggles boolean variable"
-  (interactive "vToggle variable: ")
-  (set var (not (symbol-value var)))
-  (message "%s set to %s" var (symbol-value var)))
+;; ;; Set frame font to "Monospace-nn", where nn is the key pressed last
+;; ;; with a lookup in font-size-by-digit. That is, if invoked by "C-x
+;; ;; C-1" frame font will be set to "Monospace-8".
+;; (setq font-size-by-digit [30 8 9 10 11 12 14 16 19 24])
+;; (setq frame-font-name-format "Liberation Mono-%d")
+;; (defun set-frame-font-size-self-digit (&optional arg)
+;;   (interactive "p")
+;;   (let* ((char (if (integerp last-command-event)
+;;                    last-command-event
+;;                  (get last-command-event 'ascii-character)))
+;;          (digit (- (logand char ?\177) ?0))
+;;          (font-size (if (and (> arg 5) (<= arg 30)) arg
+;;                       (elt font-size-by-digit digit)))
+;;          (font-name (format frame-font-name-format font-size)))
+;;     (set-frame-font font-name t)
+;;     (message "Frame font set to %s" font-name)))
+
+;; (defun toggle-variable (var)
+;;   "toggles boolean variable"
+;;   (interactive "vToggle variable: ")
+;;   (set var (not (symbol-value var)))
+;;   (message "%s set to %s" var (symbol-value var)))
 
 ;; White space handling. White space mode is more comprehensive, but
 ;; has the annoying bug(in emacs 23.1) of showing trailing white space font for
@@ -138,23 +138,26 @@ other buffer in other window."
   "make all frames display the *Messages* buffer only after
 storing current frame configuration to register 8."
   (interactive)
-  (frame-configuration-to-register ?8)
+  (frame-configuration-to-register ?9)
   (dolist (f (frame-list))
     (let ((w (frame-first-window f)))
       (delete-other-windows w)
       (set-window-buffer w "*Messages*"))))
-(define-key register-channel-mode-map (kbd "M-g 8") 'all-frames-to-messages-buffer)
+(define-key register-channel-mode-map (kbd "M-g 9") 'all-frames-to-messages-buffer)
 
 (require 'ace-jump-mode)
+(global-set-key (kbd "C-j") 'ace-jump-mode)
 (setq ace-jump-mode-scope 'frame)
-(global-set-key (kbd "M-g M-g") 'ace-jump-mode)
-(global-set-key (kbd "M-g g") 'ace-jump-mode)
-(global-set-key (kbd "M-g M-h") 'ace-jump-char-mode)
-(global-set-key (kbd "M-g h") 'ace-jump-char-mode)
-(global-set-key (kbd "M-g M-j") 'ace-jump-line-mode)
-(global-set-key (kbd "M-g j") 'ace-jump-line-mode)
-(global-set-key (kbd "M-g l") 'goto-line)
-(global-set-key (kbd "M-g M-l") 'goto-line)
+(setq ace-jump-mode-gray-background nil)
+
+(require 'ace-window)
+(global-set-key (kbd "M-0") 'ace-window)
+(setq aw-scope 'frame)
+(setq aw-background nil)
+
+(require 'ace-jump-zap)
+(global-set-key (kbd "M-z") 'ace-jump-zap-up-to-char-dwim)
+(global-set-key (kbd "M-Z") 'ace-jump-zap-to-char-dwim)
 
 (require 'smartscan)
 (global-smartscan-mode 1)
@@ -211,6 +214,9 @@ storing current frame configuration to register 8."
 (global-set-key (kbd "ESC ESC") 'god-mode-all)
 (define-key god-local-mode-map (kbd "z") 'repeat)
 (define-key god-local-mode-map (kbd "i") 'god-mode-all)
+(require 'god-mode-isearch)
+(define-key isearch-mode-map (kbd "ESC ESC") 'god-mode-isearch-activate)
+(define-key god-mode-isearch-map (kbd "ESC ESC") 'god-mode-isearch-disable)
 
 (dolist (i '("1" "2" "3" "4" "5" "6" "7" "8"))
   ;; directly bind these to commands, instead of making it a macro so
