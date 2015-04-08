@@ -35,11 +35,11 @@
 (set-scroll-bar-mode nil)
 (mouse-wheel-mode 1)
 (blink-cursor-mode 1)
-(transient-mark-mode -1)
-(global-font-lock-mode t)
-(show-paren-mode t)
+;(transient-mark-mode 1)
+(global-font-lock-mode 't)
+(show-paren-mode 't)
 (ansi-color-for-comint-mode-on)
-(setq comint-scroll-to-bottom-on-output t
+(setq comint-scroll-to-bottom-on-output 't
       comint-scroll-show-maximum-output nil)
 (temp-buffer-resize-mode 1)
 (fset 'yes-or-no-p 'y-or-n-p)
