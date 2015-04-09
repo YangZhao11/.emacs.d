@@ -77,7 +77,10 @@
   (let ((ess-S-assign " %T>% ")
         (ess-smart-S-assign-key "?"))
     (ess-smart-S-assign)))
-
+;; In ESS-R, `$' is by default part of the symbol (_), which makes dabbrev
+;; ignore variable names after $ for expansion. Fix by making it
+;; punctuation.
+(modify-syntax-entry ?$ "." R-syntax-table)
 
 (defun ess-debug-next-or-eval-line ()
   (interactive)

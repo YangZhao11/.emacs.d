@@ -114,9 +114,6 @@ storing current frame configuration to register 9."
 (global-set-key (kbd "M-z") 'ace-jump-zap-up-to-char-dwim)
 (global-set-key (kbd "M-Z") 'ace-jump-zap-to-char-dwim)
 
-(require 'smartscan)
-(global-smartscan-mode 1)
-
 (require 'smex)
 (global-set-key (kbd "M-x") 'smex)
 
