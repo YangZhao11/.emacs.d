@@ -26,23 +26,18 @@
 (global-set-key [f8] 'gud-next)
 (global-set-key [(shift f8)] 'gud-step)
 (global-set-key [f9] 'gud-finish)
+(global-set-key [f10] 'balance-windows)
+(global-set-key [f11] (lambda () (enlarge-window -1)))
+(global-set-key [f12] 'enlarge-window)
 
-(defun toggle-one-window ()
-  "Change to one window (C-x 1) if applicable, otherwise show
-other buffer in other window."
-  (interactive)
-  (if (window-parent)
-      (delete-other-windows)
-    (display-buffer (other-buffer) t)))
-(global-set-key [f10] 'toggle-one-window)
-(global-set-key [f11] 'switch-to-prev-buffer)
-(global-set-key [f12] 'switch-to-next-buffer)
+(global-set-key (kbd "M-9") 'switch-to-prev-buffer)
+(global-set-key (kbd "M-0") 'switch-to-next-buffer)
 (defun z-prev-buffer-next-window () (interactive)
   (switch-to-prev-buffer (next-window)))
-(global-set-key [(shift f11)] 'z-prev-buffer-next-window)
+(global-set-key (kbd "M-(") 'z-prev-buffer-next-window)
 (defun z-next-buffer-next-window () (interactive)
   (switch-to-next-buffer (next-window)))
-(global-set-key [(shift f12)] 'z-next-buffer-next-window)
+(global-set-key (kbd "M-)") 'z-next-buffer-next-window)
 
 ;; White space handling. White space mode is more comprehensive, but
 ;; has the annoying bug(in emacs 23.1) of showing trailing white space font for
@@ -90,23 +85,25 @@ other buffer in other window."
 
 (defun all-frames-to-messages-buffer ()
   "make all frames display the *Messages* buffer only after
-storing current frame configuration to register 9."
+storing current frame configuration to register 8."
   (interactive)
-  (frame-configuration-to-register ?9)
+  (frame-configuration-to-register ?8)
   (dolist (f (frame-list))
     (let ((w (frame-first-window f)))
       (delete-other-windows w)
       (set-window-buffer w "*Messages*"))))
-(define-key register-channel-mode-map (kbd "M-g 9") 'all-frames-to-messages-buffer)
-(define-key register-channel-mode-map (kbd "M-9") 'register-channel-dwim)
+(define-key register-channel-mode-map (kbd "M-g 8") 'all-frames-to-messages-buffer)
 
 (require 'ace-jump-mode)
+(setq ace-jump-mode-submode-list
+      '(ace-jump-char-mode ace-jump-line-mode ace-jump-word-mode))
 (global-set-key (kbd "C-j") 'ace-jump-mode)
+(global-set-key (kbd "M-j") 'ace-jump-word-mode)
 (setq ace-jump-mode-scope 'frame)
 (setq ace-jump-mode-gray-background nil)
 
 (require 'ace-window)
-(global-set-key (kbd "M-0") 'ace-window)
+(global-set-key (kbd "M-o") 'ace-window)
 (setq aw-scope 'frame)
 (setq aw-background nil)
 

@@ -34,7 +34,9 @@
 
 ;; --------------------------------------------------
 ;; modes
-(defun z-emacs-lisp-mode-hook () (rainbow-delimiters-mode))
+(defun z-emacs-lisp-mode-hook ()
+  (rainbow-delimiters-mode)
+  (local-unset-key (kbd "C-j")))
 (add-hook 'emacs-lisp-mode-hook 'z-emacs-lisp-mode-hook)
 
 (defun z-c-mode-common-hook ()
