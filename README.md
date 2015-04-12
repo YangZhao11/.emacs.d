@@ -1,4 +1,2 @@
-.emacs.d
-========
-
-Personal emacs configs
+# .emacs.d
+Personal emacs configs.
