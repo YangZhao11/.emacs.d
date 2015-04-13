@@ -27,7 +27,7 @@
 (global-set-key [(shift f8)] 'gud-step)
 (global-set-key [f9] 'gud-finish)
 (global-set-key [f10] 'balance-windows)
-(global-set-key [f11] (lambda () (enlarge-window -1)))
+(global-set-key [f11] 'shrink-window)
 (global-set-key [f12] 'enlarge-window)
 
 (global-set-key (kbd "M-9") 'switch-to-prev-buffer)
