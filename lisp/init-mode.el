@@ -58,13 +58,26 @@
 
 
 (defun z-scala-mode-hook ()
-  (when (fboundp 'prettify-symbols-mode) ; 24.4 needed
-    (setq prettify-symbols-alist
-          (append '(("=>" . ?⇒)
-                    ("->" . ?→))
-                  prettify-symbols-alist))
-    (prettify-symbols-mode)))
+  (setq prettify-symbols-alist
+        (append '(("=>" . ?⇒)
+                  ("->" . ?→))
+                prettify-symbols-alist))
+  (prettify-symbols-mode))
 (add-hook 'scala-mode-hook 'z-scala-mode-hook)
+
+(defun z-haskell-mode-hook ()
+  (turn-on-haskell-indentation)
+  (setq haskell-font-lock-symbols 't))
+  ;; (setq prettify-symbols-alist
+  ;;       (append '(("=>" . ?⇒)
+  ;;                 ("->" . ?→)
+  ;;                 (" . " . ?∘)
+  ;;                 ("/=" . ?≠)
+  ;;                 ("\\" . ?λ)
+  ;;                 ("<-" . ?←))
+  ;;               prettify-symbols-alist))
+  ;;  (prettify-symbols-mode)
+(add-hook 'haskell-mode-hook 'z-haskell-mode-hook)
 
 ;; --------------------------------------------------
 ;; ess
