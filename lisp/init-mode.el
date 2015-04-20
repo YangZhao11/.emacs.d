@@ -10,6 +10,9 @@
         ("google3" . "http://cs/#piper///depot/google3/")
         ("google" . "http://www.google.com/search?ie=UTF-8&q=")
         ("go" . "http://go/")))
+(defun z-org-mode-hook ()
+  (local-unset-key (kbd "C-j")))
+(add-hook 'org-mode-hook 'z-org-mode-hook)
 
 ;; --------------------------------------------------
 ;; eshell
