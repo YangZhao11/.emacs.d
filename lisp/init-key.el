@@ -26,7 +26,17 @@
 (global-set-key [f8] 'gud-next)
 (global-set-key [(shift f8)] 'gud-step)
 (global-set-key [f9] 'gud-finish)
-(global-set-key [f10] 'balance-windows)
+
+
+(defun toggle-one-window ()
+  "Change to one window (C-x 1) if applicable, otherwise show
+other buffer in other window."
+  (interactive)
+  (if (window-parent)
+      (delete-other-windows)
+    (display-buffer (other-buffer) t)))
+
+(global-set-key [f10] 'toggle-one-window)
 (global-set-key [f11] 'shrink-window)
 (global-set-key [f12] 'enlarge-window)
 

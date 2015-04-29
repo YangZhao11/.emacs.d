@@ -66,8 +66,8 @@
 (add-hook 'scala-mode-hook 'z-scala-mode-hook)
 
 (defun z-haskell-mode-hook ()
-  (turn-on-haskell-indentation)
-  (setq haskell-font-lock-symbols 't))
+  (turn-on-haskell-indentation))
+  ;;(setq haskell-font-lock-symbols 't)
   ;; (setq prettify-symbols-alist
   ;;       (append '(("=>" . ?⇒)
   ;;                 ("->" . ?→)
