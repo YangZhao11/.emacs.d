@@ -143,6 +143,9 @@ storing current frame configuration to register 8."
 (add-to-list 'mc/unsupported-minor-modes 'god-local-mode)
 
 (require 'god-mode)
+(setq god-exempt-major-modes nil)
+;; (add-to-list 'god-exempt-major-modes 'ibuffer-mode)
+(setq god-exempt-predicates nil)
 (global-set-key (kbd "ESC ESC") 'god-mode-all)
 (define-key god-local-mode-map (kbd "z") 'repeat)
 (define-key god-local-mode-map (kbd "i") 'god-mode-all)
@@ -156,7 +159,6 @@ storing current frame configuration to register 8."
   (global-set-key (kbd (concat "C-x C-" i)) (key-binding (kbd (concat "C-x " i))))
   (global-set-key (kbd (concat "M-g C-" i)) (key-binding (kbd (concat "M-g " i)))))
 
-(add-to-list 'god-exempt-major-modes 'ibuffer-mode)
 (defun z-god-mode-update-modline ()
   (cond (god-local-mode (set-face-background 'mode-line "blue4"))
         (t  (set-face-background 'mode-line "#2B2B2B"))))
