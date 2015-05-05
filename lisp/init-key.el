@@ -116,6 +116,7 @@ storing current frame configuration to register 8."
 (global-set-key (kbd "M-o") 'ace-window)
 (setq aw-scope 'frame)
 (setq aw-background nil)
+(setq aw-keys '(?s ?d ?f ?j ?i ?o ?g ?h ?a ?k ?l ?\;))
 
 (require 'ace-jump-zap)
 (global-set-key (kbd "M-z") 'ace-jump-zap-up-to-char-dwim)
