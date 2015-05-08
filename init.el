@@ -77,6 +77,9 @@
 (diminish 'god-local-mode " •")
 (diminish 'yas-minor-mode)
 (diminish 'autopair-mode)
+(diminish 'whitespace-mode)
+(diminish 'magit-auto-revert-mode)
+(diminish 'eldoc-mode)
 
 ;; --------------------------------------------------
 ;; customs
