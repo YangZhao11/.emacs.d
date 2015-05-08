@@ -74,12 +74,12 @@
 
 
 (require 'diminish)
-(diminish 'god-local-mode " •")
-(diminish 'yas-minor-mode)
-(diminish 'autopair-mode)
-(diminish 'whitespace-mode)
-(diminish 'magit-auto-revert-mode)
-(diminish 'eldoc-mode)
+(eval-after-load "god-mode" '(diminish 'god-local-mode " •"))
+(eval-after-load "yasnippet" '(diminish 'yas-minor-mode))
+(eval-after-load "autopair" '(diminish 'autopair-mode))
+(eval-after-load "whitespace" '(diminish 'whitespace-mode))
+(eval-after-load "magit" '(diminish 'magit-auto-revert-mode))
+(eval-after-load "eldoc" '(diminish 'eldoc-mode))
 
 ;; --------------------------------------------------
 ;; customs
