@@ -7,6 +7,7 @@
 (package-install 'ace-jump-zap)
 (package-install 'ace-window)
 (package-install 'autopair)
+(package-install 'diminish)
 (package-install 'expand-region)
 (package-install 'goto-chg)
 (package-install 'haskell-mode)
