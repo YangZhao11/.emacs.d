@@ -102,11 +102,13 @@
 
 (defun ess-debug-next-or-eval-line ()
   (interactive)
-  (let ((proc (get-process ess-current-process-name) ))
-    (if (not (or (process-get proc 'dbg-active)
+  (let ((proc (and ess-current-process-name
+                   (get-process ess-current-process-name))))
+    (if (and proc
+             (or (process-get proc 'dbg-active)
                  (process-get proc 'is-recover)))
-        (ess-eval-line-and-step)
-      (ess-debug-command-next))))
+        (ess-debug-command-next)
+      (ess-eval-line-and-step))))
 
 (defun z-ess-mode-symbols ()
   (when (fboundp 'prettify-symbols-mode) ; 24.4 needed

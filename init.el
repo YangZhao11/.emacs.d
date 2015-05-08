@@ -72,6 +72,12 @@
 (load "init-mode")
 (load "init-key")
 
+
+(require 'diminish)
+(diminish 'god-local-mode " •")
+(diminish 'yas-minor-mode)
+(diminish 'autopair-mode)
+
 ;; --------------------------------------------------
 ;; customs
 (custom-set-variables

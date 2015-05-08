@@ -12,6 +12,7 @@
         ess-yank
         go-mode-insert-and-indent
         kill-sexp
+        yas-expand
         ))
 
 (setq mc/cmds-to-run-once
