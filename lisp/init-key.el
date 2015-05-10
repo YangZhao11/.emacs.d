@@ -1,6 +1,4 @@
 (global-set-key (kbd "C-`") (kbd "C-SPC"))
-(global-set-key (kbd "C-;") (kbd "C-SPC"))
-(global-set-key (kbd "C-x C-;") (kbd "C-x C-SPC"))
 (global-set-key (kbd "C-x C-`") (kbd "C-x C-SPC"))
 (global-set-key (kbd "C-M-y") 'browse-kill-ring)
 (global-set-key (kbd "M-s M-o") 'multi-occur-in-matching-buffers)
@@ -104,13 +102,21 @@ storing current frame configuration to register 8."
       (set-window-buffer w "*Messages*"))))
 (define-key register-channel-mode-map (kbd "M-g 8") 'all-frames-to-messages-buffer)
 
-(require 'ace-jump-mode)
-(setq ace-jump-mode-submode-list
-      '(ace-jump-char-mode ace-jump-line-mode ace-jump-word-mode))
-(global-set-key (kbd "C-j") 'ace-jump-mode)
-(global-set-key (kbd "M-j") 'ace-jump-word-mode)
-(setq ace-jump-mode-scope 'frame)
-(setq ace-jump-mode-gray-background nil)
+(require 'avy-jump)
+(setq avy-style 'at-full)
+(defun z-goto-word (&optional arg)
+  "call avy-goto-word-1, or with prefix arg, avy-goto-subword-1"
+  (interactive "P")
+  (if arg (call-interactively 'avy-goto-subword-1)
+    (call-interactively 'avy-goto-word-1)))
+(global-set-key (kbd "M-j") 'z-goto-word)
+(defun z-jump-dwim (&optional arg)
+  "call avy-goto-char-2, or with prefix arg, avy-goto-line"
+  (interactive "P")
+  (if arg (call-interactively 'avy-goto-line)
+    (call-interactively 'avy-goto-char-2)))
+(global-set-key (kbd "C-j") 'z-jump-dwim)
+(avy-setup-default)
 
 (require 'ace-window)
 (global-set-key (kbd "M-o") 'ace-window)
@@ -118,9 +124,9 @@ storing current frame configuration to register 8."
 (setq aw-background nil)
 (setq aw-keys '(?s ?d ?f ?j ?i ?o ?g ?h ?a ?k ?l ?\;))
 
-(require 'ace-jump-zap)
-(global-set-key (kbd "M-z") 'ace-jump-zap-up-to-char-dwim)
-(global-set-key (kbd "M-Z") 'ace-jump-zap-to-char-dwim)
+(require 'misc)
+(global-set-key (kbd "M-z") 'zap-up-to-char)
+(global-set-key (kbd "M-Z") 'zap-to-char)
 
 (require 'smex)
 (global-set-key (kbd "M-x") 'smex)
