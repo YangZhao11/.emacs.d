@@ -102,7 +102,7 @@ storing current frame configuration to register 8."
       (set-window-buffer w "*Messages*"))))
 (define-key register-channel-mode-map (kbd "M-g 8") 'all-frames-to-messages-buffer)
 
-(require 'avy-jump)
+(require 'avy)
 (setq avy-style 'at-full)
 (defun z-goto-word (&optional arg)
   "call avy-goto-word-1, or with prefix arg, avy-goto-subword-1"

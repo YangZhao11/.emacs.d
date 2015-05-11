@@ -81,6 +81,7 @@
 (eval-after-load "magit" '(diminish 'magit-auto-revert-mode))
 (eval-after-load "eldoc" '(diminish 'eldoc-mode))
 
+(setq magit-last-seen-setup-instructions "1.4.0")
 ;; --------------------------------------------------
 ;; customs
 (custom-set-variables
