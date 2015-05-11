@@ -116,7 +116,8 @@ storing current frame configuration to register 8."
   (if arg (call-interactively 'avy-goto-line)
     (call-interactively 'avy-goto-char-2)))
 (global-set-key (kbd "C-j") 'z-jump-dwim)
-(avy-setup-default)
+(eval-after-load "isearch"
+    '(define-key isearch-mode-map (kbd "M-j") 'avy-isearch))
 
 (require 'ace-window)
 (global-set-key (kbd "M-o") 'ace-window)
