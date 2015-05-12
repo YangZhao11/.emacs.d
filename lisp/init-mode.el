@@ -165,6 +165,8 @@
 (add-hook 'before-save-hook 'z-remove-fancy-comments)
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
+(add-hook 'ess-post-run-hook 'smartparens-mode)
+
 (defun z-gdb-mode-hook () (setq gdb-many-windows t))
 (add-hook 'gdb-mode-hook 'z-gdb-mode-hook)
 

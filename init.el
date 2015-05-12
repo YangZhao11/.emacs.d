@@ -37,7 +37,6 @@
 (blink-cursor-mode 1)
 (transient-mark-mode -1)
 (global-font-lock-mode 't)
-(show-paren-mode 't)
 (ansi-color-for-comint-mode-on)
 (setq comint-scroll-to-bottom-on-output 't
       comint-scroll-show-maximum-output nil)
@@ -45,11 +44,16 @@
 (fset 'yes-or-no-p 'y-or-n-p)
 
 ;; --------------------------------------------------
+(show-paren-mode -1)
+;;(require 'autopair)
+;;(autopair-global-mode -1)
+(require 'smartparens-config)
+(smartparens-global-mode 't)
+(show-smartparens-global-mode 't)
+
 (require 's)
 (load-theme 'zenburn t)
 (require 'rainbow-delimiters)
-(require 'autopair)
-(autopair-global-mode)
 
 ;; --------------------------------------------------
 (require 'yasnippet)
@@ -80,6 +84,7 @@
 (eval-after-load "whitespace" '(diminish 'whitespace-mode))
 (eval-after-load "magit" '(diminish 'magit-auto-revert-mode))
 (eval-after-load "eldoc" '(diminish 'eldoc-mode))
+(eval-after-load "smartparens" '(diminish 'smartparens-mode))
 
 (setq magit-last-seen-setup-instructions "1.4.0")
 ;; --------------------------------------------------

@@ -47,6 +47,14 @@ other buffer in other window."
   (switch-to-next-buffer (next-window)))
 (global-set-key (kbd "M-)") 'z-next-buffer-next-window)
 
+(defun isearch-exit-other-end (rbeg rend)
+    "Exit isearch, but at the other end of the search string.
+  This is useful when followed by an immediate kill."
+    (interactive "r")
+    (isearch-exit)
+    (goto-char isearch-other-end))
+(define-key isearch-mode-map (kbd "M-RET") 'isearch-exit-other-end)
+
 ;; White space handling. White space mode is more comprehensive, but
 ;; has the annoying bug(in emacs 23.1) of showing trailing white space font for
 ;; spaces in front of the cursor.
@@ -104,20 +112,18 @@ storing current frame configuration to register 8."
 
 (require 'avy)
 (setq avy-style 'at-full)
-(defun z-goto-word (&optional arg)
-  "call avy-goto-word-1, or with prefix arg, avy-goto-subword-1"
-  (interactive "P")
-  (if arg (call-interactively 'avy-goto-subword-1)
-    (call-interactively 'avy-goto-word-1)))
-(global-set-key (kbd "M-j") 'z-goto-word)
-(defun z-jump-dwim (&optional arg)
-  "call avy-goto-char-2, or with prefix arg, avy-goto-line"
-  (interactive "P")
-  (if arg (call-interactively 'avy-goto-line)
-    (call-interactively 'avy-goto-char-2)))
-(global-set-key (kbd "C-j") 'z-jump-dwim)
 (eval-after-load "isearch"
     '(define-key isearch-mode-map (kbd "M-j") 'avy-isearch))
+(global-set-key (kbd "M-j") 'avy-goto-word-1)
+(global-set-key (kbd "C-j") 'avy-goto-char-2)
+(global-set-key (kbd "C-;") 'avy-goto-line)
+(global-set-key (kbd "M-g j") 'avy-goto-char-2)
+(global-set-key (kbd "M-g M-j") 'avy-goto-char-2)
+(global-set-key (kbd "M-g k") 'avy-goto-word-1)
+(global-set-key (kbd "M-g M-k") 'avy-goto-word-1)
+(global-set-key (kbd "M-g l") 'avy-goto-line)
+(global-set-key (kbd "M-g M-l") 'avy-goto-line)
+(setq avy-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l ?e ?r ?u ?i ?o ?p ?x ?c ?v ?n ?m))
 
 (require 'ace-window)
 (global-set-key (kbd "M-o") 'ace-window)
@@ -148,6 +154,9 @@ storing current frame configuration to register 8."
 (global-set-key (kbd "M-m s") 'mc/sort-regions)
 (global-set-key (kbd "M-m r") 'mc/reverse-regions)
 (add-to-list 'mc/unsupported-minor-modes 'god-local-mode)
+
+(require 'yasnippet)
+(global-set-key (kbd "M-?") 'yas-insert-snippet)
 
 (require 'god-mode)
 (setq god-exempt-major-modes nil)
