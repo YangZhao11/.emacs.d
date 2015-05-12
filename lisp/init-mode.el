@@ -83,6 +83,11 @@
 ;; ess
 (require 'ess-site)
 (setq inferior-julia-program-name "~/bin/julia")
+(setq ess-smart-S-assign-key ";")
+(ess-toggle-S-assign nil)
+(ess-toggle-S-assign nil)
+(ess-toggle-underscore nil)
+
 (defun ess-smart-pipe ()
   "Similar to ess-smart-S-assign, but insert %>% instead."
   (interactive)
@@ -133,6 +138,7 @@
     'ess-eval-function-or-paragraph-and-step)
   (define-key ess-mode-map (kbd "C-x <f8>") 'ess-tracebug)
   (define-key ess-mode-map (kbd "\\") 'ess-smart-pipe)
+  (define-key ess-mode-map (kbd ";") 'ess-smart-S-assign)
   (setq ess-tab-complete-in-script t)
   (whitespace-mode 1)
   (z-ess-mode-symbols))
@@ -150,6 +156,7 @@
   (define-key inferior-ess-mode-map [f7] 'ess-show-R-traceback)
   (define-key inferior-ess-mode-map (kbd "C-x <f8>") 'ess-tracebug)
   (define-key inferior-ess-mode-map (kbd "\\") 'ess-smart-pipe)
+  (define-key inferior-ess-mode-map (kbd ";") 'ess-smart-S-assign)
   (z-ess-mode-symbols))
 (add-hook 'inferior-ess-mode-hook 'z-inferior-ess-mode-hook)
 
