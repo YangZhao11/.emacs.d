@@ -42,15 +42,10 @@
       comint-scroll-show-maximum-output nil)
 (temp-buffer-resize-mode 1)
 (fset 'yes-or-no-p 'y-or-n-p)
+(show-paren-mode 1)
+(electric-pair-mode)
 
 ;; --------------------------------------------------
-(show-paren-mode -1)
-;;(require 'autopair)
-;;(autopair-global-mode -1)
-(require 'smartparens-config)
-(smartparens-global-mode 't)
-(show-smartparens-global-mode 't)
-
 (require 's)
 (load-theme 'zenburn t)
 (require 'rainbow-delimiters)

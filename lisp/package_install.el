@@ -4,6 +4,7 @@
 (package-refresh-contents)
 
 (package-install 'ace-window)
+(package-install 'avy)
 (package-install 'diminish)
 (package-install 'expand-region)
 (package-install 'goto-chg)
@@ -17,7 +18,6 @@
 (package-install 'multiple-cursors)
 (package-install 'rainbow-delimiters)
 (package-install 'register-channel)
-(package-install 'smartparens)
 (package-install 'smex)
 (package-install 'yasnippet)
 (package-install 'zenburn-theme)
