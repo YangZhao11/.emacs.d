@@ -140,6 +140,7 @@
   (define-key ess-mode-map (kbd "\\") 'ess-smart-pipe)
   (define-key ess-mode-map (kbd ";") 'ess-smart-S-assign)
   (setq ess-tab-complete-in-script t)
+  (rainbow-delimiters-mode)
   (whitespace-mode 1)
   (z-ess-mode-symbols))
 (add-hook 'ess-mode-hook 'z-ess-mode-hook)
@@ -171,8 +172,6 @@
         (replace-match "\\1# " nil nil)))))
 (add-hook 'before-save-hook 'z-remove-fancy-comments)
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
-
-(add-hook 'ess-post-run-hook 'smartparens-mode)
 
 (defun z-gdb-mode-hook () (setq gdb-many-windows t))
 (add-hook 'gdb-mode-hook 'z-gdb-mode-hook)

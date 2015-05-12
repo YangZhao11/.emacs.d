@@ -79,7 +79,6 @@
 (eval-after-load "whitespace" '(diminish 'whitespace-mode))
 (eval-after-load "magit" '(diminish 'magit-auto-revert-mode))
 (eval-after-load "eldoc" '(diminish 'eldoc-mode))
-(eval-after-load "smartparens" '(diminish 'smartparens-mode))
 
 (setq magit-last-seen-setup-instructions "1.4.0")
 ;; --------------------------------------------------

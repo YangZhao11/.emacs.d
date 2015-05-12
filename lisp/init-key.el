@@ -175,8 +175,22 @@ storing current frame configuration to register 8."
   (global-set-key (kbd (concat "C-x C-" i)) (key-binding (kbd (concat "C-x " i))))
   (global-set-key (kbd (concat "M-g C-" i)) (key-binding (kbd (concat "M-g " i)))))
 
-(defun z-god-mode-update-modline ()
-  (cond (god-local-mode (set-face-background 'mode-line "blue4"))
-        (t  (set-face-background 'mode-line "#2B2B2B"))))
-(add-hook 'god-mode-enabled-hook 'z-god-mode-update-modline)
-(add-hook 'god-mode-disabled-hook 'z-god-mode-update-modline)
+(dolist (i '("c" "g" "j" "k" "l" "n" "p"))
+  ;; bind M-g C-i to M-g i
+  (global-set-key (kbd (concat "M-g C-" i)) (key-binding (kbd (concat "M-g " i)))))
+
+(defun z-set-cursor-color (color)
+  (if (eq (framep (selected-frame)) 't)
+      (let ((term (terminal-parameter
+                   (frame-terminal (selected-frame)) 'terminal-initted)))
+        (send-string-to-terminal
+         (if (eq term 'terminal-init-screen)
+             (concat "\033P\033]12;" color  "\007\033\\")
+             (concat "\033]12;" color "\007"))))
+    (set-cursor-color color)))
+
+(defun z-god-mode-update ()
+  (cond (god-local-mode (z-set-cursor-color "red"))
+        (t  (z-set-cursor-color "#FFFFEF"))))
+(add-hook 'god-mode-enabled-hook 'z-god-mode-update)
+(add-hook 'god-mode-disabled-hook 'z-god-mode-update)
