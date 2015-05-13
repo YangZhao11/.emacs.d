@@ -5,6 +5,11 @@
 ;; occur-edit-mode in occur mode key binding is 'e'
 (global-set-key (kbd "M-s g") 'grep)
 (global-set-key (kbd "M-s M-g") 'rgrep)
+(defun z-exchange-point-and-mark (&optional ARG)
+  "Like exchange point and mark, but do not activate mark by default"
+  (interactive "P")
+  (exchange-point-and-mark (not ARG)))
+(global-set-key (kbd "C-x C-x") 'z-exchange-point-and-mark)
 
 (defun shrink-other-window-if-larger-than-buffer ()
     (interactive)
@@ -85,12 +90,12 @@ other buffer in other window."
 (global-set-key (kbd "C-x t v") 'view-mode)
 (global-set-key (kbd "C-x t w") 'subword-mode)
 
-(defun toggle-transient-mark-mode ()
-  "Toggle transient mark mode temporarily."
+(defun z-toggle-activate-mark ()
   (interactive)
-  (if transient-mark-mode (setq transient-mark-mode nil)
-    (setq transient-mark-mode 'lambda)))
-(global-set-key (kbd "M-i") 'toggle-transient-mark-mode)
+  (if (region-active-p)
+      (deactivate-mark)
+      (activate-mark)))
+(global-set-key (kbd "M-i") 'z-toggle-activate-mark)
 
 (require 'goto-chg)
 (global-set-key (kbd "C-.") 'goto-last-change)

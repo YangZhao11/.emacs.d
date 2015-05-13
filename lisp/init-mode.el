@@ -37,8 +37,9 @@
 
 ;; --------------------------------------------------
 ;; modes
+(add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
+
 (defun z-emacs-lisp-mode-hook ()
-  (rainbow-delimiters-mode)
   (local-unset-key (kbd "C-j")))
 (add-hook 'emacs-lisp-mode-hook 'z-emacs-lisp-mode-hook)
 
@@ -140,7 +141,6 @@
   (define-key ess-mode-map (kbd "\\") 'ess-smart-pipe)
   (define-key ess-mode-map (kbd ";") 'ess-smart-S-assign)
   (setq ess-tab-complete-in-script t)
-  (rainbow-delimiters-mode)
   (whitespace-mode 1)
   (z-ess-mode-symbols))
 (add-hook 'ess-mode-hook 'z-ess-mode-hook)
