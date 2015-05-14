@@ -103,6 +103,8 @@ other buffer in other window."
 (require 'register-channel)
 (register-channel-mode)
 (set-register ?5 '(file . "~/Projects/NOTES.org"))
+(define-key register-channel-mode-map (kbd "M-g 5")
+  'register-channel-describe-register)
 
 (defun all-frames-to-messages-buffer ()
   "make all frames display the *Messages* buffer only after
@@ -113,7 +115,8 @@ storing current frame configuration to register 8."
     (let ((w (frame-first-window f)))
       (delete-other-windows w)
       (set-window-buffer w "*Messages*"))))
-(define-key register-channel-mode-map (kbd "M-g 8") 'all-frames-to-messages-buffer)
+(define-key register-channel-mode-map (kbd "M-g 8")
+  'all-frames-to-messages-buffer)
 
 (require 'avy)
 (setq avy-style 'at-full)
