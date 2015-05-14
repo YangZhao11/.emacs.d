@@ -6,6 +6,8 @@
 (require 'package)
 (setq package-enable-at-startup nil)
 (package-initialize)
+(add-to-list 'package-archives
+             '("melpa" . "http://melpa.org/packages/") t)
 
 ;; Load platform specific inits, including init-gnu-linux /
 ;; init-darwin, init-ns / init-x, init-hostname.

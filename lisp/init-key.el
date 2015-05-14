@@ -6,7 +6,7 @@
 (global-set-key (kbd "M-s g") 'grep)
 (global-set-key (kbd "M-s M-g") 'rgrep)
 (defun z-exchange-point-and-mark (&optional ARG)
-  "Like exchange point and mark, but do not activate mark by default"
+  "Like exchange-point-and-mark, but do not activate mark by default"
   (interactive "P")
   (exchange-point-and-mark (not ARG)))
 (global-set-key (kbd "C-x C-x") 'z-exchange-point-and-mark)
@@ -29,7 +29,6 @@
 (global-set-key [f8] 'gud-next)
 (global-set-key [(shift f8)] 'gud-step)
 (global-set-key [f9] 'gud-finish)
-
 
 (defun toggle-one-window ()
   "Change to one window (C-x 1) if applicable, otherwise show
@@ -120,15 +119,15 @@ storing current frame configuration to register 8."
 (eval-after-load "isearch"
     '(define-key isearch-mode-map (kbd "M-j") 'avy-isearch))
 (global-set-key (kbd "M-j") 'avy-goto-word-1)
-(global-set-key (kbd "C-j") 'avy-goto-char-2)
+(global-set-key (kbd "C-j") 'avy-goto-char)
 (global-set-key (kbd "C-;") 'avy-goto-line)
-(global-set-key (kbd "M-g j") 'avy-goto-char-2)
-(global-set-key (kbd "M-g M-j") 'avy-goto-char-2)
+(global-set-key (kbd "M-g j") 'avy-goto-char)
+(global-set-key (kbd "M-g M-j") 'avy-goto-char)
 (global-set-key (kbd "M-g k") 'avy-goto-word-1)
 (global-set-key (kbd "M-g M-k") 'avy-goto-word-1)
 (global-set-key (kbd "M-g l") 'avy-goto-line)
 (global-set-key (kbd "M-g M-l") 'avy-goto-line)
-(setq avy-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l ?e ?r ?u ?i ?o ?p ?x ?c ?v ?n ?m))
+(setq avy-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l ?w ?e ?r ?u ?i ?o ?p ?x ?c ?v ?n ?m))
 
 (require 'ace-window)
 (global-set-key (kbd "M-o") 'ace-window)

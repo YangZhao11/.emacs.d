@@ -1,7 +1,6 @@
 (setq auto-mode-alist
       (append
-       '(("NOTES$" . org-mode)
-         ("\\.Rmd\\'" . markdown-mode))
+       '(("\\.Rmd\\'" . markdown-mode))
        auto-mode-alist))
 
 ;; org mode link abbreviations
@@ -11,7 +10,8 @@
         ("google" . "http://www.google.com/search?ie=UTF-8&q=")
         ("go" . "http://go/")))
 (defun z-org-mode-hook ()
-  (local-unset-key (kbd "C-j")))
+  (local-unset-key (kbd "C-j"))
+  (setq org-use-speed-commands 't))
 (add-hook 'org-mode-hook 'z-org-mode-hook)
 
 ;; --------------------------------------------------
