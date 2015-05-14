@@ -3,14 +3,16 @@
        '(("\\.Rmd\\'" . markdown-mode))
        auto-mode-alist))
 
-;; org mode link abbreviations
-(setq org-link-abbrev-alist
-      '(("wiki" . "http://wiki/Main/")
-        ("google3" . "http://cs/#piper///depot/google3/")
-        ("google" . "http://www.google.com/search?ie=UTF-8&q=")
-        ("go" . "http://go/")))
+
+(require 'bug-reference)
+(setq bug-reference-url-format "http://%s")
+(setq bug-reference-bug-regexp
+      "\\(\\)\\(b/[0-9]+\\|c[rl]/[0-9]+\\|\\(g\\|go\\|goto\\)/[-a-zA-z0-9_]+\\)")
+
+
 (defun z-org-mode-hook ()
   (local-unset-key (kbd "C-j"))
+  (bug-reference-mode)
   (setq org-use-speed-commands 't))
 (add-hook 'org-mode-hook 'z-org-mode-hook)
 
