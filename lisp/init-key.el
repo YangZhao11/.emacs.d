@@ -11,6 +11,8 @@
   (exchange-point-and-mark (not ARG)))
 (global-set-key (kbd "C-x C-x") 'z-exchange-point-and-mark)
 
+(require 'dired-x)                      ;bind C-x C-j to dired-jump
+
 (defun shrink-other-window-if-larger-than-buffer ()
     (interactive)
     "Shrink other window if larger than buffer"
@@ -166,6 +168,12 @@ storing current frame configuration to register 8."
 (require 'yasnippet)
 (global-set-key (kbd "M-?") 'yas-insert-snippet)
 
+(require 'guide-key)
+(setq guide-key/guide-key-sequence '("C-x r" "C-x 4" "C-x 8"))
+(setq guide-key/popup-window-position 'bottom)
+(guide-key-mode 1)
+
+;; --------------------------------------------------
 (require 'god-mode)
 (setq god-exempt-major-modes nil)
 ;; (add-to-list 'god-exempt-major-modes 'ibuffer-mode)
