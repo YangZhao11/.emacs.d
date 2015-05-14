@@ -102,6 +102,7 @@ other buffer in other window."
 
 (require 'register-channel)
 (register-channel-mode)
+(set-register ?5 '(file . "~/Projects/NOTES.org"))
 
 (defun all-frames-to-messages-buffer ()
   "make all frames display the *Messages* buffer only after
