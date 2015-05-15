@@ -14,6 +14,10 @@
   (local-unset-key (kbd "C-j"))
   (bug-reference-mode)
   (setq org-use-speed-commands 't))
+(setq org-todo-keyword-faces
+      '(("PLAN" . "#8093CC") ("OBSOLETE" . "#909090") ("WAIT" . "#CCA060")))
+(setq org-todo-keywords
+      '((sequence "PLAN(p)" "TODO(t)" "WAIT(w)" "|" "OBSOLETE(o)" "DONE(d)")))
 (add-hook 'org-mode-hook 'z-org-mode-hook)
 
 ;; --------------------------------------------------
