@@ -7,6 +7,7 @@
 (package-install 'expand-region)
 (package-install 'goto-chg)
 (package-install 'haskell-mode)
+(package-install 'hydra)
 (package-install 'ido-ubiquitous)
 (package-install 'ido-vertical-mode)
 (package-install 'julia-mode)

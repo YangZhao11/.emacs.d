@@ -13,6 +13,7 @@
         go-mode-insert-and-indent
         kill-sexp
         yas-expand
+        zap-up-to-char
         ))
 
 (setq mc/cmds-to-run-once
