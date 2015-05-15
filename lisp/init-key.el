@@ -177,7 +177,6 @@ storing current frame configuration to register 8."
 (global-set-key (kbd "M-m SPC") 'hydra-mark/body)
 
 (require 'multiple-cursors)
-(global-unset-key (kbd "M-m"))
 (global-set-key (kbd "M-m ,") 'mc/mark-more-like-this-extended)
 (global-set-key (kbd "M-m M-m") 'mc/mark-all-dwim)
 (global-set-key (kbd "M-m m") 'mc/mark-all-like-this-dwim)
