@@ -7,6 +7,7 @@
         autopair-insert-or-skip-quote
         autopair-newline
         autopair-skip-close-maybe
+        backward-sexp
         delete-horizontal-space
         ess-smart-comma
         ess-yank

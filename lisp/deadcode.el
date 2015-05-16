@@ -69,3 +69,51 @@
       (recompile)
     (call-interactively 'compile)))
 (global-set-key [f5] 'z-maybe-recompile)
+
+(require 'hydra)
+
+(defhydra hydra-mark (global-map "M-m" :idle 1.0)
+  "mark"
+  ("s" mark-sexp "sexp")
+  ("f" mark-defun "defun")
+  ("w" mark-word "word")
+  ("e" mark-end-of-sentence "sentence")
+  ("h" mark-paragraph "paragraph")
+  ("p" mark-page "page")
+  ("\\" er/expand-region "expand")
+  ("|" er/contract-region "contract")
+  ("u" backward-up-list "up list")
+  ("d" down-list "down list")
+  ("b" backward-sexp "backward list")
+  ("f" forward-sexp "forward list")
+  ("x" z-exchange-point-and-mark "exchange")
+  ("i" z-toggle-activate-mark "activate")
+  ("q" nil "cancel")
+  )
+(global-set-key (kbd "M-m SPC") 'hydra-mark/body)
+
+;; (defhydra hydra-rectangle (:body-pre (rectangle-mark-mode 1)
+;;                            :color pink
+;;                            :hint nil
+;;                            :post (deactivate-mark))
+;;   "
+;;   ^_p_^     _d_elete    s_t_ring  e_x_change
+;; _b_   _f_   _k_ill      _y_ank    _/_undo
+;;   ^_n_^     ne_w_-copy  _r_eset   _q_uit
+;; "
+;;   ("b" backward-char)
+;;   ("f" forward-char)
+;;   ("p" previous-line)
+;;   ("n" next-line)
+;;   ("x" z-exchange-point-and-mark)
+;;   ("w" copy-rectangle-as-kill)
+;;   ("d" delete-rectangle)
+;;   ("r" (if (region-active-p)
+;;            (deactivate-mark)
+;;          (rectangle-mark-mode 1)))
+;;   ("y" yank-rectangle)
+;;   ("/" undo)
+;;   ("t" string-rectangle)
+;;   ("k" kill-rectangle)
+;;   ("q" nil))
+;; (global-set-key (kbd "C-x SPC") 'hydra-rectangle/body)
