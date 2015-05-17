@@ -126,11 +126,14 @@ storing current frame configuration to register 8."
     '(define-key isearch-mode-map (kbd "M-j") 'avy-isearch))
 (global-set-key (kbd "M-j") 'avy-goto-word-1)
 (defun z-goto-char (char &optional arg)
-  (interactive (list (read-char "Goto: " 't)
+  "Call avy-goto-char unless char is RET or SPC, when we call
+avy-goto-line or avy-goto-word-1 respectively."
+  (interactive (list (read-char "Goto: ")
                      current-prefix-arg))
   (cond ((= char 13) (call-interactively 'avy-goto-line))
         ((= char ?\ ) (call-interactively 'avy-goto-word-1))
-    (avy-goto-char arg char)))
+        ('t (avy-goto-char char arg))))
+
 (global-set-key (kbd "C-j") 'z-goto-char)
 (global-set-key (kbd "C-;") 'avy-goto-line)
 (global-set-key (kbd "M-g j") 'avy-goto-char)
