@@ -14,6 +14,7 @@
         go-mode-insert-and-indent
         kill-sexp
         yas-expand
+        z-zap-up-to-char
         zap-up-to-char
         ))
 

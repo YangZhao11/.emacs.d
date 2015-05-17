@@ -125,7 +125,13 @@ storing current frame configuration to register 8."
 (eval-after-load "isearch"
     '(define-key isearch-mode-map (kbd "M-j") 'avy-isearch))
 (global-set-key (kbd "M-j") 'avy-goto-word-1)
-(global-set-key (kbd "C-j") 'avy-goto-char)
+(defun z-goto-char (char &optional arg)
+  (interactive (list (read-char "Goto: " 't)
+                     current-prefix-arg))
+  (cond ((= char 13) (call-interactively 'avy-goto-line))
+        ((= char ?\ ) (call-interactively 'avy-goto-word-1))
+    (avy-goto-char arg char)))
+(global-set-key (kbd "C-j") 'z-goto-char)
 (global-set-key (kbd "C-;") 'avy-goto-line)
 (global-set-key (kbd "M-g j") 'avy-goto-char)
 (global-set-key (kbd "M-g M-j") 'avy-goto-char)
@@ -142,7 +148,12 @@ storing current frame configuration to register 8."
 (setq aw-keys '(?s ?d ?f ?j ?i ?o ?g ?h ?a ?k ?l ?\;))
 
 (require 'misc)
-(global-set-key (kbd "M-z") 'zap-up-to-char)
+(defun z-zap-up-to-char (arg char)
+  "Similar to zap-up-to-char, but works with multiple cursors."
+  (interactive (list (prefix-numeric-value current-prefix-arg)
+		     (read-char "Zap up to char: " t)))
+  (zap-up-to-char arg char))
+(global-set-key (kbd "M-z") 'z-zap-up-to-char)
 (global-set-key (kbd "M-Z") 'zap-to-char)
 
 (require 'smex)
