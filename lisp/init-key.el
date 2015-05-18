@@ -5,10 +5,13 @@
 ;; occur-edit-mode in occur mode key binding is 'e'
 (global-set-key (kbd "M-s g") 'grep)
 (global-set-key (kbd "M-s M-g") 'rgrep)
-(defun z-exchange-point-and-mark ()
-  "Like exchange-point-and-mark, but do not activate mark by default"
-  (interactive)
-  (exchange-point-and-mark (not (use-region-p))))
+(defun z-exchange-point-and-mark (&optional arg)
+  "Like exchange-point-and-mark, but arg means toggle active
+region, instead of inactivate region."
+  (interactive "P")
+  (let ((active (or (and arg (not (use-region-p)))
+                    (and (not arg) (use-region-p)))))
+    (exchange-point-and-mark (not active))))
 (global-set-key (kbd "C-x C-x") 'z-exchange-point-and-mark)
 
 (require 'dired-x)                      ;bind C-x C-j to dired-jump
