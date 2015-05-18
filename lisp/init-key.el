@@ -179,7 +179,8 @@ avy-goto-line or avy-goto-word-1 respectively."
 (global-set-key (kbd "M-?") 'yas-insert-snippet)
 
 (require 'guide-key)
-(setq guide-key/guide-key-sequence '("C-x r" "C-x 4" "C-x 8" "C-x t"))
+(setq guide-key/guide-key-sequence
+      '("C-x r" "C-x 4" "C-x 8" "C-x t" "C-x C-k" "M-s"))
 (setq guide-key/popup-window-position 'bottom)
 (guide-key-mode 1)
 
