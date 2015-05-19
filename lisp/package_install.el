@@ -4,6 +4,7 @@
 (package-install 'ace-window)
 (package-install 'avy)
 (package-install 'diminish)
+(package-install 'easy-kill)
 (package-install 'expand-region)
 (package-install 'go-mode)
 (package-install 'goto-chg)

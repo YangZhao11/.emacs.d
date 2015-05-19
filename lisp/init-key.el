@@ -1,5 +1,4 @@
-(global-set-key (kbd "C-`") (kbd "C-SPC"))
-(global-set-key (kbd "C-x C-`") (kbd "C-x C-SPC"))
+(global-set-key (kbd "M-w") 'easy-kill)
 (global-set-key (kbd "C-M-y") 'browse-kill-ring)
 (global-set-key (kbd "M-s M-o") 'multi-occur-in-matching-buffers)
 ;; occur-edit-mode in occur mode key binding is 'e'
