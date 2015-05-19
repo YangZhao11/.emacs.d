@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: flag
+# key: flag
+# --
+DEFINE_${1:bool} ${2:flag} ${3:default} "${4:doc}"

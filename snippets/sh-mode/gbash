@@ -6,10 +6,10 @@ source gbash.sh || exit
 set -e
 
 DEFINE_bool verbose false "Show commands running."
+$0
 
 gbash::init_google "$@"
 
 if (( FLAGS_verbose )); then
   set -x
 fi
-$0
