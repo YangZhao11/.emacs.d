@@ -3,6 +3,7 @@
 
 (package-install 'ace-window)
 (package-install 'avy)
+(package-install 'browse-kill-ring)
 (package-install 'diminish)
 (package-install 'easy-kill)
 (package-install 'expand-region)
