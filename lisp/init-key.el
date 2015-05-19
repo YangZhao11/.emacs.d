@@ -1,7 +1,3 @@
-(require 'easy-kill)
-(setq easy-kill-unhighlight-key (kbd "SPC"))
-(global-set-key (kbd "M-w") 'easy-kill)
-(define-key easy-kill-base-map (kbd "M-i") 'easy-kill-mark-region)
 (require 'browse-kill-ring)
 (global-set-key (kbd "C-M-y") 'browse-kill-ring)
 
