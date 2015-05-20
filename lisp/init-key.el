@@ -64,11 +64,6 @@ other buffer in other window."
     (goto-char isearch-other-end))
 (define-key isearch-mode-map (kbd "M-RET") 'isearch-exit-other-end)
 
-;; White space handling. White space mode is more comprehensive, but
-;; has the annoying bug(in emacs 23.1) of showing trailing white space font for
-;; spaces in front of the cursor.
-(setq whitespace-style '(tabs lines-tail))
-;(global-whitespace-mode t)
 ;(setq-default show-trailing-whitespace t)
 (defun toggle-show-trailing-whitespace ()
    "Toggle show-trailing-whitespace"
@@ -88,7 +83,6 @@ other buffer in other window."
 (global-set-key (kbd "C-x t o") 'outline-minor-mode)
 (global-set-key (kbd "C-x t p") 'rainbow-delimiters-mode)
 (global-set-key (kbd "C-x t r") 'hs-minor-mode)
-(global-set-key (kbd "C-x t s") 'whitespace-mode)
 (global-set-key (kbd "C-x t t") 'toggle-show-trailing-whitespace)
 (global-set-key (kbd "C-x t v") 'view-mode)
 (global-set-key (kbd "C-x t w") 'subword-mode)
@@ -138,7 +132,6 @@ avy-goto-line or avy-goto-word-1 respectively."
         ('t (avy-goto-char char arg))))
 
 (global-set-key (kbd "C-j") 'z-goto-char)
-(global-set-key (kbd "C-;") 'avy-goto-line)
 (global-set-key (kbd "M-g j") 'avy-goto-char)
 (global-set-key (kbd "M-g M-j") 'avy-goto-char)
 (global-set-key (kbd "M-g k") 'avy-goto-word-1)
@@ -167,6 +160,8 @@ avy-goto-line or avy-goto-word-1 respectively."
 
 (require 'expand-region)
 (global-set-key (kbd "C-\\") 'er/expand-region)
+(setq er/try-expand-list
+      (append er/try-expand-list '(mark-paragraph mark-page)))
 
 (require 'multiple-cursors)
 (global-unset-key (kbd "M-m"))
