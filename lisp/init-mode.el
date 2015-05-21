@@ -5,15 +5,22 @@
 
 
 (require 'bug-reference)
-(setq bug-reference-url-format "http://%s")
+(defun z-bug-to-link ()
+  "Convert text captured from bug-reference-bug-regexp into links."
+  (let ((m (match-string 2)))
+    (if (s-ends-with? "@" m)
+        (concat "teams/" (s-chop-suffix "@" m))
+      (concat "http://" m))))
+(put 'z-bug-to-link 'bug-reference-url-format 't)
+(setq bug-reference-url-format 'z-bug-to-link)
 (setq bug-reference-bug-regexp
-      "\\(\\)\\(b/[0-9]+\\|c[rl]/[0-9]+\\|\\(g\\|go\\|goto\\)/[-a-zA-z0-9_]+\\)")
-
+      "\\(\\)\\(b/[0-9]+\\|c[rl]/[0-9]+\\|\\(g\\|go\\|goto\\)/[-a-zA-z0-9_]+\\|[a-z]+@\\)")
 
 (defun z-org-mode-hook ()
   (local-unset-key (kbd "C-j"))
   (bug-reference-mode)
-  (setq org-use-speed-commands 't))
+  (setq org-use-speed-commands 't)
+  (setq-local register-channel-move-by-default 't))
 (setq org-todo-keyword-faces
       '(("PLAN" . "#8093CC") ("OBSOLETE" . "#909090") ("WAIT" . "#CCA060")))
 (setq org-todo-keywords

@@ -21,13 +21,14 @@
 ;; --------------------------------------------------
 ;; Defaults
 (setq-default indent-tabs-mode nil
-              indicate-empty-lines t
+              indicate-empty-lines 't
               frame-title-format "%b @Emacs"
               ispell-program-name "aspell"
               page-delimiter "\\(^\f\\|-\\{5,\\}$\\)")
-(setq visible-bell t
-      set-mark-command-repeat-pop t
-      require-final-newline t
+(setq visible-bell 't
+      set-mark-command-repeat-pop 't
+      sentence-end-double-space nil
+      require-final-newline 't
       tramp-default-method "ssh"
       text-scale-mode-step 1.1)
 ;;(setq ansi-color-names-vector ["#3F3F3F" "#CC9393" "#7F9F7F" "#F0DFAF" "#8CD0D3" "#DC8CC3" "#93E0E3" "#DCDCCC"])
