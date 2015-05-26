@@ -83,6 +83,7 @@ other buffer in other window."
 (global-set-key (kbd "C-x t o") 'outline-minor-mode)
 (global-set-key (kbd "C-x t p") 'rainbow-delimiters-mode)
 (global-set-key (kbd "C-x t r") 'hs-minor-mode)
+(global-set-key (kbd "C-x t s") 'whitespace-mode)
 (global-set-key (kbd "C-x t t") 'toggle-show-trailing-whitespace)
 (global-set-key (kbd "C-x t v") 'view-mode)
 (global-set-key (kbd "C-x t w") 'subword-mode)

@@ -61,7 +61,6 @@
   (define-key c-mode-base-map (kbd "C-x t d") 'doxymacs-mode)
   (define-key c-mode-base-map (kbd "C-x t m") 'cwarn-mode)
   (setq c-electric-pound-behavior '(alignleft)) ;make a #define left-aligned
-  (whitespace-mode 1)
 )
 (add-hook 'c-mode-common-hook 'z-c-mode-common-hook)
 (add-hook 'text-mode-hook 'auto-fill-mode)
@@ -154,7 +153,6 @@
   (define-key ess-mode-map (kbd "\\") 'ess-smart-pipe)
   (define-key ess-mode-map (kbd ";") 'ess-smart-S-assign)
   (setq ess-tab-complete-in-script t)
-  (whitespace-mode 1)
   (z-ess-mode-symbols))
 (add-hook 'ess-mode-hook 'z-ess-mode-hook)
 
@@ -188,9 +186,6 @@
 
 (defun z-gdb-mode-hook () (setq gdb-many-windows t))
 (add-hook 'gdb-mode-hook 'z-gdb-mode-hook)
-
-(defun z-python-mode-hook () (whitespace-mode 1))
-(add-hook 'python-mode-hook 'z-python-mode-hook)
 
 ;; --------------------------------------------------
 ;; Legacy code
