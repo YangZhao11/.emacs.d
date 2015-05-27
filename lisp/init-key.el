@@ -121,7 +121,7 @@ storing current frame configuration to register 8."
 (require 'avy)
 (setq avy-style 'at-full)
 (eval-after-load "isearch"
-    '(define-key isearch-mode-map (kbd "M-j") 'avy-isearch))
+    '(define-key isearch-mode-map (kbd "C-j") 'avy-isearch))
 (global-set-key (kbd "M-j") 'avy-goto-word-1)
 
 (defun z-goto-char (char &optional arg)
@@ -201,15 +201,17 @@ avy-goto-line or avy-goto-word-1 respectively."
 (define-key isearch-mode-map (kbd "ESC ESC") 'god-mode-isearch-activate)
 (define-key god-mode-isearch-map (kbd "ESC ESC") 'god-mode-isearch-disable)
 
-(dolist (i '("1" "2" "3" "4" "5" "6" "7" "8" "9"))
-  ;; directly bind these to commands, instead of making it a macro so
-  ;; that messages work in god-mode.
-  (global-set-key (kbd (concat "C-x C-" i)) (key-binding (kbd (concat "C-x " i))))
-  (global-set-key (kbd (concat "M-g C-" i)) (key-binding (kbd (concat "M-g " i)))))
+;; Bind some second level modifier keys with C- prefix for easier
+;; god-mode access. Directly bind these to commands, instead of making
+;; it a keyboard macro so that messages work.
+(dolist (i '("1" "2" "3" "4" "5" "6" "7" "8" "9" "#"))
+  (global-set-key (kbd (concat "C-x C-" i))
+                  (key-binding (kbd (concat "C-x " i))))
+)
 
-(dolist (i '("c" "g" "j" "k" "l" "n" "p"))
-  ;; bind M-g C-i to M-g i
-  (global-set-key (kbd (concat "M-g C-" i)) (key-binding (kbd (concat "M-g " i)))))
+(dolist (i '("1" "2" "3" "4" "5" "6" "7" "8" "9" "c" "g" "j" "k" "l" "n" "p"))
+  (global-set-key (kbd (concat "M-g C-" i))
+                  (key-binding (kbd (concat "M-g " i)))))
 
 (defun z-god-mode-update ()
   (cond (god-local-mode (set-face-background 'mode-line "blue4"))

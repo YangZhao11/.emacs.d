@@ -1,6 +1,6 @@
 (setq auto-mode-alist
       (append
-       '(("\\.Rmd\\'" . markdown-mode))
+       '(("\\.Rmd\\'" . poly-markdown+r-mode))
        auto-mode-alist))
 
 
@@ -24,7 +24,9 @@
 (setq org-todo-keyword-faces
       '(("PLAN" . "#8093CC") ("OBSOLETE" . "#909090") ("WAIT" . "#CCA060")))
 (setq org-todo-keywords
-      '((sequence "PLAN(p)" "TODO(t)" "WAIT(w)" "|" "OBSOLETE(o)" "DONE(d)")))
+      '((sequence "PLAN(p)" "TODO(t)" "WAIT(w)" "|"
+                  "OBSOLETE(o)" "DONE(d)")))
+(setq org-agenda-files '("~/Projects/NOTES.org"))
 (add-hook 'org-mode-hook 'z-org-mode-hook)
 
 ;; --------------------------------------------------
