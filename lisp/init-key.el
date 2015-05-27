@@ -186,8 +186,9 @@ avy-goto-line or avy-goto-word-1 respectively."
 
 ;; --------------------------------------------------
 (require 'god-mode)
-(setq god-exempt-major-modes nil)
+(setq god-mod-alist '((nil . "C-") ("m" . "M-") ("g" . "C-M-")))
 ;; (add-to-list 'god-exempt-major-modes 'ibuffer-mode)
+(setq god-exempt-major-modes nil)
 (setq god-exempt-predicates nil)
 (global-set-key (kbd "ESC ESC") 'god-mode-all)
 (define-key god-local-mode-map (kbd "z") 'repeat)
