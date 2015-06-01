@@ -204,14 +204,15 @@ avy-goto-line or avy-goto-word-1 respectively."
 ;; Bind some second level modifier keys with C- prefix for easier
 ;; god-mode access. Directly bind these to commands, instead of making
 ;; it a keyboard macro so that messages work.
-(dolist (i '("1" "2" "3" "4" "5" "6" "7" "8" "9" "#"))
-  (global-set-key (kbd (concat "C-x C-" i))
-                  (key-binding (kbd (concat "C-x " i))))
-)
-
-(dolist (i '("1" "2" "3" "4" "5" "6" "7" "8" "9" "c" "g" "j" "k" "l" "n" "p"))
-  (global-set-key (kbd (concat "M-g C-" i))
-                  (key-binding (kbd (concat "M-g " i)))))
+(dolist (bindings
+         '(("C-x" "1" "2" "3" "4" "5" "6" "7" "8" "9" "#")
+           ("M-g" "1" "2" "3" "4" "5" "6" "7" "8" "9" "c" "j" "k" "l" "n" "p")
+           ("M-m" "i" "o")))
+  (let ((prefix (car bindings))
+        (chars (cdr bindings)))
+    (dolist (i chars)
+      (global-set-key (kbd (concat prefix " C-" i))
+                      (key-binding (kbd (concat prefix " " i)))))))
 
 (defun z-god-mode-update ()
   (cond (god-local-mode (set-face-background 'mode-line "blue4"))

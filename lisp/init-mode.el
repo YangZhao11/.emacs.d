@@ -3,7 +3,6 @@
        '(("\\.Rmd\\'" . poly-markdown+r-mode))
        auto-mode-alist))
 
-
 (require 'bug-reference)
 (defun z-bug-to-link ()
   "Convert text captured from bug-reference-bug-regexp into links."
@@ -21,6 +20,9 @@
   (bug-reference-mode)
   (setq org-use-speed-commands 't)
   (setq-local register-channel-move-by-default 't))
+(setq org-speed-commands-user
+      '(("S" . org-schedule)
+        ("d" . org-deadline)))
 (setq org-todo-keyword-faces
       '(("PLAN" . "#8093CC") ("OBSOLETE" . "#909090") ("WAIT" . "#CCA060")))
 (setq org-todo-keywords
