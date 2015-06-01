@@ -190,7 +190,7 @@ avy-goto-line or avy-goto-word-1 respectively."
 
 ;; --------------------------------------------------
 (require 'god-mode)
-(setq god-mod-alist '((nil . "C-") ("m" . "M-") ("g" . "C-M-")))
+(setq god-mod-alist '((nil . "C-") ("g" . "M-") ("h" . "C-M-")))
 ;; (add-to-list 'god-exempt-major-modes 'ibuffer-mode)
 (setq god-exempt-major-modes nil)
 (setq god-exempt-predicates nil)
@@ -205,8 +205,8 @@ avy-goto-line or avy-goto-word-1 respectively."
 ;; god-mode access. Directly bind these to commands, instead of making
 ;; it a keyboard macro so that messages work.
 (dolist (bindings
-         '(("C-x" "1" "2" "3" "4" "5" "6" "7" "8" "9" "#")
-           ("M-g" "1" "2" "3" "4" "5" "6" "7" "8" "9" "c" "j" "k" "l" "n" "p")
+         '(("C-x" "1" "2" "3" "#")
+           ("M-g" "1" "2" "3" "4" "5" "6" "7" "8" "c" "j" "k" "l" "n" "p")
            ("M-m" "i" "o")))
   (let ((prefix (car bindings))
         (chars (cdr bindings)))
