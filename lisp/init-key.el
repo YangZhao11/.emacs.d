@@ -190,7 +190,7 @@ avy-goto-line or avy-goto-word-1 respectively."
 
 ;; --------------------------------------------------
 (require 'god-mode)
-(setq god-mod-alist '((nil . "C-") ("m" . "M-") ("g" . "C-M-")))
+(setq god-mod-alist '((nil . "C-") ("g" . "M-") ("h" . "C-M-")))
 ;; (add-to-list 'god-exempt-major-modes 'ibuffer-mode)
 (setq god-exempt-major-modes nil)
 (setq god-exempt-predicates nil)
@@ -204,12 +204,12 @@ avy-goto-line or avy-goto-word-1 respectively."
 ;; Bind some second level modifier keys with C- prefix for easier
 ;; god-mode access. Directly bind these to commands, instead of making
 ;; it a keyboard macro so that messages work.
-(dolist (i '("1" "2" "3" "4" "5" "6" "7" "8" "9" "#"))
+(dolist (i '("1" "2" "3" "#"))
   (global-set-key (kbd (concat "C-x C-" i))
                   (key-binding (kbd (concat "C-x " i))))
 )
 
-(dolist (i '("1" "2" "3" "4" "5" "6" "7" "8" "9" "c" "g" "j" "k" "l" "n" "p"))
+(dolist (i '("1" "2" "3" "4" "5" "6" "7" "8" "c" "g" "j" "k" "l" "n" "p"))
   (global-set-key (kbd (concat "M-g C-" i))
                   (key-binding (kbd (concat "M-g " i)))))
 
