@@ -198,19 +198,19 @@ avy-goto-line or avy-goto-word-1 respectively."
 (define-key god-local-mode-map (kbd "z") 'repeat)
 (define-key god-local-mode-map (kbd "i") 'god-mode-all)
 
-;; bind symbols to M-?
-(dolist (i '("!" "@" "$" "%" "^" "&" "*" "{" "}" "<" ">" ";" ":"))
-  (define-key god-local-mode-map (kbd i)
-    (key-binding (kbd (concat "M-" i)))))
-(define-key god-local-mode-map (kbd "#") 'server-edit)
-(define-key god-local-mode-map (kbd "(") 'backward-sexp)
-(define-key god-local-mode-map (kbd ")") 'forward-sexp)
-(define-key god-local-mode-map (kbd "[") 'switch-to-prev-buffer)
-(define-key god-local-mode-map (kbd "]") 'switch-to-next-buffer)
-
 (require 'god-mode-isearch)
 (define-key isearch-mode-map (kbd "ESC ESC") 'god-mode-isearch-activate)
 (define-key god-mode-isearch-map (kbd "ESC ESC") 'god-mode-isearch-disable)
+
+;; bind symbols to M-?
+(dolist (i '("!" "@" "$" "%" "^" "&" "*" "{" "}" "<" ">" ";" ":" "|"))
+  (define-key god-local-mode-map (kbd i)
+    (key-binding (kbd (concat "M-" i)))))
+(define-key god-local-mode-map (kbd "#") 'server-edit)
+(define-key god-local-mode-map (kbd "[") 'backward-sexp)
+(define-key god-local-mode-map (kbd "]") 'forward-sexp)
+(define-key god-local-mode-map (kbd "(") 'switch-to-prev-buffer)
+(define-key god-local-mode-map (kbd ")") 'switch-to-next-buffer)
 
 ;; Bind some second level modifier keys with C- prefix for easier
 ;; god-mode access. Directly bind these to commands, instead of making
