@@ -94,7 +94,7 @@ other buffer in other window."
   (if (region-active-p)
       (deactivate-mark)
       (activate-mark)))
-(global-set-key (kbd "M-i") 'z-toggle-activate-mark)
+(global-set-key (kbd "M-=") 'z-toggle-activate-mark)
 
 (require 'goto-chg)
 (global-set-key (kbd "C-.") 'goto-last-change)
@@ -143,7 +143,7 @@ avy-goto-line or avy-goto-word-1 respectively."
 (setq avy-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l ?w ?e ?r ?u ?i ?o ?p ?x ?c ?v ?n ?m))
 
 (require 'ace-window)
-(global-set-key (kbd "M-o") 'ace-window)
+(global-set-key (kbd "M-j") 'ace-window)
 (setq aw-scope 'frame)
 (setq aw-background nil)
 (setq aw-keys '(?s ?d ?f ?j ?i ?o ?g ?h ?a ?k ?l ?\;))
@@ -165,12 +165,12 @@ avy-goto-line or avy-goto-word-1 respectively."
 (setq er/try-expand-list
       (append er/try-expand-list '(mark-paragraph mark-page)))
 
-(global-unset-key (kbd "M-m"))
 (require 'change-inner)
-(global-set-key (kbd "M-m i") 'change-inner)
-(global-set-key (kbd "M-m o") 'change-outer)
+(global-set-key (kbd "M-i") 'change-inner)
+(global-set-key (kbd "M-o") 'change-outer)
 
 (require 'multiple-cursors)
+(global-unset-key (kbd "M-m"))
 (global-set-key (kbd "M-m ,") 'mc/mark-more-like-this-extended)
 (global-set-key (kbd "M-m M-m") 'mc/mark-all-dwim)
 (global-set-key (kbd "M-m m") 'mc/mark-all-like-this-dwim)
@@ -217,8 +217,8 @@ avy-goto-line or avy-goto-word-1 respectively."
 ;; it a keyboard macro so that messages work in god-mode.
 (dolist (bindings
          '(("C-x" "1" "2" "3" "#")
-           ("M-g" "1" "2" "3" "4" "5" "6" "7" "8" "c" "j" "k" "l" "n" "p")
-           ("M-m" "i" "o")))
+           ("M-g" "1" "2" "3" "4" "5" "6" "7" "8"
+            "c" "i" "j" "k" "l" "n" "o" "p")))
   (let ((prefix (car bindings))
         (chars (cdr bindings)))
     (dolist (i chars)
