@@ -216,7 +216,7 @@ avy-goto-line or avy-goto-word-1 respectively."
 ;; god-mode access. Directly bind these to commands, instead of making
 ;; it a keyboard macro so that messages work in god-mode.
 (dolist (bindings
-         '(("C-x" "1" "2" "3" "#")
+         '(("C-x" "1" "2" "3" "#" "[" "]")
            ("M-g" "1" "2" "3" "4" "5" "6" "7" "8"
             "c" "i" "j" "k" "l" "n" "o" "p")))
   (let ((prefix (car bindings))
