@@ -19,6 +19,8 @@
   (local-unset-key (kbd "C-j"))
   (bug-reference-mode)
   (setq org-use-speed-commands 't)
+  (setq org-link-abbrev-alist
+        '(("doc" . "https://drive.google.com/drive/search?q=")))
   (setq-local register-channel-move-by-default 't))
 (setq org-speed-commands-user
       '(("S" . org-schedule)
@@ -157,6 +159,7 @@
   (define-key ess-mode-map (kbd "\\") 'ess-smart-pipe)
   (define-key ess-mode-map (kbd ";") 'ess-smart-S-assign)
   (setq ess-tab-complete-in-script t)
+  (rainbow-delimiters-mode 1)
   (z-ess-mode-symbols))
 (add-hook 'ess-mode-hook 'z-ess-mode-hook)
 
