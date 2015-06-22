@@ -1,0 +1,7 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: wd
+# key: wd
+# condition: (string= ess-dialect "R")
+# expand-env: ((dir (if (buffer-file-name) (file-name-directory (buffer-file-name)) "")))
+# --
+setwd("${1:`(s-replace (getenv "HOME") "~" dir)`}")
