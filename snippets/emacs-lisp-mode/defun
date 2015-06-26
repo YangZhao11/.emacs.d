@@ -2,6 +2,6 @@
 # name: defun
 # key: defun
 # --
-(defun ${1:function} ($2)
+defun ${1:function} ($2)
        ${3:(interactive$4)
-       }$0)
+       }$0

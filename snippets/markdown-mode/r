@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: r
+# key: r
+# type: command
+# To work correctly with poly-mode, exit point has to be in markdown-mode.
+# --
+(insert "```{r}\n\n```")
+(previous-line)
+(move-beginning-of-line)

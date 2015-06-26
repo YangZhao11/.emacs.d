@@ -1,0 +1,8 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: pandoc
+# key: pandoc
+# --
+<!--pandoc
+t: ${1:html5}
+css: ${2:markdown.css}
+$0-->

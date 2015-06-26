@@ -1,0 +1,8 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: src_dremel
+# key: src_dremel
+# condition: (string= ess-dialect "R")
+# --
+conn <- DremelConnect()
+src <- src_dremel(conn, ${1:datacube} = "/namespace/logs/loga-home/`user-login-name`$0")
+$1 <- tbl(src, "$1")
