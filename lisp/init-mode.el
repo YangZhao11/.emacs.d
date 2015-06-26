@@ -20,7 +20,8 @@
   (bug-reference-mode)
   (setq org-use-speed-commands 't)
   (setq org-link-abbrev-alist
-        '(("doc" . "https://drive.google.com/drive/search?q=")))
+        '(("doc" . "https://drive.google.com/drive/search?q=")
+          ("ai" . "https://groups.google.com/a/google.com/forum/#!searchin/zhyang-ai/")))
   (setq-local register-channel-move-by-default 't))
 (setq org-speed-commands-user
       '(("S" . org-schedule)

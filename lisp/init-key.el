@@ -118,11 +118,15 @@ storing current frame configuration to register 8."
 (define-key register-channel-mode-map (kbd "M-g 8")
   'all-frames-to-messages-buffer)
 
+(defun z-unbind-j ()
+  (local-unset-key (kbd "C-j"))
+  (local-unset-key (kbd "M-j")))
+(add-hook 'prog-mode-hook 'z-unbind-j)
+
 (require 'avy)
 (setq avy-style 'at-full)
 (eval-after-load "isearch"
     '(define-key isearch-mode-map (kbd "C-j") 'avy-isearch))
-(global-set-key (kbd "M-j") 'avy-goto-word-1)
 
 (defun z-goto-char (char &optional arg)
   "Call avy-goto-char unless char is RET or SPC, when we call
@@ -133,13 +137,6 @@ avy-goto-line or avy-goto-word-1 respectively."
         ((= char ?\ ) (call-interactively 'avy-goto-word-1))
         ('t (avy-goto-char char arg))))
 (global-set-key (kbd "C-j") 'z-goto-char)
-
-(global-set-key (kbd "M-g j") 'avy-goto-char)
-(global-set-key (kbd "M-g M-j") 'avy-goto-char)
-(global-set-key (kbd "M-g k") 'avy-goto-word-1)
-(global-set-key (kbd "M-g M-k") 'avy-goto-word-1)
-(global-set-key (kbd "M-g l") 'avy-goto-line)
-(global-set-key (kbd "M-g M-l") 'avy-goto-line)
 (setq avy-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l ?w ?e ?r ?u ?i ?o ?p ?x ?c ?v ?n ?m))
 
 (require 'ace-window)
@@ -216,9 +213,8 @@ avy-goto-line or avy-goto-word-1 respectively."
 ;; god-mode access. Directly bind these to commands, instead of making
 ;; it a keyboard macro so that messages work in god-mode.
 (dolist (bindings
-         '(("C-x" "1" "2" "3" "#" "[" "]")
-           ("M-g" "1" "2" "3" "4" "5" "6" "7" "8"
-            "c" "i" "j" "k" "l" "n" "o" "p")))
+         '(("C-x" "0" "1" "2" "3" "#" "[" "]")
+           ("M-g" "1" "2" "3" "4" "5" "6" "7" "8" "c" "n" "p")))
   (let ((prefix (car bindings))
         (chars (cdr bindings)))
     (dolist (i chars)
