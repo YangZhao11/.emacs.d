@@ -6,3 +6,4 @@ eshell/
 **/*~
 **/#*#
 /session.*
+.DS_Store
