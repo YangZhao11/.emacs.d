@@ -54,6 +54,11 @@
                  'rear-nonsticky '(face readonly)))))
 (setq eshell-prompt-function 'z-eshell-prompt-function
       eshell-highlight-prompt nil)
+(defun z-eshell-mode-hook ()
+  (setq pcomplete-cycle-completions nil))
+(add-hook 'eshell-mode-hook 'z-eshell-mode-hook)
+(defalias 'eshell/x 'eshell/exit)
+
 
 ;; --------------------------------------------------
 ;; modes
