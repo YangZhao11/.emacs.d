@@ -13,7 +13,7 @@
 (put 'z-bug-to-link 'bug-reference-url-format 't)
 (setq bug-reference-url-format 'z-bug-to-link)
 (setq bug-reference-bug-regexp
-      "\\(\\b\\)\\(b/[0-9]+\\|c[rl]/[0-9]+\\|\\(g\\|go\\|goto\\)/[-a-zA-z0-9_]+\\|[a-z]+@\\)")
+      "\\(\\b\\)\\(b/[0-9]+\\|c[rl]/[0-9]+\\|t/[0-9]+\\|\\(g\\|go\\|goto\\)/[-a-zA-z0-9_]+\\|[a-z]+@\\)")
 
 (defun z-org-mode-hook ()
   (local-unset-key (kbd "C-j"))

@@ -79,7 +79,7 @@
 
 
 (require 'diminish)
-(eval-after-load "god-mode" '(diminish 'god-local-mode " •"))
+(eval-after-load "god-mode" '(diminish 'god-local-mode " ⌘"))
 (eval-after-load "yasnippet" '(diminish 'yas-minor-mode))
 (eval-after-load "autopair" '(diminish 'autopair-mode))
 (eval-after-load "whitespace" '(diminish 'whitespace-mode))
