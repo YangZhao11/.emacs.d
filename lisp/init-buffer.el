@@ -11,6 +11,7 @@
       ido-ignore-buffers
       '("\\` " "^\\*ESS\\*" "^\\*Messages\\*" "^\\*Help\\*" "^\\*Buffer"
               "^\\*.*Completions\\*$" "^\\*Ediff" "^\\*tramp" "^\\*cvs-"
+              "\\[r\\]" "\\[fundamental\\]"
               "_region_" " output\\*$" "^TAGS$" "^\*Ido")
       ido-ignore-directories
       '("\\`auto/" "\\.prv/" "\\`CVS/" "\\`\\.\\./" "\\`\\./")
