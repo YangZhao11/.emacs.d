@@ -11,7 +11,7 @@
       ido-ignore-buffers
       '("\\` " "^\\*ESS\\*" "^\\*Messages\\*" "^\\*Help\\*" "^\\*Buffer"
               "^\\*.*Completions\\*$" "^\\*Ediff" "^\\*tramp" "^\\*cvs-"
-              "\\[r\\]" "\\[fundamental\\]"
+              "\\[r\\]$" "\\[fundamental\\]$"
               "_region_" " output\\*$" "^TAGS$" "^\*Ido")
       ido-ignore-directories
       '("\\`auto/" "\\.prv/" "\\`CVS/" "\\`\\.\\./" "\\`\\./")
@@ -31,36 +31,36 @@
 (require 'ibuffer)
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 
-(defvar citc-root (format "/google/src/cloud/%s" (getenv "USER"))
-  "The root location of all citc clients")
+(defun g3-clients ()
+  "Returns all g3 clients by iterating through all open files."
+  (let* ((files (delq nil (mapcar 'buffer-file-name (buffer-list))))
+         (f (cl-remove-if-not (lambda (x) (s-contains-p "/google3/" x)) files))
+         (dirs (mapcar (lambda (x)
+                         (replace-regexp-in-string
+                          ".*/\\([^/]+\\)/google3/.*" "\\1" x)) f)))
+    (cl-delete-duplicates dirs
+                          :test (lambda (x y) (equal x y)))))
 
-(defun citc-clients ()
-  "Returns all citc clients by listing citc-root."
-  (let ((citc (ignore-errors (directory-files citc-root))))
-    (setq citc (delete "." citc))
-    (delete ".." citc)))
-
-(defvar z-default-citc-group
-  `(("CitC"
-     ,(cons 'filename (format "^%s/" citc-root))))
-  "Default citc group when citc clients are not available,
+(defvar z-default-g3-group
+  '(("G3" (filename . "/googl3/")))
+  "Default g3 group when g3 clients are not available,
 e.g. no prodaccess.")
 
-(defun z-citc-group (d)
-  "Function to map citc client name to ibuffer filter group"
-  (list (format "CitC %s" d)
+(defun z-g3-group (d)
+  "Function to map g3 client name to ibuffer filter group"
+  (list (format "G3: %s" d)
         (cons 'filename
-              (format "^%s/%s/" citc-root d))))
+              (format "/%s/google3/" d))))
 
 (defun z-ibuffer-groups (name)
-  "Generate ibuffer filter group definition. Each CitC client has its own group."
-  (let ((citc (citc-clients))
-        (grps z-default-citc-group))
-    (if citc
-        (setq grps (mapcar 'z-citc-group citc)))
+  "Generate ibuffer filter group definition. Each G3 client has its own group."
+  (let ((g3 (g3-clients))
+        (grps z-default-g3-group))
+    (if g3
+        (setq grps (mapcar 'z-g3-group g3)))
     (append (list name)
            grps
-           `(("Google3"
+           `(("G3"
               (filename . "/google3/"))
              (,(format "%s Home" (getenv "USER"))
               ,(cons 'filename
@@ -70,6 +70,8 @@ e.g. no prodaccess.")
                          (mode . ess-help-mode)
                          (mode . apropos-mode)
                          (mode . completion-list-mode)
+                         (name . "\\[r\\]$")
+                         (name . "\\[fundamental\\]$")
                          (name . "^\\*Messages\\*$")
                          (name . "^\\*Backtrace\\*$")
                          (name . "^\\*.*Help.*\\*$")
