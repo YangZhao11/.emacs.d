@@ -24,11 +24,9 @@ region, instead of inactivate region."
 (global-set-key (kbd "C-x _") 'shrink-other-window-if-larger-than-buffer)
 (global-set-key (kbd "C-x 9") 'delete-other-windows-vertically)
 
-(global-set-key [f1] 'ispell-word)
-(global-set-key (kbd "C-x <f1>") 'ispell-comments-and-strings)
+;; F1 for help.
 (global-set-key [f2] 'eshell)
 ;; F3 and F4 for macros
-;(global-set-key (kbd "C-x <f5>") 'rgrep)
 (global-set-key [f7] 'gud-up)
 (global-set-key [(shift f7)] 'gud-down)
 (global-set-key [f8] 'gud-next)
@@ -200,7 +198,7 @@ avy-goto-line or avy-goto-word-1 respectively."
 (define-key god-mode-isearch-map (kbd "ESC ESC") 'god-mode-isearch-disable)
 
 ;; bind symbols to M-?
-(dolist (i '("!" "@" "$" "%" "^" "&" "*" "{" "}" "<" ">" ";" ":" "|"))
+(dolist (i '("!" "@" "$" "%" "^" "&" "*" "{" "}" "<" ">" ";" ":" "|" "="))
   (define-key god-local-mode-map (kbd i)
     (key-binding (kbd (concat "M-" i)))))
 (define-key god-local-mode-map (kbd "#") 'server-edit)
