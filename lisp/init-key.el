@@ -131,8 +131,9 @@ storing current frame configuration to register 8."
 avy-goto-line or avy-goto-word-1 respectively."
   (interactive (list (read-char "Goto: ")
                      current-prefix-arg))
-  (cond ((= char 13) (call-interactively 'avy-goto-line))
-        ((= char ?\ ) (call-interactively 'avy-goto-word-1))
+  (cond ((= char 13) (call-interactively 'avy-goto-line)) ; return
+        ((= char ?\ ) (call-interactively 'avy-goto-word-1)) ; space
+        ((= char ?\t) (call-interactively 'avy-goto-char-in-line)) ; Tab
         ('t (avy-goto-char char arg))))
 (global-set-key (kbd "C-j") 'z-goto-char)
 (setq avy-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l ?w ?e ?r ?u ?i ?o ?p ?x ?c ?v ?n ?m))
