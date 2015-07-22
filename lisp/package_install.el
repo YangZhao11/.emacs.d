@@ -12,6 +12,7 @@
 (package-install 'ido-ubiquitous)
 (package-install 'ido-vertical-mode)
 (package-install 'julia-mode)
+(package-install 'jump-char)
 (package-install 'lua-mode)
 (package-install 'magit)
 (package-install 'markdown-mode)

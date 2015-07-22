@@ -166,14 +166,23 @@ avy-goto-line or avy-goto-word-1 respectively."
 (global-set-key (kbd "M-o") 'change-outer)
 
 (require 'multiple-cursors)
-(global-unset-key (kbd "M-m"))
-(global-set-key (kbd "M-m ,") 'mc/mark-more-like-this-extended)
-(global-set-key (kbd "M-m M-m") 'mc/mark-all-dwim)
-(global-set-key (kbd "M-m m") 'mc/mark-all-like-this-dwim)
-(global-set-key (kbd "M-m /") 'mc/edit-lines)
-(global-set-key (kbd "M-m n") 'mc/insert-numbers)
-(global-set-key (kbd "M-m .") 'mc/mark-pop)
+(global-unset-key (kbd "C-x m"))
+(global-set-key (kbd "C-x m ,") 'mc/mark-more-like-this-extended)
+(global-set-key (kbd "C-x m m") 'mc/mark-all-dwim)
+(global-set-key (kbd "C-x m M") 'mc/mark-all-like-this-dwim)
+(global-set-key (kbd "C-x m /") 'mc/edit-lines)
+(global-set-key (kbd "C-x m n") 'mc/insert-numbers)
+(global-set-key (kbd "C-x m .") 'mc/mark-pop)
 (add-to-list 'mc/unsupported-minor-modes 'god-local-mode)
+
+(require 'jump-char)
+(setq jump-char-forward-key "."
+      jump-char-backward-key ",")
+(define-key jump-char-isearch-map (kbd "C-j") 'jump-char-switch-to-ace)
+(defalias 'ace-jump-char-mode 'avy-goto-char)
+
+(global-set-key (kbd "M-m") 'jump-char-forward)
+(global-set-key (kbd "M-M") 'jump-char-backward)
 
 (require 'yasnippet)
 (global-set-key (kbd "M-?") 'yas-insert-snippet)
@@ -205,8 +214,6 @@ avy-goto-line or avy-goto-word-1 respectively."
 (define-key god-local-mode-map (kbd "#") 'server-edit)
 (define-key god-local-mode-map (kbd "[") 'backward-sexp)
 (define-key god-local-mode-map (kbd "]") 'forward-sexp)
-(define-key god-local-mode-map (kbd "(") 'switch-to-prev-buffer)
-(define-key god-local-mode-map (kbd ")") 'switch-to-next-buffer)
 
 ;; Bind some second level modifier keys with C- prefix for easier
 ;; god-mode access. Directly bind these to commands, instead of making
