@@ -12,8 +12,10 @@
         ess-smart-comma
         ess-yank
         go-mode-insert-and-indent
+        iy-go-to-char--command
         kill-sexp
         yas-expand
+        z-exchange-point-and-mark
         z-toggle-activate-mark
         z-zap-up-to-char
         zap-up-to-char

@@ -1,3 +1,12 @@
+
+;; (require 'jump-char)
+;; (setq jump-char-forward-key "."
+;;       jump-char-backward-key ",")
+;; (define-key jump-char-isearch-map (kbd "C-j") 'jump-char-switch-to-ace)
+;; (defalias 'ace-jump-char-mode 'avy-goto-char)
+;; (global-set-key (kbd "M-m") 'jump-char-forward)
+;; (global-set-key (kbd "M-M") 'jump-char-backward)
+
 ;; replaced with ace-window
 (global-set-key (kbd "M-9") (lambda () (interactive)
                               (other-window -1)))

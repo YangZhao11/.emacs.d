@@ -86,6 +86,7 @@ other buffer in other window."
 (global-set-key (kbd "C-x t v") 'view-mode)
 (global-set-key (kbd "C-x t w") 'subword-mode)
 (global-set-key (kbd "C-x t W") 'superword-mode)
+(global-set-key (kbd "C-x t SPC") 'global-hl-line-mode)
 
 (defun z-toggle-activate-mark ()
   (interactive)
@@ -176,14 +177,11 @@ avy-goto-line or avy-goto-word-1 respectively."
 (global-set-key (kbd "C-x m .") 'mc/mark-pop)
 (add-to-list 'mc/unsupported-minor-modes 'god-local-mode)
 
-(require 'jump-char)
-(setq jump-char-forward-key "."
-      jump-char-backward-key ",")
-(define-key jump-char-isearch-map (kbd "C-j") 'jump-char-switch-to-ace)
-(defalias 'ace-jump-char-mode 'avy-goto-char)
-
-(global-set-key (kbd "M-m") 'jump-char-forward)
-(global-set-key (kbd "M-M") 'jump-char-backward)
+(require 'iy-go-to-char)
+(setq iy-go-to-char-key-forward ?.
+      iy-go-to-char-key-backward ?,)
+(global-set-key (kbd "M-m") 'iy-go-up-to-char)
+(global-set-key (kbd "M-M") 'iy-go-to-char-backward)
 
 (require 'yasnippet)
 (global-set-key (kbd "M-?") 'yas-insert-snippet)
