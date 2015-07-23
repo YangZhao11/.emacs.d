@@ -12,8 +12,8 @@
 (require 'google-cc-extras)
 
 ;; code search
-(global-set-key (kbd "M-.") 'codesearch-search)
-(global-set-key (kbd "M-,") 'google-open-in-code-search)
+(global-set-key (kbd "M-s s") 'codesearch-search)
+(global-set-key (kbd "M-s c") 'google-open-in-code-search)
 
 (when (fboundp 'autogen)
   (add-hook 'find-file-not-found-hooks 'autogen))
