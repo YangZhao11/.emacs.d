@@ -17,6 +17,7 @@
 
 (defun z-org-mode-hook ()
   (local-unset-key (kbd "C-j"))
+  (local-unset-key (kbd "M-m"))
   (bug-reference-mode)
   (setq org-use-speed-commands 't)
   (setq org-link-abbrev-alist
