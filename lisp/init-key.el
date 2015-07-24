@@ -169,21 +169,31 @@ avy-goto-line or avy-goto-word-1 respectively."
 (global-set-key (kbd "M-o") 'change-outer)
 
 (require 'multiple-cursors)
-(global-unset-key (kbd "C-x m"))
-(global-set-key (kbd "C-x m ,") 'mc/mark-more-like-this-extended)
-(global-set-key (kbd "C-x m m") 'mc/mark-all-dwim)
-(global-set-key (kbd "C-x m M") 'mc/mark-all-like-this-dwim)
-(global-set-key (kbd "C-x m /") 'mc/edit-lines)
-(global-set-key (kbd "C-x m n") 'mc/insert-numbers)
-(global-set-key (kbd "C-x m .") 'mc/mark-pop)
+(global-unset-key (kbd "M-m"))
+(global-set-key (kbd "M-m ,") 'mc/mark-more-like-this-extended)
+(global-set-key (kbd "M-m m") 'mc/mark-all-dwim)
+(global-set-key (kbd "M-m M-m") 'mc/mark-all-like-this-dwim)
+(global-set-key (kbd "M-m /") 'mc/edit-lines)
+(global-set-key (kbd "M-m n") 'mc/insert-numbers)
+(global-set-key (kbd "M-m .") 'mc/mark-pop)
 (add-to-list 'mc/unsupported-minor-modes 'god-local-mode)
 (add-to-list 'mc/cursor-specific-vars 'iy-go-to-char-start-pos)
 
 (require 'iy-go-to-char)
-(setq iy-go-to-char-key-forward ?.
-      iy-go-to-char-key-backward ?,)
-(global-set-key (kbd "M-m") 'iy-go-up-to-char)
-(global-set-key (kbd "M-M") 'iy-go-to-char-backward)
+(setq iy-go-to-char-use-key-forward nil
+      iy-go-to-char-use-key-backward nil)
+(global-set-key (kbd "M-.") 'iy-go-up-to-char)
+(global-set-key (kbd "M-,") 'iy-go-to-char-backward)
+(defun zy-goto-char-continue (n)
+  (interactive "p")
+  (iy-go-to-or-up-to-continue
+   (* iy-go-to-char-start-dir n) 'exclude))
+(defun zy-goto-char-continue-backward (n)
+  (interactive "p")
+  (iy-go-to-or-up-to-continue
+   (- (* iy-go-to-char-start-dir n)) 'include))
+(define-key iy-go-to-char-keymap (kbd "M-.") 'zy-goto-char-continue)
+(define-key iy-go-to-char-keymap (kbd "M-,") 'zy-goto-char-continue-backward)
 
 (require 'yasnippet)
 (global-set-key (kbd "M-?") 'yas-insert-snippet)
