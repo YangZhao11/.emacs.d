@@ -132,9 +132,10 @@ storing current frame configuration to register 8."
 avy-goto-line or avy-goto-word-1 respectively."
   (interactive (list (read-char "Goto: ")
                      current-prefix-arg))
+  (message "z-goto-char %c" char)
   (cond ((= char ?\ ) (call-interactively 'avy-goto-line)) ; space
         ((= char ?\t) (call-interactively 'avy-goto-char-in-line)) ; Tab
-        ((string-match-p "\\w" (char-to-string char))
+        ((string-match-p "[:alpha:]" (char-to-string char))
          (avy-goto-subword-1 char arg))
         ('t (avy-goto-char char arg))))
 (global-set-key (kbd "C-j") 'z-goto-char)
@@ -176,6 +177,7 @@ avy-goto-line or avy-goto-word-1 respectively."
 (global-set-key (kbd "C-x m n") 'mc/insert-numbers)
 (global-set-key (kbd "C-x m .") 'mc/mark-pop)
 (add-to-list 'mc/unsupported-minor-modes 'god-local-mode)
+(add-to-list 'mc/cursor-specific-vars 'iy-go-to-char-start-pos)
 
 (require 'iy-go-to-char)
 (setq iy-go-to-char-key-forward ?.
@@ -218,7 +220,7 @@ avy-goto-line or avy-goto-word-1 respectively."
 ;; god-mode access. Directly bind these to commands, instead of making
 ;; it a keyboard macro so that messages work in god-mode.
 (dolist (bindings
-         '(("C-x" "0" "1" "2" "3" "#" "[" "]")
+         '(("C-x" "0" "1" "2" "3" "9" "#" "[" "]")
            ("M-g" "1" "2" "3" "4" "5" "6" "7" "8" "c" "n" "p")))
   (let ((prefix (car bindings))
         (chars (cdr bindings)))

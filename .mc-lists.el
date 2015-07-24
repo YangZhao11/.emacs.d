@@ -14,6 +14,7 @@
         go-mode-insert-and-indent
         iy-go-to-char--command
         kill-sexp
+        search-forward
         yas-expand
         z-exchange-point-and-mark
         z-toggle-activate-mark
@@ -24,4 +25,5 @@
 (setq mc/cmds-to-run-once
       '(
         god-mode-all
+        smex
         ))
