@@ -19,7 +19,8 @@
   (local-unset-key (kbd "C-j"))
   (local-unset-key (kbd "M-m"))
   (bug-reference-mode)
-  (setq org-use-speed-commands 't)
+  (setq org-use-speed-commands 't
+        org-sparse-tree-default-date-type 'closed)
   (setq org-link-abbrev-alist
         '(("doc" . "https://drive.google.com/drive/search?q=")
           ("ai" . "https://groups.google.com/a/google.com/forum/#!searchin/zhyang-ai/")))

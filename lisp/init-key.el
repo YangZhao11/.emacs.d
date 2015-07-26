@@ -179,6 +179,9 @@ avy-goto-line or avy-goto-word-1 respectively."
 (add-to-list 'mc/unsupported-minor-modes 'god-local-mode)
 (add-to-list 'mc/cursor-specific-vars 'iy-go-to-char-start-pos)
 
+(global-set-key (kbd "C-x C-.") 'find-tag)
+(global-set-key (kbd "C-x C-,") 'tags-loop-continue)
+
 (require 'iy-go-to-char)
 (setq iy-go-to-char-use-key-forward nil
       iy-go-to-char-use-key-backward nil)
