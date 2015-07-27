@@ -1,19 +1,24 @@
-(setq auto-mode-alist
-      (append
-       '(("\\.Rmd\\'" . poly-markdown+r-mode))
-       auto-mode-alist))
+(eval-after-load "eldoc" '(diminish 'eldoc-mode))
+;; (use-package eldoc
+;;   :diminish
+;;   :commands eldoc-mode)
 
-(require 'bug-reference)
-(defun z-bug-to-link ()
-  "Convert text captured from bug-reference-bug-regexp into links."
-  (let ((m (match-string 2)))
-    (if (s-ends-with? "@" m)
-        (concat "teams/" (s-chop-suffix "@" m))
-      (concat "http://" m))))
-(put 'z-bug-to-link 'bug-reference-url-format 't)
-(setq bug-reference-url-format 'z-bug-to-link)
-(setq bug-reference-bug-regexp
-      "\\(\\b\\)\\(b/[0-9]+\\|c[rl]/[0-9]+\\|t/[0-9]+\\|\\(g\\|go\\|goto\\)/[-a-zA-z0-9_]+\\|[a-z]+@\\)")
+(use-package poly-R
+  :mode ("\\.Rmd\\'" . poly-markdown+r-mode))
+
+(use-package bug-reference
+  :commands bug-reference-mode
+  :config
+  (defun z-bug-to-link ()
+    "Convert text captured from bug-reference-bug-regexp into links."
+    (let ((m (match-string 2)))
+      (if (s-ends-with? "@" m)
+          (concat "teams/" (s-chop-suffix "@" m))
+        (concat "http://" m))))
+  (put 'z-bug-to-link 'bug-reference-url-format 't)
+  (setq bug-reference-url-format 'z-bug-to-link
+        bug-reference-bug-regexp
+        "\\(\\b\\)\\(b/[0-9]+\\|c[rl]/[0-9]+\\|t/[0-9]+\\|\\(g\\|go\\|goto\\)/[-a-zA-z0-9_]+\\|[a-z]+@\\)"))
 
 (defun z-org-mode-hook ()
   (local-unset-key (kbd "C-j"))
@@ -25,19 +30,26 @@
         '(("doc" . "https://drive.google.com/drive/search?q=")
           ("ai" . "https://groups.google.com/a/google.com/forum/#!searchin/zhyang-ai/")))
   (setq-local register-channel-move-by-default 't))
-(setq org-speed-commands-user
+
+(use-package org
+  :defer 't
+  :config
+  (setq org-speed-commands-user
       '(("S" . org-schedule)
-        ("d" . org-deadline)))
-(setq org-todo-keyword-faces
-      '(("PLAN" . "#8093CC") ("OBSOLETE" . "#909090") ("WAIT" . "#CCA060")))
-(setq org-todo-keywords
+        ("d" . org-deadline))
+      org-todo-keyword-faces
+      '(("PLAN" . "#8093CC") ("OBSOLETE" . "#909090") ("WAIT" . "#CCA060"))
+      org-todo-keywords
       '((sequence "PLAN(p)" "TODO(t)" "WAIT(w)" "|"
-                  "OBSOLETE(o)" "DONE(d)")))
-(setq org-agenda-files '("~/Projects/NOTES.org"))
-(add-hook 'org-mode-hook 'z-org-mode-hook)
+                  "OBSOLETE(o)" "DONE(d)"))
+      org-agenda-files '("~/Projects/NOTES.org"))
+  (add-hook 'org-mode-hook 'z-org-mode-hook))
 
 ;; --------------------------------------------------
 ;; eshell
+(use-package eshell
+  :commands eshell
+  :config
 (defun z-eshell-prompt-function ()
   (let* ((pwd (eshell/pwd))
          (short-pwd (abbreviate-file-name pwd))
@@ -54,21 +66,24 @@
                  'face 'eshell-prompt
                  'readonly t
                  'rear-nonsticky '(face readonly)))))
-(setq eshell-prompt-function 'z-eshell-prompt-function
-      eshell-highlight-prompt nil)
+(defalias 'eshell/x 'eshell/exit)
 (defun z-eshell-mode-hook ()
   (setq pcomplete-cycle-completions nil))
-(add-hook 'eshell-mode-hook 'z-eshell-mode-hook)
-(defalias 'eshell/x 'eshell/exit)
+(setq eshell-prompt-function 'z-eshell-prompt-function
+      eshell-highlight-prompt nil)
+(add-hook 'eshell-mode-hook 'z-eshell-mode-hook))
 
 
 ;; --------------------------------------------------
 ;; modes
-(add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
+(use-package rainbow-delimiters
+  :commands rainbow-delimiters-mode
+  :init
+  (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 
-(defun z-emacs-lisp-mode-hook ()
-  (local-unset-key (kbd "C-j")))
-(add-hook 'emacs-lisp-mode-hook 'z-emacs-lisp-mode-hook)
+;; (defun z-emacs-lisp-mode-hook ()
+;;   (local-unset-key (kbd "C-j")))
+;; (add-hook 'emacs-lisp-mode-hook 'z-emacs-lisp-mode-hook)
 
 (defun z-c-mode-common-hook ()
   (define-key c-mode-base-map "\C-m" 'newline-and-indent)
@@ -108,12 +123,18 @@
 
 ;; --------------------------------------------------
 ;; ess
-(require 'ess-site)
-(setq inferior-julia-program-name "~/bin/julia")
-(setq ess-smart-S-assign-key ";")
-(ess-toggle-S-assign nil)
-(ess-toggle-S-assign nil)
-(ess-toggle-underscore nil)
+
+(defun z-ess-mode-hook ()
+  (define-key ess-mode-map [f7] 'ess-show-traceback)
+  (define-key ess-mode-map [f8] 'ess-debug-next-or-eval-line)
+  (define-key ess-mode-map [f9]
+    'ess-eval-function-or-paragraph-and-step)
+  (define-key ess-mode-map (kbd "C-x <f8>") 'ess-tracebug)
+  (define-key ess-mode-map (kbd "\\") 'ess-smart-pipe)
+  (define-key ess-mode-map (kbd ";") 'ess-smart-S-assign)
+  (setq ess-tab-complete-in-script t)
+  (rainbow-delimiters-mode 1)
+  (z-ess-mode-symbols))
 
 (defun ess-smart-pipe ()
   "Similar to ess-smart-S-assign, but insert %>% instead."
@@ -127,10 +148,6 @@
   (let ((ess-S-assign " %T>% ")
         (ess-smart-S-assign-key "?"))
     (ess-smart-S-assign)))
-;; In ESS-R, `$' is by default part of the symbol (_), which makes dabbrev
-;; ignore variable names after $ for expansion. Fix by making it
-;; punctuation.
-(modify-syntax-entry ?$ "." R-syntax-table)
 
 (defun ess-debug-next-or-eval-line ()
   (interactive)
@@ -158,25 +175,12 @@
                   prettify-symbols-alist))
     (prettify-symbols-mode)))
 
-(defun z-ess-mode-hook ()
-  (define-key ess-mode-map [f7] 'ess-show-traceback)
-  (define-key ess-mode-map [f8] 'ess-debug-next-or-eval-line)
-  (define-key ess-mode-map [f9]
-    'ess-eval-function-or-paragraph-and-step)
-  (define-key ess-mode-map (kbd "C-x <f8>") 'ess-tracebug)
-  (define-key ess-mode-map (kbd "\\") 'ess-smart-pipe)
-  (define-key ess-mode-map (kbd ";") 'ess-smart-S-assign)
-  (setq ess-tab-complete-in-script t)
-  (rainbow-delimiters-mode 1)
-  (z-ess-mode-symbols))
-(add-hook 'ess-mode-hook 'z-ess-mode-hook)
-
 (defun z-ess-help-mode-hook ()
   (define-key ess-help-mode-map [f8] 'ess-eval-line-and-step)
   (define-key ess-help-mode-map [f9]
     'ess-eval-function-or-paragraph-and-step)
   (z-ess-mode-symbols))
-(add-hook 'ess-help-mode-hook 'z-ess-help-mode-hook)
+
 (defun z-inferior-ess-mode-hook ()
   (define-key inferior-ess-mode-map "\C-cw"
     'ess-execute-screen-options)
@@ -185,7 +189,24 @@
   (define-key inferior-ess-mode-map (kbd "\\") 'ess-smart-pipe)
   (define-key inferior-ess-mode-map (kbd ";") 'ess-smart-S-assign)
   (z-ess-mode-symbols))
-(add-hook 'inferior-ess-mode-hook 'z-inferior-ess-mode-hook)
+
+(use-package ess-site
+  :commands (R julia)
+  :mode (".R$" . R-mode)
+  :config
+  (setq inferior-julia-program-name "~/bin/julia"
+        ess-smart-S-assign-key ";")
+  (ess-toggle-S-assign nil)
+  (ess-toggle-S-assign nil)
+  (ess-toggle-underscore nil)
+
+;; In ESS-R, `$' is by default part of the symbol (_), which makes dabbrev
+;; ignore variable names after $ for expansion. Fix by making it
+;; punctuation.
+(modify-syntax-entry ?$ "." R-syntax-table)
+(add-hook 'ess-mode-hook 'z-ess-mode-hook)
+(add-hook 'ess-help-mode-hook 'z-ess-help-mode-hook)
+(add-hook 'inferior-ess-mode-hook 'z-inferior-ess-mode-hook))
 
 ;; Remove ## as begining of comment. Google R style guide insists we use
 ;; single #.

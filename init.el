@@ -9,6 +9,8 @@
 (add-to-list 'package-archives
              '("melpa" . "http://melpa.org/packages/") t)
 
+(eval-when-compile (require 'use-package))
+
 ;; Load platform specific inits, including init-gnu-linux /
 ;; init-darwin, init-ns / init-x, init-hostname.
 (push "~/.emacs.d/lisp" load-path)
@@ -31,7 +33,6 @@
       require-final-newline 't
       tramp-default-method "ssh"
       text-scale-mode-step 1.1)
-;;(setq ansi-color-names-vector ["#3F3F3F" "#CC9393" "#7F9F7F" "#F0DFAF" "#8CD0D3" "#DC8CC3" "#93E0E3" "#DCDCCC"])
 
 (menu-bar-mode (if (eq system-type 'darwin) 1 -1)) ; Mac always has menu bar
 (tool-bar-mode -1)
@@ -51,15 +52,18 @@
 ;; --------------------------------------------------
 (require 's)
 (load-theme 'zenburn t)
-(require 'rainbow-delimiters)
 
 ;; --------------------------------------------------
-(require 'yasnippet)
-(setq yas-snippet-dirs '("~/.emacs.d/snippets")
-      yas-prompt-functions
-      '(yas-ido-prompt yas-completing-prompt yas-no-prompt)
-      yas-wrap-around-region t)
-(yas-global-mode)
+(use-package yasnippet
+  :demand
+  :diminish yas-minor-mode
+  :bind ("M-?" . yas-insert-snippet)
+  :config
+  (setq yas-snippet-dirs '("~/.emacs.d/snippets")
+        yas-prompt-functions
+        '(yas-ido-prompt yas-completing-prompt yas-no-prompt)
+        yas-wrap-around-region t)
+  (yas-global-mode))
 
 (defun z-re-backward (re count)
   "Search re backward, returns count-th submatch. Used in snippets."
@@ -76,15 +80,6 @@
 (load "init-buffer")
 (load "init-mode")
 (load "init-key")
-
-
-(require 'diminish)
-(eval-after-load "god-mode" '(diminish 'god-local-mode " ⌘"))
-(eval-after-load "yasnippet" '(diminish 'yas-minor-mode))
-(eval-after-load "autopair" '(diminish 'autopair-mode))
-(eval-after-load "whitespace" '(diminish 'whitespace-mode))
-(eval-after-load "eldoc" '(diminish 'eldoc-mode))
-(eval-after-load "guide-key" '(diminish 'guide-key-mode))
 
 (setq magit-last-seen-setup-instructions "1.4.0")
 ;; --------------------------------------------------

@@ -1,5 +1,5 @@
-(require 'browse-kill-ring)
-(global-set-key (kbd "C-M-y") 'browse-kill-ring)
+(use-package browse-kill-ring
+  :bind ("C-M-y" . browse-kill-ring))
 
 (global-set-key (kbd "M-s M-o") 'multi-occur-in-matching-buffers)
 ;; occur-edit-mode in occur mode key binding is 'e'
@@ -14,7 +14,8 @@ region, instead of inactivate region."
     (exchange-point-and-mark (not active))))
 (global-set-key (kbd "C-x C-x") 'z-exchange-point-and-mark)
 
-(require 'dired-x)                      ;bind C-x C-j to dired-jump
+(use-package dired-x
+  :bind ("C-x C-j" . dired-jump))
 
 (defun shrink-other-window-if-larger-than-buffer ()
     (interactive)
@@ -54,10 +55,10 @@ other buffer in other window."
   (switch-to-next-buffer (next-window)))
 (global-set-key (kbd "M-)") 'z-next-buffer-next-window)
 
-(defun isearch-exit-other-end (rbeg rend)
+(defun isearch-exit-other-end ()
     "Exit isearch, but at the other end of the search string.
   This is useful when followed by an immediate kill."
-    (interactive "r")
+    (interactive)
     (isearch-exit)
     (goto-char isearch-other-end))
 (define-key isearch-mode-map (kbd "M-RET") 'isearch-exit-other-end)
@@ -81,7 +82,9 @@ other buffer in other window."
 (global-set-key (kbd "C-x t o") 'outline-minor-mode)
 (global-set-key (kbd "C-x t p") 'rainbow-delimiters-mode)
 (global-set-key (kbd "C-x t r") 'hs-minor-mode)
-(global-set-key (kbd "C-x t s") 'whitespace-mode)
+(use-package whitespace
+  :bind ("C-x t s" . whitespace-mode)
+  :diminish whitespace-mode)
 (global-set-key (kbd "C-x t t") 'toggle-show-trailing-whitespace)
 (global-set-key (kbd "C-x t v") 'view-mode)
 (global-set-key (kbd "C-x t w") 'subword-mode)
@@ -95,15 +98,16 @@ other buffer in other window."
       (activate-mark)))
 (global-set-key (kbd "M-=") 'z-toggle-activate-mark)
 
-(require 'goto-chg)
-(global-set-key (kbd "C-.") 'goto-last-change)
-(global-set-key (kbd "C-,") 'goto-last-change-reverse)
+(use-package goto-chg
+  :bind (("C-." . goto-last-change)
+         ("C-," . goto-last-change-reverse)))
 
-(require 'register-channel)
-(register-channel-mode)
-(set-register ?5 '(file . "~/Projects/NOTES.org"))
-(define-key register-channel-mode-map (kbd "M-g 5")
-  'register-channel-describe-register)
+(use-package register-channel
+  :config
+  (register-channel-mode)
+  (set-register ?5 '(file . "~/Projects/NOTES.org"))
+  (define-key register-channel-mode-map (kbd "M-g 5")
+    'register-channel-describe-register))
 
 (defun all-frames-to-messages-buffer ()
   "make all frames display the *Messages* buffer only after
@@ -117,17 +121,21 @@ storing current frame configuration to register 8."
 (define-key register-channel-mode-map (kbd "M-g 8")
   'all-frames-to-messages-buffer)
 
-(defun z-unbind-j ()
-  (local-unset-key (kbd "C-j"))
-  (local-unset-key (kbd "M-j")))
-(add-hook 'prog-mode-hook 'z-unbind-j)
+;; (defun z-unbind-j ()
+;;   (local-unset-key (kbd "C-j"))
+;;   (local-unset-key (kbd "M-j")))
+;; (add-hook 'prog-mode-hook 'z-unbind-j)
 
-(require 'avy)
-(setq avy-style 'at-full)
-(eval-after-load "isearch"
+(use-package avy
+  :bind* ("C-j" . z-goto-char)
+  :config
+  (setq avy-style 'at-full
+        avy-keys
+        '(?a ?s ?d ?f ?g ?h ?j ?k ?l ?w ?e ?r ?u ?i ?o ?p ?x ?c ?v ?n ?m))
+  (eval-after-load "isearch"
     '(define-key isearch-mode-map (kbd "C-j") 'avy-isearch))
 
-(defun z-goto-char (char &optional arg)
+  (defun z-goto-char (char &optional arg)
   "Call avy-goto-char unless char is RET or SPC, when we call
 avy-goto-line or avy-goto-word-1 respectively."
   (interactive (list (read-char "Goto: ")
@@ -137,112 +145,123 @@ avy-goto-line or avy-goto-word-1 respectively."
         ((= char ?\t) (call-interactively 'avy-goto-char-in-line)) ; Tab
         ((string-match-p "[:alpha:]" (char-to-string char))
          (avy-goto-subword-1 char arg))
-        ('t (avy-goto-char char arg))))
-(global-set-key (kbd "C-j") 'z-goto-char)
-(setq avy-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l ?w ?e ?r ?u ?i ?o ?p ?x ?c ?v ?n ?m))
+        ('t (avy-goto-char char arg)))))
 
-(require 'ace-window)
-(global-set-key (kbd "M-j") 'ace-window)
-(setq aw-scope 'frame)
-(setq aw-background nil)
-(setq aw-keys '(?s ?d ?f ?j ?i ?o ?g ?h ?a ?k ?l ?\;))
 
-(require 'misc)
-(defun z-zap-up-to-char (arg char)
-  "Similar to zap-up-to-char, but works with multiple cursors."
-  (interactive (list (prefix-numeric-value current-prefix-arg)
-		     (read-char "Zap up to char: " t)))
-  (zap-up-to-char arg char))
-(global-set-key (kbd "M-z") 'z-zap-up-to-char)
-(global-set-key (kbd "M-Z") 'zap-to-char)
+(use-package ace-window
+  :bind* ("M-j" . ace-window)
+  :config
+  (setq aw-scope 'frame
+        aw-background nil
+        aw-keys '(?s ?d ?f ?j ?i ?o ?g ?h ?a ?k ?l ?\;)))
 
-(require 'smex)
-(global-set-key (kbd "M-x") 'smex)
+(use-package misc
+  :config
+  (defun z-zap-up-to-char (arg char)
+    "Similar to zap-up-to-char, but works with multiple cursors."
+    (interactive (list (prefix-numeric-value current-prefix-arg)
+                       (read-char "Zap up to char: " t)))
+    (zap-up-to-char arg char))
+  :bind (("M-z" . z-zap-up-to-char)
+         ("M-Z" . zap-to-char)))
 
-(require 'expand-region)
-(global-set-key (kbd "C-\\") 'er/expand-region)
-(setq er/try-expand-list
-      (append er/try-expand-list '(mark-paragraph mark-page)))
+(use-package smex
+  :bind ("M-x" . smex))
 
-(require 'change-inner)
-(global-set-key (kbd "M-i") 'change-inner)
-(global-set-key (kbd "M-o") 'change-outer)
+(use-package expand-region
+  :bind ("C-\\" . er/expand-region)
+  :config
+  (setq er/try-expand-list
+        (append er/try-expand-list '(mark-paragraph mark-page))))
 
-(require 'multiple-cursors)
-(global-unset-key (kbd "M-m"))
-(global-set-key (kbd "M-m ,") 'mc/mark-more-like-this-extended)
-(global-set-key (kbd "M-m m") 'mc/mark-all-dwim)
-(global-set-key (kbd "M-m M-m") 'mc/mark-all-like-this-dwim)
-(global-set-key (kbd "M-m /") 'mc/edit-lines)
-(global-set-key (kbd "M-m n") 'mc/insert-numbers)
-(global-set-key (kbd "M-m .") 'mc/mark-pop)
-(add-to-list 'mc/unsupported-minor-modes 'god-local-mode)
-(add-to-list 'mc/cursor-specific-vars 'iy-go-to-char-start-pos)
+(use-package change-inner
+  :bind (("M-i" . change-inner)
+         ("M-o" . change-outer)))
 
-(global-set-key (kbd "C-x C-.") 'find-tag)
-(global-set-key (kbd "C-x C-,") 'tags-loop-continue)
 
-(require 'iy-go-to-char)
-(setq iy-go-to-char-use-key-forward nil
-      iy-go-to-char-use-key-backward nil)
-(global-set-key (kbd "M-.") 'iy-go-up-to-char)
-(global-set-key (kbd "M-,") 'iy-go-to-char-backward)
-(defun zy-goto-char-continue (n)
-  (interactive "p")
-  (iy-go-to-or-up-to-continue
-   (* iy-go-to-char-start-dir n) 'exclude))
-(defun zy-goto-char-continue-backward (n)
-  (interactive "p")
-  (iy-go-to-or-up-to-continue
-   (- (* iy-go-to-char-start-dir n)) 'include))
-(define-key iy-go-to-char-keymap (kbd "M-.") 'zy-goto-char-continue)
-(define-key iy-go-to-char-keymap (kbd "M-,") 'zy-goto-char-continue-backward)
+(use-package multiple-cursors
+  :init
+  (global-unset-key (kbd "M-m"))
+  :bind (("M-m ," . mc/mark-more-like-this-extended)
+         ("M-m m" . mc/mark-all-dwim)
+         ("M-m M-m" . mc/mark-all-like-this-dwim)
+         ("M-m /" . mc/edit-lines)
+         ("M-m n" . mc/insert-numbers)
+         ("M-m ." . mc/mark-pop))
+  :config
+  (add-to-list 'mc/unsupported-minor-modes 'god-local-mode)
+  (add-to-list 'mc/cursor-specific-vars 'iy-go-to-char-start-pos))
 
-(require 'yasnippet)
-(global-set-key (kbd "M-?") 'yas-insert-snippet)
+(use-package etags
+  :if (not (featurep 'google))
+  :bind (("C-x C-." . find-tag)
+         ("C-x C-," . tags-loop-continue)))
 
-(require 'guide-key)
-(setq guide-key/guide-key-sequence
-      '("C-x r" "C-x 4" "C-x 8" "C-x t" "C-x C-k" "M-s"))
-(setq guide-key/popup-window-position 'bottom)
-(guide-key-mode 1)
+(use-package iy-go-to-char
+  :bind (("M-." . iy-go-up-to-char)
+         ("M-," . iy-go-to-char-backward))
+  :config
+  (setq iy-go-to-char-use-key-forward nil
+        iy-go-to-char-use-key-backward nil)
+  (defun zy-goto-char-continue (n)
+    (interactive "p")
+    (iy-go-to-or-up-to-continue
+     (* iy-go-to-char-start-dir n) 'exclude))
+  (defun zy-goto-char-continue-backward (n)
+    (interactive "p")
+    (iy-go-to-or-up-to-continue
+     (- (* iy-go-to-char-start-dir n)) 'include))
+  (bind-keys :map iy-go-to-char-keymap
+             ("M-." . zy-goto-char-continue)
+             ("M-," . zy-goto-char-continue-backward)))
+
+(use-package guide-key
+  :demand
+  :diminish guide-key-mode
+  :config
+  (setq guide-key/guide-key-sequence
+        '("C-x r" "C-x 4" "C-x 8" "C-x t" "C-x C-k" "M-s")
+        guide-key/popup-window-position 'bottom)
+  (guide-key-mode 1))
 
 ;; --------------------------------------------------
-(require 'god-mode)
-(setq god-mod-alist '((nil . "C-") ("g" . "M-") ("h" . "C-M-")))
-;; (add-to-list 'god-exempt-major-modes 'ibuffer-mode)
-(setq god-exempt-major-modes nil)
-(setq god-exempt-predicates nil)
-(global-set-key (kbd "ESC ESC") 'god-mode-all)
-(define-key god-local-mode-map (kbd "z") 'repeat)
-(define-key god-local-mode-map (kbd "i") 'god-mode-all)
+(use-package god-mode
+  :bind ("ESC ESC" . god-mode-all)
+  :diminish (god-local-mode . " ⌘")
+  :config
+  (setq god-mod-alist '((nil . "C-") ("g" . "M-") ("h" . "C-M-")))
+  (setq god-exempt-major-modes nil)
+  (setq god-exempt-predicates nil)
+  (define-key god-local-mode-map (kbd "z") 'repeat)
+  (define-key god-local-mode-map (kbd "i") 'god-mode-all)
 
-(require 'god-mode-isearch)
-(define-key isearch-mode-map (kbd "ESC ESC") 'god-mode-isearch-activate)
-(define-key god-mode-isearch-map (kbd "ESC ESC") 'god-mode-isearch-disable)
+  (require 'god-mode-isearch)
+  (define-key isearch-mode-map (kbd "ESC ESC") 'god-mode-isearch-activate)
+  (define-key god-mode-isearch-map (kbd "ESC ESC") 'god-mode-isearch-disable)
 
-;; bind symbols to M-?
-(dolist (i '("!" "@" "$" "%" "^" "&" "*" "{" "}" "<" ">" ";" ":" "|" "="))
-  (define-key god-local-mode-map (kbd i)
-    (key-binding (kbd (concat "M-" i)))))
-(define-key god-local-mode-map (kbd "#") 'server-edit)
-(define-key god-local-mode-map (kbd "[") 'backward-sexp)
-(define-key god-local-mode-map (kbd "]") 'forward-sexp)
+  ;; bind symbols to M-?
+  (dolist (i '("!" "@" "$" "%" "^" "&" "*" "{" "}" "<" ">" ";" ":" "|" "="))
+    (define-key god-local-mode-map (kbd i)
+      (key-binding (kbd (concat "M-" i)))))
+  (define-key god-local-mode-map (kbd "#") 'server-edit)
+  (define-key god-local-mode-map (kbd "[") 'backward-sexp)
+  (define-key god-local-mode-map (kbd "]") 'forward-sexp)
 
-;; Bind some second level modifier keys with C- prefix for easier
-;; god-mode access. Directly bind these to commands, instead of making
-;; it a keyboard macro so that messages work in god-mode.
-(dolist (bindings
-         '(("C-x" "0" "1" "2" "3" "9" "#" "[" "]")
-           ("M-g" "1" "2" "3" "4" "5" "6" "7" "8" "c" "n" "p")))
-  (let ((prefix (car bindings))
-        (chars (cdr bindings)))
-    (dolist (i chars)
-      (global-set-key (kbd (concat prefix " C-" i))
-                      (key-binding (kbd (concat prefix " " i)))))))
+  ;; Bind some second level modifier keys with C- prefix for easier
+  ;; god-mode access. Directly bind these to commands, instead of making
+  ;; it a keyboard macro so that messages work in god-mode.
+  (dolist (bindings
+           '(("C-x" "0" "1" "2" "3" "9" "#" "[" "]")
+             ("M-g" "1" "2" "3" "4" "5" "6" "7" "8" "c" "n" "p")))
+    (let ((prefix (car bindings))
+          (chars (cdr bindings)))
+      (dolist (i chars)
+        (global-set-key (kbd (concat prefix " C-" i))
+                        (key-binding (kbd (concat prefix " " i)))))))
 
-(defun z-god-mode-update ()
-  (cond (god-local-mode (set-face-background 'mode-line "blue4"))
-        (t  (set-face-background 'mode-line "#2B2B2B"))))
-(add-hook 'god-mode-enabled-hook 'z-god-mode-update)
-(add-hook 'god-mode-disabled-hook 'z-god-mode-update)
+  (defun z-god-mode-update ()
+    (cond (god-local-mode (set-face-background 'mode-line "blue4"))
+          (t  (set-face-background 'mode-line "#2B2B2B"))))
+  (add-hook 'god-mode-enabled-hook 'z-god-mode-update)
+  (add-hook 'god-mode-disabled-hook 'z-god-mode-update)
+  )

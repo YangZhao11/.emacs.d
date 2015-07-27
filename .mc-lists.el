@@ -11,6 +11,7 @@
         delete-horizontal-space
         ess-smart-comma
         ess-yank
+        forward-sexp
         go-mode-insert-and-indent
         iy-go-to-char--command
         kill-sexp
