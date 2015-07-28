@@ -8,6 +8,7 @@
              '("melpa" . "http://melpa.org/packages/") t)
 
 (eval-when-compile (require 'use-package))
+(require 'diminish)
 
 ;; Load platform specific inits, including init-gnu-linux /
 ;; init-darwin, init-ns / init-x, init-hostname.

@@ -1,4 +1,27 @@
 
+;; cperl-mode is preferred to perl-mode
+(defalias 'perl-mode 'cperl-mode)
+(defun z-cperl-mode-hook ()
+  (define-key cperl-mode-map (kbd "C-h f") 'cperl-perldoc)
+  (define-key cperl-mode-map "\C-m" 'newline-and-indent)
+  (setq cperl-invalid-face nil
+        cperl-electric-parens nil
+        cperl-electric-keywords nil
+        cperl-indent-level 4))
+(add-hook 'cperl-mode-hook 'z-cperl-mode-hook)
+
+(defun z-LaTeX-mode-hook ()
+  (define-key LaTeX-mode-map (kbd "C-x `") 'next-error)
+  (define-key LaTeX-mode-map (kbd "C-x <f1>") 'TeX-ispell-document)
+  (turn-on-reftex)
+  (setq reftex-plug-into-AUCTeX t
+        TeX-auto-save t
+        TeX-parse-self t))
+(add-hook 'LaTeX-mode-hook 'z-LaTeX-mode-hook)
+;;'(TeX-PDF-mode t)
+;; '(TeX-output-view-style (quote (("^dvi$" "." "evince %dS %d") ("^pdf$" "." "evince %o") ("^html?$" "." "sensible-browser %o"))))
+;; '(TeX-view-style (quote (("." "%(o?)evince %dS %d"))))
+
 ;; (require 'jump-char)
 ;; (setq jump-char-forward-key "."
 ;;       jump-char-backward-key ",")

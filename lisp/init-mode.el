@@ -1,9 +1,13 @@
+; -*- coding: utf-8 -*-
+
+(use-package magit
+  :commands (magit-status magit-get-top-dir)
+  :config
+  (when (boundp 'magit-auto-revert-mode) ; needed for magit < 2.0
+    (diminish 'magit-auto-revert-mode)))
+
 (use-package eldoc :diminish eldoc-mode
   :commands eldoc-mode)
-
-(use-package poly-R :ensure polymode
-  :mode ("\\.Rmd\\'" . poly-markdown+r-mode)
-  :config (require 'ess-site))
 
 (use-package bug-reference
   :commands bug-reference-mode
@@ -53,28 +57,28 @@
 (use-package eshell
   :commands eshell
   :config
-(defun z-eshell-prompt-function ()
-  (let* ((pwd (eshell/pwd))
-         (short-pwd (abbreviate-file-name pwd))
-         (pwd-face 'default))
-    (setq pwd-face
-          (cond ((string= (nth 2 (file-attributes pwd 'string)) user-login-name)
-                 'eshell-ls-symlink)
-                ((file-writable-p pwd) 'font-lock-constant-face)
-                ((file-readable-p pwd) 'eshell-ls-readonly)
-                (t 'eshell-ls-missing)))
-    (concat
-     (propertize short-pwd 'face pwd-face 'readonly t)
-     (propertize (if (= (user-uid) 0) " # " " $ ")
-                 'face 'eshell-prompt
-                 'readonly t
-                 'rear-nonsticky '(face readonly)))))
-(defalias 'eshell/x 'eshell/exit)
-(defun z-eshell-mode-hook ()
-  (setq pcomplete-cycle-completions nil))
-(setq eshell-prompt-function 'z-eshell-prompt-function
-      eshell-highlight-prompt nil)
-(add-hook 'eshell-mode-hook 'z-eshell-mode-hook))
+  (defun z-eshell-prompt-function ()
+    (let* ((pwd (eshell/pwd))
+           (short-pwd (abbreviate-file-name pwd))
+           (pwd-face 'default))
+      (setq pwd-face
+            (cond ((string= (nth 2 (file-attributes pwd 'string)) user-login-name)
+                   'eshell-ls-symlink)
+                  ((file-writable-p pwd) 'font-lock-constant-face)
+                  ((file-readable-p pwd) 'eshell-ls-readonly)
+                  (t 'eshell-ls-missing)))
+      (concat
+       (propertize short-pwd 'face pwd-face 'readonly t)
+       (propertize (if (= (user-uid) 0) " # " " $ ")
+                   'face 'eshell-prompt
+                   'readonly t
+                   'rear-nonsticky '(face readonly)))))
+  (defalias 'eshell/x 'eshell/exit)
+  (defun z-eshell-mode-hook ()
+    (setq pcomplete-cycle-completions nil))
+  (setq eshell-prompt-function 'z-eshell-prompt-function
+        eshell-highlight-prompt nil)
+  (add-hook 'eshell-mode-hook 'z-eshell-mode-hook))
 
 
 ;; --------------------------------------------------
@@ -186,8 +190,8 @@
   (z-ess-mode-symbols))
 
 (use-package ess-site
-  :commands (R julia)
-  :mode (".R$" . R-mode)
+  :commands (R R-mode julia)
+  :mode ((".R$" . r-mode) (".jl$" . julia-mode))
   :config
   (setq inferior-julia-program-name "~/bin/julia"
         ess-smart-S-assign-key ";")
@@ -195,13 +199,13 @@
   (ess-toggle-S-assign nil)
   (ess-toggle-underscore nil)
 
-;; In ESS-R, `$' is by default part of the symbol (_), which makes dabbrev
-;; ignore variable names after $ for expansion. Fix by making it
-;; punctuation.
-(modify-syntax-entry ?$ "." R-syntax-table)
-(add-hook 'ess-mode-hook 'z-ess-mode-hook)
-(add-hook 'ess-help-mode-hook 'z-ess-help-mode-hook)
-(add-hook 'inferior-ess-mode-hook 'z-inferior-ess-mode-hook))
+  ;; In ESS-R, `$' is by default part of the symbol (_), which makes dabbrev
+  ;; ignore variable names after $ for expansion. Fix by making it
+  ;; punctuation.
+  (modify-syntax-entry ?$ "." R-syntax-table)
+  (add-hook 'ess-mode-hook 'z-ess-mode-hook)
+  (add-hook 'ess-help-mode-hook 'z-ess-help-mode-hook)
+  (add-hook 'inferior-ess-mode-hook 'z-inferior-ess-mode-hook))
 
 ;; Remove ## as begining of comment. Google R style guide insists we use
 ;; single #.
@@ -215,31 +219,8 @@
 (add-hook 'before-save-hook 'z-remove-fancy-comments)
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
+(use-package poly-R :ensure polymode
+  :mode ("\\.Rmd\\'" . poly-markdown+r-mode))
+
 (defun z-gdb-mode-hook () (setq gdb-many-windows t))
 (add-hook 'gdb-mode-hook 'z-gdb-mode-hook)
-
-;; --------------------------------------------------
-;; Legacy code
-
-;; cperl-mode is preferred to perl-mode
-(defalias 'perl-mode 'cperl-mode)
-(defun z-cperl-mode-hook ()
-  (define-key cperl-mode-map (kbd "C-h f") 'cperl-perldoc)
-  (define-key cperl-mode-map "\C-m" 'newline-and-indent)
-  (setq cperl-invalid-face nil
-        cperl-electric-parens nil
-        cperl-electric-keywords nil
-        cperl-indent-level 4))
-(add-hook 'cperl-mode-hook 'z-cperl-mode-hook)
-
-(defun z-LaTeX-mode-hook ()
-  (define-key LaTeX-mode-map (kbd "C-x `") 'next-error)
-  (define-key LaTeX-mode-map (kbd "C-x <f1>") 'TeX-ispell-document)
-  (turn-on-reftex)
-  (setq reftex-plug-into-AUCTeX t
-        TeX-auto-save t
-        TeX-parse-self t))
-(add-hook 'LaTeX-mode-hook 'z-LaTeX-mode-hook)
-;;'(TeX-PDF-mode t)
-;; '(TeX-output-view-style (quote (("^dvi$" "." "evince %dS %d") ("^pdf$" "." "evince %o") ("^html?$" "." "sensible-browser %o"))))
-;; '(TeX-view-style (quote (("." "%(o?)evince %dS %d"))))
