@@ -22,9 +22,9 @@
   (define-key ido-file-dir-completion-map
     [remap set-mark-command]  'ido-restrict-to-matches))
 
-(use-package ido-ubiquitous
+(use-package ido-ubiquitous :ensure
   :init (ido-ubiquitous-mode 1))
-(use-package ido-vertical-mode
+(use-package ido-vertical-mode :ensure
   :init (ido-vertical-mode 1))
 
 ;; ==================================================

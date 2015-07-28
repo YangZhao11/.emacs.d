@@ -7,3 +7,4 @@ eshell/
 **/#*#
 /session.*
 .DS_Store
+**/*.elc

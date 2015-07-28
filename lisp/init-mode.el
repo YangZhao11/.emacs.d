@@ -1,10 +1,9 @@
-(eval-after-load "eldoc" '(diminish 'eldoc-mode))
-;; (use-package eldoc
-;;   :diminish
-;;   :commands eldoc-mode)
+(use-package eldoc :diminish eldoc-mode
+  :commands eldoc-mode)
 
-(use-package poly-R
-  :mode ("\\.Rmd\\'" . poly-markdown+r-mode))
+(use-package poly-R :ensure polymode
+  :mode ("\\.Rmd\\'" . poly-markdown+r-mode)
+  :config (require 'ess-site))
 
 (use-package bug-reference
   :commands bug-reference-mode
@@ -20,29 +19,33 @@
         bug-reference-bug-regexp
         "\\(\\b\\)\\(b/[0-9]+\\|c[rl]/[0-9]+\\|t/[0-9]+\\|\\(g\\|go\\|goto\\)/[-a-zA-z0-9_]+\\|[a-z]+@\\)"))
 
-(defun z-org-mode-hook ()
-  (local-unset-key (kbd "C-j"))
-  (local-unset-key (kbd "M-m"))
-  (bug-reference-mode)
-  (setq org-use-speed-commands 't
-        org-sparse-tree-default-date-type 'closed)
-  (setq org-link-abbrev-alist
-        '(("doc" . "https://drive.google.com/drive/search?q=")
-          ("ai" . "https://groups.google.com/a/google.com/forum/#!searchin/zhyang-ai/")))
-  (setq-local register-channel-move-by-default 't))
-
 (use-package org
   :defer 't
+  :bind (("<f5>" . org-capture) ("<f6>" . org-agenda))
   :config
   (setq org-speed-commands-user
-      '(("S" . org-schedule)
-        ("d" . org-deadline))
-      org-todo-keyword-faces
-      '(("PLAN" . "#8093CC") ("OBSOLETE" . "#909090") ("WAIT" . "#CCA060"))
-      org-todo-keywords
-      '((sequence "PLAN(p)" "TODO(t)" "WAIT(w)" "|"
-                  "OBSOLETE(o)" "DONE(d)"))
-      org-agenda-files '("~/Projects/NOTES.org"))
+        '(("S" . org-schedule) ("d" . org-deadline))
+        org-todo-keyword-faces
+        '(("PLAN" . "#8093CC") ("OBSOLETE" . "#909090") ("WAIT" . "#CCA060"))
+        org-todo-keywords
+        '((sequence "PLAN(p)" "TODO(t)" "WAIT(w)" "|" "OBSOLETE(o)" "DONE(d)"))
+        org-use-speed-commands 't
+        org-sparse-tree-default-date-type 'closed
+        org-agenda-files '("~/Projects/NOTES.org")
+        org-capture-templates
+        '(("r" "Requests" entry
+           (file+headline "~/Projects/NOTES.org" "Requests")
+           "** TODO %t %?")
+          ("n" "Notes" entry
+           (file+headline "~/Projects/NOTES.org" "Captured Notes")
+           "** %?\n%T"))
+        org-link-abbrev-alist
+        '(("doc" . "https://drive.google.com/drive/search?q=")
+          ("ai" . "https://groups.google.com/a/google.com/forum/#!searchin/zhyang-ai/")))
+  (define-key org-mode-map (kbd "M-m") nil)
+  (defun z-org-mode-hook ()
+    (bug-reference-mode)
+    (setq-local register-channel-move-by-default 't))
   (add-hook 'org-mode-hook 'z-org-mode-hook))
 
 ;; --------------------------------------------------
@@ -76,14 +79,6 @@
 
 ;; --------------------------------------------------
 ;; modes
-(use-package rainbow-delimiters
-  :commands rainbow-delimiters-mode
-  :init
-  (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
-
-;; (defun z-emacs-lisp-mode-hook ()
-;;   (local-unset-key (kbd "C-j")))
-;; (add-hook 'emacs-lisp-mode-hook 'z-emacs-lisp-mode-hook)
 
 (defun z-c-mode-common-hook ()
   (define-key c-mode-base-map "\C-m" 'newline-and-indent)
@@ -234,15 +229,7 @@
   (setq cperl-invalid-face nil
         cperl-electric-parens nil
         cperl-electric-keywords nil
-        cperl-indent-level 4)
-  (define-key cperl-mode-map (kbd "C-x t (")
-    (lambda () "toggle electric parens"
-      (interactive)
-      (toggle-variable 'cperl-electric-parens)))
-  (define-key cperl-mode-map (kbd "C-x t )")
-    (lambda () "toggle electric keywords"
-      (interactive)
-      (toggle-variable 'cperl-electric-keywords))))
+        cperl-indent-level 4))
 (add-hook 'cperl-mode-hook 'z-cperl-mode-hook)
 
 (defun z-LaTeX-mode-hook ()

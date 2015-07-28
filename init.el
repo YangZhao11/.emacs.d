@@ -1,6 +1,4 @@
 ; -*- coding: utf-8 -*-
-(setq inhibit-startup-screen t)
-(server-start)
 
 ;; Make elpa packages available
 (require 'package)
@@ -27,7 +25,8 @@
               frame-title-format "%b @Emacs"
               ispell-program-name "aspell"
               page-delimiter "\\(^\f\\|-\\{5,\\}$\\)")
-(setq visible-bell 't
+(setq inhibit-startup-screen t
+      visible-bell 't
       set-mark-command-repeat-pop 't
       sentence-end-double-space nil
       require-final-newline 't
@@ -54,13 +53,13 @@
 (load-theme 'zenburn t)
 
 ;; --------------------------------------------------
-(use-package yasnippet
-  :demand
+(use-package yasnippet :demand ;; :ensure
   :diminish yas-minor-mode
   :bind ("M-?" . yas-insert-snippet)
+  :init
+  (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
   :config
-  (setq yas-snippet-dirs '("~/.emacs.d/snippets")
-        yas-prompt-functions
+  (setq yas-prompt-functions
         '(yas-ido-prompt yas-completing-prompt yas-no-prompt)
         yas-wrap-around-region t)
   (yas-global-mode))
@@ -82,6 +81,13 @@
 (load "init-key")
 
 (setq magit-last-seen-setup-instructions "1.4.0")
+(add-hook 'after-init-hook 'server-start)
+
+(use-package edit-server :ensure
+  :config
+  (setq edit-server-new-frame nil)
+  (add-hook 'after-init-hook 'edit-server-start))
+
 ;; --------------------------------------------------
 ;; customs
 (custom-set-variables
