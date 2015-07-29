@@ -81,8 +81,13 @@ other buffer in other window."
   :bind ("C-x t k" . which-key-mode)
   :config (setq which-key-idle-delay 2))
 
-(global-set-key (kbd "C-x t l") 'flyspell-mode)
-(global-set-key (kbd "C-x t ;") 'flyspell-prog-mode)
+(use-package flyspell
+  :bind (("C-x t l" . flyspell-mode)
+         ("C-x t ;" . flyspell-prog-mode))
+  :config
+  (define-key flyspell-mode-map (kbd "C-.") nil)
+  (define-key flyspell-mode-map (kbd "C-,") nil))
+
 (global-set-key (kbd "C-x t n") 'linum-mode)
 (global-set-key (kbd "C-x t o") 'outline-minor-mode)
 
