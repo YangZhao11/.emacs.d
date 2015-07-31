@@ -112,8 +112,8 @@ other buffer in other window."
 (global-set-key (kbd "M-=") 'z-toggle-activate-mark)
 
 (use-package goto-chg :ensure
-  :bind (("C-." . goto-last-change)
-         ("C-," . goto-last-change-reverse)))
+  :bind* (("C-." . goto-last-change)
+          ("C-," . goto-last-change-reverse)))
 
 (use-package register-channel :ensure
   :config

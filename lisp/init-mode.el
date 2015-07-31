@@ -29,10 +29,11 @@
   :config
   (setq org-speed-commands-user
         '(("S" . org-schedule) ("d" . org-deadline))
-        org-todo-keyword-faces
-        '(("PLAN" . "#8093CC") ("OBSOLETE" . "#909090") ("WAIT" . "#CCA060"))
         org-todo-keywords
-        '((sequence "PLAN(p)" "TODO(t)" "WAIT(w)" "|" "OBSOLETE(o)" "DONE(d)"))
+        '((sequence "PLAN(p)" "TODO(t)" "OPEN(o)" "WAIT(w)" "|" "OBSOLETE(e)" "DONE(d)"))
+        org-todo-keyword-faces
+        '(("OPEN" . "#90A8D0") ("PLAN" . "#A08880")
+          ("OBSOLETE" . "#909090") ("WAIT" . "#CCA060"))
         org-use-speed-commands 't
         org-sparse-tree-default-date-type 'closed
         org-agenda-files '("~/Projects/NOTES.org")
@@ -107,17 +108,8 @@
 (add-hook 'scala-mode-hook 'z-scala-mode-hook)
 
 (defun z-haskell-mode-hook ()
-  (turn-on-haskell-indentation))
+  (haskell-indentation-mode))
   ;;(setq haskell-font-lock-symbols 't)
-  ;; (setq prettify-symbols-alist
-  ;;       (append '(("=>" . ?⇒)
-  ;;                 ("->" . ?→)
-  ;;                 (" . " . ?∘)
-  ;;                 ("/=" . ?≠)
-  ;;                 ("\\" . ?λ)
-  ;;                 ("<-" . ?←))
-  ;;               prettify-symbols-alist))
-  ;;  (prettify-symbols-mode)
 (add-hook 'haskell-mode-hook 'z-haskell-mode-hook)
 
 ;; --------------------------------------------------
