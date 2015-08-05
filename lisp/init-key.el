@@ -15,7 +15,9 @@ region, instead of inactivate region."
 (global-set-key (kbd "C-x C-x") 'z-exchange-point-and-mark)
 
 (use-package dired-x
-  :bind ("C-x C-j" . dired-jump))
+  :bind ("C-x C-j" . dired-jump)
+  :init
+  (setq dired-x-hands-off-my-keys nil))
 
 (defun shrink-other-window-if-larger-than-buffer ()
     (interactive)

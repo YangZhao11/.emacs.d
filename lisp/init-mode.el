@@ -50,7 +50,8 @@
   (define-key org-mode-map (kbd "M-m") nil)
   (defun z-org-mode-hook ()
     (bug-reference-mode)
-    (setq-local register-channel-move-by-default 't))
+    (setq-local register-channel-move-by-default 't)
+    (setq-local ido-use-filename-at-point nil))
   (add-hook 'org-mode-hook 'z-org-mode-hook))
 
 ;; --------------------------------------------------
@@ -75,6 +76,8 @@
                    'readonly t
                    'rear-nonsticky '(face readonly)))))
   (defalias 'eshell/x 'eshell/exit)
+  (defalias 'eshell/p 'find-file-read-only)
+  (defalias 'eshell/ec 'find-file)
   (defun z-eshell-mode-hook ()
     (setq pcomplete-cycle-completions nil))
   (setq eshell-prompt-function 'z-eshell-prompt-function

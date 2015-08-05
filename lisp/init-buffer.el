@@ -4,7 +4,8 @@
 (use-package ido
   :config
   (ido-mode t)
-  (setq ido-enable-flex-matching t
+  (setq ido-enable-flex-matching 't
+        ido-use-filename-at-point 't
         ido-auto-merge-delay-time 99999
         ido-create-new-buffer 'always
         ido-default-buffer-method 'selected-window
