@@ -81,7 +81,6 @@
 (load "init-mode")
 (load "init-key")
 
-(setq magit-last-seen-setup-instructions "1.4.0")
 (add-hook 'after-init-hook 'server-start)
 
 (use-package edit-server :ensure
