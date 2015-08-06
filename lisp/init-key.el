@@ -89,7 +89,7 @@ other buffer in other window."
   :config
   (bind-keys :map flyspell-mode-map
              ("C-." . nil) ("C-," . nil)
-             ("M-'" . flyspell-auto-correct-word)))
+             ("C-;" . flyspell-auto-correct-word)))
 (add-hook 'text-mode-hook 'flyspell-mode)
 
 (global-set-key (kbd "C-x t n") 'linum-mode)
