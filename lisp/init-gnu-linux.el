@@ -1,9 +1,10 @@
 ; -*- coding: utf-8 -*-
-;; needed for self-compiled emacs.
-(add-to-list 'load-path "/usr/share/emacs/site-lisp/google")
 
 ;; --------------------------------------------------
 ;; google specific settings
+;; needed for self-compiled emacs.
+(add-to-list 'load-path "/usr/share/emacs/site-lisp/google")
+
 (require 'google nil t)
 (setq p4-use-p4config-exclusively t)
 (require 'google-imports)
@@ -22,3 +23,7 @@
       browse-url-generic-program "google-chrome")
 
 (set-frame-font "Menlo-11" 't 't)
+
+;; fix for cases where we do not have autoloads defined
+(use-package markdown-mode
+  :mode ("\\.md\\'" . markdown-mode))

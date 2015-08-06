@@ -128,7 +128,7 @@ other buffer in other window."
   "make all frames display the *Messages* buffer only after
 storing current frame configuration to register 8."
   (interactive)
-  (frame-configuration-to-register ?8)
+  (frameset-to-register ?8)
   (dolist (f (frame-list))
     (let ((w (frame-first-window f)))
       (delete-other-windows w)

@@ -77,6 +77,7 @@
                    'readonly t
                    'rear-nonsticky '(face readonly)))))
   (defalias 'eshell/x 'eshell/exit)
+  (defalias 'eshell/l 'eshell/ls)
   (defalias 'eshell/p 'find-file-read-only)
   (defalias 'eshell/ec 'find-file)
   (defun z-eshell-mode-hook ()
@@ -217,6 +218,8 @@
 
 (use-package poly-R :ensure polymode
   :mode ("\\.Rmd\\'" . poly-markdown+r-mode))
+
+
 
 (defun z-gdb-mode-hook () (setq gdb-many-windows t))
 (add-hook 'gdb-mode-hook 'z-gdb-mode-hook)
