@@ -44,7 +44,7 @@
            "** TODO %t %?")
           ("n" "Notes" entry
            (file+headline "~/Projects/NOTES.org" "Captured Notes")
-           "** %?\n%T"))
+           "** %? %T"))
         org-link-abbrev-alist
         '(("doc" . "https://drive.google.com/drive/search?q=")
           ("ai" . "https://groups.google.com/a/google.com/forum/#!searchin/zhyang-ai/")))

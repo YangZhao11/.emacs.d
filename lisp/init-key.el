@@ -87,8 +87,9 @@ other buffer in other window."
   :bind (("C-x t l" . flyspell-mode)
          ("C-x t ;" . flyspell-prog-mode))
   :config
-  (define-key flyspell-mode-map (kbd "C-.") nil)
-  (define-key flyspell-mode-map (kbd "C-,") nil))
+  (bind-keys :map flyspell-mode-map
+             ("C-." . nil) ("C-," . nil)
+             ("M-'" . flyspell-auto-correct-word)))
 
 (global-set-key (kbd "C-x t n") 'linum-mode)
 (global-set-key (kbd "C-x t o") 'outline-minor-mode)
@@ -106,8 +107,7 @@ other buffer in other window."
 (global-set-key (kbd "C-x t W") 'superword-mode)
 (global-set-key (kbd "C-x t SPC") 'global-hl-line-mode)
 
-(defun z-toggle-activate-mark ()
-  (interactive)
+(defun z-toggle-activate-mark () (interactive)
   (if (region-active-p)
       (deactivate-mark)
       (activate-mark)))
@@ -135,11 +135,6 @@ storing current frame configuration to register 8."
       (set-window-buffer w "*Messages*"))))
 (define-key register-channel-mode-map (kbd "M-g 8")
   'all-frames-to-messages-buffer)
-
-;; (defun z-unbind-j ()
-;;   (local-unset-key (kbd "C-j"))
-;;   (local-unset-key (kbd "M-j")))
-;; (add-hook 'prog-mode-hook 'z-unbind-j)
 
 (use-package avy :ensure
   :bind* ("C-j" . z-goto-char)
