@@ -90,6 +90,7 @@ other buffer in other window."
   (bind-keys :map flyspell-mode-map
              ("C-." . nil) ("C-," . nil)
              ("M-'" . flyspell-auto-correct-word)))
+(add-hook 'text-mode-hook 'flyspell-mode)
 
 (global-set-key (kbd "C-x t n") 'linum-mode)
 (global-set-key (kbd "C-x t o") 'outline-minor-mode)
