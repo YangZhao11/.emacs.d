@@ -19,6 +19,14 @@ region, instead of inactivate region."
   :init
   (setq dired-x-hands-off-my-keys nil))
 
+(defun ediff-this-buffer ()
+  (interactive)
+  (if (buffer-modified-p)
+      (ediff-current-file)
+    (ediff-backup (buffer-file-name))))
+(global-set-key (kbd "C-x C-d") 'ediff-this-buffer)
+
+
 (defun shrink-other-window-if-larger-than-buffer ()
     (interactive)
     "Shrink other window if larger than buffer"
@@ -114,9 +122,13 @@ other buffer in other window."
       (activate-mark)))
 (global-set-key (kbd "M-=") 'z-toggle-activate-mark)
 
+(setq ctl-j-map (make-sparse-keymap))
 (use-package goto-chg :ensure
   :bind* (("C-." . goto-last-change)
-          ("C-," . goto-last-change-reverse)))
+          ("C-," . goto-last-change-reverse))
+  :bind (:map ctl-j-map
+              ("C-k" . goto-last-change)
+              ("C-i" . goto-last-change-reverse)))
 
 (use-package register-channel :ensure
   :config
@@ -139,6 +151,7 @@ storing current frame configuration to register 8."
 
 (use-package avy :ensure
   :bind* ("C-j" . z-goto-char)
+  :bind (:map ctl-j-map ("SPC" . avy-goto-line))
   :config
   (setq avy-style 'at-full
         avy-keys
@@ -147,16 +160,15 @@ storing current frame configuration to register 8."
     '(define-key isearch-mode-map (kbd "C-j") 'avy-isearch))
 
   (defun z-goto-char (char &optional arg)
-  "Call avy-goto-char unless char is RET or SPC, when we call
-avy-goto-line or avy-goto-word-1 respectively."
-  (interactive (list (read-char "Goto: ")
+  "Call avy-goto-char or avy-goto-subword-1, but respect bindings
+in ctl-j-map first."
+  (interactive (list (read-char "C-j ")
                      current-prefix-arg))
-  (message "z-goto-char %c" char)
-  (cond ((= char ?\ ) (call-interactively 'avy-goto-line)) ; space
-        ((= char ?\t) (call-interactively 'avy-goto-char-in-line)) ; Tab
-        ((string-match-p "[[:alpha:]]" (char-to-string char))
-         (avy-goto-subword-1 char arg))
-        ('t (avy-goto-char char arg)))))
+  (let ((act (lookup-key ctl-j-map (char-to-string char))))
+    (cond (act (call-interactively act))
+          ((string-match-p "[[:alpha:]]" (char-to-string char))
+           (avy-goto-subword-1 char arg))
+          ('t (avy-goto-char char arg))))))
 
 (use-package ace-window :ensure
   :bind* ("M-j" . ace-window)
@@ -188,7 +200,6 @@ avy-goto-line or avy-goto-word-1 respectively."
 (use-package change-inner :ensure
   :bind (("M-i" . change-inner)
          ("M-o" . change-outer)))
-
 
 (use-package multiple-cursors :ensure
   :init
