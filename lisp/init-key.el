@@ -166,6 +166,7 @@ avy-goto-line or avy-goto-word-1 respectively."
         aw-keys '(?s ?d ?f ?j ?i ?o ?g ?h ?a ?k ?l ?\;)))
 
 (use-package misc
+  :commands zap-up-to-char
   :config
   (defun z-zap-up-to-char (arg char)
     "Similar to zap-up-to-char, but works with multiple cursors."
