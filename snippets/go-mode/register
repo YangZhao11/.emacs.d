@@ -1,0 +1,5 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: register
+# key: register
+# --
+eventcollector.RegisterFunction("$1", $1)

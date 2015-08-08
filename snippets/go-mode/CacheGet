@@ -1,0 +1,8 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: CacheGet
+# key: CacheGet
+# expand-env: ((z-id (z-re-backward "\\([^ =]*\\)\s*=\s*cache.NewID" 1)))
+# --
+CacheGet(${1:`z-id`}${2:, nil}, func() interface\{\} \{
+             $0
+\}).(${3:type})
