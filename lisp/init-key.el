@@ -238,6 +238,7 @@ in ctl-j-map first."
              ("M-," . zy-goto-char-continue-backward)))
 
 ;; --------------------------------------------------
+(defvar z-real-mode-line-bg (face-background 'mode-line))
 (use-package god-mode :ensure
   :bind ("ESC ESC" . god-mode-all)
   :diminish (god-local-mode . " ⌘")
@@ -271,10 +272,13 @@ in ctl-j-map first."
       (dolist (i chars)
         (global-set-key (kbd (concat prefix " C-" i))
                         (key-binding (kbd (concat prefix " " i)))))))
-
   (defun z-god-mode-update ()
-    (cond (god-local-mode (set-face-background 'mode-line "blue4"))
-          (t  (set-face-background 'mode-line "#2B2B2B"))))
+    (cond (god-local-mode
+           (let ((col (face-background 'mode-line)))
+           (unless (string= col "blue4")
+             (setq z-real-mode-line-bg col)
+             (set-face-background 'mode-line "blue4"))))
+          (t  (set-face-background 'mode-line z-real-mode-line-bg))))
   (add-hook 'god-mode-enabled-hook 'z-god-mode-update)
   (add-hook 'god-mode-disabled-hook 'z-god-mode-update)
   )
