@@ -69,10 +69,8 @@
   "Search re backward, returns count-th submatch. Used in snippets."
   (save-excursion
     (save-match-data
-      (save-restriction  ; Needed for yasnippet 0.8. Remove after 0.9.
-        (widen)
-        (when (re-search-backward re (point-min) t)
-          (match-string count))))))
+      (when (re-search-backward re (point-min) t)
+          (match-string count)))))
 
 ;; --------------------------------------------------
 ;; Load subfiles
