@@ -1,6 +1,9 @@
 (use-package browse-kill-ring :ensure
   :bind ("C-M-y" . browse-kill-ring))
 
+(use-package easy-kill
+  :bind ([remap kill-ring-save] . easy-kill))
+
 (global-set-key (kbd "M-s M-o") 'multi-occur-in-matching-buffers)
 ;; occur-edit-mode in occur mode key binding is 'e'
 (global-set-key (kbd "M-s g") 'grep)
@@ -28,7 +31,6 @@ region, instead of inactivate region."
       (ediff-current-file)
     (ediff-backup (buffer-file-name))))
 (global-set-key (kbd "C-x C-d") 'ediff-this-buffer)
-
 
 (defun shrink-other-window-if-larger-than-buffer ()
     (interactive)
@@ -96,11 +98,7 @@ other buffer in other window."
 
 (use-package flyspell
   :bind (("C-x t l" . flyspell-mode)
-         ("C-x t ;" . flyspell-prog-mode))
-  :config
-  (bind-keys :map flyspell-mode-map
-             ("C-." . nil) ("C-," . nil)
-             ("C-;" . flyspell-auto-correct-word)))
+         ("C-x t ;" . flyspell-prog-mode)))
 (add-hook 'text-mode-hook 'flyspell-mode)
 
 (global-set-key (kbd "C-x t n") 'linum-mode)
@@ -127,11 +125,8 @@ other buffer in other window."
 
 (setq ctl-j-map (make-sparse-keymap))
 (use-package goto-chg :ensure
-  :bind* (("C-." . goto-last-change)
-          ("C-," . goto-last-change-reverse))
-  :bind (:map ctl-j-map
-              ("C-k" . goto-last-change)
-              ("C-i" . goto-last-change-reverse)))
+  :bind (("M-i" . goto-last-change)
+         ("M-o" . goto-last-change-reverse)))
 
 (use-package register-channel :ensure
   :config
@@ -182,45 +177,22 @@ in ctl-j-map first."
 
 (use-package misc
   :commands zap-up-to-char
-  :config
-  (defun z-zap-up-to-char (arg char)
-    "Similar to zap-up-to-char, but works with multiple cursors."
-    (interactive (list (prefix-numeric-value current-prefix-arg)
-                       (read-char "Zap up to char: " t)))
-    (zap-up-to-char arg char))
-  :bind (("M-z" . z-zap-up-to-char)
+  ;; :config
+  ;; (defun z-zap-up-to-char (arg char)
+  ;;   "Similar to zap-up-to-char, but works with multiple cursors."
+  ;;   (interactive (list (prefix-numeric-value current-prefix-arg)
+  ;;                      (read-char "Zap up to char: " t)))
+  ;;   (zap-up-to-char arg char))
+  :bind (("M-z" . zap-up-to-char)
          ("M-Z" . zap-to-char)))
 
 (use-package smex :ensure
   :bind ("M-x" . smex))
 
-(use-package expand-region :ensure
-  :bind ("C-\\" . er/expand-region)
-  :config
-  (setq er/try-expand-list
-        (append er/try-expand-list '(mark-paragraph mark-page))))
-
-(use-package change-inner :ensure
-  :bind (("M-i" . change-inner)
-         ("M-o" . change-outer)))
-
-(use-package multiple-cursors :ensure
-  :init
-  (global-unset-key (kbd "M-m"))
-  :bind (("M-m ," . mc/mark-more-like-this-extended)
-         ("M-m m" . mc/mark-all-dwim)
-         ("M-m M-m" . mc/mark-all-like-this-dwim)
-         ("M-m /" . mc/edit-lines)
-         ("M-m n" . mc/insert-numbers)
-         ("M-m ." . mc/mark-pop))
-  :config
-  (add-to-list 'mc/unsupported-minor-modes 'god-local-mode)
-  (add-to-list 'mc/cursor-specific-vars 'iy-go-to-char-start-pos))
-
-(use-package etags
+(use-package xref
   :if (not (featurep 'google))
-  :bind (("C-x C-." . find-tag)
-         ("C-x C-," . tags-loop-continue)))
+  :bind (("C-x C-." . xref-find-definitions)
+         ("C-x C-," . xref-pop-marker-stack)))
 
 (use-package iy-go-to-char :ensure
   :bind (("M-." . iy-go-up-to-char)

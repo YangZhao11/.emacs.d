@@ -1,3 +1,26 @@
+(use-package expand-region :ensure
+  :bind ("C-\\" . er/expand-region)
+  :config
+  (setq er/try-expand-list
+        (append er/try-expand-list '(mark-paragraph mark-page))))
+
+(use-package change-inner :ensure
+  :bind (("M-i" . change-inner)
+         ("M-o" . change-outer)))
+
+(use-package multiple-cursors :ensure
+  :init
+  (global-unset-key (kbd "M-m"))
+  :bind (("M-m ," . mc/mark-more-like-this-extended)
+         ("M-m m" . mc/mark-all-dwim)
+         ("M-m M-m" . mc/mark-all-like-this-dwim)
+         ("M-m /" . mc/edit-lines)
+         ("M-m n" . mc/insert-numbers)
+         ("M-m ." . mc/mark-pop))
+  :config
+  (add-to-list 'mc/unsupported-minor-modes 'god-local-mode)
+  (add-to-list 'mc/cursor-specific-vars 'iy-go-to-char-start-pos))
+
 
 ;; cperl-mode is preferred to perl-mode
 (defalias 'perl-mode 'cperl-mode)
