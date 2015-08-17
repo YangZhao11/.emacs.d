@@ -11,7 +11,10 @@ region, instead of inactivate region."
   (interactive "P")
   (let ((active (or (and arg (not (use-region-p)))
                     (and (not arg) (use-region-p)))))
-    (exchange-point-and-mark (not active))))
+    (if (and rectangle-mark-mode
+             (fboundp 'rectangle-exchange-point-and-mark))
+        (rectangle-exchange-point-and-mark (not active))
+      (exchange-point-and-mark (not active)))))
 (global-set-key (kbd "C-x C-x") 'z-exchange-point-and-mark)
 
 (use-package dired-x
