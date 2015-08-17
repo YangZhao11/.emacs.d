@@ -229,7 +229,8 @@ in ctl-j-map first."
   (define-key god-mode-isearch-map (kbd "ESC ESC") 'god-mode-isearch-disable)
 
   ;; bind symbols to M-?
-  (dolist (i '("!" "@" "$" "%" "^" "&" "*" "{" "}" "<" ">" ";" ":" "|" "="))
+  (dolist (i '("!" "@" "$" "%" "^" "&" "*" "{" "}"
+               "<" ">" "," "." ";" ":" "|" "="))
     (define-key god-local-mode-map (kbd i)
       (key-binding (kbd (concat "M-" i)))))
   (define-key god-local-mode-map (kbd "#") 'server-edit)
