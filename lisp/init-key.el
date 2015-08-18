@@ -2,7 +2,8 @@
   :bind ("C-M-y" . browse-kill-ring))
 
 (use-package easy-kill
-  :bind ([remap kill-ring-save] . easy-kill))
+  :bind ([remap kill-ring-save] . easy-kill)
+  :config (add-to-list 'easy-kill-alist '(?p paragraph "\n")))
 
 (global-set-key (kbd "M-s M-o") 'multi-occur-in-matching-buffers)
 ;; occur-edit-mode in occur mode key binding is 'e'
