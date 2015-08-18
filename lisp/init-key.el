@@ -17,7 +17,7 @@ region, instead of inactivate region."
   (interactive "P")
   (let ((active (or (and arg (not (use-region-p)))
                     (and (not arg) (use-region-p)))))
-    (if (and rectangle-mark-mode
+    (if (and (bound-and-true-p rectangle-mark-mode)
              (fboundp 'rectangle-exchange-point-and-mark))
         (rectangle-exchange-point-and-mark (not active))
       (exchange-point-and-mark (not active)))))
