@@ -97,7 +97,6 @@
   (setq c-electric-pound-behavior '(alignleft)) ;make a #define left-aligned
 )
 (add-hook 'c-mode-common-hook 'z-c-mode-common-hook)
-(add-hook 'text-mode-hook 'auto-fill-mode)
 
 (defun z-go-mode-hook ()
   (setq tab-width 4))

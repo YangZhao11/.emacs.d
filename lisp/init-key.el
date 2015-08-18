@@ -89,7 +89,11 @@ other buffer in other window."
 (global-set-key (kbd "C-x t a") 'abbrev-mode)
 (global-set-key (kbd "C-x t c") 'highlight-changes-mode)
 (global-set-key (kbd "C-x t d") 'eldoc-mode)
-(global-set-key (kbd "C-x t f") 'auto-fill-mode)
+(use-package simple
+  :bind ("C-x t f" . auto-fill-mode)
+  :diminish (auto-fill-function . " ¶"))
+(add-hook 'text-mode-hook 'auto-fill-mode)
+
 (global-set-key (kbd "C-x t h") 'hi-lock-mode)
 
 (use-package which-key :ensure :diminish which-key-mode
@@ -98,7 +102,8 @@ other buffer in other window."
 
 (use-package flyspell
   :bind (("C-x t l" . flyspell-mode)
-         ("C-x t ;" . flyspell-prog-mode)))
+         ("C-x t ;" . flyspell-prog-mode))
+  :diminish " ≈")
 (add-hook 'text-mode-hook 'flyspell-mode)
 
 (global-set-key (kbd "C-x t n") 'linum-mode)
