@@ -1,9 +1,11 @@
 (use-package browse-kill-ring :ensure
   :bind ("C-M-y" . browse-kill-ring))
 
-(use-package easy-kill
+(use-package easy-kill :ensure
   :bind ([remap kill-ring-save] . easy-kill)
-  :config (add-to-list 'easy-kill-alist '(?p paragraph "\n")))
+  :config
+  (add-to-list 'easy-kill-alist '(?p paragraph "\n"))
+  (setq easy-kill-unhighlight-key " "))
 
 (global-set-key (kbd "M-s M-o") 'multi-occur-in-matching-buffers)
 ;; occur-edit-mode in occur mode key binding is 'e'
@@ -235,7 +237,7 @@ in ctl-j-map first."
   (define-key god-mode-isearch-map (kbd "ESC ESC") 'god-mode-isearch-disable)
 
   ;; bind symbols to M-?
-  (dolist (i '("!" "@" "$" "%" "^" "&" "*" "{" "}"
+  (dolist (i '("!" "@" "$" "%" "^" "&" "*" "{" "}" "\\"
                "<" ">" "," "." ";" ":" "|" "="))
     (define-key god-local-mode-map (kbd i)
       (key-binding (kbd (concat "M-" i)))))
