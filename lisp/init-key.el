@@ -264,5 +264,4 @@ in ctl-j-map first."
              (set-face-background 'mode-line "blue4"))))
           (t  (set-face-background 'mode-line z-real-mode-line-bg))))
   (add-hook 'god-mode-enabled-hook 'z-god-mode-update)
-  (add-hook 'god-mode-disabled-hook 'z-god-mode-update)
-  )
+  (add-hook 'god-mode-disabled-hook 'z-god-mode-update))
