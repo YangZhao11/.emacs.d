@@ -7,6 +7,10 @@
   (add-to-list 'easy-kill-alist '(?p paragraph "\n"))
   (setq easy-kill-unhighlight-key " "))
 
+(use-package shrink-whitespace :ensure
+  :bind (("M-\\" . shrink-whitespace)
+         ("M-SPC" . shrink-whitespace)))
+
 (global-set-key (kbd "M-s M-o") 'multi-occur-in-matching-buffers)
 ;; occur-edit-mode in occur mode key binding is 'e'
 (global-set-key (kbd "M-s g") 'grep)
