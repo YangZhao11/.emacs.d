@@ -7,9 +7,12 @@
   (add-to-list 'easy-kill-alist '(?p paragraph "\n"))
   (setq easy-kill-unhighlight-key " "))
 
-(use-package shrink-whitespace :ensure
-  :bind (("M-\\" . shrink-whitespace)
-         ("M-SPC" . shrink-whitespace)))
+(use-package simple
+  :bind ("M-SPC" . cycle-spacing)
+  :init
+  (defun cycle-spacing-0 ()
+    (interactive) (cycle-spacing 0))
+  (bind-key "M-\\"  'cycle-spacing-0))
 
 (global-set-key (kbd "M-s M-o") 'multi-occur-in-matching-buffers)
 ;; occur-edit-mode in occur mode key binding is 'e'
@@ -242,7 +245,7 @@ in ctl-j-map first."
 
   ;; bind symbols to M-?
   (dolist (i '("!" "@" "$" "%" "^" "&" "*" "{" "}" "\\"
-               "<" ">" "," "." ";" ":" "|" "="))
+               "<" ">" ";" ":" "|" "="))
     (define-key god-local-mode-map (kbd i)
       (key-binding (kbd (concat "M-" i)))))
   (define-key god-local-mode-map (kbd "#") 'server-edit)
