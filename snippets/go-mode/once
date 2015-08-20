@@ -1,0 +1,8 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: once
+# key: once
+# expand-env: ((z-once-var (z-re-backward "\\b\\([a-zA-Z0-9_]+\\) +sync.Once" 1)))
+# --
+${1:`z-once-var`}.Do(func() {
+     $0
+})

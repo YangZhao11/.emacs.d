@@ -1,7 +1,0 @@
-# -*- mode: snippet; require-final-newline: nil -*-
-# name: ifok
-# key: ifok
-# --
-if ${1:_}, ok := ${2:map[key]}; ok {
-   $0
-}

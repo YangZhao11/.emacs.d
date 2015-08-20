@@ -1,8 +1,0 @@
-# -*- mode: snippet; require-final-newline: nil -*-
-# name: fore
-# key: fore
-# binding: direct-keybinding
-# --
-for _, ${1:e} := range ${2:s.Event} {
-  $0
-}
