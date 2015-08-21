@@ -7,12 +7,10 @@
   (add-to-list 'easy-kill-alist '(?p paragraph "\n"))
   (setq easy-kill-unhighlight-key " "))
 
-(use-package simple
-  :bind ("M-SPC" . cycle-spacing)
-  :init
-  (defun cycle-spacing-0 ()
+(defun cycle-spacing-0 ()
     (interactive) (cycle-spacing 0))
-  (bind-key "M-\\"  'cycle-spacing-0))
+(bind-keys ("M-SPC" . cycle-spacing)
+           ("M-\\"  . cycle-spacing-0))
 
 (global-set-key (kbd "M-s M-o") 'multi-occur-in-matching-buffers)
 ;; occur-edit-mode in occur mode key binding is 'e'
@@ -99,9 +97,8 @@ other buffer in other window."
 (global-set-key (kbd "C-x t a") 'abbrev-mode)
 (global-set-key (kbd "C-x t c") 'highlight-changes-mode)
 (global-set-key (kbd "C-x t d") 'eldoc-mode)
-(use-package simple
-  :bind ("C-x t f" . auto-fill-mode)
-  :diminish (auto-fill-function . " ¶"))
+(bind-key "C-x t f" 'auto-fill-mode)
+(diminish 'auto-fill-function " ¶")
 (add-hook 'text-mode-hook 'auto-fill-mode)
 
 (global-set-key (kbd "C-x t h") 'hi-lock-mode)
@@ -192,12 +189,6 @@ in ctl-j-map first."
 
 (use-package misc
   :commands zap-up-to-char
-  ;; :config
-  ;; (defun z-zap-up-to-char (arg char)
-  ;;   "Similar to zap-up-to-char, but works with multiple cursors."
-  ;;   (interactive (list (prefix-numeric-value current-prefix-arg)
-  ;;                      (read-char "Zap up to char: " t)))
-  ;;   (zap-up-to-char arg char))
   :bind (("M-z" . zap-up-to-char)
          ("M-Z" . zap-to-char)))
 
