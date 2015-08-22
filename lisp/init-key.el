@@ -110,7 +110,7 @@ other buffer in other window."
 (use-package flyspell
   :bind (("C-x t l" . flyspell-mode)
          ("C-x t ;" . flyspell-prog-mode))
-  :diminish " ≈")
+  :diminish " ✔")
 (add-hook 'text-mode-hook 'flyspell-mode)
 
 (global-set-key (kbd "C-x t n") 'linum-mode)
@@ -121,7 +121,7 @@ other buffer in other window."
   :init  (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 
 (global-set-key (kbd "C-x t r") 'hs-minor-mode)
-(use-package whitespace :diminish whitespace-mode
+(use-package whitespace :diminish " ␣"
   :bind ("C-x t s" . whitespace-mode))
 (global-set-key (kbd "C-x t t") 'toggle-show-trailing-whitespace)
 (global-set-key (kbd "C-x t v") 'view-mode)
