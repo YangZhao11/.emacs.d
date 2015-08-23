@@ -5,7 +5,12 @@
   :bind ([remap kill-ring-save] . easy-kill)
   :config
   (add-to-list 'easy-kill-alist '(?p paragraph "\n"))
-  (setq easy-kill-unhighlight-key " "))
+  (setq easy-kill-unhighlight-key " ")
+  (bind-keys
+   :map easy-kill-base-map
+   ("k" . easy-kill-region)
+   ("DEL" . easy-kill-delete-region)
+   ([remap z-exchange-point-and-mark] . easy-kill-exchange-point-and-mark)))
 
 (defun cycle-spacing-0 ()
     (interactive) (cycle-spacing 0))
@@ -16,6 +21,8 @@
 ;; occur-edit-mode in occur mode key binding is 'e'
 (global-set-key (kbd "M-s g") 'grep)
 (global-set-key (kbd "M-s M-g") 'rgrep)
+
+;; Decouple exchange-point-and-mark and activating region.
 (defun z-exchange-point-and-mark (&optional arg)
   "Like exchange-point-and-mark, but arg means toggle active
 region, instead of inactivate region."
@@ -27,6 +34,12 @@ region, instead of inactivate region."
         (rectangle-exchange-point-and-mark (not active))
       (exchange-point-and-mark (not active)))))
 (global-set-key (kbd "C-x C-x") 'z-exchange-point-and-mark)
+
+(defun z-toggle-activate-mark () (interactive)
+  (if (region-active-p)
+      (deactivate-mark)
+      (activate-mark)))
+(global-set-key (kbd "M-=") 'z-toggle-activate-mark)
 
 (use-package dired-x
   :bind ("C-x C-j" . dired-jump)
@@ -129,12 +142,6 @@ other buffer in other window."
 (global-set-key (kbd "C-x t W") 'superword-mode)
 (global-set-key (kbd "C-x t SPC") 'global-hl-line-mode)
 
-(defun z-toggle-activate-mark () (interactive)
-  (if (region-active-p)
-      (deactivate-mark)
-      (activate-mark)))
-(global-set-key (kbd "M-=") 'z-toggle-activate-mark)
-
 (setq ctl-j-map (make-sparse-keymap))
 (use-package goto-chg :ensure
   :bind (("M-i" . goto-last-change)
@@ -224,18 +231,44 @@ in ctl-j-map first."
   :bind ("ESC ESC" . god-mode-all)
   :diminish (god-local-mode . " ⌘")
   :config
-  (setq god-mod-alist '((nil . "C-") ("g" . "M-") ("h" . "C-M-")))
+  (defvar z-god-state 'normal)
+  (defvar god-mode-color "blue4")
+  (defvar z-real-mode-line-bg nil)
+  (defvar z-god-states
+    '((normal " ⌘" "blue4" (nil . "C-") ("g" . "M-") ("h" . "C-M-"))
+      (cm " ⌘⌥" "red4" (nil . "C-M-") ("g" . "C-"))))
+  (defun z-god-mode-update ()
+    (unless z-real-mode-line-bg
+      (setq z-real-mode-line-bg (face-background 'mode-line)))
+    (cond (god-local-mode
+           (set-face-background 'mode-line god-mode-color))
+          (t  (set-face-background 'mode-line z-real-mode-line-bg))))
+  (defun z-god-set-state (state)
+    (let ((s (cdr (assq state z-god-states)))
+          (lighter (cdr (assq 'god-local-mode minor-mode-alist))))
+      (setcar lighter (car s))
+      (setq god-mode-color (cadr s)
+            god-mod-alist (cddr s)
+            z-god-state state)
+      (z-god-mode-update)))
+
+  (defun z-god-mode-toggle ()
+    (interactive)
+    (z-god-set-state (if (eq z-god-state 'normal) 'cm 'normal)))
+
   (setq god-exempt-major-modes nil)
   (setq god-exempt-predicates nil)
-  (define-key god-local-mode-map (kbd "z") 'repeat)
-  (define-key god-local-mode-map (kbd "i") 'god-mode-all)
+  (bind-keys :map god-local-mode-map
+             ("z" . repeat)
+             ("i" . god-mode-all)
+             ("`" . z-god-mode-toggle))
 
   (require 'god-mode-isearch)
   (define-key isearch-mode-map (kbd "ESC ESC") 'god-mode-isearch-activate)
   (define-key god-mode-isearch-map (kbd "ESC ESC") 'god-mode-isearch-disable)
 
   ;; bind symbols to M-?
-  (dolist (i '("!" "@" "$" "%" "^" "&" "*" "{" "}" "\\"
+  (dolist (i '("!" "@" "$" "%" "^" "&" "*" "{" "}"
                "<" ">" ";" ":" "|" "="))
     (define-key god-local-mode-map (kbd i)
       (key-binding (kbd (concat "M-" i)))))
@@ -254,12 +287,7 @@ in ctl-j-map first."
       (dolist (i chars)
         (global-set-key (kbd (concat prefix " C-" i))
                         (key-binding (kbd (concat prefix " " i)))))))
-  (defun z-god-mode-update ()
-    (cond (god-local-mode
-           (let ((col (face-background 'mode-line)))
-           (unless (string= col "blue4")
-             (setq z-real-mode-line-bg col)
-             (set-face-background 'mode-line "blue4"))))
-          (t  (set-face-background 'mode-line z-real-mode-line-bg))))
+
   (add-hook 'god-mode-enabled-hook 'z-god-mode-update)
-  (add-hook 'god-mode-disabled-hook 'z-god-mode-update))
+  (add-hook 'god-mode-disabled-hook 'z-god-mode-update)
+  (z-god-set-state 'normal))
