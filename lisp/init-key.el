@@ -232,11 +232,11 @@ in ctl-j-map first."
   :diminish (god-local-mode . " ⌘")
   :config
   (defvar z-god-state 'normal)
-  (defvar god-mode-color "blue4")
+  (defvar god-mode-color "#153E7E")
   (defvar z-real-mode-line-bg nil)
   (defvar z-god-states
-    '((normal " ⌘" "blue4" (nil . "C-") ("g" . "M-") ("h" . "C-M-"))
-      (cm " ⌘⌥" "red4" (nil . "C-M-") ("g" . "C-"))))
+    '((normal " ⌘" "#153E7E" (nil . "C-") ("g" . "M-") ("h" . "C-M-"))
+      (cm " ⌘⌥" "#7D053F" (nil . "C-M-") ("g" . "C-"))))
   (defun z-god-mode-update ()
     (unless z-real-mode-line-bg
       (setq z-real-mode-line-bg (face-background 'mode-line)))
