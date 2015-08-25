@@ -9,7 +9,7 @@
   (bind-keys
    :map easy-kill-base-map
    ("k" . easy-kill-region)
-   ("DEL" . easy-kill-delete-region)
+   ("m" . easy-kill-mark-region)
    ([remap z-exchange-point-and-mark] . easy-kill-exchange-point-and-mark)))
 
 (defun cycle-spacing-0 ()
