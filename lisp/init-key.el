@@ -229,39 +229,46 @@ in ctl-j-map first."
 (defvar z-real-mode-line-bg (face-background 'mode-line))
 (use-package god-mode :ensure
   :bind ("ESC ESC" . god-mode-all)
-  :diminish (god-local-mode . " ⌘")
   :config
+  (defvar z-god-mode-lighter "")
+  (setcdr (assq 'god-local-mode minor-mode-alist)
+          '((t z-god-mode-lighter)))
   (defvar z-god-state 'normal)
-  (defvar god-mode-color "#153E7E")
+  (defvar z-god-mode-color nil)
   (defvar z-real-mode-line-bg nil)
-  (defvar z-god-states
+  (setq z-god-states
     '((normal " ⌘" "#153E7E" (nil . "C-") ("g" . "M-") ("h" . "C-M-"))
-      (cm " ⌘⌥" "#7D053F" (nil . "C-M-") ("g" . "C-"))))
+      (cm " ⌘⌥" "#7D053F" (nil . "C-M-") ("g" . "C-"))
+      (meta " ⌥" "#055D30" (nil . "M-"))))
   (defun z-god-mode-update ()
     (unless z-real-mode-line-bg
       (setq z-real-mode-line-bg (face-background 'mode-line)))
     (cond (god-local-mode
-           (set-face-background 'mode-line god-mode-color))
+           (set-face-background 'mode-line z-god-mode-color))
           (t  (set-face-background 'mode-line z-real-mode-line-bg))))
   (defun z-god-set-state (state)
-    (let ((s (cdr (assq state z-god-states)))
-          (lighter (cdr (assq 'god-local-mode minor-mode-alist))))
-      (setcar lighter (car s))
-      (setq god-mode-color (cadr s)
+    (let ((s (cdr (assq state z-god-states))))
+      (setq z-god-mode-lighter (car s)
+            z-god-mode-color (cadr s)
             god-mod-alist (cddr s)
             z-god-state state)
       (z-god-mode-update)))
 
-  (defun z-god-mode-toggle ()
+  (defun z-god-mode-toggle-meta ()
     (interactive)
-    (z-god-set-state (if (eq z-god-state 'normal) 'cm 'normal)))
+    (z-god-set-state (if (eq z-god-state 'meta) 'normal 'meta)))
+  (defun z-god-mode-toggle-cm ()
+    (interactive)
+    (z-god-set-state (if (eq z-god-state 'cm) 'normal 'cm)))
 
   (setq god-exempt-major-modes nil)
   (setq god-exempt-predicates nil)
   (bind-keys :map god-local-mode-map
              ("z" . repeat)
              ("i" . god-mode-all)
-             ("`" . z-god-mode-toggle))
+             ("[" . z-god-mode-toggle-cm)
+             ("]" . z-god-mode-toggle-meta)
+             ("#" . server-edit))
 
   (require 'god-mode-isearch)
   (define-key isearch-mode-map (kbd "ESC ESC") 'god-mode-isearch-activate)
@@ -272,9 +279,6 @@ in ctl-j-map first."
                "<" ">" ";" ":" "|" "="))
     (define-key god-local-mode-map (kbd i)
       (key-binding (kbd (concat "M-" i)))))
-  (define-key god-local-mode-map (kbd "#") 'server-edit)
-  (define-key god-local-mode-map (kbd "[") 'backward-sexp)
-  (define-key god-local-mode-map (kbd "]") 'forward-sexp)
 
   ;; Bind some second level modifier keys with C- prefix for easier
   ;; god-mode access. Directly bind these to commands, instead of making
@@ -288,6 +292,5 @@ in ctl-j-map first."
         (global-set-key (kbd (concat prefix " C-" i))
                         (key-binding (kbd (concat prefix " " i)))))))
 
-  (add-hook 'god-mode-enabled-hook 'z-god-mode-update)
-  (add-hook 'god-mode-disabled-hook 'z-god-mode-update)
-  (z-god-set-state 'normal))
+  (add-hook 'god-mode-enabled-hook (lambda () (z-god-set-state 'normal)))
+  (add-hook 'god-mode-disabled-hook 'z-god-mode-update))
