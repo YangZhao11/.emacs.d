@@ -216,7 +216,8 @@
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 (use-package poly-R :ensure polymode
-  :mode ("\\.Rmd\\'" . poly-markdown+r-mode))
+  :mode ("\\.Rmd\\'" . poly-markdown+r-mode)
+  :diminish (poly-markdown+r-mode . " ~Rmd"))
 
 
 
