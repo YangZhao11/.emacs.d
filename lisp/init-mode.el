@@ -217,9 +217,10 @@
 
 (use-package poly-R :ensure polymode
   :mode ("\\.Rmd\\'" . poly-markdown+r-mode)
-  :diminish (poly-markdown+r-mode . " ~Rmd"))
-
-
+  :config
+  (dolist (mode '(poly-markdown+r-mode poly-ess-help+r-mode poly-Rd-mode poly-c++r-mode poly-r+c++-mode poly-brew+r-mode poly-html+r-mode poly-rapport-mode poly-noweb+r-mode))
+    (let ((m (assq mode minor-mode-alist)))
+      (setcdr m (list " ρ")))))
 
 (defun z-gdb-mode-hook () (setq gdb-many-windows t))
 (add-hook 'gdb-mode-hook 'z-gdb-mode-hook)

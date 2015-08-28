@@ -79,9 +79,11 @@
 (load "init-mode")
 (load "init-key")
 
-(add-hook 'after-init-hook 'server-start)
+(use-package server :diminish (server-buffer-clients . " #")
+  :config (add-hook 'after-init-hook 'server-start))
 
 (use-package edit-server :ensure
+  :diminish (edit-server-edit-mode . " ##")
   :config
   (setq edit-server-new-frame nil)
   (add-hook 'after-init-hook 'edit-server-start))
