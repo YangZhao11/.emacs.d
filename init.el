@@ -88,6 +88,9 @@
   (setq edit-server-new-frame nil)
   (add-hook 'after-init-hook 'edit-server-start))
 
+(setcdr (assq 'defining-kbd-macro minor-mode-alist)
+        '((:propertize " ●" face (:foreground "#D04020"))))
+
 ;; --------------------------------------------------
 ;; customs
 (custom-set-variables
