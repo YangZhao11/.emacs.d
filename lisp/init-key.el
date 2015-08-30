@@ -125,7 +125,11 @@ other buffer in other window."
          ("C-x t ;" . flyspell-prog-mode))
   :config
   (setcdr (assq 'flyspell-mode minor-mode-alist)
-        '((" " (:propertize "α" face flyspell-incorrect)))))
+          `((" " (:propertize "α"
+                              face flyspell-incorrect
+                              mouse-face mode-line-highlight
+                              local-map ,mode-line-minor-mode-keymap
+                              help-echo "Fly Spell")))))
 (add-hook 'text-mode-hook 'flyspell-mode)
 
 (global-set-key (kbd "C-x t n") 'linum-mode)
