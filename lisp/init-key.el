@@ -123,7 +123,9 @@ other buffer in other window."
 (use-package flyspell
   :bind (("C-x t l" . flyspell-mode)
          ("C-x t ;" . flyspell-prog-mode))
-  :diminish " ✔")
+  :config
+  (setcdr (assq 'flyspell-mode minor-mode-alist)
+        '((" " (:propertize "α" face flyspell-incorrect)))))
 (add-hook 'text-mode-hook 'flyspell-mode)
 
 (global-set-key (kbd "C-x t n") 'linum-mode)
