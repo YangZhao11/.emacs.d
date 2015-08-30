@@ -5,6 +5,7 @@
   :config
   (when (boundp 'magit-auto-revert-mode) ; needed for magit < 2.0
     (diminish 'magit-auto-revert-mode))
+  (setq with-editor-mode-lighter "")
   (setq magit-last-seen-setup-instructions "1.4.0"))
 
 (use-package eldoc :diminish eldoc-mode
