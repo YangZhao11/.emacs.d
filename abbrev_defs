@@ -1,6 +1,8 @@
 ;;-*-coding: utf-8;-*-
 (define-abbrev-table 'Buffer-menu-mode-abbrev-table '())
 
+(define-abbrev-table 'Custom-mode-abbrev-table '())
+
 (define-abbrev-table 'Info-edit-mode-abbrev-table '())
 
 (define-abbrev-table 'Rd-mode-abbrev-table
@@ -39,15 +41,21 @@
 
 (define-abbrev-table 'apropos-mode-abbrev-table '())
 
-(define-abbrev-table 'awk-mode-abbrev-table '())
+(define-abbrev-table 'awk-mode-abbrev-table
+  '(
+   ))
 
 (define-abbrev-table 'borg-mode-abbrev-table '())
 
 (define-abbrev-table 'borgmon-mode-abbrev-table '())
 
-(define-abbrev-table 'c++-mode-abbrev-table '())
+(define-abbrev-table 'c++-mode-abbrev-table
+  '(
+   ))
 
-(define-abbrev-table 'c-mode-abbrev-table '())
+(define-abbrev-table 'c-mode-abbrev-table
+  '(
+   ))
 
 (define-abbrev-table 'calendar-mode-abbrev-table '())
 
@@ -81,6 +89,8 @@
 
 (define-abbrev-table 'fundamental-mode-abbrev-table '())
 
+(define-abbrev-table 'g4-pending-mode-abbrev-table '())
+
 (define-abbrev-table 'gdb-script-mode-abbrev-table '())
 
 (define-abbrev-table 'gfm-mode-abbrev-table '())
@@ -109,7 +119,9 @@
 
 (define-abbrev-table 'inferior-python-mode-abbrev-table '())
 
-(define-abbrev-table 'java-mode-abbrev-table '())
+(define-abbrev-table 'java-mode-abbrev-table
+  '(
+   ))
 
 (define-abbrev-table 'lisp-mode-abbrev-table '())
 
@@ -143,7 +155,9 @@
 
 (define-abbrev-table 'messages-buffer-mode-abbrev-table '())
 
-(define-abbrev-table 'objc-mode-abbrev-table '())
+(define-abbrev-table 'objc-mode-abbrev-table
+  '(
+   ))
 
 (define-abbrev-table 'occur-edit-mode-abbrev-table '())
 
@@ -151,11 +165,35 @@
 
 (define-abbrev-table 'outline-mode-abbrev-table '())
 
+(define-abbrev-table 'p4-annotate-mode-abbrev-table '())
+
+(define-abbrev-table 'p4-basic-list-mode-abbrev-table '())
+
+(define-abbrev-table 'p4-basic-mode-abbrev-table '())
+
+(define-abbrev-table 'p4-change-form-mode-abbrev-table '())
+
+(define-abbrev-table 'p4-diff-mode-abbrev-table '())
+
+(define-abbrev-table 'p4-filelog-mode-abbrev-table '())
+
+(define-abbrev-table 'p4-form-mode-abbrev-table '())
+
+(define-abbrev-table 'p4-grep-mode-abbrev-table '())
+
+(define-abbrev-table 'p4-job-form-mode-abbrev-table '())
+
+(define-abbrev-table 'p4-opened-list-mode-abbrev-table '())
+
+(define-abbrev-table 'p4-status-list-mode-abbrev-table '())
+
 (define-abbrev-table 'package-menu-mode-abbrev-table '())
 
 (define-abbrev-table 'piccolo-mode-abbrev-table '())
 
-(define-abbrev-table 'pike-mode-abbrev-table '())
+(define-abbrev-table 'pike-mode-abbrev-table
+  '(
+   ))
 
 (define-abbrev-table 'process-menu-mode-abbrev-table '())
 
@@ -163,7 +201,9 @@
 
 (define-abbrev-table 'python-mode-abbrev-table '())
 
-(define-abbrev-table 'python-mode-skeleton-abbrev-table '())
+(define-abbrev-table 'python-mode-skeleton-abbrev-table
+  '(
+   ))
 
 (define-abbrev-table 'select-tags-table-mode-abbrev-table '())
 
@@ -183,10 +223,27 @@
 
 (define-abbrev-table 'text-mode-abbrev-table
   '(
-    ("cdd" "candidate" nil 11)
+    ("bn" "binomial" nil 0)
+    ("bt" "between" nil 0)
+    ("calc" "calculate" nil 2)
+    ("calcd" "calculated" nil 0)
+    ("calcn" "calculation" nil 0)
+    ("cdd" "candidate" nil 20)
+    ("diff" "difference" nil 0)
+    ("dist" "distribution" nil 1)
+    ("epd" "explained" nil 0)
+    ("flw" "Follow up" nil 1)
     ("pp" "population" nil 2)
+    ("prob" "probability" nil 3)
+    ("props" "proportions" nil 0)
+    ("rlv" "relevant" nil 1)
     ("sp" "sample" nil 0)
-    ("spl" "sampling" nil 0)
+    ("spl" "sampling" nil 2)
+    ("stat" "statistics" nil 3)
+    ("statl" "statistical" nil 0)
+    ("statn" "statistician" nil 0)
+    ("ud" "understand" nil 1)
+    ("udi" "understanding" nil 0)
    ))
 
 (define-abbrev-table 'url-cookie-mode-abbrev-table '())
@@ -194,4 +251,8 @@
 (define-abbrev-table 'vc-git-log-edit-mode-abbrev-table '())
 
 (define-abbrev-table 'vc-git-log-view-mode-abbrev-table '())
+
+(define-abbrev-table 'vc-git-region-history-mode-abbrev-table '())
+
+(define-abbrev-table 'xref--xref-buffer-mode-abbrev-table '())
 
