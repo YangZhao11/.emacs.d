@@ -108,6 +108,9 @@ other buffer in other window."
 
 ;; Toggle commands
 (global-set-key (kbd "C-x t a") 'abbrev-mode)
+(diminish 'abbrev-mode " ∂A")
+(add-hook 'text-mode-hook 'abbrev-mode)
+
 (global-set-key (kbd "C-x t c") 'highlight-changes-mode)
 (global-set-key (kbd "C-x t d") 'eldoc-mode)
 (bind-key "C-x t f" 'auto-fill-mode)
@@ -290,7 +293,7 @@ in ctl-j-map first."
   ;; god-mode access. Directly bind these to commands, instead of making
   ;; it a keyboard macro so that messages work in god-mode.
   (dolist (bindings
-           '(("C-x" "0" "1" "2" "3" "9" "#" "[" "]")
+           '(("C-x" "0" "1" "2" "3" "9" "[" "]")
              ("M-g" "1" "2" "3" "4" "5" "6" "7" "8" "c" "n" "p")))
     (let ((prefix (car bindings))
           (chars (cdr bindings)))

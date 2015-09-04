@@ -45,6 +45,8 @@
   '(
    ))
 
+(define-abbrev-table 'bibtex-mode-abbrev-table '())
+
 (define-abbrev-table 'borg-mode-abbrev-table '())
 
 (define-abbrev-table 'borgmon-mode-abbrev-table '())
@@ -75,6 +77,8 @@
 
 (define-abbrev-table 'edit-abbrevs-mode-abbrev-table '())
 
+(define-abbrev-table 'eieio-custom-mode-abbrev-table '())
+
 (define-abbrev-table 'elisp-byte-code-mode-abbrev-table '())
 
 (define-abbrev-table 'emacs-lisp-byte-code-mode-abbrev-table '())
@@ -86,6 +90,14 @@
 (define-abbrev-table 'epa-key-list-mode-abbrev-table '())
 
 (define-abbrev-table 'epa-key-mode-abbrev-table '())
+
+(define-abbrev-table 'ert-results-mode-abbrev-table '())
+
+(define-abbrev-table 'ert-simple-view-mode-abbrev-table '())
+
+(define-abbrev-table 'eshell-mode-abbrev-table '())
+
+(define-abbrev-table 'ess-julia-mode-abbrev-table '())
 
 (define-abbrev-table 'fundamental-mode-abbrev-table '())
 
@@ -117,11 +129,15 @@
 
 (define-abbrev-table 'idl-mode-abbrev-table '())
 
+(define-abbrev-table 'inferior-julia-mode-abbrev-table '())
+
 (define-abbrev-table 'inferior-python-mode-abbrev-table '())
 
 (define-abbrev-table 'java-mode-abbrev-table
   '(
    ))
+
+(define-abbrev-table 'julia-mode-abbrev-table '())
 
 (define-abbrev-table 'lisp-mode-abbrev-table '())
 
@@ -137,17 +153,36 @@
 
 (define-abbrev-table 'magit-log-mode-abbrev-table '())
 
+(define-abbrev-table 'magit-log-select-mode-abbrev-table '())
+
 (define-abbrev-table 'magit-mode-abbrev-table '())
+
+(define-abbrev-table 'magit-popup-mode-abbrev-table '())
+
+(define-abbrev-table 'magit-popup-sequence-mode-abbrev-table '())
 
 (define-abbrev-table 'magit-process-mode-abbrev-table '())
 
 (define-abbrev-table 'magit-reflog-mode-abbrev-table '())
 
+(define-abbrev-table 'magit-refs-mode-abbrev-table '())
+
+(define-abbrev-table 'magit-revision-mode-abbrev-table '())
+
+(define-abbrev-table 'magit-stash-mode-abbrev-table '())
+
+(define-abbrev-table 'magit-stashes-mode-abbrev-table '())
+
 (define-abbrev-table 'magit-status-mode-abbrev-table '())
 
 (define-abbrev-table 'magit-wazzup-mode-abbrev-table '())
 
-(define-abbrev-table 'markdown-mode-abbrev-table '())
+(define-abbrev-table 'markdown-mode-abbrev-table
+  '(
+    ("difft" "different" nil 0)
+    ("ga" "Google Analytics" nil 2)
+    ("iow" "in other words" nil 0)
+   ))
 
 (define-abbrev-table 'mendel-mode-abbrev-table '())
 
@@ -162,6 +197,8 @@
 (define-abbrev-table 'occur-edit-mode-abbrev-table '())
 
 (define-abbrev-table 'occur-mode-abbrev-table '())
+
+(define-abbrev-table 'org-mode-abbrev-table '())
 
 (define-abbrev-table 'outline-mode-abbrev-table '())
 
@@ -217,28 +254,34 @@
 
 (define-abbrev-table 'speedbar-mode-abbrev-table '())
 
-(define-abbrev-table 'sql-mode-abbrev-table '())
+(define-abbrev-table 'sql-mode-abbrev-table
+  '(
+   ))
 
 (define-abbrev-table 'tabulated-list-mode-abbrev-table '())
 
+(define-abbrev-table 'tar-mode-abbrev-table '())
+
 (define-abbrev-table 'text-mode-abbrev-table
   '(
-    ("bn" "binomial" nil 0)
+    ("bn" "binomial" nil 1)
     ("bt" "between" nil 0)
-    ("calc" "calculate" nil 2)
-    ("calcd" "calculated" nil 0)
-    ("calcn" "calculation" nil 0)
+    ("calc" "calculate" nil 3)
+    ("calcd" "calculated" nil 1)
+    ("calcn" "calculation" nil 1)
     ("cdd" "candidate" nil 20)
-    ("diff" "difference" nil 0)
+    ("ci" "confidence interval" nil 1)
+    ("diff" "difference" nil 1)
     ("dist" "distribution" nil 1)
     ("epd" "explained" nil 0)
     ("flw" "Follow up" nil 1)
     ("pp" "population" nil 2)
     ("prob" "probability" nil 3)
-    ("props" "proportions" nil 0)
+    ("props" "proportions" nil 2)
     ("rlv" "relevant" nil 1)
     ("sp" "sample" nil 0)
-    ("spl" "sampling" nil 2)
+    ("spl" "sampling" nil 3)
+    ("srp" "Server reliability problem" nil 0)
     ("stat" "statistics" nil 3)
     ("statl" "statistical" nil 0)
     ("statn" "statistician" nil 0)

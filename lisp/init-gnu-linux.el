@@ -4,17 +4,17 @@
 ;; google specific settings
 ;; needed for self-compiled emacs.
 (defvar google-exclude-load-path-items
-  '("google/third_party//auto_complete"
-    "google/third_party//cl_lib"
-    "google/third_party//company_mode"
-    "google/third_party//dash"
-    "google/third_party//ess_mode"
-    "google/third_party//ess_mode/lisp"
-    "google/third_party//f"
-    "google/third_party//git_modes"
-    "google/third_party//magit"
-    "google/third_party//markdown_mode"
-    "google/third_party//yasnippet"))
+  '("emacs-google-config/third_party/elisp/auto_complete"
+    "emacs-google-config/third_party/elisp/cl_lib"
+    "emacs-google-config/third_party/elisp/company_mode"
+    "emacs-google-config/third_party/elisp/dash"
+    "emacs-google-config/third_party/elisp/ess_mode"
+    "emacs-google-config/third_party/elisp/ess_mode/lisp"
+    "emacs-google-config/third_party/elisp/f"
+    "emacs-google-config/third_party/elisp/git_modes"
+    "emacs-google-config/third_party/elisp/magit"
+    "emacs-google-config/third_party/elisp/markdown_mode"
+    "emacs-google-config/third_party/elisp/yasnippet"))
 
 (defun allowed-google-load-path-additions (path)
   "Decides which PATH items should be added to the load path."
@@ -25,7 +25,7 @@
 
 (setq google-update-load-path 'allowed-google-load-path-additions)
 
-(add-to-list 'load-path "/usr/share/emacs/site-lisp/google")
+(add-to-list 'load-path "/usr/share/emacs/site-lisp/emacs-google-config/devtools/editors/emacs")
 (require 'google nil t)
 (setq p4-use-p4config-exclusively t)
 (require 'google-imports)
@@ -44,7 +44,4 @@
       browse-url-generic-program "google-chrome")
 
 (set-frame-font "Menlo-11" 't 't)
-
-;; ;; fix for cases where we do not have autoloads defined
-;; (use-package markdown-mode
-;;   :mode ("\\.md\\'" . markdown-mode))
+(add-to-list 'auto-mode-alist '(".pipertmp-.*-change" . outline-mode))
