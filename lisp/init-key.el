@@ -123,16 +123,9 @@ other buffer in other window."
   :bind ("C-x t k" . which-key-mode)
   :config (setq which-key-idle-delay 2))
 
-(use-package flyspell
+(use-package flyspell :diminish " ω̼"
   :bind (("C-x t l" . flyspell-mode)
-         ("C-x t ;" . flyspell-prog-mode))
-  :config
-  (setcdr (assq 'flyspell-mode minor-mode-alist)
-          `((" " (:propertize "α"
-                              face flyspell-incorrect
-                              mouse-face mode-line-highlight
-                              local-map ,mode-line-minor-mode-keymap
-                              help-echo "Fly Spell")))))
+         ("C-x t ;" . flyspell-prog-mode)))
 (add-hook 'text-mode-hook 'flyspell-mode)
 
 (global-set-key (kbd "C-x t n") 'linum-mode)

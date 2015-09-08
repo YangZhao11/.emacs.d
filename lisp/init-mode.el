@@ -11,8 +11,6 @@
 (use-package eldoc :diminish eldoc-mode
   :commands eldoc-mode)
 
-(use-package diff-mode :diminish (diff-minor-mode . " ∆"))
-
 (use-package imenu
   :bind ("C-x j" . imenu))
 
