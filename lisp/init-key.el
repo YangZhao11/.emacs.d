@@ -1,15 +1,29 @@
 (use-package browse-kill-ring :ensure
   :bind ("C-M-y" . browse-kill-ring))
 
+(use-package anchored-transpose :ensure
+  :commands anchored-transpose)
+(defun z-transpose ()
+  (interactive)
+  (if (use-region-p) (call-interactively 'anchored-transpose)
+    (call-interactively 'transpose-chars)))
+(bind-key "C-t" 'z-transpose)
+
 (use-package easy-kill :ensure
   :bind ([remap kill-ring-save] . easy-kill)
   :config
   (add-to-list 'easy-kill-alist '(?p paragraph "\n"))
   (setq easy-kill-unhighlight-key " ")
+  (defun easy-kill-transpose ()
+    (interactive)
+    (save-mark-and-excursion
+     (easy-kill-mark-region)
+     (call-interactively 'anchored-transpose)))
   (bind-keys
    :map easy-kill-base-map
    ("k" . easy-kill-region)
    ("m" . easy-kill-mark-region)
+   ("t" . easy-kill-transpose)
    ([remap z-exchange-point-and-mark] . easy-kill-exchange-point-and-mark)))
 
 (defun cycle-spacing-0 ()
