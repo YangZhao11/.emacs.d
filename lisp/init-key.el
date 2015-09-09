@@ -31,10 +31,9 @@
 (bind-keys ("M-SPC" . cycle-spacing)
            ("M-\\"  . cycle-spacing-0))
 
-(global-set-key (kbd "M-s M-o") 'multi-occur-in-matching-buffers)
-;; occur-edit-mode in occur mode key binding is 'e'
-(global-set-key (kbd "M-s g") 'grep)
-(global-set-key (kbd "M-s M-g") 'rgrep)
+(bind-keys ("M-s M-o" . multi-occur-in-matching-buffers)
+           ("M-s g" . grep)
+           ("M-s M-g" . rgrep))
 
 ;; Decouple exchange-point-and-mark and activating region.
 (defun z-exchange-point-and-mark (&optional arg)
@@ -47,13 +46,13 @@ region, instead of inactivate region."
              (fboundp 'rectangle-exchange-point-and-mark))
         (rectangle-exchange-point-and-mark (not active))
       (exchange-point-and-mark (not active)))))
-(global-set-key (kbd "C-x C-x") 'z-exchange-point-and-mark)
+(bind-key "C-x C-x" 'z-exchange-point-and-mark)
 
 (defun z-toggle-activate-mark () (interactive)
   (if (region-active-p)
       (deactivate-mark)
       (activate-mark)))
-(global-set-key (kbd "M-=") 'z-toggle-activate-mark)
+(bind-key "M-=" 'z-toggle-activate-mark)
 
 (use-package dired-x
   :bind ("C-x C-j" . dired-jump)
@@ -65,24 +64,26 @@ region, instead of inactivate region."
   (if (buffer-modified-p)
       (ediff-current-file)
     (ediff-backup (buffer-file-name))))
-(global-set-key (kbd "C-x C-d") 'ediff-this-buffer)
+(bind-key "C-x C-d" 'ediff-this-buffer)
 
 (defun shrink-other-window-if-larger-than-buffer ()
     (interactive)
     "Shrink other window if larger than buffer"
     (shrink-window-if-larger-than-buffer
      (next-window (selected-window) nil nil)))
-(global-set-key (kbd "C-x _") 'shrink-other-window-if-larger-than-buffer)
-(global-set-key (kbd "C-x 9") 'delete-other-windows-vertically)
+(bind-keys ("C-x _" . shrink-other-window-if-larger-than-buffer)
+           ("C-x 9" . delete-other-windows-vertically))
 
 ;; F1 for help.
-(global-set-key [f2] 'eshell)
+(bind-key "<f2>" 'eshell)
 ;; F3 and F4 for macros
-(global-set-key [f7] 'gud-up)
-(global-set-key [(shift f7)] 'gud-down)
-(global-set-key [f8] 'gud-next)
-(global-set-key [(shift f8)] 'gud-step)
-(global-set-key [f9] 'gud-finish)
+;; F5 and F6 bound for org-mode stuff.
+(use-package gud
+  :bind (("<f7>" . gud-up)
+         ("S-<f7>" . gud-down)
+         ("<f8>" . gud-next)
+         ("S-<f8>" . gud-step)
+         ("<f9>" . gud-finish)))
 
 (defun toggle-one-window ()
   "Change to one window (C-x 1) if applicable, otherwise show
@@ -91,19 +92,18 @@ other buffer in other window."
   (if (window-parent)
       (delete-other-windows)
     (display-buffer (other-buffer) t)))
+(bind-keys ("<f10>" . toggle-one-window)
+           ("<f11>" . shrink-window)
+           ("<f12>" . enlarge-window))
 
-(global-set-key [f10] 'toggle-one-window)
-(global-set-key [f11] 'shrink-window)
-(global-set-key [f12] 'enlarge-window)
-
-(global-set-key (kbd "M-9") 'switch-to-prev-buffer)
-(global-set-key (kbd "M-0") 'switch-to-next-buffer)
 (defun z-prev-buffer-next-window () (interactive)
   (switch-to-prev-buffer (next-window)))
-(global-set-key (kbd "M-(") 'z-prev-buffer-next-window)
 (defun z-next-buffer-next-window () (interactive)
   (switch-to-next-buffer (next-window)))
-(global-set-key (kbd "M-)") 'z-next-buffer-next-window)
+(bind-keys ("M-9" . switch-to-prev-buffer)
+           ("M-0" . switch-to-next-buffer)
+           ("M-(" . z-prev-buffer-next-window)
+           ("M-)" . z-next-buffer-next-window))
 
 (defun isearch-exit-other-end ()
     "Exit isearch, but at the other end of the search string.

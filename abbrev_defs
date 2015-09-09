@@ -125,6 +125,8 @@
 
 (define-abbrev-table 'help-mode-abbrev-table '())
 
+(define-abbrev-table 'html-mode-abbrev-table '())
+
 (define-abbrev-table 'ibuffer-mode-abbrev-table '())
 
 (define-abbrev-table 'idl-mode-abbrev-table '())
@@ -244,6 +246,8 @@
 
 (define-abbrev-table 'select-tags-table-mode-abbrev-table '())
 
+(define-abbrev-table 'sgml-mode-abbrev-table '())
+
 (define-abbrev-table 'sh-mode-abbrev-table '())
 
 (define-abbrev-table 'shell-mode-abbrev-table '())
@@ -282,6 +286,7 @@
     ("indep" "independence" nil 1)
     ("logi" "logistic" nil 2)
     ("mle" "maximum likelihood estimate" nil 0)
+    ("ow" "otherwise" nil 0)
     ("plm" "problem" nil 0)
     ("pp" "population" nil 3)
     ("prob" "probability" nil 5)
