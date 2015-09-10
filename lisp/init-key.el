@@ -4,10 +4,10 @@
   :bind ("C-M-y" . browse-kill-ring))
 
 (use-package anchored-transpose :ensure
-  :bind ("C-x C-t" . anchored-transpose))
-(defun z-transpose ()
-  (interactive)
-  (if (use-region-p)
+  :commands anchored-transpose)
+(defun z-transpose (arg)
+  (interactive "*P")
+  (if (or arg (use-region-p))
       (call-interactively 'anchored-transpose)
     (call-interactively 'transpose-chars)))
 (bind-key "C-t" 'z-transpose)
