@@ -1,11 +1,14 @@
+; -*- coding: utf-8 -*-
+
 (use-package browse-kill-ring :ensure
   :bind ("C-M-y" . browse-kill-ring))
 
 (use-package anchored-transpose :ensure
-  :commands anchored-transpose)
+  :bind ("C-x C-t" . anchored-transpose))
 (defun z-transpose ()
   (interactive)
-  (if (use-region-p) (call-interactively 'anchored-transpose)
+  (if (use-region-p)
+      (call-interactively 'anchored-transpose)
     (call-interactively 'transpose-chars)))
 (bind-key "C-t" 'z-transpose)
 
@@ -14,6 +17,8 @@
   :config
   (add-to-list 'easy-kill-alist '(?p paragraph "\n"))
   (setq easy-kill-unhighlight-key " ")
+
+  (put 'easy-kill-transpose 'easy-kill-exit t)
   (defun easy-kill-transpose ()
     (interactive)
     (save-mark-and-excursion
