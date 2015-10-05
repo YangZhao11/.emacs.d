@@ -191,7 +191,7 @@
 
 (use-package ess-site
   :commands (R R-mode julia)
-  :mode ((".R$" . r-mode) (".jl$" . julia-mode))
+  :mode ((".R$" . r-mode) (".Rmd$" . r-mode) (".jl$" . julia-mode))
   :config
   (setq inferior-julia-program-name "~/bin/julia"
         ess-smart-S-assign-key ";")
@@ -203,6 +203,7 @@
   ;; ignore variable names after $ for expansion. Fix by making it
   ;; punctuation.
   (modify-syntax-entry ?$ "." R-syntax-table)
+  (modify-syntax-entry ?` "." R-syntax-table) ;hack for rmd editing
   (add-hook 'ess-mode-hook 'z-ess-mode-hook)
   (add-hook 'ess-help-mode-hook 'z-ess-help-mode-hook)
   (add-hook 'inferior-ess-mode-hook 'z-inferior-ess-mode-hook))
@@ -216,15 +217,8 @@
       (goto-char (point-min))
       (while (re-search-forward "^\\( *\\)## " nil t)
         (replace-match "\\1# " nil nil)))))
-(add-hook 'before-save-hook 'z-remove-fancy-comments)
+;; (add-hook 'before-save-hook 'z-remove-fancy-comments)
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
-
-(use-package poly-R :ensure polymode
-  :mode ("\\.Rmd\\'" . poly-markdown+r-mode)
-  :config
-  (dolist (mode '(poly-markdown+r-mode poly-ess-help+r-mode poly-Rd-mode poly-c++r-mode poly-r+c++-mode poly-brew+r-mode poly-html+r-mode poly-rapport-mode poly-noweb+r-mode))
-    (let ((m (assq mode minor-mode-alist)))
-      (setcdr m (list " ρ")))))
 
 (defun z-gdb-mode-hook () (setq gdb-many-windows t))
 (add-hook 'gdb-mode-hook 'z-gdb-mode-hook)
