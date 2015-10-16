@@ -24,11 +24,26 @@
     (save-mark-and-excursion
      (easy-kill-mark-region)
      (call-interactively 'anchored-transpose)))
+
+  (put 'easy-kill-wrap-region 'easy-kill-exit t)
+  (defun easy-kill-wrap-region ()
+    (interactive)
+    (save-mark-and-excursion
+     (easy-kill-mark-region)
+     (call-interactively 'self-insert-command)))
   (bind-keys
    :map easy-kill-base-map
    ("k" . easy-kill-region)
    ("m" . easy-kill-mark-region)
    ("t" . easy-kill-transpose)
+   ("(" . easy-kill-wrap-region)
+   (")" . easy-kill-wrap-region)
+   ("[" . easy-kill-wrap-region)
+   ("]" . easy-kill-wrap-region)
+   ("{" . easy-kill-wrap-region)
+   ("}" . easy-kill-wrap-region)
+   ("\"" . easy-kill-wrap-region)
+   ("'" . easy-kill-wrap-region)
    ([remap z-exchange-point-and-mark] . easy-kill-exchange-point-and-mark)))
 
 (defun cycle-spacing-0 ()
