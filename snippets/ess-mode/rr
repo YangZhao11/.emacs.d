@@ -1,0 +1,9 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: rr
+# key: rr
+# --
+\`\`\`{r $1}
+
+$0
+
+\`\`\`

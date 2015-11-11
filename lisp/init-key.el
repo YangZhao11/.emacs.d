@@ -145,6 +145,13 @@ other buffer in other window."
 (diminish 'abbrev-mode " ∂A")
 (add-hook 'text-mode-hook 'abbrev-mode)
 
+(use-package beacon :ensure :diminish beacon-mode
+  :bind ("C-x t b" . beacon-mode)
+  :config
+  (add-hook 'beacon-dont-blink-predicates
+            (lambda () (not (display-graphic-p)))))
+(beacon-mode 1)
+
 (global-set-key (kbd "C-x t c") 'highlight-changes-mode)
 (global-set-key (kbd "C-x t d") 'eldoc-mode)
 (bind-key "C-x t f" 'auto-fill-mode)
@@ -303,7 +310,6 @@ in ctl-j-map first."
              ("z" . repeat)
              ("i" . god-mode-all)
              ("[" . z-god-mode-toggle-cm)
-             ("]" . z-god-mode-toggle-meta)
              ("#" . server-edit))
 
   (require 'god-mode-isearch)
