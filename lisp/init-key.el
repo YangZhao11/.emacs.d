@@ -149,7 +149,11 @@ other buffer in other window."
   :bind ("C-x t b" . beacon-mode)
   :config
   (add-hook 'beacon-dont-blink-predicates
-            (lambda () (not (display-graphic-p)))))
+            (lambda () (not (display-graphic-p))))
+  (setq beacon-dont-blink-major-modes
+        '(inferior-ess-mode
+          magit-status-mode magit-popup-mode
+          gnus-summary-mode gnus-group-mode)))
 (beacon-mode 1)
 
 (global-set-key (kbd "C-x t c") 'highlight-changes-mode)
