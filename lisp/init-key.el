@@ -215,11 +215,13 @@ storing current frame configuration to register 8."
 
 (use-package avy :ensure
   :bind* ("C-j" . z-goto-char)
-  :bind (:map ctl-j-map ("SPC" . avy-goto-line))
+  :bind (:map ctl-j-map
+              ("SPC" . avy-goto-line)
+              ("TAB" . avy-copy-region))
   :config
-  (setq avy-style 'at-full
+  (setq avy-style 'de-bruijn
         avy-keys
-        '(?s ?d ?f ?g ?h ?j ?k ?l ?w ?e ?r ?u ?i ?o ?c ?v ?b ?n ?m))
+        '(?s ?d ?f ?g ?h ?j ?k ?l ?w ?e ?r ?u ?i ?o))
   (eval-after-load "isearch"
     '(define-key isearch-mode-map (kbd "C-j") 'avy-isearch))
 
@@ -274,6 +276,10 @@ in ctl-j-map first."
 
 ;; --------------------------------------------------
 (defvar z-real-mode-line-bg (face-background 'mode-line))
+(defun update-z-real-mode-line-bg (&rest r)
+  (setq z-real-mode-line-bg (face-background 'mode-line)))
+(advice-add 'load-theme :after #'update-z-real-mode-line-bg)
+
 (use-package god-mode :ensure
   :bind ("ESC ESC" . god-mode-all)
   :config
@@ -282,14 +288,11 @@ in ctl-j-map first."
           '((t z-god-mode-lighter)))
   (defvar z-god-state 'normal)
   (defvar z-god-mode-color nil)
-  (defvar z-real-mode-line-bg nil)
   (setq z-god-states
     '((normal " ⌘" "#153E7E" (nil . "C-") ("g" . "M-") ("h" . "C-M-"))
       (cm " ⌘⌥" "#7D053F" (nil . "C-M-") ("g" . "C-"))
       (meta " ⌥" "#055D30" (nil . "M-"))))
   (defun z-god-mode-update ()
-    (unless z-real-mode-line-bg
-      (setq z-real-mode-line-bg (face-background 'mode-line)))
     (cond (god-local-mode
            (set-face-background 'mode-line z-god-mode-color))
           (t  (set-face-background 'mode-line z-real-mode-line-bg))))
