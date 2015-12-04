@@ -56,7 +56,7 @@
 
 ;; --------------------------------------------------
 (load-theme 'zenburn t)                 ; load this first for many defaults.
-(load-theme 'base16-ashes-dark t)
+(load-theme 'base16-oceanicnext-dark t)
 
 ;; --------------------------------------------------
 (use-package yasnippet :demand ;; :ensure
