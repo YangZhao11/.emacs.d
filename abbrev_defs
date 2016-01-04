@@ -41,9 +41,7 @@
 
 (define-abbrev-table 'apropos-mode-abbrev-table '())
 
-(define-abbrev-table 'awk-mode-abbrev-table
-  '(
-   ))
+(define-abbrev-table 'awk-mode-abbrev-table '())
 
 (define-abbrev-table 'bibtex-mode-abbrev-table '())
 
@@ -51,13 +49,9 @@
 
 (define-abbrev-table 'borgmon-mode-abbrev-table '())
 
-(define-abbrev-table 'c++-mode-abbrev-table
-  '(
-   ))
+(define-abbrev-table 'c++-mode-abbrev-table '())
 
-(define-abbrev-table 'c-mode-abbrev-table
-  '(
-   ))
+(define-abbrev-table 'c-mode-abbrev-table '())
 
 (define-abbrev-table 'calendar-mode-abbrev-table '())
 
@@ -123,6 +117,20 @@
 
 (define-abbrev-table 'gud-mode-abbrev-table '())
 
+(define-abbrev-table 'haskell-cabal-mode-abbrev-table '())
+
+(define-abbrev-table 'haskell-compilation-mode-abbrev-table '())
+
+(define-abbrev-table 'haskell-debug-mode-abbrev-table '())
+
+(define-abbrev-table 'haskell-error-mode-abbrev-table '())
+
+(define-abbrev-table 'haskell-interactive-mode-abbrev-table '())
+
+(define-abbrev-table 'haskell-mode-abbrev-table '())
+
+(define-abbrev-table 'haskell-presentation-mode-abbrev-table '())
+
 (define-abbrev-table 'help-mode-abbrev-table '())
 
 (define-abbrev-table 'html-mode-abbrev-table '())
@@ -131,17 +139,19 @@
 
 (define-abbrev-table 'idl-mode-abbrev-table '())
 
+(define-abbrev-table 'inferior-haskell-mode-abbrev-table '())
+
 (define-abbrev-table 'inferior-julia-mode-abbrev-table '())
 
 (define-abbrev-table 'inferior-python-mode-abbrev-table '())
 
-(define-abbrev-table 'java-mode-abbrev-table
-  '(
-   ))
+(define-abbrev-table 'java-mode-abbrev-table '())
 
 (define-abbrev-table 'julia-mode-abbrev-table '())
 
 (define-abbrev-table 'lisp-mode-abbrev-table '())
+
+(define-abbrev-table 'literate-haskell-mode-abbrev-table '())
 
 (define-abbrev-table 'log-edit-mode-abbrev-table '())
 
@@ -156,6 +166,8 @@
 (define-abbrev-table 'magit-log-mode-abbrev-table '())
 
 (define-abbrev-table 'magit-log-select-mode-abbrev-table '())
+
+(define-abbrev-table 'magit-merge-preview-mode-abbrev-table '())
 
 (define-abbrev-table 'magit-mode-abbrev-table '())
 
@@ -187,9 +199,7 @@
 
 (define-abbrev-table 'messages-buffer-mode-abbrev-table '())
 
-(define-abbrev-table 'objc-mode-abbrev-table
-  '(
-   ))
+(define-abbrev-table 'objc-mode-abbrev-table '())
 
 (define-abbrev-table 'occur-edit-mode-abbrev-table '())
 
@@ -225,9 +235,7 @@
 
 (define-abbrev-table 'piccolo-mode-abbrev-table '())
 
-(define-abbrev-table 'pike-mode-abbrev-table
-  '(
-   ))
+(define-abbrev-table 'pike-mode-abbrev-table '())
 
 (define-abbrev-table 'process-menu-mode-abbrev-table '())
 
@@ -263,50 +271,53 @@
   '(
     ("ackd" "acknowledged" nil 1)
     ("aspn" "assumption" nil 0)
-    ("avg" "average" nil 5)
-    ("bn" "binomial" nil 9)
+    ("avg" "average" nil 9)
+    ("bn" "binomial" nil 13)
     ("bt" "between" nil 0)
-    ("calc" "calculate" nil 6)
-    ("calcd" "calculated" nil 3)
-    ("calcn" "calculation" nil 6)
-    ("cdd" "candidate" nil 78)
-    ("ci" "confidence interval" nil 14)
+    ("calc" "calculate" nil 9)
+    ("calcd" "calculated" nil 4)
+    ("calcn" "calculation" nil 8)
+    ("cdd" "candidate" nil 103)
+    ("confint" "confidence interval" nil 22)
+    ("corrd" "correlated" nil 0)
+    ("corrn" "correlation" nil 0)
     ("ctl" "correctly" nil 0)
-    ("diff" "difference" nil 6)
+    ("diff" "difference" nil 8)
     ("difft" "different" nil 1)
     ("dist" "distribution" nil 9)
     ("distd" "distributed" nil 0)
     ("epd" "explained" nil 1)
     ("eptn" "expectation" nil 0)
-    ("est" "estimate" nil 4)
-    ("flw" "Follow up" nil 5)
+    ("est" "estimate" nil 5)
+    ("flw" "Follow up" nil 6)
     ("fml" "familiar" nil 0)
-    ("ga" "Google Analytics" nil 3)
     ("gend" "generated" nil 0)
-    ("indep" "independence" nil 1)
+    ("ggl" "Google" nil 5)
+    ("indep" "independence" nil 2)
     ("iow" "in other words" nil 0)
     ("logi" "logistic" nil 2)
     ("mle" "maximum likelihood estimate" nil 0)
-    ("ow" "otherwise" nil 2)
+    ("ow" "otherwise" nil 3)
     ("param" "parameter" nil 0)
-    ("plm" "problem" nil 0)
-    ("pp" "population" nil 8)
-    ("prob" "probability" nil 5)
+    ("popn" "population" nil 8)
+    ("prm" "problem" nil 0)
+    ("prob" "probability" nil 6)
+    ("prog" "program" nil 2)
     ("prop" "proportion" nil 2)
-    ("props" "proportions" nil 8)
+    ("props" "proportions" nil 13)
     ("regn" "regression" nil 2)
     ("rlv" "relevant" nil 1)
     ("sigt" "significant" nil 0)
     ("sp" "sample" nil 3)
-    ("spl" "sampling" nil 12)
-    ("srp" "Server reliability problem" nil 4)
+    ("spl" "sampling" nil 17)
+    ("srp" "Server reliability problem" nil 7)
     ("stat" "statistics" nil 5)
     ("statl" "statistical" nil 2)
     ("statn" "statistician" nil 0)
     ("staty" "statistically" nil 0)
-    ("ud" "understand" nil 2)
+    ("ud" "understand" nil 4)
     ("udi" "understanding" nil 0)
-    ("wtd" "weighted" nil 3)
+    ("wtd" "weighted" nil 6)
    ))
 
 (define-abbrev-table 'url-cookie-mode-abbrev-table '())

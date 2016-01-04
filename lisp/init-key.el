@@ -12,25 +12,24 @@
     (call-interactively 'transpose-chars)))
 (bind-key "C-t" 'z-transpose)
 
+(defun easy-kill-transpose ()
+  (interactive)
+  (save-mark-and-excursion
+   (easy-kill-mark-region)
+   (call-interactively 'anchored-transpose)))
+(defun easy-kill-wrap-region ()
+  (interactive)
+  (save-mark-and-excursion
+   (easy-kill-mark-region)
+   (call-interactively 'self-insert-command)))
 (use-package easy-kill :ensure
   :bind ([remap kill-ring-save] . easy-kill)
   :config
   (add-to-list 'easy-kill-alist '(?p paragraph "\n"))
   (setq easy-kill-unhighlight-key " ")
-
   (put 'easy-kill-transpose 'easy-kill-exit t)
-  (defun easy-kill-transpose ()
-    (interactive)
-    (save-mark-and-excursion
-     (easy-kill-mark-region)
-     (call-interactively 'anchored-transpose)))
-
   (put 'easy-kill-wrap-region 'easy-kill-exit t)
-  (defun easy-kill-wrap-region ()
-    (interactive)
-    (save-mark-and-excursion
-     (easy-kill-mark-region)
-     (call-interactively 'self-insert-command)))
+
   (bind-keys
    :map easy-kill-base-map
    ("k" . easy-kill-region)
@@ -51,6 +50,15 @@
 (bind-keys ("M-SPC" . cycle-spacing)
            ("M-\\"  . cycle-spacing-0))
 
+(setq search-whitespace-regexp "[-_ \t\r\n]+")
+(defun isearch-exit-other-end ()
+    "Exit isearch, but at the other end of the search string.
+  This is useful when followed by an immediate kill."
+    (interactive)
+    (isearch-exit)
+    (goto-char isearch-other-end))
+(bind-keys :map isearch-mode-map
+              ("M-RET" . isearch-exit-other-end))
 (bind-keys ("M-s M-o" . multi-occur-in-matching-buffers)
            ("M-s g" . grep)
            ("M-s M-g" . rgrep))
@@ -125,14 +133,6 @@ other buffer in other window."
            ("M-(" . z-prev-buffer-next-window)
            ("M-)" . z-next-buffer-next-window))
 
-(defun isearch-exit-other-end ()
-    "Exit isearch, but at the other end of the search string.
-  This is useful when followed by an immediate kill."
-    (interactive)
-    (isearch-exit)
-    (goto-char isearch-other-end))
-(define-key isearch-mode-map (kbd "M-RET") 'isearch-exit-other-end)
-
 ;(setq-default show-trailing-whitespace t)
 (defun toggle-show-trailing-whitespace ()
    "Toggle show-trailing-whitespace"
@@ -162,8 +162,6 @@ other buffer in other window."
 (diminish 'auto-fill-function " ¶")
 (add-hook 'text-mode-hook 'auto-fill-mode)
 
-(global-set-key (kbd "C-x t h") 'hi-lock-mode)
-
 (use-package which-key :ensure :diminish which-key-mode
   :bind ("C-x t k" . which-key-mode)
   :config (setq which-key-idle-delay 2))
@@ -173,21 +171,22 @@ other buffer in other window."
          ("C-x t ;" . flyspell-prog-mode)))
 (add-hook 'text-mode-hook 'flyspell-mode)
 
-(global-set-key (kbd "C-x t n") 'linum-mode)
-(global-set-key (kbd "C-x t o") 'outline-minor-mode)
-
 (use-package rainbow-delimiters :ensure
   :bind ("C-x t p" . rainbow-delimiters-mode)
   :init  (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 
-(global-set-key (kbd "C-x t r") 'hs-minor-mode)
 (use-package whitespace :diminish " ␣"
   :bind ("C-x t s" . whitespace-mode))
-(global-set-key (kbd "C-x t t") 'toggle-show-trailing-whitespace)
-(global-set-key (kbd "C-x t v") 'view-mode)
-(global-set-key (kbd "C-x t w") 'subword-mode)
-(global-set-key (kbd "C-x t W") 'superword-mode)
-(global-set-key (kbd "C-x t SPC") 'global-hl-line-mode)
+
+(bind-keys ("C-x t h" . hi-lock-mode)
+           ("C-x t n" . linum-mode)
+           ("C-x t o" . outline-minor-mode)
+           ("C-x t r" . hs-minor-mode)
+           ("C-x t t" . toggle-show-trailing-whitespace)
+           ("C-x t v" . view-mode)
+           ("C-x t W" . superword-mode)
+           ("C-x t w" . subword-mode)
+           ("C-x t SPC" . hl-line-mode))
 
 (setq ctl-j-map (make-sparse-keymap))
 (use-package goto-chg :ensure
