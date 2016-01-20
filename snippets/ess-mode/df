@@ -1,6 +1,0 @@
-# -*- mode: snippet; require-final-newline: nil -*-
-# name: df
-# key: df
-# condition: (string= ess-dialect "R")
-# --
-data.frame($0)

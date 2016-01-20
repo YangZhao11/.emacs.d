@@ -1,6 +1,0 @@
-# -*- mode: snippet; require-final-newline: nil -*-
-# name: s
-# key: s
-# condition: (string= ess-dialect "R")
-# --
-summarize($0)

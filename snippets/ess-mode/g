@@ -1,6 +1,0 @@
-# -*- mode: snippet; require-final-newline: nil -*-
-# name: g
-# key: g
-# condition: (string= ess-dialect "R")
-# --
-group_by($0)

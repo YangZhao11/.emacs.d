@@ -41,7 +41,9 @@
 
 (define-abbrev-table 'apropos-mode-abbrev-table '())
 
-(define-abbrev-table 'awk-mode-abbrev-table '())
+(define-abbrev-table 'awk-mode-abbrev-table
+  '(
+   ))
 
 (define-abbrev-table 'bibtex-mode-abbrev-table '())
 
@@ -49,9 +51,13 @@
 
 (define-abbrev-table 'borgmon-mode-abbrev-table '())
 
-(define-abbrev-table 'c++-mode-abbrev-table '())
+(define-abbrev-table 'c++-mode-abbrev-table
+  '(
+   ))
 
-(define-abbrev-table 'c-mode-abbrev-table '())
+(define-abbrev-table 'c-mode-abbrev-table
+  '(
+   ))
 
 (define-abbrev-table 'calendar-mode-abbrev-table '())
 
@@ -145,7 +151,13 @@
 
 (define-abbrev-table 'inferior-python-mode-abbrev-table '())
 
-(define-abbrev-table 'java-mode-abbrev-table '())
+(define-abbrev-table 'java-mode-abbrev-table
+  '(
+   ))
+
+(define-abbrev-table 'js-jsx-mode-abbrev-table '())
+
+(define-abbrev-table 'js-mode-abbrev-table '())
 
 (define-abbrev-table 'julia-mode-abbrev-table '())
 
@@ -199,7 +211,9 @@
 
 (define-abbrev-table 'messages-buffer-mode-abbrev-table '())
 
-(define-abbrev-table 'objc-mode-abbrev-table '())
+(define-abbrev-table 'objc-mode-abbrev-table
+  '(
+   ))
 
 (define-abbrev-table 'occur-edit-mode-abbrev-table '())
 
@@ -235,7 +249,9 @@
 
 (define-abbrev-table 'piccolo-mode-abbrev-table '())
 
-(define-abbrev-table 'pike-mode-abbrev-table '())
+(define-abbrev-table 'pike-mode-abbrev-table
+  '(
+   ))
 
 (define-abbrev-table 'process-menu-mode-abbrev-table '())
 
@@ -279,6 +295,7 @@
     ("calcn" "calculation" nil 8)
     ("cdd" "candidate" nil 103)
     ("confint" "confidence interval" nil 22)
+    ("corr" "correlate" nil 0)
     ("corrd" "correlated" nil 0)
     ("corrn" "correlation" nil 0)
     ("ctl" "correctly" nil 0)
@@ -287,6 +304,7 @@
     ("dist" "distribution" nil 9)
     ("distd" "distributed" nil 0)
     ("epd" "explained" nil 1)
+    ("epn" "explanation" nil 0)
     ("eptn" "expectation" nil 0)
     ("est" "estimate" nil 5)
     ("flw" "Follow up" nil 6)
@@ -300,6 +318,8 @@
     ("ow" "otherwise" nil 3)
     ("param" "parameter" nil 0)
     ("popn" "population" nil 8)
+    ("pps" "propose" nil 0)
+    ("ppsd" "proposed" nil 0)
     ("prm" "problem" nil 0)
     ("prob" "probability" nil 6)
     ("prog" "program" nil 2)
@@ -309,14 +329,14 @@
     ("rlv" "relevant" nil 1)
     ("sigt" "significant" nil 0)
     ("sp" "sample" nil 3)
-    ("spl" "sampling" nil 17)
+    ("sping" "sampling" nil 17)
     ("srp" "Server reliability problem" nil 7)
     ("stat" "statistics" nil 5)
     ("statl" "statistical" nil 2)
     ("statn" "statistician" nil 0)
     ("staty" "statistically" nil 0)
     ("ud" "understand" nil 4)
-    ("udi" "understanding" nil 0)
+    ("uding" "understanding" nil 0)
     ("wtd" "weighted" nil 6)
    ))
 
