@@ -26,6 +26,30 @@
         bug-reference-bug-regexp
         "\\(\\b\\)\\(b/[0-9]+\\|c[rl]/[0-9]+\\|t/[0-9]+\\|\\(g\\|go\\|goto\\)/[-a-zA-z0-9_]+\\|[a-z]+@\\)"))
 
+;; --------------------------------------------------
+(use-package yasnippet :demand ;; :ensure
+  :diminish yas-minor-mode
+  :bind ("M-?" . yas-insert-snippet)
+  :init
+  (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
+  :config
+  (setq yas-prompt-functions
+        '(yas-ido-prompt yas-completing-prompt yas-no-prompt)
+        yas-wrap-around-region t)
+  (yas-global-mode))
+
+(defun z-re-backward (re count)
+  "Search re backward, returns count-th submatch. Used in snippets."
+  (save-excursion
+    (save-match-data
+      (when (re-search-backward re (point-min) t)
+          (match-string count)))))
+
+(use-package company :defer 't
+  :commands (company-mode company-complete)
+  :config
+  (setq company-idle-delay nil))
+
 (use-package org
   :defer 't
   :bind (("<f5>" . org-capture) ("<f6>" . org-agenda))
@@ -101,9 +125,14 @@
 (add-hook 'c-mode-common-hook 'z-c-mode-common-hook)
 
 (defun z-go-mode-hook ()
-  (setq tab-width 4))
-(add-hook 'go-mode-hook 'z-go-mode-hook)
-
+  (setq tab-width 4)
+  (setq-local company-backends '(company-go))
+  (company-mode 1)
+  (go-eldoc-setup))
+(use-package go-mode
+  :config
+  (bind-key "M-/" 'company-complete go-mode-map)
+  (add-hook 'go-mode-hook 'z-go-mode-hook))
 
 (defun z-scala-mode-hook ()
   (setq prettify-symbols-alist

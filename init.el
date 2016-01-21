@@ -59,25 +59,6 @@
 (load-theme 'base16-oceanicnext-dark t)
 
 ;; --------------------------------------------------
-(use-package yasnippet :demand ;; :ensure
-  :diminish yas-minor-mode
-  :bind ("M-?" . yas-insert-snippet)
-  :init
-  (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
-  :config
-  (setq yas-prompt-functions
-        '(yas-ido-prompt yas-completing-prompt yas-no-prompt)
-        yas-wrap-around-region t)
-  (yas-global-mode))
-
-(defun z-re-backward (re count)
-  "Search re backward, returns count-th submatch. Used in snippets."
-  (save-excursion
-    (save-match-data
-      (when (re-search-backward re (point-min) t)
-          (match-string count)))))
-
-;; --------------------------------------------------
 ;; Load subfiles
 
 (load "init-buffer")
@@ -114,7 +95,7 @@
     ("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3")))
  '(package-selected-packages
    (quote
-    (smex ack magit beacon anchored-transpose avy csv-mode go-mode shrink-whitespace easy-kill zenburn-theme yasnippet which-key use-package squery register-channel rainbow-delimiters multiple-cursors markdown-mode lua-mode iy-go-to-char ido-vertical-mode ido-ubiquitous haskell-mode guide-key goto-chg god-mode f ess edit-server change-inner browse-kill-ring base16-theme ace-window)))
+    (go-eldoc company company-go smex ack magit beacon anchored-transpose avy csv-mode go-mode shrink-whitespace easy-kill zenburn-theme yasnippet which-key use-package squery register-channel rainbow-delimiters multiple-cursors markdown-mode lua-mode iy-go-to-char ido-vertical-mode ido-ubiquitous haskell-mode guide-key goto-chg god-mode f ess edit-server change-inner browse-kill-ring base16-theme ace-window)))
  '(vc-annotate-background "#2B2B2B")
  '(vc-annotate-color-map
    (quote
