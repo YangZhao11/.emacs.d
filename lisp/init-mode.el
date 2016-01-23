@@ -45,8 +45,16 @@
       (when (re-search-backward re (point-min) t)
           (match-string count)))))
 
+(defun company-complete-or-dabbrev ()
+    (interactive)
+    (if (bound-and-true-p company-mode)
+        (call-interactively 'company-complete)
+      (call-interactively 'dabbrev-expand)))
+(bind-key "M-/" 'company-complete-or-dabbrev)
+
 (use-package company :defer 't
-  :commands (company-mode company-complete)
+  :diminish " ⊙"
+  :commands (company-mode)
   :config
   (setq company-idle-delay nil))
 
@@ -129,10 +137,7 @@
   (setq-local company-backends '(company-go))
   (company-mode 1)
   (go-eldoc-setup))
-(use-package go-mode
-  :config
-  (bind-key "M-/" 'company-complete go-mode-map)
-  (add-hook 'go-mode-hook 'z-go-mode-hook))
+(add-hook 'go-mode-hook 'z-go-mode-hook)
 
 (defun z-scala-mode-hook ()
   (setq prettify-symbols-alist
@@ -149,18 +154,6 @@
 
 ;; --------------------------------------------------
 ;; ess
-
-(defun z-ess-mode-hook ()
-  (define-key ess-mode-map [f7] 'ess-show-traceback)
-  (define-key ess-mode-map [f8] 'ess-debug-next-or-eval-line)
-  (define-key ess-mode-map [f9]
-    'ess-eval-function-or-paragraph-and-step)
-  (define-key ess-mode-map (kbd "C-x <f8>") 'ess-tracebug)
-  (define-key ess-mode-map (kbd "\\") 'ess-smart-pipe)
-  (define-key ess-mode-map (kbd ";") 'ess-smart-S-assign)
-  (setq ess-tab-complete-in-script t)
-  (rainbow-delimiters-mode 1)
-  (z-ess-mode-symbols))
 
 (defun ess-smart-pipe ()
   "Similar to ess-smart-S-assign, but insert %>% instead."
@@ -201,26 +194,19 @@
                   prettify-symbols-alist))
     (prettify-symbols-mode)))
 
-(defun z-ess-help-mode-hook ()
-  (define-key ess-help-mode-map [f8] 'ess-eval-line-and-step)
-  (define-key ess-help-mode-map [f9]
-    'ess-eval-function-or-paragraph-and-step)
+(defun z-ess-mode-hook ()
+  (rainbow-delimiters-mode 1)
+  (setq-local company-backends ess-company-backends) ; todo: add dabbrev?
+  (company-mode)
   (z-ess-mode-symbols))
 
-(defun z-inferior-ess-mode-hook ()
-  (define-key inferior-ess-mode-map "\C-cw"
-    'ess-execute-screen-options)
-  (define-key inferior-ess-mode-map [f7] 'ess-show-R-traceback)
-  (define-key inferior-ess-mode-map (kbd "C-x <f8>") 'ess-tracebug)
-  (define-key inferior-ess-mode-map (kbd "\\") 'ess-smart-pipe)
-  (define-key inferior-ess-mode-map (kbd ";") 'ess-smart-S-assign)
-  (z-ess-mode-symbols))
 
 (use-package ess-site
   :commands (R R-mode julia)
   :mode ((".R$" . r-mode) (".Rmd$" . r-mode) (".jl$" . julia-mode))
   :config
   (setq inferior-julia-program-name "~/bin/julia"
+        ess-tab-complete-in-script 't
         ess-smart-S-assign-key ";")
   (ess-toggle-S-assign nil)
   (ess-toggle-S-assign nil)
@@ -231,9 +217,29 @@
   ;; punctuation.
   (modify-syntax-entry ?$ "." R-syntax-table)
   (modify-syntax-entry ?` "." R-syntax-table) ;hack for rmd editing
+
+  (bind-keys :map ess-mode-map
+             ("<f7>" . ess-show-traceback)
+             ("<f8>" . ess-debug-next-or-eval-line)
+             ("<f9>" . ess-eval-function-or-paragraph-and-step)
+             ("C-x <f8>" . ess-tracebug)
+             ("\\" . ess-smart-pipe)
+             (";" . ess-smart-S-assign))
+
+  (bind-keys :map inferior-ess-mode-map
+             ("\C-cw" . ess-execute-screen-options)
+             ("<f7>" . ess-show-R-traceback)
+             ("C-x <f8>" . ess-tracebug)
+             ("\\" . ess-smart-pipe)
+             (";" .  ess-smart-S-assign))
+
+  (bind-keys :map ess-help-mode-map
+             ("<f8>" . ess-eval-line-and-step)
+             ("<f9>" . ess-eval-function-or-paragraph-and-step))
+
   (add-hook 'ess-mode-hook 'z-ess-mode-hook)
-  (add-hook 'ess-help-mode-hook 'z-ess-help-mode-hook)
-  (add-hook 'inferior-ess-mode-hook 'z-inferior-ess-mode-hook))
+  (add-hook 'ess-help-mode-hook 'z-ess-mode-symbols)
+  (add-hook 'inferior-ess-mode-hook 'z-ess-mode-symbols))
 
 ;; Remove ## as begining of comment. Google R style guide insists we use
 ;; single #.

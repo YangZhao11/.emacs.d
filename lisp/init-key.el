@@ -324,7 +324,7 @@ in ctl-j-map first."
 
   ;; bind symbols to M-?
   (dolist (i '("!" "@" "$" "%" "^" "&" "*" "{" "}"
-               "<" ">" ";" ":" "|" "="))
+               "<" ">" ";" ":" "|" "=" "?"))
     (define-key god-local-mode-map (kbd i)
       (key-binding (kbd (concat "M-" i)))))
 
