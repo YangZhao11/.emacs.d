@@ -166,7 +166,7 @@ other buffer in other window."
   :bind ("C-x t k" . which-key-mode)
   :config (setq which-key-idle-delay 2))
 
-(use-package flyspell :diminish " ω̼"
+(use-package flyspell :diminish " ⍹"
   :bind (("C-x t l" . flyspell-mode)
          ("C-x t ;" . flyspell-prog-mode)))
 (add-hook 'text-mode-hook 'flyspell-mode)
@@ -218,7 +218,7 @@ storing current frame configuration to register 8."
               ("SPC" . avy-goto-line)
               ("TAB" . avy-copy-region))
   :config
-  (setq avy-style 'de-bruijn
+  (setq avy-styles-alist '((avy-goto-char . de-bruijn))
         avy-keys
         '(?s ?d ?f ?g ?h ?j ?k ?l ?w ?e ?r ?u ?i ?o))
   (eval-after-load "isearch"

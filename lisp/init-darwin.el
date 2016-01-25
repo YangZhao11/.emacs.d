@@ -5,3 +5,4 @@
       mac-right-command-modifier 'super)
 (add-to-list 'exec-path "/usr/local/bin")
 (setenv "PATH" (concat "/usr/local/bin:" (getenv "PATH")))
+(setenv "LANG" "en_US.UTF-8")

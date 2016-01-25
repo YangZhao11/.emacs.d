@@ -178,6 +178,10 @@
         (ess-debug-command-next)
       (ess-eval-line-and-step))))
 
+(defun ess-render-markdown ()
+  (interactive)
+  (ess-eval-linewise (concat "render(\"" buffer-file-name "\")") nil 'eob))
+
 (defun z-ess-mode-symbols ()
   (when (fboundp 'prettify-symbols-mode) ; 24.4 needed
     (setq prettify-symbols-alist
@@ -223,6 +227,7 @@
              ("<f8>" . ess-debug-next-or-eval-line)
              ("<f9>" . ess-eval-function-or-paragraph-and-step)
              ("C-x <f8>" . ess-tracebug)
+             ("C-c SPC" . ess-render-markdown)
              ("\\" . ess-smart-pipe)
              (";" . ess-smart-S-assign))
 
