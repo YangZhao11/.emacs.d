@@ -45,16 +45,10 @@
       (when (re-search-backward re (point-min) t)
           (match-string count)))))
 
-(defun company-complete-or-dabbrev ()
-    (interactive)
-    (if (bound-and-true-p company-mode)
-        (call-interactively 'company-complete)
-      (call-interactively 'dabbrev-expand)))
-(bind-key "M-/" 'company-complete-or-dabbrev)
-
 (use-package company :defer 't
   :diminish " ⊙"
   :commands (company-mode)
+  :bind ("M-m" . company-complete)
   :config
   (setq company-idle-delay nil))
 
@@ -180,7 +174,7 @@
 
 (defun ess-render-markdown ()
   (interactive)
-  (ess-eval-linewise (concat "render(\"" buffer-file-name "\")") nil 'eob))
+  (ess-eval-linewise (concat "render(\"" buffer-file-name "\", output_dir = getwd())") nil 'eob))
 
 (defun z-ess-mode-symbols ()
   (when (fboundp 'prettify-symbols-mode) ; 24.4 needed
@@ -200,10 +194,9 @@
 
 (defun z-ess-mode-hook ()
   (rainbow-delimiters-mode 1)
-  (setq-local company-backends ess-company-backends) ; todo: add dabbrev?
+  (setq-local company-backends ess-company-backends)
   (company-mode)
   (z-ess-mode-symbols))
-
 
 (use-package ess-site
   :commands (R R-mode julia)

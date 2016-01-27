@@ -175,13 +175,17 @@ other buffer in other window."
   :bind ("C-x t p" . rainbow-delimiters-mode)
   :init  (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 
+(use-package autorevert
+  :diminish (auto-revert-mode . " ↻")
+  :bind ("C-x t r" . auto-revert-mode))
+
 (use-package whitespace :diminish " ␣"
   :bind ("C-x t s" . whitespace-mode))
 
-(bind-keys ("C-x t h" . hi-lock-mode)
+(bind-keys ("C-x t e" . hs-minor-mode)
+           ("C-x t h" . hi-lock-mode)
            ("C-x t n" . linum-mode)
            ("C-x t o" . outline-minor-mode)
-           ("C-x t r" . hs-minor-mode)
            ("C-x t t" . toggle-show-trailing-whitespace)
            ("C-x t v" . view-mode)
            ("C-x t W" . superword-mode)
@@ -197,8 +201,8 @@ other buffer in other window."
   :config
   (register-channel-mode)
   (set-register ?5 '(file . "~/Projects/NOTES.org"))
-  (define-key register-channel-mode-map (kbd "M-g 5")
-    'register-channel-describe-register))
+  (bind-key "M-g 5" 'register-channel-describe-register
+            register-channel-mode-map))
 
 (defun all-frames-to-messages-buffer ()
   "make all frames display the *Messages* buffer only after
@@ -209,8 +213,7 @@ storing current frame configuration to register 8."
     (let ((w (frame-first-window f)))
       (delete-other-windows w)
       (set-window-buffer w "*Messages*"))))
-(define-key register-channel-mode-map (kbd "M-g 8")
-  'all-frames-to-messages-buffer)
+(bind-key "M-g 8" 'all-frames-to-messages-buffer register-channel-mode-map)
 
 (use-package avy :ensure
   :bind* ("C-j" . z-goto-char)
