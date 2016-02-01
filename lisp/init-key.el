@@ -293,7 +293,7 @@ in ctl-j-map first."
   (setq z-god-states
     '((normal " ⌘" "#153E7E" (nil . "C-") ("g" . "M-") ("h" . "C-M-"))
       (cm " ⌘⌥" "#7D053F" (nil . "C-M-") ("g" . "C-"))
-      (meta " ⌥" "#055D30" (nil . "M-"))))
+      (meta " ⌥" "#5D0530" (nil . "M-"))))
   (defun z-god-mode-update ()
     (cond (god-local-mode
            (set-face-background 'mode-line z-god-mode-color))
@@ -306,6 +306,19 @@ in ctl-j-map first."
             z-god-state state)
       (z-god-mode-update)))
 
+  (defun mortal-mode-return ()
+    (interactive)
+    (god-local-mode-resume))
+  (defvar mortal-pushed-state nil)
+  (define-minor-mode mortal-mode
+    "Allow temporary departures from god-mode."
+    :lighter " ⎀"
+    :keymap '(([return] . mortal-mode-return))
+    (when (and mortal-mode god-local-mode)
+      (setq mortal-pushed-state z-god-state)
+      (god-local-mode-pause)
+      (set-face-background 'mode-line "#055D30")))
+
   (defun z-god-mode-toggle-meta ()
     (interactive)
     (z-god-set-state (if (eq z-god-state 'meta) 'normal 'meta)))
@@ -317,7 +330,7 @@ in ctl-j-map first."
   (setq god-exempt-predicates nil)
   (bind-keys :map god-local-mode-map
              ("z" . repeat)
-             ("i" . god-mode-all)
+             ("i" . mortal-mode)
              ("[" . z-god-mode-toggle-cm)
              ("#" . server-edit))
 
@@ -343,5 +356,11 @@ in ctl-j-map first."
         (global-set-key (kbd (concat prefix " C-" i))
                         (key-binding (kbd (concat prefix " " i)))))))
 
-  (add-hook 'god-mode-enabled-hook (lambda () (z-god-set-state 'normal)))
-  (add-hook 'god-mode-disabled-hook 'z-god-mode-update))
+  (add-hook 'god-mode-enabled-hook
+            (lambda ()
+              (mortal-mode 0)
+              (z-god-set-state (or mortal-pushed-state 'normal))
+              (setq mortal-pushed-state nil)))
+  (add-hook 'god-mode-disabled-hook
+            (lambda ()
+              (unless mortal-mode (z-god-mode-update)))))
