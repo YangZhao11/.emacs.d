@@ -258,23 +258,16 @@ in ctl-j-map first."
   :bind (("C-x C-." . xref-find-definitions)
          ("C-x C-," . xref-pop-marker-stack)))
 
-(use-package iy-go-to-char :ensure
-  :bind (("M-." . iy-go-up-to-char)
-         ("M-," . iy-go-to-char-backward))
+(use-package jump-char :ensure
+  :bind (("M-." . jump-char-forward)
+         ("M-," . jump-char-backward))
   :config
-  (setq iy-go-to-char-use-key-forward nil
-        iy-go-to-char-use-key-backward nil)
-  (defun zy-goto-char-continue (n)
-    (interactive "p")
-    (iy-go-to-or-up-to-continue
-     (* iy-go-to-char-start-dir n) 'exclude))
-  (defun zy-goto-char-continue-backward (n)
-    (interactive "p")
-    (iy-go-to-or-up-to-continue
-     (- (* iy-go-to-char-start-dir n)) 'include))
-  (bind-keys :map iy-go-to-char-keymap
-             ("M-." . zy-goto-char-continue)
-             ("M-," . zy-goto-char-continue-backward)))
+  (setq jump-char-forward-key nil
+        jump-char-backward-key nil)
+  (bind-keys :map jump-char-isearch-map
+             ("C-j" . jump-char-switch-to-ace)
+             ("<return>" . jump-char-exit))
+  (defalias 'ace-jump-char-mode 'avy-goto-char))
 
 ;; --------------------------------------------------
 (defvar z-real-mode-line-bg (face-background 'mode-line))
