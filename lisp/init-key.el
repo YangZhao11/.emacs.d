@@ -302,15 +302,16 @@ in ctl-j-map first."
 
   (defun mortal-mode-return ()
     (interactive)
-    (god-local-mode-resume))
+    (unless god-global-mode (god-mode-all)))
   (defvar mortal-pushed-state nil)
   (define-minor-mode mortal-mode
     "Allow temporary departures from god-mode."
+    :global 't
     :lighter " ⎀"
     :keymap '(([return] . mortal-mode-return))
     (when (and mortal-mode god-local-mode)
       (setq mortal-pushed-state z-god-state)
-      (god-local-mode-pause)
+      (if god-global-mode (god-mode-all))
       (set-face-background 'mode-line "#055D30")))
 
   (defun z-god-mode-toggle-meta ()
