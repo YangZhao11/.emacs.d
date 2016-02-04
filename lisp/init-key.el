@@ -315,7 +315,7 @@ in ctl-j-map first."
     :keymap '(([return] .
                (menu-item "" nil
                           :filter (lambda (&optional _)
-                                    (when  (not (window-minibuffer-p))
+                                    (when  (not (minibufferp))
                                       'mortal-mode-return)))))
     (when (and mortal-mode god-local-mode)
       (setq mortal-pushed-state z-god-state)
