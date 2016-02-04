@@ -270,7 +270,7 @@ in ctl-j-map first."
   :config
   (bind-keys :map jump-char-isearch-map
              ("C-j" . jump-char-switch-to-ace)
-             ("<return>" . jump-char-exit))
+             ("RET" . jump-char-exit))
   (defalias 'ace-jump-char-mode 'avy-goto-char))
 
 ;; --------------------------------------------------
@@ -312,7 +312,7 @@ in ctl-j-map first."
     "Allow temporary departures from god-mode."
     :global 't
     :lighter " ⎀"
-    :keymap '(([return] .
+    :keymap '(([?\C-m] .
                (menu-item "" nil
                           :filter (lambda (&optional _)
                                     (when  (not (window-minibuffer-p))
