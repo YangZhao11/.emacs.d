@@ -164,7 +164,10 @@ other buffer in other window."
 
 (use-package which-key :ensure :diminish which-key-mode
   :bind ("C-x t k" . which-key-mode)
-  :config (setq which-key-idle-delay 2))
+  :config (setq which-key-idle-delay 2)
+  (setq which-key-key-replacement-alist
+        (append '(("TAB" . "↹") ("DEL" . "⇤")("RET" . "⏎")("SPC" . "␣"))
+                which-key-key-replacement-alist)))
 
 (use-package flyspell :diminish " ⍹"
   :bind (("C-x t l" . flyspell-mode)
@@ -304,11 +307,16 @@ in ctl-j-map first."
     (interactive)
     (unless god-global-mode (god-mode-all)))
   (defvar mortal-pushed-state nil)
+  (defvar mortal-mode-map)
   (define-minor-mode mortal-mode
     "Allow temporary departures from god-mode."
     :global 't
     :lighter " ⎀"
-    :keymap '(([return] . mortal-mode-return))
+    :keymap '(([return] .
+               (menu-item "" nil
+                          :filter (lambda (&optional _)
+                                    (when  (not (window-minibuffer-p))
+                                      'mortal-mode-return)))))
     (when (and mortal-mode god-local-mode)
       (setq mortal-pushed-state z-god-state)
       (if god-global-mode (god-mode-all))
