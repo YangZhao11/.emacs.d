@@ -37,7 +37,8 @@
       sentence-end-double-space nil
       require-final-newline 't
       tramp-default-method "ssh"
-      text-scale-mode-step 1.1)
+      text-scale-mode-step 1.1
+      default-input-method 'TeX)
 
 (menu-bar-mode (if (eq system-type 'darwin) 1 -1)) ; Mac always has menu bar
 (tool-bar-mode -1)
@@ -52,7 +53,7 @@
 (temp-buffer-resize-mode 1)
 (fset 'yes-or-no-p 'y-or-n-p)
 (show-paren-mode 1)
-(electric-pair-mode)
+(electric-pair-mode 1)
 
 ;; --------------------------------------------------
 (load-theme 'zenburn t)                 ; load this first for many defaults.
@@ -69,7 +70,7 @@
   :config (add-hook 'after-init-hook 'server-start))
 
 (use-package edit-server :ensure
-  :diminish (edit-server-edit-mode . " ##")
+  :diminish (edit-server-edit-mode . " ‡")
   :config
   (setq edit-server-new-frame nil)
   (add-hook 'after-init-hook 'edit-server-start))

@@ -8,27 +8,27 @@
 (defun z-transpose (arg)
   (interactive "*P")
   (if (or arg (use-region-p))
-      (call-interactively 'anchored-transpose)
-    (call-interactively 'transpose-chars)))
-(bind-key "C-t" 'z-transpose)
+      (call-interactively #'anchored-transpose)
+    (call-interactively #'transpose-chars)))
+(bind-key "C-t" #'z-transpose)
 
 (defun easy-kill-transpose ()
   (interactive)
   (save-mark-and-excursion
    (easy-kill-mark-region)
-   (call-interactively 'anchored-transpose)))
+   (call-interactively #'anchored-transpose)))
 (defun easy-kill-wrap-region ()
   (interactive)
   (save-mark-and-excursion
    (easy-kill-mark-region)
-   (call-interactively 'self-insert-command)))
+   (call-interactively #'self-insert-command)))
 (use-package easy-kill :ensure
   :bind ([remap kill-ring-save] . easy-kill)
   :config
   (add-to-list 'easy-kill-alist '(?p paragraph "\n"))
   (setq easy-kill-unhighlight-key " ")
-  (put 'easy-kill-transpose 'easy-kill-exit t)
-  (put 'easy-kill-wrap-region 'easy-kill-exit t)
+  (put #'easy-kill-transpose 'easy-kill-exit t)
+  (put #'easy-kill-wrap-region 'easy-kill-exit t)
 
   (bind-keys
    :map easy-kill-base-map
@@ -74,13 +74,13 @@ region, instead of inactivate region."
              (fboundp 'rectangle-exchange-point-and-mark))
         (rectangle-exchange-point-and-mark (not active))
       (exchange-point-and-mark (not active)))))
-(bind-key "C-x C-x" 'z-exchange-point-and-mark)
+(bind-key "C-x C-x" #'z-exchange-point-and-mark)
 
 (defun z-toggle-activate-mark () (interactive)
   (if (region-active-p)
       (deactivate-mark)
       (activate-mark)))
-(bind-key "M-=" 'z-toggle-activate-mark)
+(bind-key "M-=" #'z-toggle-activate-mark)
 
 (use-package dired-x
   :bind ("C-x C-j" . dired-jump)
@@ -92,7 +92,7 @@ region, instead of inactivate region."
   (if (buffer-modified-p)
       (ediff-current-file)
     (ediff-backup (buffer-file-name))))
-(bind-key "C-x C-d" 'ediff-this-buffer)
+(bind-key "C-x C-d" #'ediff-this-buffer)
 
 (defun shrink-other-window-if-larger-than-buffer ()
     (interactive)
@@ -103,7 +103,7 @@ region, instead of inactivate region."
            ("C-x 9" . delete-other-windows-vertically))
 
 ;; F1 for help.
-(bind-key "<f2>" 'eshell)
+(bind-key "<f2>" #'eshell)
 ;; F3 and F4 for macros
 ;; F5 and F6 bound for org-mode stuff.
 (use-package gud
@@ -141,9 +141,9 @@ other buffer in other window."
    (message "show-trailing-whitespace set to %s" show-trailing-whitespace))
 
 ;; Toggle commands
-(global-set-key (kbd "C-x t a") 'abbrev-mode)
+(global-set-key (kbd "C-x t a") #'abbrev-mode)
 (diminish 'abbrev-mode " ∂A")
-(add-hook 'text-mode-hook 'abbrev-mode)
+(add-hook 'text-mode-hook #'abbrev-mode)
 
 (use-package beacon :ensure :diminish beacon-mode
   :bind ("C-x t b" . beacon-mode)
@@ -156,11 +156,11 @@ other buffer in other window."
           gnus-summary-mode gnus-group-mode)))
 (beacon-mode 1)
 
-(global-set-key (kbd "C-x t c") 'highlight-changes-mode)
-(global-set-key (kbd "C-x t d") 'eldoc-mode)
-(bind-key "C-x t f" 'auto-fill-mode)
+(global-set-key (kbd "C-x t c") #'highlight-changes-mode)
+(global-set-key (kbd "C-x t d") #'eldoc-mode)
+(bind-key "C-x t f" #'auto-fill-mode)
 (diminish 'auto-fill-function " ¶")
-(add-hook 'text-mode-hook 'auto-fill-mode)
+(add-hook 'text-mode-hook #'auto-fill-mode)
 
 (use-package which-key :ensure :diminish which-key-mode
   :bind ("C-x t k" . which-key-mode)
@@ -172,11 +172,11 @@ other buffer in other window."
 (use-package flyspell :diminish " ⍹"
   :bind (("C-x t l" . flyspell-mode)
          ("C-x t ;" . flyspell-prog-mode)))
-(add-hook 'text-mode-hook 'flyspell-mode)
+(add-hook 'text-mode-hook #'flyspell-mode)
 
 (use-package rainbow-delimiters :ensure
   :bind ("C-x t p" . rainbow-delimiters-mode)
-  :init  (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
+  :init  (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
 
 (use-package autorevert
   :diminish (auto-revert-mode . " ↻")
@@ -204,7 +204,7 @@ other buffer in other window."
   :config
   (register-channel-mode)
   (set-register ?5 '(file . "~/Projects/NOTES.org"))
-  (bind-key "M-g 5" 'register-channel-describe-register
+  (bind-key "M-g 5" #'register-channel-describe-register
             register-channel-mode-map))
 
 (defun all-frames-to-messages-buffer ()
@@ -216,7 +216,7 @@ storing current frame configuration to register 8."
     (let ((w (frame-first-window f)))
       (delete-other-windows w)
       (set-window-buffer w "*Messages*"))))
-(bind-key "M-g 8" 'all-frames-to-messages-buffer register-channel-mode-map)
+(bind-key "M-g 8" #'all-frames-to-messages-buffer register-channel-mode-map)
 
 (use-package avy :ensure
   :bind* ("C-j" . z-goto-char)
@@ -228,7 +228,7 @@ storing current frame configuration to register 8."
         avy-keys
         '(?s ?d ?f ?g ?h ?j ?k ?l ?w ?e ?r ?u ?i ?o))
   (eval-after-load "isearch"
-    '(define-key isearch-mode-map (kbd "C-j") 'avy-isearch))
+    '(define-key isearch-mode-map (kbd "C-j") #'avy-isearch))
 
   (defun z-goto-char (char &optional arg)
   "Call avy-goto-char or avy-goto-subword-1, but respect bindings
@@ -271,7 +271,7 @@ in ctl-j-map first."
   (bind-keys :map jump-char-isearch-map
              ("C-j" . jump-char-switch-to-ace)
              ("RET" . jump-char-exit))
-  (defalias 'ace-jump-char-mode 'avy-goto-char))
+  (defalias 'ace-jump-char-mode #'avy-goto-char))
 
 ;; --------------------------------------------------
 (defvar z-real-mode-line-bg (face-background 'mode-line))
@@ -316,7 +316,7 @@ in ctl-j-map first."
                (menu-item "" nil
                           :filter (lambda (&optional _)
                                     (when  (not (minibufferp))
-                                      'mortal-mode-return)))))
+                                      #'mortal-mode-return)))))
     (when (and mortal-mode god-local-mode)
       (setq mortal-pushed-state z-god-state)
       (if god-global-mode (god-mode-all))
@@ -335,15 +335,17 @@ in ctl-j-map first."
              ("z" . repeat)
              ("i" . mortal-mode)
              ("[" . z-god-mode-toggle-cm)
+             ("(" . self-insert-command)
+             (")" . self-insert-command)
              ("#" . server-edit))
 
   (require 'god-mode-isearch)
-  (define-key isearch-mode-map (kbd "ESC ESC") 'god-mode-isearch-activate)
-  (define-key god-mode-isearch-map (kbd "ESC ESC") 'god-mode-isearch-disable)
+  (bind-key "ESC ESC" #'god-mode-isearch-activate isearch-mode-map)
+  (bind-key "ESC ESC" #'god-mode-isearch-disable god-mode-isearch-map)
 
   ;; bind symbols to M-?
   (dolist (i '("!" "@" "$" "%" "^" "&" "*" "{" "}"
-               "<" ">" ";" ":" "|" "=" "?"))
+               "<" ">" ";" ":" "|" "\\" "=" "?"))
     (define-key god-local-mode-map (kbd i)
       (key-binding (kbd (concat "M-" i)))))
 
