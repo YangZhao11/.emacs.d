@@ -277,6 +277,7 @@ in ctl-j-map first."
   :config
   (bind-keys :map jump-char-isearch-map
              ("C-j" . jump-char-switch-to-ace)
+             ("<return>" . jump-char-exit)
              ("RET" . jump-char-exit))
   (defalias 'ace-jump-char-mode #'avy-goto-char))
 
@@ -314,7 +315,6 @@ in ctl-j-map first."
     (interactive)
     (unless god-global-mode (god-mode-all)))
   (defvar mortal-pushed-state nil)
-  (defvar mortal-mode-map)
   (define-minor-mode mortal-mode
     "Allow temporary departures from god-mode."
     :global 't
