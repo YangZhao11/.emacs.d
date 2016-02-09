@@ -22,6 +22,11 @@
   (save-mark-and-excursion
    (easy-kill-mark-region)
    (call-interactively #'self-insert-command)))
+(defun easy-kill-indent-region ()
+  (interactive)
+  (save-mark-and-excursion
+   (easy-kill-mark-region)
+   (call-interactively #'indent-region)))
 (use-package easy-kill :ensure
   :bind ([remap kill-ring-save] . easy-kill)
   :config
@@ -29,6 +34,7 @@
   (setq easy-kill-unhighlight-key " ")
   (put #'easy-kill-transpose 'easy-kill-exit t)
   (put #'easy-kill-wrap-region 'easy-kill-exit t)
+  (put #'easy-kill-indent-region 'easy-kill-exit t)
 
   (bind-keys
    :map easy-kill-base-map
@@ -43,6 +49,7 @@
    ("}" . easy-kill-wrap-region)
    ("\"" . easy-kill-wrap-region)
    ("'" . easy-kill-wrap-region)
+   ("\\" . easy-kill-indent-region)
    ([remap z-exchange-point-and-mark] . easy-kill-exchange-point-and-mark)))
 
 (defun cycle-spacing-0 ()
