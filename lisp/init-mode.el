@@ -177,26 +177,23 @@
   (ess-eval-linewise (concat "render(\"" buffer-file-name "\", output_dir = getwd())") nil 'eob))
 
 (defun z-ess-mode-symbols ()
-  (when (fboundp 'prettify-symbols-mode) ; 24.4 needed
-    (setq prettify-symbols-alist
-          (append '(("%>%" . ?↦)
-                    ("%T>%" . ?↧) ;↴
-                    ("%<>%" . ?⇄) ;⇋⇌⇆
-                    ;("%$%" . ?⊙)
-                    ("%+%" . ?⊕)        ; ggplot2 has this
-                    ("<=" . ?≤)
-                    (">=" . ?≥)
-                    ("%in%" . ?∈)
-                    ("%*%" . ?×)
-                    ("function" ?ƒ))
-                  prettify-symbols-alist))
-    (prettify-symbols-mode)))
+  (setq prettify-symbols-alist
+        (append '(("%>%" . ?↦)
+                  ("%T>%" . ?↧) ;↴
+                  ("%<>%" . ?⇄) ;⇋⇌⇆
+                  ("<=" . ?≤)
+                  (">=" . ?≥)
+                  ("%in%" . ?∈)
+                  ("%*%" . ?×)
+                  ("function" ?ƒ))
+                prettify-symbols-alist))
+  (prettify-symbols-mode))
 
 (defun z-ess-mode-hook ()
   (rainbow-delimiters-mode 1)
+  (z-ess-mode-symbols)
   (setq-local company-backends ess-company-backends)
-  (company-mode)
-  (z-ess-mode-symbols))
+  (company-mode))
 
 (use-package ess-site
   :commands (R R-mode julia)
@@ -213,7 +210,9 @@
   ;; ignore variable names after $ for expansion. Fix by making it
   ;; punctuation.
   (modify-syntax-entry ?$ "." R-syntax-table)
-  (modify-syntax-entry ?` "." R-syntax-table) ;hack for rmd editing
+
+  ;; For Rmd editing, do not treat ` as quote.
+  (modify-syntax-entry ?` "." R-syntax-table)
 
   (bind-keys :map ess-mode-map
              ("<f7>" . ess-show-traceback)

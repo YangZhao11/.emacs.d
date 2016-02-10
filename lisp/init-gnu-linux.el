@@ -9,8 +9,10 @@
       "emacs-google-config/third_party/elisp/ess_mode/lisp"
       "emacs-google-config/third_party/elisp/f"
       "emacs-google-config/third_party/elisp/git_modes"
+      "emacs-google-config/third_party/elisp/goto_chg"
       "emacs-google-config/third_party/elisp/magit"
       "emacs-google-config/third_party/elisp/markdown_mode"
+      "emacs-google-config/third_party/elisp/seq"
       "emacs-google-config/third_party/elisp/yasnippet"))
 
 (defun allowed-google-load-path-additions (path)
