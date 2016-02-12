@@ -313,7 +313,9 @@ in ctl-j-map first."
 
   (defun mortal-mode-return ()
     (interactive)
-    (unless god-global-mode (god-mode-all)))
+    (unless god-global-mode
+      (god-mode-all)
+      (setq mortal-pushed-state nil)))
   (defvar mortal-pushed-state nil)
   (define-minor-mode mortal-mode
     "Allow temporary departures from god-mode."
@@ -369,12 +371,13 @@ in ctl-j-map first."
         (global-set-key (kbd (concat prefix " C-" i))
                         (key-binding (kbd (concat prefix " " i)))))))
 
-  (add-hook 'god-mode-enabled-hook
-            (lambda ()
-              (mortal-mode 0)
-              (z-god-set-state (or mortal-pushed-state 'normal))
-              (setq mortal-pushed-state nil)))
-  (add-hook 'god-mode-disabled-hook
-            (lambda ()
-              (unless mortal-mode
-                (setq z-god-mode-lighter nil)))))
+  (defun z-god-mode-enabled-hook ()
+    (mortal-mode 0)
+    (z-god-set-state z-god-state))
+  (add-hook 'god-mode-enabled-hook 'z-god-mode-enabled-hook)
+
+  (defun z-god-mode-disabled-hook ()
+    (unless mortal-mode
+      (setq z-god-mode-lighter nil)
+      (setq z-god-state 'normal)))
+  (add-hook 'god-mode-disabled-hook 'z-god-mode-disabled-hook))
