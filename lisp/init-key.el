@@ -282,34 +282,34 @@ in ctl-j-map first."
   (defalias 'ace-jump-char-mode #'avy-goto-char))
 
 ;; --------------------------------------------------
-(defvar z-real-mode-line-bg (face-background 'mode-line))
-(defun update-z-real-mode-line-bg (&rest r)
-  (setq z-real-mode-line-bg (face-background 'mode-line)))
-(advice-add 'load-theme :after #'update-z-real-mode-line-bg)
+(defvar z-god-mode-lighter "")
+(setq-default mode-line-format
+      (cons '(:eval z-god-mode-lighter)
+            (default-value 'mode-line-format)))
 
 (use-package god-mode :ensure
   :bind ("ESC ESC" . god-mode-all)
+  :diminish god-local-mode
   :config
-  (defvar z-god-mode-lighter "")
-  (setcdr (assq 'god-local-mode minor-mode-alist)
-          '((t z-god-mode-lighter)))
+
   (defvar z-god-state 'normal)
-  (defvar z-god-mode-color nil)
   (setq z-god-states
-    '((normal " ⌘" "#153E7E" (nil . "C-") ("g" . "M-") ("h" . "C-M-"))
-      (cm " ⌘⌥" "#7D053F" (nil . "C-M-") ("g" . "C-"))
-      (meta " ⌥" "#5D0530" (nil . "M-"))))
-  (defun z-god-mode-update ()
-    (cond (god-local-mode
-           (set-face-background 'mode-line z-god-mode-color))
-          (t  (set-face-background 'mode-line z-real-mode-line-bg))))
+        `((normal (:propertize " ⌘ " face
+                   (:background "#4DB0FF" :foreground "black" :weight bold))
+                  (nil . "C-") ("g" . "M-") ("h" . "C-M-"))
+          (cm (:propertize "⌘⌥ " face
+                   (:background "#FF6088" :foreground "black" :weight bold))
+              (nil . "C-M-") ("g" . "C-"))
+          (meta (:propertize " ⌥ " face
+                   (:background "#FF38E0" :foreground "black" :weight bold))
+                (nil . "M-"))))
+
   (defun z-god-set-state (state)
     (let ((s (cdr (assq state z-god-states))))
       (setq z-god-mode-lighter (car s)
-            z-god-mode-color (cadr s)
-            god-mod-alist (cddr s)
-            z-god-state state)
-      (z-god-mode-update)))
+            god-mod-alist (cdr s)
+            z-god-state state))
+    (force-mode-line-update))
 
   (defun mortal-mode-return ()
     (interactive)
@@ -318,7 +318,6 @@ in ctl-j-map first."
   (define-minor-mode mortal-mode
     "Allow temporary departures from god-mode."
     :global 't
-    :lighter " ⎀"
     :keymap '(([?\C-m] .
                (menu-item "" nil
                           :filter (lambda (&optional _)
@@ -327,7 +326,9 @@ in ctl-j-map first."
     (when (and mortal-mode god-local-mode)
       (setq mortal-pushed-state z-god-state)
       (if god-global-mode (god-mode-all))
-      (set-face-background 'mode-line "#055D30")))
+      (setq z-god-mode-lighter
+            '(:propertize " ɪ " face
+              (:background "#4DFFA0" :foreground "black" :weight bold)))))
 
   (defun z-god-mode-toggle-meta ()
     (interactive)
@@ -336,8 +337,8 @@ in ctl-j-map first."
     (interactive)
     (z-god-set-state (if (eq z-god-state 'cm) 'normal 'cm)))
 
-  (setq god-exempt-major-modes nil)
-  (setq god-exempt-predicates nil)
+  (setq god-exempt-major-modes nil
+        god-exempt-predicates nil)
   (bind-keys :map god-local-mode-map
              ("z" . repeat)
              ("i" . mortal-mode)
@@ -375,4 +376,5 @@ in ctl-j-map first."
               (setq mortal-pushed-state nil)))
   (add-hook 'god-mode-disabled-hook
             (lambda ()
-              (unless mortal-mode (z-god-mode-update)))))
+              (unless mortal-mode
+                (setq z-god-mode-lighter nil)))))
