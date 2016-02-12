@@ -49,8 +49,7 @@
    ("}" . easy-kill-wrap-region)
    ("\"" . easy-kill-wrap-region)
    ("'" . easy-kill-wrap-region)
-   ("\\" . easy-kill-indent-region)
-   ([remap z-exchange-point-and-mark] . easy-kill-exchange-point-and-mark)))
+   ("\\" . easy-kill-indent-region)))
 
 (defun cycle-spacing-0 ()
     (interactive) (cycle-spacing 0))
@@ -81,7 +80,7 @@ region, instead of inactivate region."
              (fboundp 'rectangle-exchange-point-and-mark))
         (rectangle-exchange-point-and-mark (not active))
       (exchange-point-and-mark (not active)))))
-(bind-key "C-x C-x" #'z-exchange-point-and-mark)
+(bind-key [remap exchange-point-and-mark] #'z-exchange-point-and-mark)
 
 (defun z-toggle-activate-mark () (interactive)
   (if (region-active-p)
@@ -231,6 +230,7 @@ storing current frame configuration to register 8."
               ("SPC" . avy-goto-line)
               ("TAB" . avy-copy-region))
   :config
+  (require 'subword)
   (setq avy-styles-alist '((avy-goto-char . de-bruijn))
         avy-keys
         '(?s ?d ?f ?g ?h ?j ?k ?l ?w ?e ?r ?u ?i ?o))
@@ -295,13 +295,13 @@ in ctl-j-map first."
   (defvar z-god-state 'normal)
   (setq z-god-states
         `((normal (:propertize " ⌘ " face
-                   (:background "#4DB0FF" :foreground "black" :weight bold))
+                   (:background "#4DB0FF" :foreground "black"))
                   (nil . "C-") ("g" . "M-") ("h" . "C-M-"))
           (cm (:propertize "⌘⌥ " face
-                   (:background "#FF6088" :foreground "black" :weight bold))
+                   (:background "#FF6088" :foreground "black"))
               (nil . "C-M-") ("g" . "C-"))
           (meta (:propertize " ⌥ " face
-                   (:background "#FF38E0" :foreground "black" :weight bold))
+                   (:background "#FF38E0" :foreground "black"))
                 (nil . "M-"))))
 
   (defun z-god-set-state (state)
@@ -330,7 +330,7 @@ in ctl-j-map first."
       (if god-global-mode (god-mode-all))
       (setq z-god-mode-lighter
             '(:propertize " ɪ " face
-              (:background "#4DFFA0" :foreground "black" :weight bold)))))
+              (:background "#4DFFA0" :foreground "black")))))
 
   (defun z-god-mode-toggle-meta ()
     (interactive)
