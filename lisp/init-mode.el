@@ -46,7 +46,7 @@
           (match-string count)))))
 
 (use-package company :defer 't
-  :diminish " ⊙"
+  :diminish " ☰"
   :bind (("C-x t m" . company-mode)
          ("M-m" . company-complete))
   :config

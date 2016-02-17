@@ -1,8 +1,6 @@
 ; -*- coding: utf-8 -*-
 
 ;;; Code:
-(bind-key "M-o" 'ido-switch-buffer)
-
 (use-package browse-kill-ring :ensure
   :bind ("C-M-y" . browse-kill-ring))
 
@@ -207,7 +205,7 @@ This is useful when followed by an immediate kill."
 (setq ctl-j-map (make-sparse-keymap))
 (use-package goto-chg :ensure
   :bind (("M-i" . goto-last-change)
-         ("M-I" . goto-last-change-reverse)))
+         ("M-o" . goto-last-change-reverse)))
 
 (use-package register-channel :ensure
   :config
