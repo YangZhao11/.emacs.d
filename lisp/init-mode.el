@@ -132,6 +132,20 @@
 )
 (add-hook 'c-mode-common-hook 'z-c-mode-common-hook)
 
+(defun z-c++-mode-hook ()
+  (setq flycheck-clang-language-standard "c++14"
+        flycheck-gcc-language-standard "c++14")
+  (abbrev-mode -1)
+  (require 'clang-format nil 't))
+(add-hook 'c++-mode-hook 'z-c++-mode-hook)
+
+(defun z-maybe-clang-format ()
+  (when (eq major-mode 'c++-mode)
+    (clang-format-buffer)))
+(use-package clang-format
+  :config
+  (add-hook 'before-save-hook 'z-maybe-clang-format))
+
 (defun z-go-mode-hook ()
   (setq tab-width 4)
   (setq-local company-backends '(company-go))
