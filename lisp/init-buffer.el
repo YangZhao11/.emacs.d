@@ -26,6 +26,7 @@
   :init (ido-ubiquitous-mode 1))
 (use-package ido-vertical-mode :ensure
   :init (ido-vertical-mode 1))
+(setq ido-decorations '("\n→ " "" "\n  " "\n  ..." "[" "]" " [No match]" " [Matched]" " [Not readable]" " [Too big]" " [Confirm]" "\n→ " ""))
 
 ;; ==================================================
 ;; ibuffer

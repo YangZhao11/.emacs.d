@@ -1,3 +1,10 @@
+(use-package which-key :ensure :diminish which-key-mode
+  :bind ("C-x t /" . which-key-mode)
+  :config (setq which-key-idle-delay 2)
+  (setq which-key-key-replacement-alist
+        (append '(("TAB" . "↹") ("DEL" . "⇤")("RET" . "⏎")("SPC" . "␣"))
+                which-key-key-replacement-alist)))
+
 (use-package iy-go-to-char :ensure
   :bind (("M-." . iy-go-up-to-char)
          ("M-," . iy-go-to-char-backward))

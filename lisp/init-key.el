@@ -1,5 +1,8 @@
 ; -*- coding: utf-8 -*-
 
+;;; Code:
+(bind-key "M-o" 'ido-switch-buffer)
+
 (use-package browse-kill-ring :ensure
   :bind ("C-M-y" . browse-kill-ring))
 
@@ -52,17 +55,18 @@
    ("\\" . easy-kill-indent-region)))
 
 (defun cycle-spacing-0 ()
-    (interactive) (cycle-spacing 0))
+  "Remove adjacent spaces, but undo if the command is issued the second time."
+  (interactive) (cycle-spacing 0))
 (bind-keys ("M-SPC" . cycle-spacing)
            ("M-\\"  . cycle-spacing-0))
 
 (setq search-whitespace-regexp "[-_ \t\r\n]+")
 (defun isearch-exit-other-end ()
-    "Exit isearch, but at the other end of the search string.
-  This is useful when followed by an immediate kill."
-    (interactive)
-    (isearch-exit)
-    (goto-char isearch-other-end))
+  "Exit isearch, but at the other end of the search string.
+This is useful when followed by an immediate kill."
+  (interactive)
+  (isearch-exit)
+  (goto-char isearch-other-end))
 (bind-keys :map isearch-mode-map
               ("M-RET" . isearch-exit-other-end))
 (bind-keys ("M-s M-o" . multi-occur-in-matching-buffers)
@@ -71,8 +75,7 @@
 
 ;; Decouple exchange-point-and-mark and activating region.
 (defun z-exchange-point-and-mark (&optional arg)
-  "Like exchange-point-and-mark, but arg means toggle active
-region, instead of inactivate region."
+  "Like `exchange-point-and-mark', but ARG means toggle active region, instead of inactivate region."
   (interactive "P")
   (let ((active (or (and arg (not (use-region-p)))
                     (and (not arg) (use-region-p)))))
@@ -82,10 +85,12 @@ region, instead of inactivate region."
       (exchange-point-and-mark (not active)))))
 (bind-key [remap exchange-point-and-mark] #'z-exchange-point-and-mark)
 
-(defun z-toggle-activate-mark () (interactive)
+(defun z-toggle-activate-mark ()
+  "Toggle active region, without moving the mark."
+  (interactive)
   (if (region-active-p)
       (deactivate-mark)
-      (activate-mark)))
+    (activate-mark)))
 (bind-key "M-=" #'z-toggle-activate-mark)
 
 (use-package dired-x
@@ -94,6 +99,7 @@ region, instead of inactivate region."
   (setq dired-x-hands-off-my-keys nil))
 
 (defun ediff-this-buffer ()
+  "Call ediff on this buffer, with the version on disk or backup."
   (interactive)
   (if (buffer-modified-p)
       (ediff-current-file)
@@ -101,8 +107,8 @@ region, instead of inactivate region."
 (bind-key "C-x C-d" #'ediff-this-buffer)
 
 (defun shrink-other-window-if-larger-than-buffer ()
+    "Shrink other window if larger than buffer."
     (interactive)
-    "Shrink other window if larger than buffer"
     (shrink-window-if-larger-than-buffer
      (next-window (selected-window) nil nil)))
 (bind-keys ("C-x _" . shrink-other-window-if-larger-than-buffer)
@@ -120,8 +126,7 @@ region, instead of inactivate region."
          ("<f9>" . gud-finish)))
 
 (defun toggle-one-window ()
-  "Change to one window (C-x 1) if applicable, otherwise show
-other buffer in other window."
+  "Change to one window (C-x 1) if applicable, otherwise show other buffer in other window."
   (interactive)
   (if (window-parent)
       (delete-other-windows)
@@ -130,9 +135,13 @@ other buffer in other window."
            ("<f11>" . shrink-window)
            ("<f12>" . enlarge-window))
 
-(defun z-prev-buffer-next-window () (interactive)
+(defun z-prev-buffer-next-window ()
+  "Switch other window to previous buffer."
+  (interactive)
   (switch-to-prev-buffer (next-window)))
-(defun z-next-buffer-next-window () (interactive)
+(defun z-next-buffer-next-window ()
+  "Switch other window to next buffer."
+  (interactive)
   (switch-to-next-buffer (next-window)))
 (bind-keys ("M-9" . switch-to-prev-buffer)
            ("M-0" . switch-to-next-buffer)
@@ -141,7 +150,7 @@ other buffer in other window."
 
 ;(setq-default show-trailing-whitespace t)
 (defun toggle-show-trailing-whitespace ()
-   "Toggle show-trailing-whitespace"
+   "Toggle `show-trailing-whitespace'."
    (interactive)
    (setq show-trailing-whitespace (not show-trailing-whitespace))
    (message "show-trailing-whitespace set to %s" show-trailing-whitespace))
@@ -167,13 +176,6 @@ other buffer in other window."
 (bind-key "C-x t f" #'auto-fill-mode)
 (diminish 'auto-fill-function " ¶")
 (add-hook 'text-mode-hook #'auto-fill-mode)
-
-(use-package which-key :ensure :diminish which-key-mode
-  :bind ("C-x t k" . which-key-mode)
-  :config (setq which-key-idle-delay 2)
-  (setq which-key-key-replacement-alist
-        (append '(("TAB" . "↹") ("DEL" . "⇤")("RET" . "⏎")("SPC" . "␣"))
-                which-key-key-replacement-alist)))
 
 (use-package flyspell :diminish " ⍹"
   :bind (("C-x t l" . flyspell-mode)
@@ -201,10 +203,11 @@ other buffer in other window."
            ("C-x t w" . subword-mode)
            ("C-x t SPC" . hl-line-mode))
 
+(defvar ctl-j-map)
 (setq ctl-j-map (make-sparse-keymap))
 (use-package goto-chg :ensure
   :bind (("M-i" . goto-last-change)
-         ("M-o" . goto-last-change-reverse)))
+         ("M-I" . goto-last-change-reverse)))
 
 (use-package register-channel :ensure
   :config
@@ -214,8 +217,7 @@ other buffer in other window."
             register-channel-mode-map))
 
 (defun all-frames-to-messages-buffer ()
-  "make all frames display the *Messages* buffer only after
-storing current frame configuration to register 8."
+  "Make all frames display the *Messages* buffer, only after storing current frame configuration to register 8."
   (interactive)
   (frameset-to-register ?8)
   (dolist (f (frame-list))
@@ -293,7 +295,7 @@ in ctl-j-map first."
   :config
 
   (defvar z-god-state 'normal)
-  (setq z-god-states
+  (defvar z-god-states
         `((normal (:propertize " ⌘ " face
                    (:background "#4DB0FF" :foreground "black"))
                   (nil . "C-") ("g" . "M-") ("h" . "C-M-"))
@@ -314,9 +316,7 @@ in ctl-j-map first."
   (defun mortal-mode-return ()
     (interactive)
     (unless god-global-mode
-      (god-mode-all)
-      (setq mortal-pushed-state nil)))
-  (defvar mortal-pushed-state nil)
+      (god-mode-all)))
   (define-minor-mode mortal-mode
     "Allow temporary departures from god-mode."
     :global 't
@@ -326,7 +326,6 @@ in ctl-j-map first."
                                     (when  (not (minibufferp))
                                       #'mortal-mode-return)))))
     (when (and mortal-mode god-local-mode)
-      (setq mortal-pushed-state z-god-state)
       (if god-global-mode (god-mode-all))
       (setq z-god-mode-lighter
             '(:propertize " ɪ " face

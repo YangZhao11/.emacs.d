@@ -39,7 +39,7 @@
   (yas-global-mode))
 
 (defun z-re-backward (re count)
-  "Search re backward, returns count-th submatch. Used in snippets."
+  "Search RE backward, return COUNT submatch.  Used in snippets."
   (save-excursion
     (save-match-data
       (when (re-search-backward re (point-min) t)
@@ -47,11 +47,17 @@
 
 (use-package company :defer 't
   :diminish " ⊙"
-  :commands (company-mode)
-  :bind ("M-m" . company-complete)
+  :bind (("C-x t m" . company-mode)
+         ("M-m" . company-complete))
   :config
   (setq company-idle-delay nil))
 
+(use-package flycheck
+  :bind ("C-x t k" . flycheck-mode)
+  :config
+  (add-hook 'flycheck-mode-hook 'flycheck-status-emoji-mode))
+
+;; ----------------------------------------
 (use-package org
   :defer 't
   :bind (("<f5>" . org-capture) ("<f6>" . org-agenda))

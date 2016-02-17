@@ -48,4 +48,6 @@
       browse-url-generic-program "google-chrome")
 
 (set-frame-font "Menlo-11" 't 't)
+(set-fontset-font t nil "Symbola")
+
 (add-to-list 'auto-mode-alist '(".pipertmp-.*-change" . outline-mode))
