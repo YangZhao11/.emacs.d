@@ -126,8 +126,6 @@
 
 (defun z-c-mode-common-hook ()
   (define-key c-mode-base-map "\C-m" 'newline-and-indent)
-  (define-key c-mode-base-map (kbd "C-x t d") 'doxymacs-mode)
-  (define-key c-mode-base-map (kbd "C-x t m") 'cwarn-mode)
   (setq c-electric-pound-behavior '(alignleft)) ;make a #define left-aligned
 )
 (add-hook 'c-mode-common-hook 'z-c-mode-common-hook)
