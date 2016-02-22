@@ -81,15 +81,15 @@
         '((:propertize " ●" face (:foreground "#D04020")
                        help-echo "Recording keyboard macro")))
 (setcdr (assq 'isearch-mode minor-mode-alist)
-        '((:eval (if isearch-forward " 🔍" " 🔎"))))
-(diminish 'next-error-follow-minor-mode " ⛓")
+        '((:eval (if isearch-forward " ⇉" " ⇇"))))
+(diminish 'next-error-follow-minor-mode " ⇅")
 (setq overlay-arrow-string "➡")
 
-;; replace Narrow in mode line with ⁐
+;; `Narrow' in mode line changed to §
 (setq mode-line-modes
       (mapcar (lambda (x)
                 (if (and (stringp x) (string= x "%n"))
-                    `(:propertize (:eval (if (buffer-narrowed-p) " 🖼"))
+                    `(:propertize (:eval (if (buffer-narrowed-p) " §"))
 			help-echo "mouse-2: Remove narrowing from buffer"
 			mouse-face mode-line-highlight
 			local-map ,(make-mode-line-mouse-map

@@ -219,7 +219,8 @@
   :config
   (setq inferior-julia-program-name "~/bin/julia"
         ess-tab-complete-in-script 't
-        ess-smart-S-assign-key ";")
+        ess-smart-S-assign-key ";"
+        ess-busy-strings '("  " " ◴" " ◷" " ◶" " ◵"))
   (ess-toggle-S-assign nil)
   (ess-toggle-S-assign nil)
   (ess-toggle-underscore nil)
