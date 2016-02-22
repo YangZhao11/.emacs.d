@@ -58,7 +58,6 @@
 (bind-keys ("M-SPC" . cycle-spacing)
            ("M-\\"  . cycle-spacing-0))
 
-(setq search-whitespace-regexp "[-_ \t\r\n]+")
 (defun isearch-exit-other-end ()
   "Exit isearch, but at the other end of the search string.
 This is useful when followed by an immediate kill."
