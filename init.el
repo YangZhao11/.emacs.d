@@ -72,7 +72,7 @@
   :config (add-hook 'after-init-hook 'server-start))
 
 (use-package edit-server :ensure
-  :diminish (edit-server-edit-mode . " ##")
+  :diminish (edit-server-edit-mode . " 🌍")
   :config
   (setq edit-server-new-frame nil)
   (add-hook 'after-init-hook 'edit-server-start))
@@ -80,6 +80,21 @@
 (setcdr (assq 'defining-kbd-macro minor-mode-alist)
         '((:propertize " ●" face (:foreground "#D04020")
                        help-echo "Recording keyboard macro")))
+(setcdr (assq 'isearch-mode minor-mode-alist)
+        '((:eval (if isearch-forward " 🔍" " 🔎"))))
+(diminish 'next-error-follow-minor-mode " ⛓")
+(setq overlay-arrow-string "➡")
+
+;; replace Narrow in mode line with ⁐
+(setq mode-line-modes
+      (mapcar (lambda (x)
+                (if (and (stringp x) (string= x "%n"))
+                    `(:propertize (:eval (if (buffer-narrowed-p) " 🖼"))
+			help-echo "mouse-2: Remove narrowing from buffer"
+			mouse-face mode-line-highlight
+			local-map ,(make-mode-line-mouse-map
+                                    'mouse-2 #'mode-line-widen))
+                  x)) mode-line-modes))
 
 ;; --------------------------------------------------
 ;; customs
