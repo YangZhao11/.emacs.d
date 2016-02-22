@@ -297,7 +297,7 @@ in ctl-j-map first."
         `((normal (:propertize " ⌘ " face
                    (:background "#4DB0FF" :foreground "black"))
                   (nil . "C-") ("g" . "M-") ("h" . "C-M-"))
-          (cm (:propertize "⌘⌥ " face
+          (cm (:propertize "⌥⌘ " face
                    (:background "#FF6088" :foreground "black"))
               (nil . "C-M-") ("g" . "C-"))
           (meta (:propertize " ⌥ " face
