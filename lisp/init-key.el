@@ -29,6 +29,7 @@
    (easy-kill-mark-region)
    (call-interactively #'indent-region)))
 (use-package easy-kill :ensure
+  :functions easy-kill-mark-region
   :bind ([remap kill-ring-save] . easy-kill)
   :config
   (add-to-list 'easy-kill-alist '(?p paragraph "\n"))

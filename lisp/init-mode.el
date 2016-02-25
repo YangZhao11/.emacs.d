@@ -57,6 +57,18 @@
   :config
   (add-hook 'flycheck-mode-hook 'flycheck-status-emoji-mode))
 
+(use-package ycmd :diminish " ☯"
+  :bind ("C-x t y" . ycmd-mode)
+  :config
+  (defconst google-ycmd--extra-conf "/usr/lib/youcompleteme/ycm_extra_conf.py")
+  (setq ycmd-server-command
+        '("/usr/grte/v4/bin/python2.7"
+          "/usr/lib/youcompleteme/third_party/ycmd/ycmd"))
+  (setq ycmd-global-config google-ycmd--extra-conf)
+  (add-to-list 'ycmd-extra-conf-whitelist google-ycmd--extra-conf)
+  (setq ycmd-idle-change-delay 0.5)
+  )
+
 ;; ----------------------------------------
 (use-package org
   :defer 't
@@ -93,6 +105,7 @@
 ;; eshell
 (use-package eshell
   :commands eshell
+  :functions eshell/pwd
   :config
   (defun z-eshell-prompt-function ()
     (let* ((pwd (eshell/pwd))
@@ -146,7 +159,8 @@
 
 (defun z-go-mode-hook ()
   (setq tab-width 4)
-  (setq-local company-backends '(company-go))
+  (setq-local company-backends '(company-ycmd))
+  (ycmd-mode 1)
   (company-mode 1)
   (go-eldoc-setup))
 (add-hook 'go-mode-hook 'z-go-mode-hook)
@@ -257,17 +271,9 @@
   (add-hook 'ess-help-mode-hook 'z-ess-mode-symbols)
   (add-hook 'inferior-ess-mode-hook 'z-ess-mode-symbols))
 
-;; Remove ## as begining of comment. Google R style guide insists we use
-;; single #.
-(defun z-remove-fancy-comments ()
-  (interactive)
-  (when (eq major-mode 'ess-mode)
-    (save-excursion
-      (goto-char (point-min))
-      (while (re-search-forward "^\\( *\\)## " nil t)
-        (replace-match "\\1# " nil nil)))))
-;; (add-hook 'before-save-hook 'z-remove-fancy-comments)
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
-(defun z-gdb-mode-hook () (setq gdb-many-windows t))
-(add-hook 'gdb-mode-hook 'z-gdb-mode-hook)
+(use-package gdb-mi
+  :config
+  (defun z-gdb-mode-hook () (setq gdb-many-windows t))
+  (add-hook 'gdb-mode-hook 'z-gdb-mode-hook))

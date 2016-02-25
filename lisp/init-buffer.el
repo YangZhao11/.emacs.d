@@ -32,6 +32,7 @@
 ;; ibuffer
 (use-package ibuffer
   :bind ("C-x C-b" . ibuffer)
+  :functions ibuffer-switch-to-saved-filter-groups
   :config
   (defun g3-clients ()
     "Returns all g3 clients by iterating through all open files."

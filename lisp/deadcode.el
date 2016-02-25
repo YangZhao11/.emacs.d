@@ -1,3 +1,13 @@
+;; Remove ## as begining of comment. Google R style guide insists we use
+;; single #.
+(defun z-remove-fancy-comments ()
+  (interactive)
+  (when (eq major-mode 'ess-mode)
+    (save-excursion
+      (goto-char (point-min))
+      (while (re-search-forward "^\\( *\\)## " nil t)
+        (replace-match "\\1# " nil nil)))))
+
 (use-package which-key :ensure :diminish which-key-mode
   :bind ("C-x t /" . which-key-mode)
   :config (setq which-key-idle-delay 2)
