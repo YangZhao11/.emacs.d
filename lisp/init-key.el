@@ -225,7 +225,7 @@ This is useful when followed by an immediate kill."
 (bind-key "M-g 8" #'all-frames-to-messages-buffer register-channel-mode-map)
 
 (use-package avy :ensure
-  :bind* ("C-j" . z-goto-char)
+  :bind (:map override-global-map ("C-j" . z-goto-char))
   :bind (:map ctl-j-map
               ("SPC" . avy-goto-line)
               ("TAB" . avy-copy-region))
@@ -249,7 +249,7 @@ in ctl-j-map first."
           ('t (avy-goto-char char arg))))))
 
 (use-package ace-window :ensure
-  :bind* ("M-j" . ace-window)
+  :bind (:map override-global-map ("M-j" . ace-window))
   :config
   (setq aw-scope 'frame
         aw-background nil
@@ -344,14 +344,16 @@ in ctl-j-map first."
              ("[" . z-god-mode-toggle-cm)
              ("(" . self-insert-command)
              (")" . self-insert-command)
-             ("#" . server-edit))
+             ("#" . server-edit)
+             ("`" . next-error)
+             ("*" . calc-dispatch))
 
   (require 'god-mode-isearch)
   (bind-key "ESC ESC" #'god-mode-isearch-activate isearch-mode-map)
   (bind-key "ESC ESC" #'god-mode-isearch-disable god-mode-isearch-map)
 
   ;; bind symbols to M-?
-  (dolist (i '("!" "@" "$" "%" "^" "&" "*" "{" "}"
+  (dolist (i '("!" "@" "$" "%" "^" "&" "{" "}"
                "<" ">" ";" ":" "|" "\\" "=" "?"))
     (define-key god-local-mode-map (kbd i)
       (key-binding (kbd (concat "M-" i)))))
