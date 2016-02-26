@@ -225,7 +225,7 @@ This is useful when followed by an immediate kill."
 (bind-key "M-g 8" #'all-frames-to-messages-buffer register-channel-mode-map)
 
 (use-package avy :ensure
-  :bind (:map override-global-map ("C-j" . z-goto-char))
+  :bind* ("C-j" . z-goto-char)
   :bind (:map ctl-j-map
               ("SPC" . avy-goto-line)
               ("TAB" . avy-copy-region))
@@ -249,7 +249,7 @@ in ctl-j-map first."
           ('t (avy-goto-char char arg))))))
 
 (use-package ace-window :ensure
-  :bind (:map override-global-map ("M-j" . ace-window))
+  :bind* ("M-j" . ace-window)
   :config
   (setq aw-scope 'frame
         aw-background nil

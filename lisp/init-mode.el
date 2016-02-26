@@ -57,7 +57,7 @@
   :config
   (add-hook 'flycheck-mode-hook 'flycheck-status-emoji-mode))
 
-(use-package ycmd :diminish " ☯"
+(use-package ycmd :diminish " ☯" :no-require t
   :bind ("C-x t y" . ycmd-mode)
   :config
   (defconst google-ycmd--extra-conf "/usr/lib/youcompleteme/ycm_extra_conf.py")
@@ -66,8 +66,7 @@
           "/usr/lib/youcompleteme/third_party/ycmd/ycmd"))
   (setq ycmd-global-config google-ycmd--extra-conf)
   (add-to-list 'ycmd-extra-conf-whitelist google-ycmd--extra-conf)
-  (setq ycmd-idle-change-delay 0.5)
-  )
+  (setq ycmd-idle-change-delay 0.5))
 
 ;; ----------------------------------------
 (use-package org
