@@ -13,25 +13,38 @@
     (call-interactively #'transpose-chars)))
 (bind-key "C-t" #'z-transpose)
 
-(defun easy-kill-transpose ()
-  (interactive)
-  (save-mark-and-excursion
-   (easy-kill-mark-region)
-   (call-interactively #'anchored-transpose)))
-(defun easy-kill-wrap-region ()
-  (interactive)
-  (save-mark-and-excursion
-   (easy-kill-mark-region)
-   (call-interactively #'self-insert-command)))
-(defun easy-kill-indent-region ()
-  (interactive)
-  (save-mark-and-excursion
-   (easy-kill-mark-region)
-   (call-interactively #'indent-region)))
+(use-package grab-region :diminish " ✊"
+  :functions grab-region-move
+  :bind ("M-g M-g" . grab-region-mode)
+  :config
+  (grab-region-remap z-goto-char))
+
+
 (use-package easy-kill :ensure
   :functions easy-kill-mark-region
   :bind ([remap kill-ring-save] . easy-kill)
   :config
+
+  (defun easy-kill-transpose ()
+    (interactive)
+    (save-mark-and-excursion
+     (easy-kill-mark-region)
+     (call-interactively #'anchored-transpose)))
+  (defun easy-kill-wrap-region ()
+    (interactive)
+    (save-mark-and-excursion
+     (easy-kill-mark-region)
+     (call-interactively #'self-insert-command)))
+  (defun easy-kill-grab-region ()
+    (interactive)
+    (easy-kill-mark-region)
+    (grab-region-mode))
+  (defun easy-kill-indent-region ()
+    (interactive)
+    (save-mark-and-excursion
+     (easy-kill-mark-region)
+     (call-interactively #'indent-region)))
+
   (add-to-list 'easy-kill-alist '(?p paragraph "\n"))
   (setq easy-kill-unhighlight-key " ")
   (put #'easy-kill-transpose 'easy-kill-exit t)
@@ -41,6 +54,7 @@
   (bind-keys
    :map easy-kill-base-map
    ("k" . easy-kill-region)
+   ("g" . easy-kill-grab-region)
    ("m" . easy-kill-mark-region)
    ("t" . easy-kill-transpose)
    ("(" . easy-kill-wrap-region)

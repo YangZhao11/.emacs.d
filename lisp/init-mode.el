@@ -58,6 +58,8 @@
   (add-hook 'flycheck-mode-hook 'flycheck-status-emoji-mode))
 
 (use-package ycmd :diminish " ☯" :no-require t
+  :defines ycmd-server-command ycmd-global-config
+  ycmd-extra-conf-whitelist ycmd-idle-change-delay
   :bind ("C-x t y" . ycmd-mode)
   :config
   (defconst google-ycmd--extra-conf "/usr/lib/youcompleteme/ycm_extra_conf.py")
@@ -136,11 +138,10 @@
 ;; --------------------------------------------------
 ;; modes
 
-(defun z-c-mode-common-hook ()
-  (define-key c-mode-base-map "\C-m" 'newline-and-indent)
+(use-package cc-mode
+  :config
   (setq c-electric-pound-behavior '(alignleft)) ;make a #define left-aligned
-)
-(add-hook 'c-mode-common-hook 'z-c-mode-common-hook)
+  (bind-key "RET" 'newline-and-indent c-mode-base-map))
 
 (defun z-c++-mode-hook ()
   (setq flycheck-clang-language-standard "c++14"
