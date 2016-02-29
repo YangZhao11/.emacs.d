@@ -1,4 +1,4 @@
-;;; grab-region -- Grab selected region
+;;; grab-region -- Grab selected region -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;
 
@@ -59,7 +59,7 @@ move the point forward;
     'backward means COMMAND takes integer arguments and positive arguments
 move the point backward.
      nil means the command does not take arguments."
-  (let ((func (make-symbol (concat "grab-region/" (symbol-name command))))
+  (let ((func (intern (concat "grab-region/" (symbol-name command))))
         (doc (concat "Move cursor using `" (symbol-name command) "', adopted for grab-region.")))
     `(progn
        (defun ,func () ,doc
