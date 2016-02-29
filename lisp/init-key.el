@@ -5,13 +5,15 @@
   :bind ("C-M-y" . browse-kill-ring))
 
 (use-package anchored-transpose :ensure
-  :commands anchored-transpose)
-(defun z-transpose (arg)
-  (interactive "*P")
-  (if (or arg (use-region-p))
-      (call-interactively #'anchored-transpose)
-    (call-interactively #'transpose-chars)))
-(bind-key "C-t" #'z-transpose)
+  :commands anchored-transpose
+  :preface
+  (defun z-transpose (arg)
+    (interactive "*P")
+    (if (or arg (use-region-p))
+        (call-interactively #'anchored-transpose)
+      (call-interactively #'transpose-chars)))
+  :bind ("C-t" . z-transpose))
+
 
 (use-package grab-region :diminish " ✊"
   :functions grab-region-move
@@ -47,24 +49,40 @@
 
   (add-to-list 'easy-kill-alist '(?p paragraph "\n"))
   (setq easy-kill-unhighlight-key " ")
+
+  (defun easy-kill-transpose ()
+    (interactive)
+    (save-mark-and-excursion
+     (easy-kill-mark-region)
+     (call-interactively #'anchored-transpose)))
+  (defun easy-kill-wrap-region ()
+    (interactive)
+    (save-mark-and-excursion
+     (easy-kill-mark-region)
+     (call-interactively #'self-insert-command)))
+  (defun easy-kill-indent-region ()
+    (interactive)
+    (save-mark-and-excursion
+     (easy-kill-mark-region)
+     (call-interactively #'indent-region)))
   (put #'easy-kill-transpose 'easy-kill-exit t)
   (put #'easy-kill-wrap-region 'easy-kill-exit t)
   (put #'easy-kill-indent-region 'easy-kill-exit t)
 
   (bind-keys
    :map easy-kill-base-map
-   ("k" . easy-kill-region)
-   ("g" . easy-kill-grab-region)
-   ("m" . easy-kill-mark-region)
-   ("t" . easy-kill-transpose)
-   ("(" . easy-kill-wrap-region)
-   (")" . easy-kill-wrap-region)
-   ("[" . easy-kill-wrap-region)
-   ("]" . easy-kill-wrap-region)
-   ("{" . easy-kill-wrap-region)
-   ("}" . easy-kill-wrap-region)
+   ("k"  . easy-kill-region)
+   ("g"  . easy-kill-grab-region)
+   ("m"  . easy-kill-mark-region)
+   ("t"  . easy-kill-transpose)
+   ("("  . easy-kill-wrap-region)
+   (")"  . easy-kill-wrap-region)
+   ("["  . easy-kill-wrap-region)
+   ("]"  . easy-kill-wrap-region)
+   ("{"  . easy-kill-wrap-region)
+   ("}"  . easy-kill-wrap-region)
    ("\"" . easy-kill-wrap-region)
-   ("'" . easy-kill-wrap-region)
+   ("'"  . easy-kill-wrap-region)
    ("\\" . easy-kill-indent-region)))
 
 (defun cycle-spacing-0 ()
@@ -73,16 +91,24 @@
 (bind-keys ("M-SPC" . cycle-spacing)
            ("M-\\"  . cycle-spacing-0))
 
+(defun toggle-selective-display (column)
+  "Toggle selective display, defaulting to current column"
+  (interactive "P")
+  (set-selective-display
+   (or column
+       (unless selective-display
+         (1+ (current-column))))))
+(bind-key "C-x $" 'toggle-selective-display)
+
 (defun isearch-exit-other-end ()
-  "Exit isearch, but at the other end of the search string.
-This is useful when followed by an immediate kill."
+  "Exit isearch, but at the other end of the search string. This is useful when followed by an immediate kill."
   (interactive)
   (isearch-exit)
   (goto-char isearch-other-end))
 (bind-keys :map isearch-mode-map
               ("M-RET" . isearch-exit-other-end))
 (bind-keys ("M-s M-o" . multi-occur-in-matching-buffers)
-           ("M-s g" . grep)
+           ("M-s g"   . grep)
            ("M-s M-g" . rgrep))
 
 ;; Decouple exchange-point-and-mark and activating region.
@@ -131,11 +157,11 @@ This is useful when followed by an immediate kill."
 ;; F3 and F4 for macros
 ;; F5 and F6 bound for org-mode stuff.
 (use-package gud
-  :bind (("<f7>" . gud-up)
+  :bind (("<f7>"   . gud-up)
          ("S-<f7>" . gud-down)
-         ("<f8>" . gud-next)
+         ("<f8>"   . gud-next)
          ("S-<f8>" . gud-step)
-         ("<f9>" . gud-finish)))
+         ("<f9>"   . gud-finish)))
 
 (defun toggle-one-window ()
   "Change to one window (C-x 1) if applicable, otherwise show other buffer in other window."
@@ -205,21 +231,15 @@ This is useful when followed by an immediate kill."
 (use-package whitespace :diminish " ␣"
   :bind ("C-x t s" . whitespace-mode))
 
-(bind-keys ("C-x t e" . hs-minor-mode)
-           ("C-x t h" . hi-lock-mode)
-           ("C-x t n" . linum-mode)
-           ("C-x t o" . outline-minor-mode)
-           ("C-x t t" . toggle-show-trailing-whitespace)
-           ("C-x t v" . view-mode)
-           ("C-x t W" . superword-mode)
-           ("C-x t w" . subword-mode)
+(bind-keys ("C-x t e"   . hs-minor-mode)
+           ("C-x t h"   . hi-lock-mode)
+           ("C-x t n"   . linum-mode)
+           ("C-x t o"   . outline-minor-mode)
+           ("C-x t t"   . toggle-show-trailing-whitespace)
+           ("C-x t v"   . view-mode)
+           ("C-x t W"   . superword-mode)
+           ("C-x t w"   . subword-mode)
            ("C-x t SPC" . hl-line-mode))
-
-(defvar ctl-j-map)
-(setq ctl-j-map (make-sparse-keymap))
-(use-package goto-chg :ensure
-  :bind (("M-i" . goto-last-change)
-         ("M-o" . goto-last-change-reverse)))
 
 (use-package register-channel :ensure
   :config
@@ -237,6 +257,13 @@ This is useful when followed by an immediate kill."
       (delete-other-windows w)
       (set-window-buffer w "*Messages*"))))
 (bind-key "M-g 8" #'all-frames-to-messages-buffer register-channel-mode-map)
+
+
+(defvar ctl-j-map)
+(setq ctl-j-map (make-sparse-keymap))
+(use-package goto-chg :ensure
+  :bind (("M-i" . goto-last-change)
+         ("M-o" . goto-last-change-reverse)))
 
 (use-package avy :ensure
   :bind* ("C-j" . z-goto-char)
@@ -290,9 +317,9 @@ in ctl-j-map first."
         jump-char-backward-key "M-,")
   :config
   (bind-keys :map jump-char-isearch-map
-             ("C-j" . jump-char-switch-to-ace)
+             ("C-j"      . jump-char-switch-to-ace)
              ("<return>" . jump-char-exit)
-             ("RET" . jump-char-exit))
+             ("RET"      . jump-char-exit))
   (defalias 'ace-jump-char-mode #'avy-goto-char))
 
 ;; --------------------------------------------------
@@ -358,8 +385,9 @@ in ctl-j-map first."
              ("[" . z-god-mode-toggle-cm)
              ("(" . self-insert-command)
              (")" . self-insert-command)
-             ("#" . server-edit)
              ("`" . next-error)
+             ("$" . toggle-selective-display)
+             ("#" . server-edit)
              ("*" . calc-dispatch))
 
   (require 'god-mode-isearch)
@@ -367,7 +395,7 @@ in ctl-j-map first."
   (bind-key "ESC ESC" #'god-mode-isearch-disable god-mode-isearch-map)
 
   ;; bind symbols to M-?
-  (dolist (i '("!" "@" "$" "%" "^" "&" "{" "}"
+  (dolist (i '("!" "@" "%" "^" "&" "{" "}"
                "<" ">" ";" ":" "|" "\\" "=" "?"))
     (define-key god-local-mode-map (kbd i)
       (key-binding (kbd (concat "M-" i)))))
