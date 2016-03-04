@@ -15,7 +15,7 @@
   :bind ("C-t" . z-transpose))
 
 
-(use-package grab-region :diminish " ✊"
+(use-package grab-region :diminish " ✋"
   :functions grab-region-move
   :bind ("M-g M-g" . grab-region-mode)
   :config
@@ -258,7 +258,6 @@
       (set-window-buffer w "*Messages*"))))
 (bind-key "M-g 8" #'all-frames-to-messages-buffer register-channel-mode-map)
 
-
 (defvar ctl-j-map)
 (setq ctl-j-map (make-sparse-keymap))
 (use-package goto-chg :ensure
@@ -367,7 +366,7 @@ in ctl-j-map first."
     (when (and mortal-mode god-local-mode)
       (if god-global-mode (god-mode-all))
       (setq z-god-mode-lighter
-            '(:propertize " ɪ " face
+            '(:propertize " ⎀ " face
               (:background "#4DFFA0" :foreground "black")))))
 
   (defun z-god-mode-toggle-meta ()

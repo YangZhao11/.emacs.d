@@ -40,6 +40,7 @@
       require-final-newline 't
       tramp-default-method "ssh"
       text-scale-mode-step 1.1
+      scroll-margin 3
       default-input-method 'TeX)
 
 (menu-bar-mode (if (eq system-type 'darwin) 1 -1)) ; Mac always has menu bar
