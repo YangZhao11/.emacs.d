@@ -15,9 +15,9 @@
   :bind ("C-t" . z-transpose))
 
 
-(use-package grab-region :diminish " ✋"
+(use-package grab-region :diminish " ⊕"
   :functions grab-region-move
-  :bind ("M-g M-g" . grab-region-mode)
+  :bind ("M-+" . grab-region-mode)
   :config
   (grab-region-remap z-goto-char))
 
@@ -68,11 +68,13 @@
   (put #'easy-kill-transpose 'easy-kill-exit t)
   (put #'easy-kill-wrap-region 'easy-kill-exit t)
   (put #'easy-kill-indent-region 'easy-kill-exit t)
+  (put #'easy-kill-grab-region 'easy-kill-exit t)
 
   (bind-keys
    :map easy-kill-base-map
    ("k"  . easy-kill-region)
    ("g"  . easy-kill-grab-region)
+   ("+"  . easy-kill-grab-region)
    ("m"  . easy-kill-mark-region)
    ("t"  . easy-kill-transpose)
    ("("  . easy-kill-wrap-region)
@@ -196,7 +198,6 @@
 ;; Toggle commands
 (global-set-key (kbd "C-x t a") #'abbrev-mode)
 (diminish 'abbrev-mode " ∂A")
-(add-hook 'text-mode-hook #'abbrev-mode)
 
 (use-package beacon :ensure :diminish beacon-mode
   :bind ("C-x t b" . beacon-mode)
@@ -213,12 +214,10 @@
 (global-set-key (kbd "C-x t d") #'eldoc-mode)
 (bind-key "C-x t f" #'auto-fill-mode)
 (diminish 'auto-fill-function " ¶")
-(add-hook 'text-mode-hook #'auto-fill-mode)
 
 (use-package flyspell :diminish " ⍹"
   :bind (("C-x t l" . flyspell-mode)
          ("C-x t ;" . flyspell-prog-mode)))
-(add-hook 'text-mode-hook #'flyspell-mode)
 
 (use-package rainbow-delimiters :ensure
   :bind ("C-x t p" . rainbow-delimiters-mode)
@@ -378,12 +377,13 @@ in ctl-j-map first."
 
   (setq god-exempt-major-modes nil
         god-exempt-predicates nil)
+  (defalias 'true-self-insert-command 'self-insert-command)
   (bind-keys :map god-local-mode-map
              ("z" . repeat)
              ("i" . mortal-mode)
              ("[" . z-god-mode-toggle-cm)
-             ("(" . self-insert-command)
-             (")" . self-insert-command)
+             ("(" . true-self-insert-command)
+             (")" . true-self-insert-command)
              ("`" . next-error)
              ("$" . toggle-selective-display)
              ("#" . server-edit)
@@ -395,7 +395,7 @@ in ctl-j-map first."
 
   ;; bind symbols to M-?
   (dolist (i '("!" "@" "%" "^" "&" "{" "}"
-               "<" ">" ";" ":" "|" "\\" "=" "?"))
+               "<" ">" ";" ":" "|" "\\" "+" "=" "?"))
     (define-key god-local-mode-map (kbd i)
       (key-binding (kbd (concat "M-" i)))))
 

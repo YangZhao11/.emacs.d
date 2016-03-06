@@ -1,5 +1,9 @@
 ; -*- coding: utf-8 -*-
 
+(add-hook 'text-mode-hook #'abbrev-mode)
+(add-hook 'text-mode-hook #'auto-fill-mode)
+(add-hook 'text-mode-hook #'flyspell-mode)
+
 (use-package magit
   :bind ("C-x g" . magit-status)
   :config
@@ -181,56 +185,61 @@
 ;; --------------------------------------------------
 ;; ess
 
-(defun ess-smart-pipe ()
-  "Similar to ess-smart-S-assign, but insert %>% instead."
-  (interactive)
-  (let ((ess-S-assign " %>% ")
-        (ess-smart-S-assign-key "\\"))
-    (ess-smart-S-assign)))
-(defun ess-smart-tpipe ()
-  "Similar to ess-smart-S-assign, but insert %T>% instead."
-  (interactive)
-  (let ((ess-S-assign " %T>% ")
-        (ess-smart-S-assign-key "?"))
-    (ess-smart-S-assign)))
-
-(defun ess-debug-next-or-eval-line ()
-  (interactive)
-  (let ((proc (and ess-current-process-name
-                   (get-process ess-current-process-name))))
-    (if (and proc
-             (or (process-get proc 'dbg-active)
-                 (process-get proc 'is-recover)))
-        (ess-debug-command-next)
-      (ess-eval-line-and-step))))
-
-(defun ess-render-markdown ()
-  (interactive)
-  (ess-eval-linewise (concat "render(\"" buffer-file-name "\", output_dir = getwd())") nil 'eob))
-
-(defun z-ess-mode-symbols ()
-  (setq prettify-symbols-alist
-        (append '(("%>%" . ?↦)
-                  ("%T>%" . ?↧) ;↴
-                  ("%<>%" . ?⇄) ;⇋⇌⇆
-                  ("<=" . ?≤)
-                  (">=" . ?≥)
-                  ("%in%" . ?∈)
-                  ("%*%" . ?×)
-                  ("function" ?ƒ))
-                prettify-symbols-alist))
-  (prettify-symbols-mode))
-
-(defun z-ess-mode-hook ()
-  (rainbow-delimiters-mode 1)
-  (z-ess-mode-symbols)
-  (setq-local company-backends ess-company-backends)
-  (company-mode))
-
 (use-package ess-site
   :commands (R R-mode julia)
   :mode ((".R$" . r-mode) (".Rmd$" . r-mode) (".jl$" . julia-mode))
+  :defines ess-company-backends ess-current-process-name
+  :functions ess-smart-S-assign ess-debug-command-next
+    ess-eval-line-and-step ess-eval-linewise ess-toggle-S-assign
+    ess-toggle-underscore
   :config
+  (defun ess-smart-pipe ()
+    "Similar to ess-smart-S-assign, but insert %>% instead."
+    (interactive)
+    (let ((ess-S-assign " %>% ")
+          (ess-smart-S-assign-key "\\"))
+      (ess-smart-S-assign)))
+
+  (defun ess-smart-tpipe ()
+    "Similar to ess-smart-S-assign, but insert %T>% instead."
+    (interactive)
+    (let ((ess-S-assign " %T>% ")
+          (ess-smart-S-assign-key "?"))
+      (ess-smart-S-assign)))
+
+  (defun ess-debug-next-or-eval-line ()
+    (interactive)
+    (let ((proc (and ess-current-process-name
+                     (get-process ess-current-process-name))))
+      (if (and proc
+               (or (process-get proc 'dbg-active)
+                   (process-get proc 'is-recover)))
+          (ess-debug-command-next)
+        (ess-eval-line-and-step))))
+
+  (defun ess-render-markdown ()
+    (interactive)
+    (ess-eval-linewise (concat "render(\"" buffer-file-name "\", output_dir = getwd())") nil 'eob))
+
+  (defun z-ess-mode-symbols ()
+    (setq prettify-symbols-alist
+          (append '(("%>%" . ?↦)
+                    ("%T>%" . ?↧) ;↴
+                    ("%<>%" . ?⇄) ;⇋⇌⇆
+                    ("<=" . ?≤)
+                    (">=" . ?≥)
+                    ("%in%" . ?∈)
+                    ("%*%" . ?×)
+                    ("function" ?ƒ))
+                  prettify-symbols-alist))
+    (prettify-symbols-mode))
+
+  (defun z-ess-mode-hook ()
+    (rainbow-delimiters-mode 1)
+    (z-ess-mode-symbols)
+    (setq-local company-backends ess-company-backends)
+    (company-mode))
+
   (setq inferior-julia-program-name "~/bin/julia"
         ess-tab-complete-in-script 't
         ess-smart-S-assign-key ";"
