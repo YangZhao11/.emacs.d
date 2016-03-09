@@ -30,6 +30,12 @@
         bug-reference-bug-regexp
         "\\(\\b\\)\\(b/[0-9]+\\|c[rl]/[0-9]+\\|t/[0-9]+\\|\\(g\\|go\\|goto\\)/[-a-zA-z0-9_]+\\|[a-z]+@\\)"))
 
+(use-package indent-guide
+  :diminish indent-guide-mode
+  :bind ("C-x t i" . indent-guide-mode)
+  :config
+  (setq indent-guide-char "•"))
+
 ;; --------------------------------------------------
 (use-package yasnippet :demand ;; :ensure
   :diminish yas-minor-mode
@@ -181,6 +187,9 @@
   (haskell-indentation-mode))
   ;;(setq haskell-font-lock-symbols 't)
 (add-hook 'haskell-mode-hook 'z-haskell-mode-hook)
+
+(add-hook 'python-mode-hook 'indent-guide-mode)
+
 
 ;; --------------------------------------------------
 ;; ess
