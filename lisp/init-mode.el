@@ -13,9 +13,6 @@
 (use-package eldoc :diminish eldoc-mode
   :commands eldoc-mode)
 
-(use-package imenu
-  :bind ("C-x j" . imenu))
-
 (use-package bug-reference
   :commands bug-reference-mode
   :config
@@ -29,12 +26,6 @@
   (setq bug-reference-url-format 'z-bug-to-link
         bug-reference-bug-regexp
         "\\(\\b\\)\\(b/[0-9]+\\|c[rl]/[0-9]+\\|t/[0-9]+\\|\\(g\\|go\\|goto\\)/[-a-zA-z0-9_]+\\|[a-z]+@\\)"))
-
-(use-package indent-guide
-  :diminish indent-guide-mode
-  :bind ("C-x t i" . indent-guide-mode)
-  :config
-  (setq indent-guide-char "•"))
 
 ;; --------------------------------------------------
 (use-package yasnippet :demand ;; :ensure
@@ -148,6 +139,18 @@
 ;; --------------------------------------------------
 ;; modes
 
+(defun z-setup-imenu-for-use-package ()
+  "Recognize `use-package` in imenu"
+  (let ((emacsd (expand-file-name "~/.emacs.d/lisp/"))
+        (initel (expand-file-name "init.el" "~/.emacs.d")))
+    (when (or (string= buffer-file-name initel)
+              (string-match (rx-to-string `(: bos ,emacsd) t) buffer-file-name))
+      (add-to-list
+       'imenu-generic-expression
+       '(nil "^\\s-*(\\(use-package\\)\\s-+\\(\\(\\sw\\|\\s_\\)+\\)" 2)))))
+(add-hook 'emacs-lisp-mode-hook 'z-setup-imenu-for-use-package)
+
+
 (use-package cc-mode
   :config
   (setq c-electric-pound-behavior '(alignleft)) ;make a #define left-aligned
@@ -187,9 +190,6 @@
   (haskell-indentation-mode))
   ;;(setq haskell-font-lock-symbols 't)
 (add-hook 'haskell-mode-hook 'z-haskell-mode-hook)
-
-(add-hook 'python-mode-hook 'indent-guide-mode)
-
 
 ;; --------------------------------------------------
 ;; ess

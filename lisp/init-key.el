@@ -133,10 +133,16 @@
     (activate-mark)))
 (bind-key "M-=" #'z-toggle-activate-mark)
 
+(use-package imenu
+  :bind ("C-x j" . imenu))
+
 (use-package dired-x
   :bind ("C-x C-j" . dired-jump)
   :init
   (setq dired-x-hands-off-my-keys nil))
+
+(use-package find-file
+  :bind ("C-x C-r" . ff-find-other-file))
 
 (defun ediff-this-buffer ()
   "Call ediff on this buffer, with the version on disk or backup."
@@ -211,7 +217,7 @@
 (beacon-mode 1)
 
 (global-set-key (kbd "C-x t c") #'highlight-changes-mode)
-(global-set-key (kbd "C-x t d") #'eldoc-mode)
+(global-set-key (kbd "C-x t d") #'which-function-mode)
 (bind-key "C-x t f" #'auto-fill-mode)
 (diminish 'auto-fill-function " ¶")
 

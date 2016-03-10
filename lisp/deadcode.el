@@ -1,3 +1,11 @@
+
+(use-package indent-guide
+  :diminish indent-guide-mode
+  :bind ("C-x t i" . indent-guide-mode)
+  :config
+  (setq indent-guide-char "│"))
+
+
 ;; Remove ## as begining of comment. Google R style guide insists we use
 ;; single #.
 (defun z-remove-fancy-comments ()
