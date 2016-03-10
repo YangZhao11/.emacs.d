@@ -40,6 +40,7 @@
   ;; code search
   (global-set-key (kbd "C-x C-.") 'codesearch-search)
   (global-set-key (kbd "C-x C-,") 'google-open-in-code-search)
+  (global-set-key (kbd "C-x C-r") 'google-rotate-among-files)
   (when (fboundp 'autogen)
     (add-hook 'find-file-not-found-hooks 'autogen)))
 (add-hook 'after-init-hook 'google-init-last)
