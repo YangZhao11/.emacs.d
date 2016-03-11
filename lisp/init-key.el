@@ -25,56 +25,50 @@
   :bind ([remap kill-ring-save] . easy-kill)
   :config
 
-  (defun easy-kill-transpose ()
-    (interactive)
-    (save-mark-and-excursion
-     (easy-kill-mark-region)
-     (call-interactively #'anchored-transpose)))
-  (defun easy-kill-wrap-region ()
-    (interactive)
-    (save-mark-and-excursion
-     (easy-kill-mark-region)
-     (call-interactively #'self-insert-command)))
   (defun easy-kill-grab-region ()
     (interactive)
     (easy-kill-mark-region)
     (grab-region-mode))
-  (defun easy-kill-indent-region ()
-    (interactive)
-    (save-mark-and-excursion
-     (easy-kill-mark-region)
-     (call-interactively #'indent-region)))
-
-  (add-to-list 'easy-kill-alist '(?p paragraph "\n"))
-  (setq easy-kill-unhighlight-key " ")
+  (put #'easy-kill-grab-region 'easy-kill-exit t)
 
   (defun easy-kill-transpose ()
     (interactive)
     (save-mark-and-excursion
      (easy-kill-mark-region)
      (call-interactively #'anchored-transpose)))
+  (put #'easy-kill-transpose 'easy-kill-exit t)
+
   (defun easy-kill-wrap-region ()
     (interactive)
     (save-mark-and-excursion
      (easy-kill-mark-region)
      (call-interactively #'self-insert-command)))
+  (put #'easy-kill-wrap-region 'easy-kill-exit t)
+
   (defun easy-kill-indent-region ()
     (interactive)
     (save-mark-and-excursion
      (easy-kill-mark-region)
      (call-interactively #'indent-region)))
-  (put #'easy-kill-transpose 'easy-kill-exit t)
-  (put #'easy-kill-wrap-region 'easy-kill-exit t)
   (put #'easy-kill-indent-region 'easy-kill-exit t)
-  (put #'easy-kill-grab-region 'easy-kill-exit t)
+
+  (defun easy-kill-comment-dwim ()
+    (interactive)
+    (save-mark-and-excursion
+     (easy-kill-mark-region)
+     (call-interactively #'comment-dwim)))
+  (put #'easy-kill-comment-dwim 'easy-kill-exit t)
+
+  (add-to-list 'easy-kill-alist '(?p paragraph "\n"))
+  (setq easy-kill-unhighlight-key " ")
 
   (bind-keys
    :map easy-kill-base-map
    ("k"  . easy-kill-region)
    ("g"  . easy-kill-grab-region)
-   ("+"  . easy-kill-grab-region)
    ("m"  . easy-kill-mark-region)
    ("t"  . easy-kill-transpose)
+   (";"  . easy-kill-comment-dwim)
    ("("  . easy-kill-wrap-region)
    (")"  . easy-kill-wrap-region)
    ("["  . easy-kill-wrap-region)
@@ -235,8 +229,7 @@
   :bind ("C-x t s" . whitespace-mode))
 
 (use-package hideshow :diminish (hs-minor-mode . " ◌")
-  :bind (("C-x t e" . hs-minor-mode)
-         ("M-$" . hs-dwim))
+  :bind ("M-$" . hs-dwim)
   :config
   (defun hs-dwim (arg)
     "Hide-show smartly based on ARG:
@@ -245,9 +238,11 @@
   Given universal arg, call `hs-show-all'.
   Otherwise call `hs-toggle-hiding'."
     (interactive "P")
+    (hs-minor-mode 1)
     (cond ((and (numberp arg) (> arg 0)) (hs-hide-level arg))
           ((eq '- arg) (hs-hide-all))
-          ((and (listp arg) (numberp (car arg))) (hs-show-all))
+          ((and (listp arg) (numberp (car arg)))
+           (hs-show-all) (hs-minor-mode -1))
           ('t (hs-toggle-hiding)))))
 
 (bind-keys ("C-x t h"   . hi-lock-mode)

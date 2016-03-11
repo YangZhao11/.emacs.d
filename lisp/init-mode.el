@@ -244,6 +244,8 @@
     (prettify-symbols-mode))
 
   (defun z-ess-mode-hook ()
+    (when (string-match "\\.Rmd$" buffer-file-name)
+      (setq-local page-delimiter "^```\\({.*}\\)?$"))
     (rainbow-delimiters-mode 1)
     (z-ess-mode-symbols)
     (setq-local company-backends ess-company-backends)
