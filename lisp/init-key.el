@@ -14,13 +14,11 @@
       (call-interactively #'transpose-chars)))
   :bind ("C-t" . z-transpose))
 
-
 (use-package grab-region :diminish " ⊕"
   :functions grab-region-move
   :bind ("M-+" . grab-region-mode)
   :config
   (grab-region-remap z-goto-char))
-
 
 (use-package easy-kill :ensure
   :functions easy-kill-mark-region
@@ -238,7 +236,19 @@
 
 (use-package hideshow :diminish (hs-minor-mode . " ◌")
   :bind (("C-x t e" . hs-minor-mode)
-         ("M-$" . hs-toggle-hiding)))
+         ("M-$" . hs-dwim))
+  :config
+  (defun hs-dwim (arg)
+    "Hide-show smartly based on ARG:
+  Given positive number, call `hs-hide-level'.
+  Given negative universal arg, call `hs-hide-all'.
+  Given universal arg, call `hs-show-all'.
+  Otherwise call `hs-toggle-hiding'."
+    (interactive "P")
+    (cond ((and (numberp arg) (> arg 0)) (hs-hide-level arg))
+          ((eq '- arg) (hs-hide-all))
+          ((and (listp arg) (numberp (car arg))) (hs-show-all))
+          ('t (hs-toggle-hiding)))))
 
 (bind-keys ("C-x t h"   . hi-lock-mode)
            ("C-x t n"   . linum-mode)
@@ -394,7 +404,6 @@ in ctl-j-map first."
              ("(" . true-self-insert-command)
              (")" . true-self-insert-command)
              ("`" . next-error)
-             ("$" . hs-toggle-hiding)
              ("#" . server-edit)
              ("*" . calc-dispatch))
 
