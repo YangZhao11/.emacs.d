@@ -236,8 +236,11 @@
 (use-package whitespace :diminish " ␣"
   :bind ("C-x t s" . whitespace-mode))
 
-(bind-keys ("C-x t e"   . hs-minor-mode)
-           ("C-x t h"   . hi-lock-mode)
+(use-package hideshow :diminish (hs-minor-mode . " ◌")
+  :bind (("C-x t e" . hs-minor-mode)
+         ("M-$" . hs-toggle-hiding)))
+
+(bind-keys ("C-x t h"   . hi-lock-mode)
            ("C-x t n"   . linum-mode)
            ("C-x t o"   . outline-minor-mode)
            ("C-x t t"   . toggle-show-trailing-whitespace)
@@ -391,7 +394,7 @@ in ctl-j-map first."
              ("(" . true-self-insert-command)
              (")" . true-self-insert-command)
              ("`" . next-error)
-             ("$" . toggle-selective-display)
+             ("$" . hs-toggle-hiding)
              ("#" . server-edit)
              ("*" . calc-dispatch))
 
@@ -400,7 +403,7 @@ in ctl-j-map first."
   (bind-key "ESC ESC" #'god-mode-isearch-disable god-mode-isearch-map)
 
   ;; bind symbols to M-?
-  (dolist (i '("!" "@" "%" "^" "&" "{" "}"
+  (dolist (i '("!" "@" "$" "%" "^" "&" "{" "}"
                "<" ">" ";" ":" "|" "\\" "+" "=" "?"))
     (define-key god-local-mode-map (kbd i)
       (key-binding (kbd (concat "M-" i)))))
