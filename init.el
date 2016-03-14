@@ -122,7 +122,7 @@
     ("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3")))
  '(package-selected-packages
    (quote
-    (clang-format markdown-mode use-package magit flycheck-status-emoji flycheck jump-char go-eldoc company company-go smex ack beacon anchored-transpose avy csv-mode go-mode shrink-whitespace easy-kill zenburn-theme yasnippet squery register-channel rainbow-delimiters multiple-cursors lua-mode ido-vertical-mode ido-ubiquitous haskell-mode guide-key goto-chg god-mode f ess edit-server change-inner browse-kill-ring base16-theme ace-window)))
+    (scala-mode2 clang-format markdown-mode use-package magit flycheck-status-emoji flycheck jump-char go-eldoc company company-go smex ack beacon anchored-transpose avy csv-mode go-mode shrink-whitespace easy-kill zenburn-theme yasnippet squery register-channel rainbow-delimiters multiple-cursors lua-mode ido-vertical-mode ido-ubiquitous haskell-mode guide-key goto-chg god-mode f ess edit-server change-inner browse-kill-ring base16-theme ace-window)))
  '(vc-annotate-background "#2B2B2B")
  '(vc-annotate-color-map
    (quote
