@@ -234,6 +234,7 @@
 
 (use-package hideshow :diminish (hs-minor-mode . " ◌")
   :bind ("M-$" . hs-dwim)
+  :functions hs-hide-level hs-show-all hs-hide-all hs-toggle-hiding
   :config
   (defun hs-dwim (arg)
     "Hide-show smartly based on ARG:
