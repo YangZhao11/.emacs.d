@@ -82,8 +82,6 @@
 (defun cycle-spacing-0 ()
   "Remove adjacent spaces, but undo if the command is issued the second time."
   (interactive) (cycle-spacing 0))
-(bind-keys ("M-SPC" . cycle-spacing)
-           ("M-\\"  . cycle-spacing-0))
 
 (defun toggle-selective-display (column)
   "Toggle selective display, defaulting to current column"
@@ -92,7 +90,13 @@
    (or column
        (unless selective-display
          (1+ (current-column))))))
-(bind-key "C-x $" 'toggle-selective-display)
+
+(bind-keys ("M-SPC"  . cycle-spacing)
+           ("M-\\"   . cycle-spacing-0)
+           ("M-c"    . capitalize-dwim)
+           ("M-l"    . downcase-dwim)
+           ("M-u"    . upcase-dwim)
+           ("C-x $"  . toggle-selective-display))
 
 (defun isearch-exit-other-end ()
   "Exit isearch, but at the other end of the search string. This is useful when followed by an immediate kill."
@@ -275,7 +279,7 @@
 (setq ctl-j-map (make-sparse-keymap))
 (use-package goto-chg :ensure
   :bind (("M-i" . goto-last-change)
-         ("M-o" . goto-last-change-reverse)))
+         ("M-I" . goto-last-change-reverse)))
 
 (use-package avy :ensure
   :bind* ("C-j" . z-goto-char)

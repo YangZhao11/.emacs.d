@@ -2,6 +2,7 @@
 ;; ==================================================
 ;; ido
 (use-package ido
+  :bind ("M-o" . ido-switch-buffer)
   :config
   (ido-mode t)
   (setq ido-enable-flex-matching 't

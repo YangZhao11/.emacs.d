@@ -143,8 +143,10 @@
   "Recognize `use-package` in imenu"
   (let ((emacsd (expand-file-name "~/.emacs.d/lisp/"))
         (initel (expand-file-name "init.el" "~/.emacs.d")))
-    (when (or (string= buffer-file-name initel)
-              (string-match (rx-to-string `(: bos ,emacsd) t) buffer-file-name))
+    (when (and buffer-file-name
+               (or (string= buffer-file-name initel)
+                   (string-match (rx-to-string `(: bos ,emacsd) t)
+                                 buffer-file-name)))
       (add-to-list
        'imenu-generic-expression
        '(nil "^\\s-*(\\(use-package\\)\\s-+\\(\\(\\sw\\|\\s_\\)+\\)" 2)))))
