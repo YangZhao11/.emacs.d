@@ -109,6 +109,20 @@
            ("M-s g"   . grep)
            ("M-s M-g" . rgrep))
 
+(use-package loccur :diminish loccur-mode
+  :bind (("M-s M-s" . loccur-current-symbol)
+         ("M-s s"   . loccur)
+         ("M-s M-d" . loccur-previous-match))
+  :config
+  (defun loccur-current-symbol ()
+    (interactive)
+    (let ((bounds (find-tag-default-bounds)))
+    (cond
+     (bounds
+      (loccur (isearch-symbol-regexp
+               (buffer-substring-no-properties (car bounds) (cdr bounds)))))
+     (t (call-interactively #'loccur-current))))))
+
 ;; Decouple exchange-point-and-mark and activating region.
 (defun z-exchange-point-and-mark (&optional arg)
   "Like `exchange-point-and-mark', but ARG means toggle active region, instead of inactivate region."
@@ -130,7 +144,7 @@
 (bind-key "M-=" #'z-toggle-activate-mark)
 
 (use-package imenu
-  :bind ("C-x j" . imenu))
+  :bind ("M-s i" . imenu))
 
 (use-package dired-x
   :bind ("C-x C-j" . dired-jump)
