@@ -118,10 +118,16 @@
     (interactive)
     (let ((bounds (find-tag-default-bounds)))
     (cond
-     (bounds
-      (loccur (isearch-symbol-regexp
+     (bounds (loccur
+              (isearch-symbol-regexp
                (buffer-substring-no-properties (car bounds) (cdr bounds)))))
-     (t (call-interactively #'loccur-current))))))
+     (t (call-interactively #'loccur-current)))))
+
+  (defun loccur-occur ()
+    (interactive)
+    (occur loccur-current-search)
+    (loccur nil))
+  (bind-key "M-s o" 'loccur-occur loccur-mode-map))
 
 ;; Decouple exchange-point-and-mark and activating region.
 (defun z-exchange-point-and-mark (&optional arg)
