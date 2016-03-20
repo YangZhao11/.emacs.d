@@ -1,3 +1,16 @@
+(use-package jump-char :ensure
+  :bind (("M-." . jump-char-forward)
+         ("M-," . jump-char-backward))
+  :init
+  (setq jump-char-forward-key "M-."
+        jump-char-backward-key "M-,")
+  :config
+  (bind-keys :map jump-char-isearch-map
+             ("C-j"      . jump-char-switch-to-ace)
+             ("<return>" . jump-char-exit)
+             ("RET"      . jump-char-exit))
+  (defalias 'ace-jump-char-mode #'avy-goto-char))
+
 
 (use-package indent-guide
   :diminish indent-guide-mode

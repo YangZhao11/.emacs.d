@@ -113,6 +113,7 @@
   :bind (("M-s M-s" . loccur-current-symbol)
          ("M-s s"   . loccur)
          ("M-s M-d" . loccur-previous-match))
+  :functions loccur-current
   :config
   (defun loccur-current-symbol ()
     (interactive)
@@ -305,8 +306,9 @@
 (use-package avy :ensure
   :bind* ("C-j" . z-goto-char)
   :bind (:map ctl-j-map
-              ("SPC" . avy-goto-line)
-              ("TAB" . avy-copy-region))
+              ("SPC" . avy-goto-line))
+  :bind (("M-," . avy-backward-char-in-line)
+         ("M-." . avy-forward-char-in-line))
   :config
   (require 'subword)
   (setq avy-styles-alist '((avy-goto-char . de-bruijn))
@@ -314,6 +316,27 @@
         '(?s ?d ?f ?g ?h ?j ?k ?l ?w ?e ?r ?u ?i ?o))
   (eval-after-load "isearch"
     '(define-key isearch-mode-map (kbd "C-j") #'avy-isearch))
+
+  (defun avy-forward-char-in-line (char)
+    "Jump to the currently visible CHAR in the current line."
+    (interactive (list (read-char "char: " t)))
+    (avy-with avy-goto-char
+      (avy--generic-jump
+       (regexp-quote (string char))
+       avy-all-windows
+       avy-style
+       (1+ (point))
+       (line-end-position))))
+  (defun avy-backward-char-in-line (char)
+    "Jump to the currently visible CHAR in the current line."
+    (interactive (list (read-char "char: " t)))
+    (avy-with avy-goto-char
+      (avy--generic-jump
+       (regexp-quote (string char))
+       avy-all-windows
+       avy-style
+       (line-beginning-position)
+       (point))))
 
   (defun z-goto-char (char &optional arg)
   "Call avy-goto-char or avy-goto-subword-1, but respect bindings
@@ -345,19 +368,6 @@ in ctl-j-map first."
   :if (not (featurep 'google))
   :bind (("C-x C-." . xref-find-definitions)
          ("C-x C-," . xref-pop-marker-stack)))
-
-(use-package jump-char :ensure
-  :bind (("M-." . jump-char-forward)
-         ("M-," . jump-char-backward))
-  :init
-  (setq jump-char-forward-key "M-."
-        jump-char-backward-key "M-,")
-  :config
-  (bind-keys :map jump-char-isearch-map
-             ("C-j"      . jump-char-switch-to-ace)
-             ("<return>" . jump-char-exit)
-             ("RET"      . jump-char-exit))
-  (defalias 'ace-jump-char-mode #'avy-goto-char))
 
 ;; --------------------------------------------------
 (defvar z-god-mode-lighter "")
