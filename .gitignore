@@ -9,3 +9,4 @@ eshell/
 .DS_Store
 **/*.elc
 /bookmarks
+url/

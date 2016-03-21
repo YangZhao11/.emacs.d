@@ -85,13 +85,13 @@
           ("OBSOLETE" . "#909090") ("WAIT" . "#CCA060"))
         org-use-speed-commands 't
         org-sparse-tree-default-date-type 'closed
-        org-agenda-files '("~/Projects/NOTES.org")
+        org-agenda-files '("~/Projects/notes/NOTES.org")
         org-capture-templates
         '(("r" "Requests" entry
-           (file+headline "~/Projects/NOTES.org" "Requests")
+           (file+headline "~/Projects/notes/NOTES.org" "Requests")
            "** TODO %t %?")
           ("n" "Notes" entry
-           (file+headline "~/Projects/NOTES.org" "Captured Notes")
+           (file+headline "~/Projects/notes/NOTES.org" "Captured Notes")
            "** %? %T"))
         org-link-abbrev-alist
         '(("doc" . "https://drive.google.com/drive/search?q=")

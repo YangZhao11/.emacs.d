@@ -283,7 +283,7 @@
 (use-package register-channel :ensure
   :config
   (register-channel-mode)
-  (set-register ?5 '(file . "~/Projects/NOTES.org"))
+  (set-register ?5 '(file . "~/Projects/notes/NOTES.org"))
   (bind-key "M-g 5" #'register-channel-describe-register
             register-channel-mode-map))
 
