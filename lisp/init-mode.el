@@ -79,10 +79,10 @@
   (setq org-speed-commands-user
         '(("S" . org-schedule) ("d" . org-deadline))
         org-todo-keywords
-        '((sequence "PLAN(p)" "TODO(t)" "OPEN(o)" "WAIT(w)" "|" "OBSOLETE(e)" "DONE(d)"))
+        '((sequence "TODO(t)" "OPEN(o)" "BLOCKED(b)" "|" "OBSOLETE(e)" "DONE(d)"))
         org-todo-keyword-faces
         '(("OPEN" . "#90A8D0") ("PLAN" . "#A08880")
-          ("OBSOLETE" . "#909090") ("WAIT" . "#CCA060"))
+          ("OBSOLETE" . "#909090") ("BLOCKED" . "#CCA060"))
         org-use-speed-commands 't
         org-sparse-tree-default-date-type 'closed
         org-agenda-files '("~/Projects/notes/NOTES.org")
