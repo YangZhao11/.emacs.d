@@ -211,7 +211,6 @@
            ("M-(" . z-prev-buffer-next-window)
            ("M-)" . z-next-buffer-next-window))
 
-;(setq-default show-trailing-whitespace t)
 (defun toggle-show-trailing-whitespace ()
    "Toggle `show-trailing-whitespace'."
    (interactive)
@@ -219,8 +218,21 @@
    (message "show-trailing-whitespace set to %s" show-trailing-whitespace))
 
 ;; Toggle commands
-(global-set-key (kbd "C-x t a") #'abbrev-mode)
+(bind-keys ("C-x t a"   . abbrev-mode)
+           ("C-x t c"   . highlight-changes-mode)
+           ("C-x t d"   . which-function-mode)
+           ("C-x t f"   . auto-fill-mode)
+           ("C-x t h"   . hi-lock-mode)
+           ("C-x t n"   . linum-mode)
+           ("C-x t o"   . outline-minor-mode)
+           ("C-x t t"   . toggle-show-trailing-whitespace)
+           ("C-x t v"   . view-mode)
+           ("C-x t W"   . superword-mode)
+           ("C-x t w"   . subword-mode)
+           ("C-x t SPC" . hl-line-mode))
+
 (diminish 'abbrev-mode " ∂A")
+(diminish 'auto-fill-function " ¶")
 
 (use-package beacon :ensure :diminish beacon-mode
   :bind ("C-x t b" . beacon-mode)
@@ -232,11 +244,6 @@
           magit-status-mode magit-popup-mode
           gnus-summary-mode gnus-group-mode)))
 (beacon-mode 1)
-
-(global-set-key (kbd "C-x t c") #'highlight-changes-mode)
-(global-set-key (kbd "C-x t d") #'which-function-mode)
-(bind-key "C-x t f" #'auto-fill-mode)
-(diminish 'auto-fill-function " ¶")
 
 (use-package flyspell :diminish " ⍹"
   :bind (("C-x t l" . flyspell-mode)
@@ -270,15 +277,6 @@
           ((and (listp arg) (numberp (car arg)))
            (hs-show-all) (hs-minor-mode -1))
           ('t (hs-toggle-hiding)))))
-
-(bind-keys ("C-x t h"   . hi-lock-mode)
-           ("C-x t n"   . linum-mode)
-           ("C-x t o"   . outline-minor-mode)
-           ("C-x t t"   . toggle-show-trailing-whitespace)
-           ("C-x t v"   . view-mode)
-           ("C-x t W"   . superword-mode)
-           ("C-x t w"   . subword-mode)
-           ("C-x t SPC" . hl-line-mode))
 
 (use-package register-channel :ensure
   :config
