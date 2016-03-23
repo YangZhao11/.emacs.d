@@ -80,11 +80,12 @@
    ("\\" . easy-kill-indent-region)))
 
 (defun cycle-spacing-0 ()
-  "Remove adjacent spaces, but undo if the command is issued the second time."
+  "Remove adjacent spaces, but undo if the command is issued the
+second time."
   (interactive) (cycle-spacing 0))
 
 (defun toggle-selective-display (column)
-  "Toggle selective display, defaulting to current column"
+  "Toggle selective display, defaulting to current column."
   (interactive "P")
   (set-selective-display
    (or column
@@ -99,7 +100,8 @@
            ("C-x $"  . toggle-selective-display))
 
 (defun isearch-exit-other-end ()
-  "Exit isearch, but at the other end of the search string. This is useful when followed by an immediate kill."
+  "Exit isearch, but at the other end of the search string. This is
+useful when followed by an immediate kill."
   (interactive)
   (isearch-exit)
   (goto-char isearch-other-end))
@@ -118,11 +120,11 @@
   (defun loccur-current-symbol ()
     (interactive)
     (let ((bounds (find-tag-default-bounds)))
-    (cond
-     (bounds (loccur
-              (isearch-symbol-regexp
-               (buffer-substring-no-properties (car bounds) (cdr bounds)))))
-     (t (call-interactively #'loccur-current)))))
+      (cond
+       (bounds (loccur
+                (isearch-symbol-regexp
+                 (buffer-substring-no-properties (car bounds) (cdr bounds)))))
+       (t (call-interactively #'loccur-current)))))
 
   (defun loccur-occur ()
     (interactive)
@@ -132,7 +134,8 @@
 
 ;; Decouple exchange-point-and-mark and activating region.
 (defun z-exchange-point-and-mark (&optional arg)
-  "Like `exchange-point-and-mark', but ARG means toggle active region, instead of inactivate region."
+  "Like `exchange-point-and-mark', but ARG means toggle active region,
+instead of inactivate region."
   (interactive "P")
   (let ((active (or (and arg (not (use-region-p)))
                     (and (not arg) (use-region-p)))))
@@ -189,7 +192,8 @@
          ("<f9>"   . gud-finish)))
 
 (defun toggle-one-window ()
-  "Change to one window (C-x 1) if applicable, otherwise show other buffer in other window."
+  "Change to one window (C-x 1) if applicable, otherwise show other
+buffer in other window."
   (interactive)
   (if (window-parent)
       (delete-other-windows)
@@ -286,7 +290,8 @@
             register-channel-mode-map))
 
 (defun all-frames-to-messages-buffer ()
-  "Make all frames display the *Messages* buffer, only after storing current frame configuration to register 8."
+  "Make all frames display the *Messages* buffer, only after storing
+current frame configuration to register 8."
   (interactive)
   (frameset-to-register ?8)
   (dolist (f (frame-list))
