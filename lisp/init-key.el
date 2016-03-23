@@ -16,7 +16,7 @@
 
 (use-package grab-region :diminish " ⊕"
   :functions grab-region-move
-  :bind ("M-+" . grab-region-mode)
+  :bind ("M-*" . grab-region-mode)
   :config
   (grab-region-remap z-goto-char))
 
@@ -66,6 +66,7 @@
    :map easy-kill-base-map
    ("k"  . easy-kill-region)
    ("g"  . easy-kill-grab-region)
+   ("*"  . easy-kill-grab-region)
    ("m"  . easy-kill-mark-region)
    ("t"  . easy-kill-transpose)
    (";"  . easy-kill-comment-dwim)
@@ -437,15 +438,14 @@ in ctl-j-map first."
              ("(" . true-self-insert-command)
              (")" . true-self-insert-command)
              ("`" . next-error)
-             ("#" . server-edit)
-             ("*" . calc-dispatch))
+             ("#" . server-edit))
 
   (require 'god-mode-isearch)
   (bind-key "ESC ESC" #'god-mode-isearch-activate isearch-mode-map)
   (bind-key "ESC ESC" #'god-mode-isearch-disable god-mode-isearch-map)
 
   ;; bind symbols to M-?
-  (dolist (i '("!" "@" "$" "%" "^" "&" "{" "}"
+  (dolist (i '("!" "@" "$" "%" "^" "&" "*" "{" "}"
                "<" ">" ";" ":" "|" "\\" "+" "=" "?"))
     (define-key god-local-mode-map (kbd i)
       (key-binding (kbd (concat "M-" i)))))
