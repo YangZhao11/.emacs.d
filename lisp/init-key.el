@@ -378,6 +378,9 @@ in ctl-j-map first."
         (on-space (if (>= arg 0)
                       (looking-at "\\s ")
                     (looking-back "\\s " (1- (point)))))
+        (has-space (if (>= arg 0)
+                      (looking-back "\\s " (1- (point)))
+                    (looking-at "\\s ")))
         (sep-regex (if (>= arg 0) "\\S \\s " "\\s \\S "))
         (start (point)))
     (when on-space
@@ -385,7 +388,7 @@ in ctl-j-map first."
       (backward-char direction))
     (re-search-forward sep-regex nil nil arg)
     (backward-char direction)
-    (unless on-space
+    (when has-space
       (re-search-forward "\\S " nil nil direction)
       (backward-char direction))
     (kill-region start (point))))
