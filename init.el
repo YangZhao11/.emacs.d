@@ -59,8 +59,7 @@
 (electric-pair-mode 1)
 
 ;; --------------------------------------------------
-(load-theme 'zenburn 't)                 ; load this first for many defaults.
-;; (load-theme 'base16-oceanicnext-dark 't)
+(load-theme 'zenburn 't)   ; load this first for many defaults.
 
 ;; --------------------------------------------------
 ;; Load subfiles
@@ -154,6 +153,8 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(font-lock-keyword-face ((t (:weight normal))))
  '(company-template-field ((t (:background "#4d5d6d"))))
+ '(font-lock-builtin-face ((t (:foreground "#B0CCDC" :weight normal))))
+ '(font-lock-constant-face ((t (:foreground "#BFDBBF"))))
+ '(font-lock-keyword-face ((t (:weight normal))))
  '(link ((t (:foreground "#D0BF8F" :underline t :weight normal)))))

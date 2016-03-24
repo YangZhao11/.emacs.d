@@ -86,6 +86,7 @@
         org-use-speed-commands 't
         org-sparse-tree-default-date-type 'closed
         org-agenda-files '("~/Projects/notes/NOTES.org")
+        org-refile-targets '((nil :level . 1) (nil :tag . "OLD"))
         org-capture-templates
         '(("r" "Requests" entry
            (file+headline "~/Projects/notes/NOTES.org" "Requests")
