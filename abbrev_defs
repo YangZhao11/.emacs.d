@@ -99,11 +99,27 @@
 
 (define-abbrev-table 'ess-julia-mode-abbrev-table '())
 
+(define-abbrev-table 'flycheck-error-list-mode-abbrev-table '())
+
 (define-abbrev-table 'fundamental-mode-abbrev-table '())
 
 (define-abbrev-table 'g4-pending-mode-abbrev-table '())
 
+(define-abbrev-table 'gdb-breakpoints-mode-abbrev-table '())
+
+(define-abbrev-table 'gdb-disassembly-mode-abbrev-table '())
+
+(define-abbrev-table 'gdb-frames-mode-abbrev-table '())
+
+(define-abbrev-table 'gdb-locals-mode-abbrev-table '())
+
+(define-abbrev-table 'gdb-memory-mode-abbrev-table '())
+
+(define-abbrev-table 'gdb-registers-mode-abbrev-table '())
+
 (define-abbrev-table 'gdb-script-mode-abbrev-table '())
+
+(define-abbrev-table 'gdb-threads-mode-abbrev-table '())
 
 (define-abbrev-table 'gfm-mode-abbrev-table '())
 
@@ -259,9 +275,7 @@
 
 (define-abbrev-table 'python-mode-abbrev-table '())
 
-(define-abbrev-table 'python-mode-skeleton-abbrev-table
-  '(
-   ))
+(define-abbrev-table 'python-mode-skeleton-abbrev-table '())
 
 (define-abbrev-table 'select-tags-table-mode-abbrev-table '())
 
@@ -288,13 +302,13 @@
     ("ackd" "acknowledged" nil 1)
     ("aspn" "assumption" nil 0)
     ("avg" "average" nil 10)
-    ("bn" "binomial" nil 14)
-    ("bt" "between" nil 0)
-    ("calc" "calculate" nil 9)
+    ("bn" "binomial" nil 15)
+    ("bt" "between" nil 1)
+    ("calc" "calculate" nil 12)
     ("calcd" "calculated" nil 4)
-    ("calcn" "calculation" nil 8)
-    ("cdd" "candidate" nil 105)
-    ("confint" "confidence interval" nil 22)
+    ("calcn" "calculation" nil 9)
+    ("cdd" "candidate" nil 122)
+    ("confint" "confidence interval" nil 25)
     ("corr" "correlate" nil 0)
     ("corrd" "correlated" nil 0)
     ("corrn" "correlation" nil 0)
@@ -303,17 +317,18 @@
     ("difft" "different" nil 1)
     ("dist" "distribution" nil 9)
     ("distd" "distributed" nil 0)
-    ("epd" "explained" nil 1)
-    ("epn" "explanation" nil 0)
+    ("epd" "explained" nil 3)
+    ("epn" "explanation" nil 1)
     ("eptn" "expectation" nil 0)
     ("est" "estimate" nil 5)
+    ("expt" "experiment" nil 0)
     ("flw" "Follow up" nil 6)
     ("fml" "familiar" nil 0)
     ("gend" "generated" nil 0)
     ("ggl" "Google" nil 5)
     ("indep" "independence" nil 2)
     ("iow" "in other words" nil 0)
-    ("logi" "logistic" nil 2)
+    ("logi" "logistic" nil 3)
     ("mle" "maximum likelihood estimate" nil 0)
     ("ow" "otherwise" nil 3)
     ("param" "parameter" nil 0)
@@ -321,22 +336,24 @@
     ("pps" "propose" nil 0)
     ("ppsd" "proposed" nil 0)
     ("prm" "problem" nil 0)
-    ("prob" "probability" nil 6)
+    ("prob" "probability" nil 7)
     ("prog" "program" nil 2)
-    ("prop" "proportion" nil 2)
-    ("props" "proportions" nil 14)
+    ("propn" "proportion" nil 3)
+    ("propns" "proportions" nil 15)
     ("regn" "regression" nil 2)
     ("rlv" "relevant" nil 1)
     ("sigt" "significant" nil 0)
     ("spl" "sample" nil 4)
-    ("spling" "sampling" nil 18)
-    ("srp" "Server reliability problem" nil 8)
+    ("spling" "sampling" nil 19)
+    ("srp" "Server reliability problem" nil 11)
     ("stat" "statistics" nil 5)
-    ("statl" "statistical" nil 2)
+    ("statl" "statistical" nil 4)
     ("statn" "statistician" nil 0)
     ("staty" "statistically" nil 0)
+    ("std" "standard" nil 1)
     ("ud" "understand" nil 4)
     ("uding" "understanding" nil 0)
+    ("wt" "weight" nil 1)
     ("wtd" "weighted" nil 6)
    ))
 
