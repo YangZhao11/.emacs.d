@@ -76,13 +76,20 @@
   :defer 't
   :bind (("<f5>" . org-capture) ("<f6>" . org-agenda))
   :config
+  (defface org-todo-open '((t :foreground "#90A8D0" :inherit org-todo))
+           "face for org mode OPEN keyword")
+  (defface org-todo-wait '((t :foreground "#CCA060" :inherit org-todo))
+           "face for org mode WAIT keyword")
+  (defface org-done-obsolete '((t :foreground "#909090" :inherit org-done))
+           "face for org mode OBSOLETE keyword")
   (setq org-speed-commands-user
         '(("S" . org-schedule) ("d" . org-deadline))
         org-todo-keywords
-        '((sequence "TODO(t)" "OPEN(o)" "BLOCKED(b)" "|" "OBSOLETE(e)" "DONE(d)"))
+        '((sequence "TODO(t)" "OPEN(o)" "WAIT(w)"
+                    "|" "OBSOLETE(e)" "DONE(d)"))
         org-todo-keyword-faces
-        '(("OPEN" . "#90A8D0") ("PLAN" . "#A08880")
-          ("OBSOLETE" . "#909090") ("BLOCKED" . "#CCA060"))
+        '(("OPEN" . org-todo-open)
+          ("OBSOLETE" . org-done-obsolete) ("WAIT" . org-todo-wait))
         org-use-speed-commands 't
         org-sparse-tree-default-date-type 'closed
         org-agenda-files '("~/Projects/notes/NOTES.org")
@@ -99,7 +106,8 @@
           ("ai" . "https://groups.google.com/a/google.com/forum/#!searchin/zhyang-ai/")))
   (define-key org-mode-map (kbd "M-m") nil)
   (defun z-org-mode-hook ()
-    (bug-reference-mode)
+    (bug-reference-mode 1)
+    (org-bullets-mode 1)
     (setq-local register-channel-move-by-default 't)
     (setq-local ido-use-filename-at-point nil))
   (add-hook 'org-mode-hook 'z-org-mode-hook))

@@ -395,13 +395,14 @@ in ctl-j-map first."
 
 (defun zap-to-char-dwim (arg char)
   "Like zap-up-to-char, except:
-- Press M-z again for zap-to-char
+- Press last key (e.g. if bound to M-z, press M-z a second time)
+  again for zap-to-char
 - zap to space handles consequtive spaces
 - zap to right parenthses goes to the end of enclosing list"
   (interactive (list (prefix-numeric-value current-prefix-arg)
                      (read-char "Zap to: " 't)))
   (cond
-   ((eq char ?\M-z)
+   ((eq char last-command-event)
     (setq this-original-command 'zap-to-char
           this-command 'zap-to-char
           real-this-command 'zap-to-char)
