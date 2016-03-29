@@ -156,7 +156,7 @@
  '(company-template-field ((t (:background "#4d5d6d"))))
  '(font-lock-builtin-face ((t (:foreground "#C0C8D0" :weight normal))))
  '(font-lock-constant-face ((t (:foreground "#BFDBBF"))))
- '(font-lock-keyword-face ((t (:foreground "nil"))))
+ '(font-lock-keyword-face ((t (:foreground "#E4E0BC" :weight normal))))
  '(font-lock-type-face ((t (:foreground "#90B8BC"))))
  '(link ((t (:foreground "#D0BF8F" :underline t :weight normal))))
  '(org-todo ((t (:foreground "#CC9393" :underline t :weight bold)))))
