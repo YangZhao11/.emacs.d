@@ -122,7 +122,7 @@
     ("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3")))
  '(package-selected-packages
    (quote
-    (js2-mode loccur scala-mode2 clang-format markdown-mode use-package magit flycheck-status-emoji flycheck go-eldoc company company-go smex beacon anchored-transpose avy csv-mode go-mode easy-kill zenburn-theme yasnippet squery register-channel rainbow-delimiters lua-mode ido-vertical-mode ido-ubiquitous haskell-mode goto-chg god-mode f ess edit-server browse-kill-ring base16-theme ace-window)))
+    (rainbow-identifiers color-identifiers-mode org-bullets js2-mode loccur scala-mode2 clang-format markdown-mode use-package magit flycheck-status-emoji flycheck go-eldoc company company-go smex beacon anchored-transpose avy csv-mode go-mode easy-kill zenburn-theme yasnippet squery register-channel rainbow-delimiters lua-mode ido-vertical-mode ido-ubiquitous haskell-mode goto-chg god-mode f ess edit-server browse-kill-ring base16-theme ace-window)))
  '(vc-annotate-background "#2B2B2B")
  '(vc-annotate-color-map
    (quote
@@ -154,7 +154,8 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(company-template-field ((t (:background "#4d5d6d"))))
- '(font-lock-builtin-face ((t (:foreground "#B0CCDC" :weight normal))))
+ '(font-lock-builtin-face ((t (:foreground "#C0C8D0" :weight normal))))
  '(font-lock-constant-face ((t (:foreground "#BFDBBF"))))
- '(font-lock-keyword-face ((t (:weight normal))))
+ '(font-lock-keyword-face ((t (:foreground "nil"))))
+ '(font-lock-type-face ((t (:foreground "#90B8BC"))))
  '(link ((t (:foreground "#D0BF8F" :underline t :weight normal)))))
