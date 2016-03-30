@@ -27,6 +27,66 @@
         bug-reference-bug-regexp
         "\\(\\b\\)\\(b/[0-9]+\\|c[rl]/[0-9]+\\|t/[0-9]+\\|\\(g\\|go\\|goto\\)/[-a-zA-z0-9_]+\\|[a-z]+@\\)"))
 
+(use-package color-identifiers-mode
+  :diminish 'color-identifiers-mode
+  :config
+
+  (defun remove-string-or-comment (str)
+    "Remove string or comment in str, based on font lock faces"
+    (let ((remove (memq (get-text-property 0 'face str)
+                        '(font-lock-string-face font-lock-comment-face)))
+          (pos 0)
+          (nextpos)
+          (result ""))
+      (while (setq nextpos (next-single-property-change pos 'face str))
+        (unless remove
+          (setq result (concat result (substring-no-properties str pos nextpos))))
+        (setq pos nextpos)
+        (setq remove (memq (get-text-property pos 'face str)
+                           '(font-lock-string-face font-lock-comment-face))))
+      (unless remove
+        (setq result (concat result (substring-no-properties str pos nextpos))))
+      result))
+
+  (defun color-identifiers:r-get-args (lend)
+    (let* ((rend (save-excursion
+                  (goto-char lend)
+                  (forward-sexp)
+                  (point)))
+           (str (remove-string-or-comment (buffer-substring (1+ lend) (1- rend))))
+           (result))
+      (mapcar (lambda (s) (replace-regexp-in-string "\\s *=.*" "" s))
+              (split-string str "," t " "))))
+
+
+  (defun color-identifiers:r-get-declarations ()
+    "Extract a list of identifiers declared in the current buffer.
+For Emacs Lisp support within color-identifiers-mode."
+    (let ((result nil))
+    (save-excursion
+      (goto-char (point-min))
+      (while (re-search-forward "\\(\\(?:\\w\\|\\s_\\)*\\)\\s *<<?-\\s *\\(function\\s *\\)?" nil t)
+        (if (match-string 2)
+            (setq result (append (color-identifiers:r-get-args (match-end 2))
+                                 result))
+          (let ((var-name (match-string-no-properties 1)))
+            (unless (string= var-name "")
+              (add-to-list 'result var-name))))))
+    (delete-dups result)
+    result))
+
+  (color-identifiers:set-declaration-scan-fn
+   'ess-mode 'color-identifiers:r-get-declarations)
+
+  (add-to-list
+   'color-identifiers:modes-alist
+   `(ess-mode "[^$][[:space:]]*" "\\_<\\(\\(?:\\s_\\|\\sw\\)+\\)"
+                   (nil)))
+
+  (setq color-identifiers:min-color-saturation 0.3
+        color-identifiers:max-color-saturation 0.5)
+)
+
 ;; --------------------------------------------------
 (use-package yasnippet :demand ;; :ensure
   :diminish yas-minor-mode
@@ -77,11 +137,11 @@
   :bind (("<f5>" . org-capture) ("<f6>" . org-agenda))
   :config
   (defface org-todo-open '((t :foreground "#90A8D0" :inherit org-todo))
-           "face for org mode OPEN keyword")
+           "face for org mode OPEN keyword" :group 'org-faces)
   (defface org-todo-wait '((t :foreground "#CCA060" :inherit org-todo))
-           "face for org mode WAIT keyword")
+           "face for org mode WAIT keyword" :group 'org-faces)
   (defface org-done-obsolete '((t :foreground "#909090" :inherit org-done))
-           "face for org mode OBSOLETE keyword")
+           "face for org mode OBSOLETE keyword" :group 'org-faces)
   (setq org-speed-commands-user
         '(("S" . org-schedule) ("d" . org-deadline))
         org-todo-keywords
@@ -148,18 +208,21 @@
 ;; --------------------------------------------------
 ;; modes
 
-(defun z-setup-imenu-for-use-package ()
-  "Recognize `use-package` in imenu"
-  (let ((emacsd (expand-file-name "~/.emacs.d/lisp/"))
-        (initel (expand-file-name "init.el" "~/.emacs.d")))
-    (when (and buffer-file-name
-               (or (string= buffer-file-name initel)
-                   (string-match (rx-to-string `(: bos ,emacsd) t)
-                                 buffer-file-name)))
-      (add-to-list
-       'imenu-generic-expression
-       '(nil "^\\s-*(\\(use-package\\)\\s-+\\(\\(\\sw\\|\\s_\\)+\\)" 2)))))
-(add-hook 'emacs-lisp-mode-hook 'z-setup-imenu-for-use-package)
+(use-package elisp-mode
+  :config
+  (defun z-setup-imenu-for-use-package ()
+    "Recognize `use-package` in imenu"
+    (let ((emacsd (expand-file-name "~/.emacs.d/lisp/"))
+          (initel (expand-file-name "init.el" "~/.emacs.d")))
+      (when (and buffer-file-name
+                 (or (string= buffer-file-name initel)
+                     (string-match (rx-to-string `(: bos ,emacsd) t)
+                                   buffer-file-name)))
+        (add-to-list
+         'imenu-generic-expression
+         '(nil "^\\s-*(\\(use-package\\)\\s-+\\(\\(\\sw\\|\\s_\\)+\\)" 2)))))
+  (add-hook 'emacs-lisp-mode-hook 'z-setup-imenu-for-use-package)
+  (add-hook 'emacs-lisp-mode-hook 'color-identifiers-mode))
 
 
 (use-package cc-mode
