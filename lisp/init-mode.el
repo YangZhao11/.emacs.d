@@ -29,6 +29,7 @@
 
 (use-package color-identifiers-mode
   :diminish 'color-identifiers-mode
+  :bind ("C-x t i" . color-identifiers-mode)
   :config
 
   (defun remove-string-or-comment (str)
@@ -66,12 +67,15 @@ For Emacs Lisp support within color-identifiers-mode."
     (save-excursion
       (goto-char (point-min))
       (while (re-search-forward "\\(\\(?:\\w\\|\\s_\\)*\\)\\s *<<?-\\s *\\(function\\s *\\)?" nil t)
-        (if (match-string 2)
-            (setq result (append (color-identifiers:r-get-args (match-end 2))
-                                 result))
-          (let ((var-name (match-string-no-properties 1)))
-            (unless (string= var-name "")
-              (add-to-list 'result var-name))))))
+        (unless (memq (get-text-property (match-end 0) 'face)
+                      '(font-lock-string-face font-lock-comment-face))
+
+          (if (match-string 2)
+              (setq result (append (color-identifiers:r-get-args (match-end 2))
+                                   result))
+            (let ((var-name (match-string-no-properties 1)))
+              (unless (string= var-name "")
+                (add-to-list 'result var-name)))))))
     (delete-dups result)
     result))
 
