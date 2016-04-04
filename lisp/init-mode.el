@@ -1,5 +1,7 @@
 ; -*- coding: utf-8 -*-
 
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
+
 (add-hook 'text-mode-hook #'abbrev-mode)
 (add-hook 'text-mode-hook #'auto-fill-mode)
 (add-hook 'text-mode-hook #'flyspell-mode)
@@ -351,6 +353,7 @@ For Emacs Lisp support within color-identifiers-mode."
              ("<f9>" . ess-eval-function-or-paragraph-and-step)
              ("C-x <f8>" . ess-tracebug)
              ("C-c SPC" . ess-render-markdown)
+             ("C-c C-m" . markdown-mode)
              ("\\" . ess-smart-pipe)
              (";" . ess-smart-S-assign))
 
@@ -369,7 +372,11 @@ For Emacs Lisp support within color-identifiers-mode."
   (add-hook 'ess-help-mode-hook 'z-ess-mode-symbols)
   (add-hook 'inferior-ess-mode-hook 'z-ess-mode-symbols))
 
-(add-hook 'before-save-hook 'delete-trailing-whitespace)
+(use-package markdown-mode
+  :mode (".md$" . markdown-mode)
+  :config
+  (bind-keys :map markdown-mode-map
+             ("C-c C-m" . r-mode)))
 
 (use-package gdb-mi
   :config
