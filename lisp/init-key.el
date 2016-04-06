@@ -168,6 +168,8 @@ instead of inactivate region."
 (defun ediff-this-buffer ()
   "Call ediff on this buffer, with the version on disk or backup."
   (interactive)
+  (unless buffer-file-name
+    (user-error "Buffer is not associated with a file"))
   (if (buffer-modified-p)
       (ediff-current-file)
     (ediff-backup (buffer-file-name))))
