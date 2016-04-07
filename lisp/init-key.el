@@ -460,6 +460,19 @@ in ctl-j-map first."
     (interactive)
     (unless god-global-mode
       (god-mode-all)))
+  (defun set-cursor-type (cursor-type)
+    (dolist (f (frame-list))
+      (modify-frame-parameters f `((cursor-type . ,cursor-type)))))
+  (defun mortal-mode-on ()
+    (when god-local-mode
+      (if god-global-mode (god-mode-all))
+      (setq z-god-mode-lighter
+            '(:propertize " ⎀ " face
+                          (:background "#4DFFA0" :foreground "black")))
+      (set-cursor-type 'bar)))
+  (defun mortal-mode-off ()
+    (set-cursor-type 'box))
+
   (define-minor-mode mortal-mode
     "Allow temporary departures from god-mode."
     :global 't
@@ -468,11 +481,8 @@ in ctl-j-map first."
                           :filter (lambda (&optional _)
                                     (when  (not (minibufferp))
                                       #'mortal-mode-return)))))
-    (when (and mortal-mode god-local-mode)
-      (if god-global-mode (god-mode-all))
-      (setq z-god-mode-lighter
-            '(:propertize " ⎀ " face
-              (:background "#4DFFA0" :foreground "black")))))
+    (if mortal-mode
+        (mortal-mode-on) (mortal-mode-off)))
 
   (defun z-god-mode-toggle-meta ()
     (interactive)
