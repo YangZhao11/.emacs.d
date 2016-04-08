@@ -480,8 +480,7 @@ in ctl-j-map first."
                           :filter (lambda (&optional _)
                                     (when  (not (minibufferp))
                                       #'mortal-mode-return)))))
-    (if mortal-mode
-        (mortal-mode-on) (mortal-mode-off)))
+    (if mortal-mode (mortal-mode-on)))
 
   (defun z-god-mode-toggle-meta ()
     (interactive)
