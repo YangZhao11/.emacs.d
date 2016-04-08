@@ -432,6 +432,10 @@ in ctl-j-map first."
       (cons '(:eval z-god-mode-lighter)
             (default-value 'mode-line-format)))
 
+(defun set-cursor-type (cursor-type)
+  (dolist (f (frame-list))
+    (modify-frame-parameters f `((cursor-type . ,cursor-type)))))
+
 (use-package god-mode :ensure
   :bind ("ESC ESC" . god-mode-all)
   :diminish god-local-mode
@@ -460,18 +464,13 @@ in ctl-j-map first."
     (interactive)
     (unless god-global-mode
       (god-mode-all)))
-  (defun set-cursor-type (cursor-type)
-    (dolist (f (frame-list))
-      (modify-frame-parameters f `((cursor-type . ,cursor-type)))))
+
   (defun mortal-mode-on ()
     (when god-local-mode
       (if god-global-mode (god-mode-all))
       (setq z-god-mode-lighter
             '(:propertize " ⎀ " face
-                          (:background "#4DFFA0" :foreground "black")))
-      (set-cursor-type 'bar)))
-  (defun mortal-mode-off ()
-    (set-cursor-type 'box))
+                          (:background "#4DFFA0" :foreground "black")))))
 
   (define-minor-mode mortal-mode
     "Allow temporary departures from god-mode."
@@ -527,11 +526,16 @@ in ctl-j-map first."
 
   (defun z-god-mode-enabled-hook ()
     (mortal-mode 0)
-    (z-god-set-state z-god-state))
+    (z-god-set-state z-god-state)
+    (set-cursor-type 'box))
   (add-hook 'god-mode-enabled-hook 'z-god-mode-enabled-hook)
 
   (defun z-god-mode-disabled-hook ()
+    (set-cursor-type 'bar)
     (unless mortal-mode
-      (setq z-god-mode-lighter nil)
+      (setq z-god-mode-lighter
+            '(:propertize " ε " face
+                          (:background "#90E090" :foreground "black")))
       (setq z-god-state 'normal)))
   (add-hook 'god-mode-disabled-hook 'z-god-mode-disabled-hook))
+(add-hook 'after-init-hook 'god-mode-all)
