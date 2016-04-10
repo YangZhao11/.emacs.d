@@ -538,3 +538,7 @@ in ctl-j-map first."
       (setq z-god-state 'normal)))
   (add-hook 'god-mode-disabled-hook 'z-god-mode-disabled-hook))
 (add-hook 'after-init-hook 'god-mode-all)
+
+(require 'keyfreq)
+(keyfreq-mode 1)
+(keyfreq-autosave-mode 1)
