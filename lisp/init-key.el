@@ -541,4 +541,6 @@ in ctl-j-map first."
 
 (require 'keyfreq)
 (keyfreq-mode 1)
+(setq keyfreq-excluded-commands
+      '(self-insert-commnad))
 (keyfreq-autosave-mode 1)

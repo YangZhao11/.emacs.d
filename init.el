@@ -14,8 +14,6 @@
 (eval-when-compile (require 'use-package))
 (require 'diminish)
 (require 's)
-(require 'seq)
-
 
 ;; Load platform specific inits, including init-gnu-linux /
 ;; init-darwin, init-ns / init-x, init-hostname.
