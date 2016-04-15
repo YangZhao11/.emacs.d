@@ -9,10 +9,9 @@
 (add-hook 'text-mode-hook #'auto-fill-mode)
 (add-hook 'text-mode-hook #'flyspell-mode)
 
-(use-package smerge-mode
-  :bind ("C-x m" . smerge-hydra/body)
-  :config
-  (defhydra smerge-hydra (:color red :hint nil)
+(defhydra smerge-hydra
+  (:color red :hint nil
+          :pre (smerge-mode 1))
     "
 ^Move^      ^Keep^         ^Diff^      ^Pair^
 ------------------------------------------------------
@@ -36,7 +35,8 @@ _q_uit      _RET_: current
     ("<"       smerge-diff-base-mine)
     ("="       smerge-diff-mine-other)
     (">"       smerge-diff-base-other)
-    ("q" nil :color blue)))
+    ("q" nil :color blue))
+(bind-key "C-x m" 'smerge-hydra/body)
 
 (use-package magit
   :bind ("C-x g" . magit-status)

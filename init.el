@@ -12,6 +12,7 @@
       '(("melpa-stable" . 20) ("gnu" . 10) ("melpa" . 0)))
 
 (eval-when-compile (require 'use-package))
+(require 'hydra)
 (require 'diminish)
 (require 's)
 
