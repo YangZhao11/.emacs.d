@@ -14,7 +14,7 @@
       (call-interactively #'transpose-chars)))
   :bind ("C-t" . z-transpose))
 
-(use-package grab-region :diminish " ⊕"
+(use-package grab-region :diminish " ⊛"
   :functions grab-region-move
   :bind ("M-*" . grab-region-mode)
   :config
@@ -460,28 +460,6 @@ in ctl-j-map first."
             z-god-state state))
     (force-mode-line-update))
 
-  (defun mortal-mode-return ()
-    (interactive)
-    (unless god-global-mode
-      (god-mode-all)))
-
-  (defun mortal-mode-on ()
-    (when god-local-mode
-      (if god-global-mode (god-mode-all))
-      (setq z-god-mode-lighter
-            '(:propertize " ⎀ " face
-                          (:background "#4DFFA0" :foreground "black")))))
-
-  (define-minor-mode mortal-mode
-    "Allow temporary departures from god-mode."
-    :global 't
-    :keymap '(([?\C-m] .
-               (menu-item "" nil
-                          :filter (lambda (&optional _)
-                                    (when  (not (minibufferp))
-                                      #'mortal-mode-return)))))
-    (if mortal-mode (mortal-mode-on)))
-
   (defun z-god-mode-toggle-meta ()
     (interactive)
     (z-god-set-state (if (eq z-god-state 'meta) 'normal 'meta)))
@@ -494,7 +472,6 @@ in ctl-j-map first."
   (defalias 'true-self-insert-command 'self-insert-command)
   (bind-keys :map god-local-mode-map
              ("z" . repeat)
-             ("i" . mortal-mode)
              ("[" . z-god-mode-toggle-cm)
              ("(" . true-self-insert-command)
              (")" . true-self-insert-command)
@@ -515,7 +492,7 @@ in ctl-j-map first."
   ;; god-mode access. Directly bind these to commands, instead of making
   ;; it a keyboard macro so that messages work in god-mode.
   (dolist (bindings
-           '(("C-x" "0" "1" "2" "3" "9" "[" "]")
+           '(("C-x" "0" "1" "2" "3" "9" "[" "]" "$")
              ("M-g" "1" "2" "3" "4" "5" "6" "7" "8" "c" "n" "p")))
     (let ((prefix (car bindings))
           (chars (cdr bindings)))
@@ -524,18 +501,16 @@ in ctl-j-map first."
                         (key-binding (kbd (concat prefix " " i)))))))
 
   (defun z-god-mode-enabled-hook ()
-    (mortal-mode 0)
     (z-god-set-state z-god-state)
     (set-cursor-type 'box))
   (add-hook 'god-mode-enabled-hook 'z-god-mode-enabled-hook)
 
   (defun z-god-mode-disabled-hook ()
     (set-cursor-type 'bar)
-    (unless mortal-mode
-      (setq z-god-mode-lighter
-            '(:propertize " ε " face
-                          (:background "#90E090" :foreground "black")))
-      (setq z-god-state 'normal)))
+    (setq z-god-mode-lighter
+          '(:propertize " ε " face
+                        (:background "#90E090" :foreground "black")))
+    (setq z-god-state 'normal))
   (add-hook 'god-mode-disabled-hook 'z-god-mode-disabled-hook))
 (add-hook 'after-init-hook 'god-mode-all)
 
