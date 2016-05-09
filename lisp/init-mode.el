@@ -1,12 +1,13 @@
 ; -*- coding: utf-8 -*-
 
-(eval-when-compile (require 'use-package))
-(eval-when-compile (require 'hydra))
+(eval-when-compile
+  (require 'use-package)
+  (require 'hydra))
 
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 (add-hook 'text-mode-hook #'abbrev-mode)
-(add-hook 'text-mode-hook #'auto-fill-mode)
+(add-hook 'text-mode-hook #'visual-line-mode)
 (add-hook 'text-mode-hook #'flyspell-mode)
 
 (defhydra smerge-hydra
@@ -285,8 +286,8 @@ For Emacs Lisp support within color-identifiers-mode."
 (defun z-go-mode-hook ()
   (setq tab-width 4)
   (setq-local company-backends '(company-ycmd))
-  (ycmd-mode 1)
-  (company-mode 1)
+  ;; (ycmd-mode 1)
+  ;; (company-mode 1)
   (go-eldoc-setup))
 (add-hook 'go-mode-hook 'z-go-mode-hook)
 

@@ -4,6 +4,8 @@
 (use-package browse-kill-ring :ensure
   :bind ("C-M-y" . browse-kill-ring))
 
+(bind-key "<C-M-backspace>" 'backward-kill-sexp)
+
 (use-package anchored-transpose :ensure
   :commands anchored-transpose
   :preface
@@ -229,6 +231,7 @@ buffer in other window."
            ("C-x t c"   . highlight-changes-mode)
            ("C-x t d"   . which-function-mode)
            ("C-x t f"   . auto-fill-mode)
+           ("C-x t F"   . visual-line-mode)
            ("C-x t h"   . hi-lock-mode)
            ("C-x t n"   . linum-mode)
            ("C-x t o"   . outline-minor-mode)
@@ -240,6 +243,8 @@ buffer in other window."
 
 (diminish 'abbrev-mode " ∂A")
 (diminish 'auto-fill-function " ¶")
+(diminish 'visual-line-mode " ↵")
+
 
 (use-package beacon :ensure :diminish beacon-mode
   :bind ("C-x t b" . beacon-mode)

@@ -2,9 +2,9 @@ elpa/
 auto-save-list/
 eshell/
 *~
-#*#
+\#*\#
 **/*~
-**/#*#
+**/\#*\#
 /session.*
 .DS_Store
 **/*.elc
