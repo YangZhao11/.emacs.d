@@ -20,6 +20,7 @@
         ido-ignore-files
         '("\\`auto/" "\\.prv/" "_region_" "\\`CVS/" "\\`#" "\\`.#"
           "\\`\\.\\./" "\\`\\./"))
+
   (define-key ido-file-dir-completion-map
     [remap set-mark-command]  'ido-restrict-to-matches))
 
@@ -27,7 +28,10 @@
   :init (ido-ubiquitous-mode 1))
 (use-package ido-vertical-mode :ensure
   :init (ido-vertical-mode 1))
-(setq ido-decorations '("\n→ " "" "\n  " "\n  ..." "[" "]" " [No match]" " [Matched]" " [Not readable]" " [Too big]" " [Confirm]" "\n→ " ""))
+(setq ido-decorations
+      '("\n► " "" "\n  " "\n  ..." "[" "]"
+        " [No match]" " [Matched]" " [Not readable]"
+        " [Too big]" " [Confirm]" "\n► " ""))
 
 ;; ==================================================
 ;; ibuffer
