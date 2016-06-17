@@ -1,5 +1,5 @@
 # -*- mode: snippet; require-final-newline: nil -*-
-# name: ss
-# key: ss
+# name: gg
+# key: gg
 # --
-summarize($0)
+group_by($0)

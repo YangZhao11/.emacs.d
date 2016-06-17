@@ -1,5 +1,5 @@
 # -*- mode: snippet; require-final-newline: nil -*-
-# name: ss
-# key: ss
+# name: ff
+# key: ff
 # --
-summarize($0)
+filter($0)
