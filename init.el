@@ -40,6 +40,7 @@
       tramp-default-method "ssh"
       text-scale-mode-step 1.1
       scroll-margin 3
+      shift-select-mode nil
       default-input-method 'TeX)
 
 (menu-bar-mode (if (eq system-type 'darwin) 1 -1)) ; Mac always has menu bar
@@ -66,6 +67,12 @@
 (load "init-buffer")
 (load "init-mode")
 (load "init-key")
+
+(setq-default mode-line-mule-info
+              `("" . ,(cddr (default-value 'mode-line-mule-info))))
+(setq-default mode-line-format
+      `("%e" (:eval z-god-mode-lighter) .
+        ,(cdr (default-value 'mode-line-format))))
 
 (use-package server :diminish (server-buffer-clients . " #")
   :config (add-hook 'after-init-hook 'server-start))

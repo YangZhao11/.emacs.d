@@ -382,9 +382,6 @@ in ctl-j-map first."
 ;; --------------------------------------------------
 (defvar z-god-mode-lighter "")
 (defvar-local z-god-saved-input-method nil "Saved input method before god-mode")
-(setq-default mode-line-format
-      (cons '(:eval z-god-mode-lighter)
-            (default-value 'mode-line-format)))
 
 (defun set-cursor-type (cursor-type)
   (dolist (f (frame-list))
@@ -465,8 +462,8 @@ in ctl-j-map first."
   (defun z-god-mode-disabled-hook ()
     (set-cursor-type 'bar)
     (setq z-god-mode-lighter
-          '(:propertize " ε " face
-                        (:background "#90E090" :foreground "black")))
+          '(:propertize (" " (:eval (or current-input-method-title "ε")) " ")
+                        face (:background "#90E090" :foreground "black")))
     (setq z-god-state 'normal)
     (if z-god-saved-input-method
         (set-input-method z-god-saved-input-method)))
