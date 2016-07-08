@@ -88,7 +88,8 @@ e.g. no prodaccess.")
                             (name . "^\\*ESS\\*$")
                             (name . "^\\*ESS-")))))))
 
-  (setq ibuffer-show-empty-filter-groups nil)
+  (setq ibuffer-show-empty-filter-groups nil
+        ibuffer-eliding-string "…")
   (defadvice ibuffer-make-column-filename (after strip-google3-filename activate)
     "Strip experimental to ~user, .../a/google3 to //a/"
     (setq ad-return-value

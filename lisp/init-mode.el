@@ -318,10 +318,10 @@ _q_uit      _RET_: current
   ;; In ESS-R, `$' is by default part of the symbol (_), which makes dabbrev
   ;; ignore variable names after $ for expansion. Fix by making it
   ;; punctuation.
-  (modify-syntax-entry ?$ "." R-syntax-table)
+  (modify-syntax-entry ?$ "." ess-r-syntax-table)
 
   ;; For Rmd editing, do not treat ` as quote.
-  (modify-syntax-entry ?` "." R-syntax-table)
+  (modify-syntax-entry ?` "." ess-r-syntax-table)
 
   (bind-keys :map ess-mode-map
              ("<f7>" . ess-show-traceback)
