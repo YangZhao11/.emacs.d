@@ -81,7 +81,9 @@
   :diminish (edit-server-edit-mode . " 🌍")
   :config
   (setq edit-server-new-frame nil
-        edit-server-url-major-mode-alist '(("mail\\.google\\.com" . html-mode)))
+        edit-server-url-major-mode-alist
+        '(("mail\\.google\\.com" . html-mode)
+          ("snippets\\.googleplex\\.com" . markdown-mode)))
   (add-hook 'after-init-hook 'edit-server-start))
 
 (setcdr (assq 'defining-kbd-macro minor-mode-alist)
