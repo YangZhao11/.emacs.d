@@ -22,6 +22,9 @@
         (when (string-match exclude-suffix path)
           (setq value nil)))))
 
+;; work-around for older code
+(setq R-syntax-table (make-syntax-table))
+
 (defun google-init-last ()
   ;; --------------------------------------------------
   ;; google specific settings
