@@ -284,7 +284,9 @@ _q_uit      _RET_: current
 
   (defun ess-render-markdown ()
     (interactive)
-    (ess-eval-linewise (concat "render(\"" buffer-file-name "\", output_dir = getwd())") nil 'eob))
+    (ess-eval-linewise
+     (concat "render(\"" buffer-file-name
+             "\", output_dir = getwd())") nil 'eob))
 
   (defun z-ess-mode-symbols ()
     (setq prettify-symbols-alist

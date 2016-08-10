@@ -56,6 +56,7 @@
 (temp-buffer-resize-mode 1)
 (fset 'yes-or-no-p 'y-or-n-p)
 (show-paren-mode 1)
+(setq show-paren-when-point-in-periphery 't)
 (electric-pair-mode 1)
 
 ;; --------------------------------------------------
