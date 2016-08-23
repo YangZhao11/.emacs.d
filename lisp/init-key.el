@@ -469,9 +469,3 @@ in ctl-j-map first."
         (set-input-method z-god-saved-input-method)))
   (add-hook 'god-mode-disabled-hook 'z-god-mode-disabled-hook))
 (add-hook 'after-init-hook 'god-mode-all)
-
-(require 'keyfreq)
-(keyfreq-mode 1)
-(setq keyfreq-excluded-commands
-      '(self-insert-command))
-(keyfreq-autosave-mode 1)
