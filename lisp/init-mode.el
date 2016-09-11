@@ -76,8 +76,10 @@ _q_uit      _RET_: current
   :init
   (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
   :config
+  (defun yas-ivy-prompt (prompt choices &optional display-fn)
+    (yas-completing-prompt prompt choices display-fn #'ivy-completing-read))
   (setq yas-prompt-functions
-        '(yas-ido-prompt yas-completing-prompt yas-no-prompt)
+        '(yas-ivy-prompt yas-completing-prompt yas-no-prompt)
         yas-wrap-around-region t)
   (yas-global-mode))
 

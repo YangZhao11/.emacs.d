@@ -114,26 +114,26 @@ useful when followed by an immediate kill."
            ("M-s g"   . grep)
            ("M-s M-g" . rgrep))
 
-(use-package loccur :diminish loccur-mode
-  :bind (("M-s M-s" . loccur-current-symbol)
-         ("M-s s"   . loccur)
-         ("M-s M-d" . loccur-previous-match))
-  :functions loccur-current
-  :config
-  (defun loccur-current-symbol ()
-    (interactive)
-    (let ((bounds (find-tag-default-bounds)))
-      (cond
-       (bounds (loccur
-                (isearch-symbol-regexp
-                 (buffer-substring-no-properties (car bounds) (cdr bounds)))))
-       (t (call-interactively #'loccur-current)))))
+;; (use-package loccur :diminish loccur-mode
+;;   :bind (("M-s M-s" . loccur-current-symbol)
+;;          ("M-s s"   . loccur)
+;;          ("M-s M-d" . loccur-previous-match))
+;;   :functions loccur-current
+;;   :config
+;;   (defun loccur-current-symbol ()
+;;     (interactive)
+;;     (let ((bounds (find-tag-default-bounds)))
+;;       (cond
+;;        (bounds (loccur
+;;                 (isearch-symbol-regexp
+;;                  (buffer-substring-no-properties (car bounds) (cdr bounds)))))
+;;        (t (call-interactively #'loccur-current)))))
 
-  (defun loccur-occur ()
-    (interactive)
-    (occur loccur-current-search)
-    (loccur nil))
-  (bind-key "M-s o" 'loccur-occur loccur-mode-map))
+;;   (defun loccur-occur ()
+;;     (interactive)
+;;     (occur loccur-current-search)
+;;     (loccur nil))
+;;   (bind-key "M-s o" 'loccur-occur loccur-mode-map))
 
 ;; Decouple exchange-point-and-mark and activating region.
 (defun z-exchange-point-and-mark (&optional arg)
@@ -371,8 +371,50 @@ in ctl-j-map first."
 (use-package zap-to-char-dwim
   :bind ("M-z" . zap-to-char-dwim))
 
-(use-package smex :ensure
-  :bind ("M-x" . smex))
+(use-package subr-x
+  :commands (string-trim-right
+             string-trim-left))
+
+(use-package ivy :diminish ""
+  :bind (("M-o" . ivy-switch-buffer)
+         ("M-s M-d" . ivy-resume))
+  :config
+  (ivy-mode 1)
+  (setq ivy-count-format "")
+  (bind-key "M-s o" 'ivy-occur ivy-minibuffer-map)
+  )
+
+(use-package swiper
+  :bind (("M-s M-s" . swiper))
+  :bind  (:map isearch-mode-map
+               ("M-s M-s" . isearch-swiper))
+  :config
+  (defun isearch-swiper (regexp)
+    "Like isearch-occur, call swiper with current regexp."
+    (interactive
+     (list (cond
+            (isearch-regexp isearch-string)
+            (t (regexp-quote isearch-string)))))
+    (let ((case-fold-search isearch-case-fold-search)
+          ;; Set `search-upper-case' to nil to not call
+          ;; `isearch-no-upper-case-p' in `occur-1'.
+          (search-upper-case nil)
+          (search-spaces-regexp
+           (if (if isearch-regexp
+                   isearch-regexp-lax-whitespace
+                 isearch-lax-whitespace)
+               search-whitespace-regexp)))
+      (swiper regexp))))
+
+(use-package counsel
+  :bind (("C-x C-f" . counsel-find-file)
+         ("M-x" . counsel-M-x))
+  :config
+  (setq counsel-find-file-ignore-regexp
+        "\\(?:\\`[#.]\\)\\|\\(?:[#~]\\'\\)\\|\\(\\`\\.\\)"))
+
+;; (use-package smex :ensure
+;;   :bind ("M-x" . smex))
 
 (use-package xref
   :if (not (featurep 'google))
