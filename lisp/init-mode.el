@@ -148,7 +148,7 @@ _q_uit      _RET_: current
         org-link-abbrev-alist
         '(("doc" . "https://drive.google.com/drive/search?q=")
           ("ai" . "https://groups.google.com/a/google.com/forum/#!searchin/zhyang-ai/")))
-  (define-key org-mode-map (kbd "M-m") nil)
+  (bind-keys :map org-mode-map ("M-m") ("C-j"))
   (defun z-org-mode-hook ()
     (bug-reference-mode 1)
     (org-bullets-mode 1)

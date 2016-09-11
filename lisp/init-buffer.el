@@ -1,40 +1,5 @@
 ; -*- coding: utf-8 -*-
 ;; ==================================================
-;; ;; ido
-;; (use-package ido
-;;   :bind ("M-o" . ido-switch-buffer)
-;;   :config
-;;   (ido-mode t)
-;;   (setq ido-enable-flex-matching 't
-;;         ido-auto-merge-delay-time 99999
-;;         ido-create-new-buffer 'always
-;;         ido-default-buffer-method 'selected-window
-;;         ido-default-file-method 'selected-window
-;;         ido-ignore-buffers
-;;         '("\\` " "^\\*ESS\\*" "^\\*Messages\\*" "^\\*Help\\*" "^\\*Buffer"
-;;           "^\\*.*Completions\\*$" "^\\*Ediff" "^\\*tramp" "^\\*cvs-"
-;;           "\\[r\\]\\(<[0-9]+>\\)?$" "\\[fundamental\\]\\(<[0-9]+>\\)?$"
-;;           "_region_" " output\\*$" "^TAGS$" "^\*Ido")
-;;         ido-ignore-directories
-;;         '("\\`auto/" "\\.prv/" "\\`CVS/" "\\`\\.\\./" "\\`\\./")
-;;         ido-ignore-files
-;;         '("\\`auto/" "\\.prv/" "_region_" "\\`CVS/" "\\`#" "\\`.#"
-;;           "\\`\\.\\./" "\\`\\./"))
-
-;;   (define-key ido-file-dir-completion-map
-;;     [remap set-mark-command]  'ido-restrict-to-matches))
-
-;; (use-package ido-ubiquitous :ensure
-;;   :init (ido-ubiquitous-mode 1))
-;; (use-package ido-vertical-mode :ensure
-;;   :init
-;;   (ido-vertical-mode 1)
-;;   (setq ido-decorations
-;;       '("\n► " "" "\n  " "\n  ..." "[" "]"
-;;         " [No match]" " [Matched]" " [Not readable]"
-;;         " [Too big]" " [Confirm]" "\n► " "")))
-
-;; ==================================================
 ;; ibuffer
 (use-package ibuffer
   :bind ("C-x C-b" . ibuffer)

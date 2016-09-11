@@ -131,7 +131,7 @@
     ("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3")))
  '(package-selected-packages
    (quote
-    (flx counsel swiper hydra keyfreq color-identifiers-mode org-bullets js2-mode loccur scala-mode2 clang-format markdown-mode use-package magit flycheck-status-emoji flycheck go-eldoc company company-go smex beacon anchored-transpose avy csv-mode go-mode easy-kill zenburn-theme yasnippet squery register-channel rainbow-delimiters lua-mode ido-vertical-mode ido-ubiquitous haskell-mode goto-chg god-mode f ess edit-server browse-kill-ring base16-theme ace-window)))
+    (ivy-hydra flx counsel swiper hydra keyfreq color-identifiers-mode org-bullets js2-mode loccur scala-mode2 clang-format markdown-mode use-package magit flycheck-status-emoji flycheck go-eldoc company company-go smex beacon anchored-transpose avy csv-mode go-mode easy-kill zenburn-theme yasnippet squery register-channel rainbow-delimiters lua-mode ido-vertical-mode ido-ubiquitous haskell-mode goto-chg god-mode f ess edit-server browse-kill-ring base16-theme ace-window)))
  '(vc-annotate-background "#2B2B2B")
  '(vc-annotate-color-map
    (quote

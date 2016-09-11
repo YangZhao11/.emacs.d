@@ -109,31 +109,11 @@ useful when followed by an immediate kill."
   (isearch-exit)
   (goto-char isearch-other-end))
 (bind-keys :map isearch-mode-map
-              ("M-RET" . isearch-exit-other-end))
+           ("M-RET" . isearch-exit-other-end)
+           ("M-k" . isearch-yank-word-or-char))
 (bind-keys ("M-s M-o" . multi-occur-in-matching-buffers)
            ("M-s g"   . grep)
            ("M-s M-g" . rgrep))
-
-;; (use-package loccur :diminish loccur-mode
-;;   :bind (("M-s M-s" . loccur-current-symbol)
-;;          ("M-s s"   . loccur)
-;;          ("M-s M-d" . loccur-previous-match))
-;;   :functions loccur-current
-;;   :config
-;;   (defun loccur-current-symbol ()
-;;     (interactive)
-;;     (let ((bounds (find-tag-default-bounds)))
-;;       (cond
-;;        (bounds (loccur
-;;                 (isearch-symbol-regexp
-;;                  (buffer-substring-no-properties (car bounds) (cdr bounds)))))
-;;        (t (call-interactively #'loccur-current)))))
-
-;;   (defun loccur-occur ()
-;;     (interactive)
-;;     (occur loccur-current-search)
-;;     (loccur nil))
-;;   (bind-key "M-s o" 'loccur-occur loccur-mode-map))
 
 ;; Decouple exchange-point-and-mark and activating region.
 (defun z-exchange-point-and-mark (&optional arg)
@@ -155,9 +135,6 @@ instead of inactivate region."
       (deactivate-mark)
     (activate-mark)))
 (bind-key "M-=" #'z-toggle-activate-mark)
-
-(use-package imenu
-  :bind ("M-s i" . imenu))
 
 (use-package dired-x
   :bind ("C-x C-j" . dired-jump)
@@ -315,7 +292,7 @@ current frame configuration to register 8."
          ("M-I" . goto-last-change-reverse)))
 
 (use-package avy :ensure
-  :bind* ("C-j" . z-goto-char)
+  :bind ("C-j" . z-goto-char)
   :bind (:map ctl-j-map
               ("SPC" . avy-goto-line))
   :bind (("M-," . avy-backward-char-in-line)
@@ -377,15 +354,34 @@ in ctl-j-map first."
 
 (use-package ivy :diminish ""
   :bind (("M-o" . ivy-switch-buffer)
+         ("M-O" . ivy-switch-buffer-other-window)
          ("M-s M-d" . ivy-resume))
   :config
   (ivy-mode 1)
   (setq ivy-count-format "")
-  (bind-key "M-s o" 'ivy-occur ivy-minibuffer-map)
-  )
+  (setq ivy-ignore-buffers
+        '("\\` " "^\\*ESS\\*" "^\\*Messages\\*" "^\\*Help\\*" "^\\*Buffer"
+           "^\\*.*Completions\\*$" "^\\*Ediff" "^\\*tramp" "^\\*cvs-"
+           "\\[r\\]\\(<[0-9]+>\\)?$" "\\[fundamental\\]\\(<[0-9]+>\\)?$"
+           "_region_" " output\\*$" "^TAGS$" "^\*Ido"))
+  (bind-keys :map ivy-minibuffer-map
+             ("M-s o" . ivy-occur)
+             ("C-j" . ivy-avy)
+             ("C-'" . ivy-alt-done)
+             ("M-k" . ivy-yank-word)
+             ("M-m" . ivy-restrict-to-matches)))
+
+(use-package counsel
+  :bind (("C-x C-f" . counsel-find-file)
+         ("M-x" . counsel-M-x)
+         ("M-s i" . counsel-imenu))
+  :config
+  (setq counsel-find-file-ignore-regexp
+        "\\(?:\\`[#.]\\)\\|\\(?:[#~]\\'\\)\\|\\(\\`\\.\\)"))
 
 (use-package swiper
-  :bind (("M-s M-s" . swiper))
+  :bind (("M-s M-s" . swiper)
+         ("M-s s" . swiper-all))
   :bind  (:map isearch-mode-map
                ("M-s M-s" . isearch-swiper))
   :config
@@ -405,16 +401,6 @@ in ctl-j-map first."
                  isearch-lax-whitespace)
                search-whitespace-regexp)))
       (swiper regexp))))
-
-(use-package counsel
-  :bind (("C-x C-f" . counsel-find-file)
-         ("M-x" . counsel-M-x))
-  :config
-  (setq counsel-find-file-ignore-regexp
-        "\\(?:\\`[#.]\\)\\|\\(?:[#~]\\'\\)\\|\\(\\`\\.\\)"))
-
-;; (use-package smex :ensure
-;;   :bind ("M-x" . smex))
 
 (use-package xref
   :if (not (featurep 'google))
