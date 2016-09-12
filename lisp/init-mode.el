@@ -231,7 +231,8 @@ _q_uit      _RET_: current
   (setq-local company-backends '(company-ycmd))
   ;; (ycmd-mode 1)
   ;; (company-mode 1)
-  (go-eldoc-setup))
+  ;; (go-eldoc-setup)
+  )
 (add-hook 'go-mode-hook 'z-go-mode-hook)
 
 (defun z-scala-mode-hook ()
