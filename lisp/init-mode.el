@@ -43,7 +43,8 @@ _q_uit      _RET_: current
   :bind ("C-x g" . magit-status)
   :config
   (setq with-editor-mode-lighter "")
-  (setq magit-last-seen-setup-instructions "1.4.0"))
+  (setq magit-last-seen-setup-instructions "1.4.0")
+  (setq magit-completing-read-function 'ivy-completing-read))
 
 (use-package eldoc :diminish eldoc-mode
   :commands eldoc-mode)

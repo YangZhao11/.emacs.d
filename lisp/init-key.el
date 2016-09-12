@@ -361,6 +361,7 @@ in ctl-j-map first."
   (setq ivy-count-format "")
   (setq ivy-ignore-buffers
         '("\\` " "^\\*ESS\\*" "^\\*Messages\\*" "^\\*Help\\*" "^\\*Buffer"
+          "^\\*LV\\*"
            "^\\*.*Completions\\*$" "^\\*Ediff" "^\\*tramp" "^\\*cvs-"
            "\\[r\\]\\(<[0-9]+>\\)?$" "\\[fundamental\\]\\(<[0-9]+>\\)?$"
            "_region_" " output\\*$" "^TAGS$" "^\*Ido"))
@@ -375,6 +376,9 @@ in ctl-j-map first."
   :bind (("C-x C-f" . counsel-find-file)
          ("M-x" . counsel-M-x)
          ("M-s i" . counsel-imenu))
+  :bind (:map help-map
+              ("v" . counsel-describe-variable)
+              ("f" . counsel-describe-function))
   :config
   (setq counsel-find-file-ignore-regexp
         "\\(?:\\`[#.]\\)\\|\\(?:[#~]\\'\\)\\|\\(\\`\\.\\)"))
@@ -385,6 +389,9 @@ in ctl-j-map first."
   :bind  (:map isearch-mode-map
                ("M-s M-s" . isearch-swiper))
   :config
+  (bind-keys :map swiper-map
+             ("M-%" . swiper-query-replace)
+             ("C-j" . swiper-avy))
   (defun isearch-swiper (regexp)
     "Like isearch-occur, call swiper with current regexp."
     (interactive
