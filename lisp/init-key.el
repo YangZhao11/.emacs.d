@@ -370,7 +370,8 @@ in ctl-j-map first."
              ("C-j" . ivy-avy)
              ("C-'" . ivy-alt-done)
              ("M-k" . ivy-yank-word)
-             ("M-m" . ivy-restrict-to-matches)))
+             ("M-m" . ivy-restrict-to-matches)
+             ("ESC ESC" . hydra-ivy/body)))
 
 (use-package counsel
   :bind (("C-x C-f" . counsel-find-file)
