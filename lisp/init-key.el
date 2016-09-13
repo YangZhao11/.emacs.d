@@ -376,6 +376,7 @@ in ctl-j-map first."
 (use-package counsel
   :bind (("C-x C-f" . counsel-find-file)
          ("M-x" . counsel-M-x)
+         ("M-s M-s" . counsel-grep-or-swiper)
          ("M-s i" . counsel-imenu))
   :bind (:map help-map
               ("v" . counsel-describe-variable)
@@ -385,8 +386,7 @@ in ctl-j-map first."
         "\\(?:\\`[#.]\\)\\|\\(?:[#~]\\'\\)\\|\\(\\`\\.\\)"))
 
 (use-package swiper
-  :bind (("M-s M-s" . swiper)
-         ("M-s s" . swiper-all))
+  :bind (("M-s s" . swiper-all))
   :bind  (:map isearch-mode-map
                ("M-s M-s" . isearch-swiper))
   :config
