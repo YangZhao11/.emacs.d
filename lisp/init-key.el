@@ -408,6 +408,7 @@ in ctl-j-map first."
                    isearch-regexp-lax-whitespace
                  isearch-lax-whitespace)
                search-whitespace-regexp)))
+      (isearch-exit)
       (swiper regexp))))
 
 (use-package xref
