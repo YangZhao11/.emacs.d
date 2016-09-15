@@ -1,6 +1,10 @@
 ; -*- coding: utf-8 -*-
 
 ;;; Code:
+(eval-when-compile
+  (require 'use-package)
+  (require 'hydra))
+
 (use-package browse-kill-ring :ensure
   :bind ("C-M-y" . browse-kill-ring))
 
@@ -204,27 +208,49 @@ buffer in other window."
    (message "show-trailing-whitespace set to %s" show-trailing-whitespace))
 
 ;; Toggle commands
-(bind-keys ("C-x t a"   . abbrev-mode)
-           ("C-x t c"   . highlight-changes-mode)
-           ("C-x t d"   . which-function-mode)
-           ("C-x t f"   . auto-fill-mode)
-           ("C-x t F"   . visual-line-mode)
-           ("C-x t h"   . hi-lock-mode)
-           ("C-x t n"   . linum-mode)
-           ("C-x t o"   . outline-minor-mode)
-           ("C-x t t"   . toggle-show-trailing-whitespace)
-           ("C-x t v"   . view-mode)
-           ("C-x t W"   . superword-mode)
-           ("C-x t w"   . subword-mode)
-           ("C-x t SPC" . hl-line-mode))
 
+(defhydra toggle-hydra (:color blue :hint nil)
+  "
+Toggle:
+_p_:rainbow-delimiters  _a_bbrev ∂A         _o_utline-minor-mode  co_m_pany ▤
+color-_i_dentifiers     auto-_f_ill ¶       _v_iew-mode           flychec_k_
+_b_eacon                _F_:visual-line ↵  ^ ^sub_w_ord/super_W_ord ^  ^_y_cmd ☯
+_h_i-lock               auto-_r_evert ↻     flyspel_l_ ⍹        ^  ^_d_:which-func
+white_s_pace/_t_railing ^  ^highlight-_c_hanges flyspel_L_-prog       li_n_um
+
+"
+  ("a"    abbrev-mode)
+  ("i"    color-identifiers-mode)
+  ("m" company-mode)
+  ("k" flycheck-mode)
+  ("y" ycmd-mode)
+  ("c"    highlight-changes-mode)
+  ("d"    which-function-mode)
+  ("f"    auto-fill-mode)
+  ("F"    visual-line-mode)
+  ("h"    hi-lock-mode)
+  ("n"    linum-mode)
+  ("o"    outline-minor-mode)
+  ("t"    toggle-show-trailing-whitespace)
+  ("v"    view-mode)
+  ("W"    superword-mode)
+  ("w"    subword-mode)
+  ("r"    auto-revert-mode)
+  ("s"    whitespace-mode)
+  ("SPC"  hl-line-mode)
+  ("p"    rainbow-delimiters-mode)
+  ("l"    flyspell-mode)
+  ("L"    flyspell-prog-mode)
+  ("b"    beacon-mode)
+)
+(bind-key "C-x t" 'toggle-hydra/body)
 (diminish 'abbrev-mode " ∂A")
 (diminish 'auto-fill-function " ¶")
 (diminish 'visual-line-mode " ↵")
 
 
 (use-package beacon :ensure :diminish beacon-mode
-  :bind ("C-x t b" . beacon-mode)
+  :commands (beacon-mode)
   :config
   (add-hook 'beacon-dont-blink-predicates
             (lambda () (not (display-graphic-p))))
@@ -235,19 +261,18 @@ buffer in other window."
 (beacon-mode 1)
 
 (use-package flyspell :diminish " ⍹"
-  :bind (("C-x t l" . flyspell-mode)
-         ("C-x t ;" . flyspell-prog-mode)))
+  :commands (flyspell-mode flyspell-prog-mode))
 
 (use-package rainbow-delimiters :ensure
-  :bind ("C-x t p" . rainbow-delimiters-mode)
+  :commands (rainbow-delimiters-mode)
   :init  (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
 
 (use-package autorevert
   :diminish (auto-revert-mode . " ↻")
-  :bind ("C-x t r" . auto-revert-mode))
+  :commands (auto-revert-mode))
 
 (use-package whitespace :diminish " ␣"
-  :bind ("C-x t s" . whitespace-mode))
+  :commands (whitespace-mode))
 
 (use-package hideshow :diminish (hs-minor-mode . " ◌")
   :bind ("M-$" . hs-dwim)

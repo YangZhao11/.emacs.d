@@ -65,7 +65,7 @@ _q_uit      _RET_: current
 
 (use-package color-identifiers-mode
   :diminish 'color-identifiers-mode
-  :bind ("C-x t i" . color-identifiers-mode)
+  :commands (color-identifiers-mode)
   :config
   (setq color-identifiers:min-color-saturation 0.1
         color-identifiers:max-color-saturation 0.3))
@@ -93,20 +93,20 @@ _q_uit      _RET_: current
 
 (use-package company :defer 't
   :diminish " ▤"
-  :bind (("C-x t m" . company-mode)
-         ("M-m" . company-complete))
+  :commands (company-mode)
+  :bind (("M-m" . company-complete))
   :config
   (setq company-idle-delay nil))
 
 (use-package flycheck
-  :bind ("C-x t k" . flycheck-mode)
+  :commands (flycheck-mode)
   :config
   (add-hook 'flycheck-mode-hook 'flycheck-status-emoji-mode))
 
 (use-package ycmd :diminish " ☯" :no-require t
   :defines ycmd-server-command ycmd-global-config
   ycmd-extra-conf-whitelist ycmd-idle-change-delay
-  :bind ("C-x t y" . ycmd-mode)
+  :commands (ycmd-mode)
   :config
   (defconst google-ycmd--extra-conf "/usr/lib/youcompleteme/ycm_extra_conf.py")
   (setq ycmd-server-command
