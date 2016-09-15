@@ -67,8 +67,8 @@ _q_uit      _RET_: current
   :diminish 'color-identifiers-mode
   :bind ("C-x t i" . color-identifiers-mode)
   :config
-  (setq color-identifiers:min-color-saturation 0.3
-        color-identifiers:max-color-saturation 0.5))
+  (setq color-identifiers:min-color-saturation 0.1
+        color-identifiers:max-color-saturation 0.3))
 
 ;; --------------------------------------------------
 (use-package yasnippet :demand ;; :ensure
@@ -207,7 +207,8 @@ _q_uit      _RET_: current
          'imenu-generic-expression
          '(nil "^\\s-*(\\(use-package\\)\\s-+\\(\\(\\sw\\|\\s_\\)+\\)" 2)))))
   (add-hook 'emacs-lisp-mode-hook 'z-setup-imenu-for-use-package)
-  (add-hook 'emacs-lisp-mode-hook 'color-identifiers-mode))
+  (add-hook 'emacs-lisp-mode-hook 'color-identifiers-mode)
+  (bind-keys :map lisp-interaction-mode-map ("C-j")))
 
 
 (use-package cc-mode
@@ -234,7 +235,8 @@ _q_uit      _RET_: current
   (setq-local company-backends '(company-ycmd))
   ;; (ycmd-mode 1)
   ;; (company-mode 1)
-  (go-eldoc-setup))
+  ;;(go-eldoc-setup)
+  )
 (add-hook 'go-mode-hook 'z-go-mode-hook)
 
 (defun z-scala-mode-hook ()
