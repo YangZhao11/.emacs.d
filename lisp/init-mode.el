@@ -10,7 +10,88 @@
 (add-hook 'text-mode-hook #'visual-line-mode)
 (add-hook 'text-mode-hook #'flyspell-mode)
 
-(defhydra smerge-hydra
+(use-package dired
+  :config
+  (defhydra hydra-dired (:color teal :columns 3)
+    "Action [available directly]"
+    ("!" dired-do-shell-command "shell")
+    ("#" dired-flag-auto-save-files "mark auto-saves")
+    ("$" dired-hide-subdir "hide subdir")
+    ("%" hydra-dired-regex/body "regex")
+    ("&" dired-do-async-shell-command "async-shell")
+    ("(" dired-hide-details-mode "hide details")
+    ("*" hydra-dired-mark/body "mark")
+    ("=" dired-diff "diff")
+    ("A" dired-do-find-regexp "find-regexp")
+    ("B" dired-do-byte-compile "byte-compile")
+    ("C" dired-do-copy "copy")
+    ("D" dired-do-delete "delete")
+    ("F" dired-do-find-marked-files "find-marked-files")
+    ("G" dired-do-chgrp "chgrp")
+    ("H" dired-do-hardlink "hardlink")
+    ("I" dired-info "info")
+    ("L" dired-do-load "load")
+    ("M" dired-do-chmod "chmod")
+    ("N" dired-man "man")
+    ("O" dired-do-chown "chown")
+    ("P" dired-do-print "print")
+    ("Q" dired-do-find-regexp-and-replace "replace regexp")
+    ("R" dired-do-rename "rename")
+    ("S" dired-do-symlink "symlink")
+    ("T" dired-do-touch "touch")
+    ("U" dired-unmark-all-marks "unmark all")
+    ("Y" dired-do-relsymlink "relsymlink")
+    ("Z" dired-do-compress "compress")
+    ("^" dired-up-directory "up-directory")
+    ("a" dired-find-alternate-file "find-alternate-file")
+    ("c" dired-do-compress-to "compress-to")
+    ("d" dired-flag-file-deletion "flag-file-deletion")
+    ("i" dired-maybe-insert-subdir "maybe-insert-subdir")
+    ("j" dired-goto-file "goto-file")
+    ("k" dired-do-kill-lines "kill-lines")
+    ("l" dired-do-redisplay "redisplay")
+    ("o" dired-find-file-other-window "find-file-other-window")
+    ("s" dired-sort-toggle-or-edit "sort-toggle-or-edit")
+    ("v" dired-view-file "view-file")
+    ("w" dired-copy-filename-as-kill "copy-filename-as-kill")
+    ("x" dired-do-flagged-delete "flagged-delete")
+    ("y" dired-show-file-type "show-file-type")
+    ("~" dired-flag-backup-files "flag-backup-files"))
+
+  (defhydra hydra-dired-mark (:color teal :columns 3)
+    "Mark"
+    ("!" dired-unmark-all-marks  "unmark all")
+    ("%" dired-mark-files-regexp "regexp")
+    ("(" dired-mark-sexp         "sexp")
+    ("*" dired-mark-executables  "executables")
+    ("." dired-mark-extension    "extension")
+    ("/" dired-mark-directories  "directories")
+    ("?" dired-unmark-all-files  "unmark specific")
+    ("@" dired-mark-symlinks     "symlinks")
+    ("O" dired-mark-omitted      "omitted")
+    ("c" dired-change-marks      "change")
+    ("s" dired-mark-subdir-files "subdir-files"))
+
+  (defhydra hydra-dired-regex (:color teal :columns 3)
+    "Regex"
+    ("&" dired-flag-garbage-files "flag-garbage-files")
+    ("C" dired-do-copy-regexp "copy")
+    ("H" dired-do-hardlink-regexp "hardlink")
+    ("S" dired-do-symlink-regexp "symlink")
+    ("Y" dired-do-relsymlink-regexp "relsymlink")
+    ("d" dired-flag-files-regexp "flag-files")
+    ("g" dired-mark-files-containing-regexp "mark-containing")
+    ("l" dired-downcase "downcase")
+    ("m" dired-mark-files-regexp "mark")
+    ("r" dired-do-rename-regexp "rename")
+    ("u" dired-upcase "upcase"))
+
+  (bind-keys :map dired-mode-map
+             ("SPC" . hydra-dired/body)
+             ("*" . hydra-dired-mark/body)
+             ("%" . hydra-dired-regex/body)))
+
+(defhydra hydra-smerge
   (:color red :hint nil
           :pre (smerge-mode 1))
     "
@@ -37,7 +118,7 @@ _q_uit      _RET_: current
     ("="   smerge-diff-mine-other)
     (">"   smerge-diff-base-other)
     ("q"   nil :color blue))
-(bind-key "C-x m" 'smerge-hydra/body)
+(bind-key "C-x m" 'hydra-smerge/body)
 
 (use-package magit
   :bind ("C-x g" . magit-status)
