@@ -212,42 +212,41 @@ buffer in other window."
 (defhydra toggle-hydra (:color blue :hint nil)
   "
 Toggle:
-_p_:rainbow-delimiters  _a_bbrev ∂A         _o_utline-minor-mode  co_m_pany ▤
-color-_i_dentifiers     auto-_f_ill ¶       _v_iew-mode           flychec_k_
-_b_eacon                _F_:visual-line ↵  ^ ^sub_w_ord/super_W_ord ^  ^_y_cmd ☯
-_h_i-lock               auto-_r_evert ↻     flyspel_l_ ⍹        ^  ^_d_:which-func
-white_s_pace/_t_railing ^  ^highlight-_c_hanges flyspel_L_-prog       li_n_um
+rainbow-_d_elimiters  ^^ _a_bbrev ∂A      _o_utline-minor-mode ^^ co_m_pany ▤
+color-_i_dentifiers   ^^ auto-_f_ill ¶    _v_iew-mode          ^^ flychec_k_
+_b_eacon              ^^ visual-lin_e_ ↵  sub_w_ord/super_W_ord   _y_cmd ☯
+_h_i-lock/_c_hanges      auto-_r_evert ↻  flyspel_l_/_p_rog ⍹     which-f_u_nc
+white_s_pace/_t_railing  li_n_um
 
 "
   ("a"    abbrev-mode)
-  ("i"    color-identifiers-mode)
-  ("m" company-mode)
-  ("k" flycheck-mode)
-  ("y" ycmd-mode)
+  ("b"    beacon-mode)
   ("c"    highlight-changes-mode)
-  ("d"    which-function-mode)
+  ("d"    rainbow-delimiters-mode)
+  ("e"    visual-line-mode)
   ("f"    auto-fill-mode)
-  ("F"    visual-line-mode)
   ("h"    hi-lock-mode)
+  ("i"    color-identifiers-mode)
+  ("k"    flycheck-mode)
+  ("l"    flyspell-mode)
+  ("p"    flyspell-prog-mode)
+  ("m"    company-mode)
   ("n"    linum-mode)
   ("o"    outline-minor-mode)
-  ("t"    toggle-show-trailing-whitespace)
-  ("v"    view-mode)
-  ("W"    superword-mode)
-  ("w"    subword-mode)
   ("r"    auto-revert-mode)
   ("s"    whitespace-mode)
   ("SPC"  hl-line-mode)
-  ("p"    rainbow-delimiters-mode)
-  ("l"    flyspell-mode)
-  ("L"    flyspell-prog-mode)
-  ("b"    beacon-mode)
+  ("t"    toggle-show-trailing-whitespace)
+  ("u"    which-function-mode)
+  ("v"    view-mode)
+  ("w"    subword-mode)
+  ("W"    superword-mode)
+  ("y"    ycmd-mode)
 )
 (bind-key "C-x t" 'toggle-hydra/body)
 (diminish 'abbrev-mode " ∂A")
 (diminish 'auto-fill-function " ¶")
 (diminish 'visual-line-mode " ↵")
-
 
 (use-package beacon :ensure :diminish beacon-mode
   :commands (beacon-mode)
