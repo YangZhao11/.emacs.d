@@ -140,11 +140,6 @@ instead of inactivate region."
     (activate-mark)))
 (bind-key "M-=" #'z-toggle-activate-mark)
 
-(use-package dired-x
-  :bind ("C-x C-j" . dired-jump)
-  :init
-  (setq dired-x-hands-off-my-keys nil))
-
 (use-package find-file
   :bind ("C-x C-r" . ff-find-other-file))
 
