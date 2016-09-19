@@ -32,10 +32,11 @@ _<_ _>_    _d_isplay
 
 (use-package grep
   :config
+  (require 'wgrep)
   (defhydra hydra-grep (:color pink :hint nil)
   "
-_k_ ↑^^  _p_rev^^  _<__>_  _RET_: goto      _e_dit
-_j_ ↓^^  _n_ext^^  _{__}_  _d_isplay
+_k_ ↑^^  _p_rev^^  _<__>_  beg/end of buffer _RET_: goto  _e_dit
+_j_ ↓^^  _n_ext^^  _{__}_: prev/next file    _d_isplay
 "
   ("SPC" nil)
   ("p" previous-error-no-select)
