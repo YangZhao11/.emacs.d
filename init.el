@@ -69,6 +69,12 @@
 (load "init-mode")
 (load "init-key")
 
+(setq-default mode-line-mule-info
+              `("" . ,(cddr (default-value 'mode-line-mule-info))))
+(setq-default mode-line-format
+      `("%e" (:eval z-god-mode-lighter) .
+        ,(cdr (default-value 'mode-line-format))))
+
 (use-package server :diminish (server-buffer-clients . " #")
   :config (add-hook 'after-init-hook 'server-start))
 
@@ -81,14 +87,6 @@
           ("snippets\\.googleplex\\.com" . markdown-mode)))
   (add-hook 'after-init-hook 'edit-server-start))
 
-;; god-mode indicator in mode line
-(setq-default mode-line-mule-info
-              `("" . ,(cddr (default-value 'mode-line-mule-info))))
-(setq-default mode-line-format
-      `("%e" (:eval z-god-mode-lighter) .
-        ,(cdr (default-value 'mode-line-format))))
-
-;; macro recording show red dot
 (setcdr (assq 'defining-kbd-macro minor-mode-alist)
         '((:propertize " ●" face (:foreground "#D04020")
                        help-echo "Recording keyboard macro")))
@@ -97,6 +95,13 @@
 (diminish 'next-error-follow-minor-mode " ⇅")
 (setq overlay-arrow-string "➡")
 
+;; line wrap symbol under terminal
+(set-display-table-slot standard-display-table 'truncation ?↔)
+(set-display-table-slot standard-display-table 'wrap ?↵)
+(set-display-table-slot standard-display-table 'selective-display [?…])
+(set-display-table-slot standard-display-table 'vertical-border ?│)
+
+
 ;; `Narrow' in mode line changed to §
 (setq mode-line-modes
       (mapcar (lambda (x)
@@ -108,12 +113,6 @@
                                     'mouse-2 #'mode-line-widen))
                   x))
               mode-line-modes))
-
-;; line wrap symbol under terminal
-(set-display-table-slot standard-display-table 'truncation ?↔)
-(set-display-table-slot standard-display-table 'wrap ?↵)
-(set-display-table-slot standard-display-table 'selective-display [?…])
-(set-display-table-slot standard-display-table 'vertical-border ?│)
 
 ;; --------------------------------------------------
 ;; customs
@@ -132,7 +131,7 @@
     ("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3")))
  '(package-selected-packages
    (quote
-    (swiper counsel ivy ivy-hydra hydra keyfreq color-identifiers-mode org-bullets js2-mode loccur scala-mode2 clang-format markdown-mode use-package magit flycheck-status-emoji flycheck go-eldoc company company-go smex beacon anchored-transpose avy go-mode easy-kill zenburn-theme yasnippet squery register-channel rainbow-delimiters lua-mode ido-vertical-mode ido-ubiquitous haskell-mode goto-chg god-mode f ess edit-server browse-kill-ring base16-theme ace-window)))
+    (ivy wgrep ivy-hydra flx counsel swiper hydra keyfreq color-identifiers-mode org-bullets js2-mode loccur scala-mode2 clang-format markdown-mode use-package magit flycheck-status-emoji flycheck go-eldoc company company-go smex beacon anchored-transpose avy csv-mode go-mode easy-kill zenburn-theme yasnippet squery register-channel rainbow-delimiters lua-mode ido-vertical-mode ido-ubiquitous haskell-mode goto-chg god-mode f ess edit-server browse-kill-ring ace-window)))
  '(vc-annotate-background "#2B2B2B")
  '(vc-annotate-color-map
    (quote

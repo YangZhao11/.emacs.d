@@ -1,6 +1,10 @@
 ; -*- coding: utf-8 -*-
 
 ;;; Code:
+(eval-when-compile
+  (require 'use-package)
+  (require 'hydra))
+
 (use-package browse-kill-ring :ensure
   :bind ("C-M-y" . browse-kill-ring))
 
@@ -109,31 +113,11 @@ useful when followed by an immediate kill."
   (isearch-exit)
   (goto-char isearch-other-end))
 (bind-keys :map isearch-mode-map
-              ("M-RET" . isearch-exit-other-end))
+           ("M-RET" . isearch-exit-other-end)
+           ("M-k" . isearch-yank-word-or-char))
 (bind-keys ("M-s M-o" . multi-occur-in-matching-buffers)
            ("M-s g"   . grep)
            ("M-s M-g" . rgrep))
-
-(use-package loccur :diminish loccur-mode
-  :bind (("M-s M-s" . loccur-current-symbol)
-         ("M-s s"   . loccur)
-         ("M-s M-d" . loccur-previous-match))
-  :functions loccur-current
-  :config
-  (defun loccur-current-symbol ()
-    (interactive)
-    (let ((bounds (find-tag-default-bounds)))
-      (cond
-       (bounds (loccur
-                (isearch-symbol-regexp
-                 (buffer-substring-no-properties (car bounds) (cdr bounds)))))
-       (t (call-interactively #'loccur-current)))))
-
-  (defun loccur-occur ()
-    (interactive)
-    (occur loccur-current-search)
-    (loccur nil))
-  (bind-key "M-s o" 'loccur-occur loccur-mode-map))
 
 ;; Decouple exchange-point-and-mark and activating region.
 (defun z-exchange-point-and-mark (&optional arg)
@@ -155,14 +139,6 @@ instead of inactivate region."
       (deactivate-mark)
     (activate-mark)))
 (bind-key "M-=" #'z-toggle-activate-mark)
-
-(use-package imenu
-  :bind ("M-s i" . imenu))
-
-(use-package dired-x
-  :bind ("C-x C-j" . dired-jump)
-  :init
-  (setq dired-x-hands-off-my-keys nil))
 
 (use-package find-file
   :bind ("C-x C-r" . ff-find-other-file))
@@ -227,27 +203,48 @@ buffer in other window."
    (message "show-trailing-whitespace set to %s" show-trailing-whitespace))
 
 ;; Toggle commands
-(bind-keys ("C-x t a"   . abbrev-mode)
-           ("C-x t c"   . highlight-changes-mode)
-           ("C-x t d"   . which-function-mode)
-           ("C-x t f"   . auto-fill-mode)
-           ("C-x t F"   . visual-line-mode)
-           ("C-x t h"   . hi-lock-mode)
-           ("C-x t n"   . linum-mode)
-           ("C-x t o"   . outline-minor-mode)
-           ("C-x t t"   . toggle-show-trailing-whitespace)
-           ("C-x t v"   . view-mode)
-           ("C-x t W"   . superword-mode)
-           ("C-x t w"   . subword-mode)
-           ("C-x t SPC" . hl-line-mode))
 
+(defhydra toggle-hydra (:color blue :hint nil)
+  "
+Toggle:
+rainbow-_d_elimiters  ^^ _a_bbrev ∂A      _o_utline-minor-mode ^^ co_m_pany ▤
+color-_i_dentifiers   ^^ auto-_f_ill ¶    _v_iew-mode          ^^ flychec_k_
+_b_eacon              ^^ visual-lin_e_ ↵  sub_w_ord/super_W_ord   _y_cmd ☯
+_h_i-lock/_c_hanges      auto-_r_evert ↻  flyspel_l_/_p_rog ⍹     which-f_u_nc
+white_s_pace/_t_railing  li_n_um
+
+"
+  ("a"    abbrev-mode)
+  ("b"    beacon-mode)
+  ("c"    highlight-changes-mode)
+  ("d"    rainbow-delimiters-mode)
+  ("e"    visual-line-mode)
+  ("f"    auto-fill-mode)
+  ("h"    hi-lock-mode)
+  ("i"    color-identifiers-mode)
+  ("k"    flycheck-mode)
+  ("l"    flyspell-mode)
+  ("p"    flyspell-prog-mode)
+  ("m"    company-mode)
+  ("n"    linum-mode)
+  ("o"    outline-minor-mode)
+  ("r"    auto-revert-mode)
+  ("s"    whitespace-mode)
+  ("SPC"  hl-line-mode)
+  ("t"    toggle-show-trailing-whitespace)
+  ("u"    which-function-mode)
+  ("v"    view-mode)
+  ("w"    subword-mode)
+  ("W"    superword-mode)
+  ("y"    ycmd-mode)
+)
+(bind-key "C-x t" 'toggle-hydra/body)
 (diminish 'abbrev-mode " ∂A")
 (diminish 'auto-fill-function " ¶")
 (diminish 'visual-line-mode " ↵")
 
-
 (use-package beacon :ensure :diminish beacon-mode
-  :bind ("C-x t b" . beacon-mode)
+  :commands (beacon-mode)
   :config
   (add-hook 'beacon-dont-blink-predicates
             (lambda () (not (display-graphic-p))))
@@ -258,19 +255,18 @@ buffer in other window."
 (beacon-mode 1)
 
 (use-package flyspell :diminish " ⍹"
-  :bind (("C-x t l" . flyspell-mode)
-         ("C-x t ;" . flyspell-prog-mode)))
+  :commands (flyspell-mode flyspell-prog-mode))
 
 (use-package rainbow-delimiters :ensure
-  :bind ("C-x t p" . rainbow-delimiters-mode)
+  :commands (rainbow-delimiters-mode)
   :init  (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
 
 (use-package autorevert
   :diminish (auto-revert-mode . " ↻")
-  :bind ("C-x t r" . auto-revert-mode))
+  :commands (auto-revert-mode))
 
 (use-package whitespace :diminish " ␣"
-  :bind ("C-x t s" . whitespace-mode))
+  :commands (whitespace-mode))
 
 (use-package hideshow :diminish (hs-minor-mode . " ◌")
   :bind ("M-$" . hs-dwim)
@@ -315,7 +311,7 @@ current frame configuration to register 8."
          ("M-I" . goto-last-change-reverse)))
 
 (use-package avy :ensure
-  :bind* ("C-j" . z-goto-char)
+  :bind ("C-j" . z-goto-char)
   :bind (:map ctl-j-map
               ("SPC" . avy-goto-line))
   :bind (("M-," . avy-backward-char-in-line)
@@ -371,8 +367,68 @@ in ctl-j-map first."
 (use-package zap-to-char-dwim
   :bind ("M-z" . zap-to-char-dwim))
 
-(use-package smex :ensure
-  :bind ("M-x" . smex))
+(use-package subr-x
+  :commands (string-trim-right
+             string-trim-left))
+
+(use-package ivy :diminish ""
+  :bind (("M-o" . ivy-switch-buffer)
+         ("M-O" . ivy-switch-buffer-other-window)
+         ("M-s M-d" . ivy-resume))
+  :config
+  (ivy-mode 1)
+  (setq ivy-count-format "")
+  (setq ivy-ignore-buffers
+        '("\\` " "^\\*ESS\\*" "^\\*Messages\\*" "^\\*Help\\*" "^\\*Buffer"
+          "^\\*LV\\*"
+           "^\\*.*Completions\\*$" "^\\*Ediff" "^\\*tramp" "^\\*cvs-"
+           "\\[r\\]\\(<[0-9]+>\\)?$" "\\[fundamental\\]\\(<[0-9]+>\\)?$"
+           "_region_" " output\\*$" "^TAGS$" "^\*Ido"))
+  (bind-keys :map ivy-minibuffer-map
+             ("M-s o" . ivy-occur)
+             ("C-j" . ivy-avy)
+             ("C-'" . ivy-alt-done)
+             ("M-k" . ivy-yank-word)
+             ("M-m" . ivy-restrict-to-matches)
+             ("ESC ESC" . hydra-ivy/body)))
+
+(use-package counsel
+  :bind (([remap find-file] . counsel-find-file)
+         ("M-x" . counsel-M-x)
+         ("M-s M-s" . counsel-grep-or-swiper)
+         ("M-s i" . counsel-imenu))
+  :bind (:map help-map
+              ("v" . counsel-describe-variable)
+              ("f" . counsel-describe-function))
+  :config
+  (setq counsel-find-file-ignore-regexp
+        "\\(?:\\`[#.]\\)\\|\\(?:[#~]\\'\\)\\|\\(\\`\\.\\)"))
+
+(use-package swiper
+  :bind (("M-s s" . swiper-all))
+  :bind  (:map isearch-mode-map
+               ("M-s M-s" . isearch-swiper))
+  :config
+  (bind-keys :map swiper-map
+             ("M-%" . swiper-query-replace)
+             ("C-j" . swiper-avy))
+  (defun isearch-swiper (regexp)
+    "Like isearch-occur, call swiper with current regexp."
+    (interactive
+     (list (cond
+            (isearch-regexp isearch-string)
+            (t (regexp-quote isearch-string)))))
+    (let ((case-fold-search isearch-case-fold-search)
+          ;; Set `search-upper-case' to nil to not call
+          ;; `isearch-no-upper-case-p' in `occur-1'.
+          (search-upper-case nil)
+          (search-spaces-regexp
+           (if (if isearch-regexp
+                   isearch-regexp-lax-whitespace
+                 isearch-lax-whitespace)
+               search-whitespace-regexp)))
+      (isearch-exit)
+      (swiper regexp))))
 
 (use-package xref
   :if (not (featurep 'google))

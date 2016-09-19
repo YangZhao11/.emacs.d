@@ -10,7 +10,143 @@
 (add-hook 'text-mode-hook #'visual-line-mode)
 (add-hook 'text-mode-hook #'flyspell-mode)
 
-(defhydra smerge-hydra
+(defhydra hydra-occur (:color pink :hint nil)
+  "
+_p_rev^^   _RET_: goto      _e_dit
+_n_ext^^   _o_ther window   %s(if next-error-follow-minor-mode \"⇅\" \"☐\") _f_ollow
+_<_ _>_    _d_isplay
+"
+  ("SPC" nil)
+  ("p" occur-prev)
+  ("n" occur-next)
+  ("<" beginning-of-buffer)
+  (">" end-of-buffer)
+  ("d" occur-mode-display-occurrence)
+  ("e" occur-edit-mode :exit t)
+  ("q" quit-window :exit t)
+  ("f" next-error-follow-minor-mode)
+  ("o" occur-mode-goto-occurrence-other-window :exit t)
+  ("RET" occur-mode-goto-occurrence :exit t))
+(bind-keys :map occur-mode-map
+           ("SPC" . hydra-occur/body))
+
+(use-package grep
+  :config
+  (defhydra hydra-grep (:color pink :hint nil)
+  "
+_k_ ↑^^  _p_rev^^  _<__>_  _RET_: goto      _e_dit
+_j_ ↓^^  _n_ext^^  _{__}_  _d_isplay
+"
+  ("SPC" nil)
+  ("p" previous-error-no-select)
+  ("n" next-error-no-select)
+  ("j" compilation-next-error)
+  ("k" compilation-previous-error)
+  ("<" beginning-of-buffer)
+  (">" end-of-buffer)
+  ("{" compilation-previous-file)
+  ("}" compilation-next-file)
+  ("d" compilation-display-error)
+  ("e" wgrep-change-to-wgrep-mode :exit t)
+  ("q" quit-window :exit t)
+  ("f" next-error-follow-minor-mode)
+  ("RET" compile-goto-error :exit t))
+  (bind-keys :map grep-mode-map
+             ("SPC" . hydra-grep/body)))
+
+(use-package dired
+  :config
+  (defhydra hydra-dired (:color pink :columns 3 :hint nil)
+    "
+^Mark^       ^Flag^        ^Emacs Op^      ^ ^              ^^File Op^^ (_e_dit)
+^----^-------^----^--------^--------^------^-^--------------^^-------^^--^-^------
+_*_: hydra   _#_: temp     _Q_uery replace _B_yte compile   _!_shell_&_ _S_ymlink
+_%_: regexp  _~_: backup   _A_: grep       _L_oad           ^^_C_opy    _H_ardlink
+_m_ark       _d_: this     _B_yte compile  _k_ill line      ^^_D_elete  ch_M_od
+_u_nmark     _x_: delete   _v_iew          _w_: file name   ^^_R_ename  ch_O_wn
+_U_nmark all ^^            _o_ther window  redisp_l_ay      ^^_T_ouch   ch_G_rp
+"
+    ("SPC" nil)
+    ("q" quit-window :exit t)
+    ("e" dired-toggle-read-only)
+    ("!" dired-do-shell-command)
+    ("m" dired-mark)
+    ("u" dired-unmark)
+    ("#" dired-flag-auto-save-files)
+    ("$" dired-hide-subdir "hide subdir")
+    ("%" hydra-dired-regexp/body :exit t)
+    ("&" dired-do-async-shell-command)
+    ("(" dired-hide-details-mode "hide details")
+    ("*" hydra-dired-mark/body :exit t)
+    ("=" dired-diff "diff")
+    ("A" dired-do-find-regexp)
+    ("B" dired-do-byte-compile)
+    ("C" dired-do-copy)
+    ("D" dired-do-delete)
+    ("G" dired-do-chgrp)
+    ("H" dired-do-hardlink)
+    ("L" dired-do-load)
+    ("M" dired-do-chmod)
+    ("O" dired-do-chown)
+    ("P" dired-do-print "print")
+    ("Q" dired-do-find-regexp-and-replace)
+    ("R" dired-do-rename)
+    ("S" dired-do-symlink)
+    ("T" dired-do-touch)
+    ("U" dired-unmark-all-marks)
+    ("Z" dired-do-compress "compress")
+    ("^" dired-up-directory "up-directory")
+    ("a" dired-find-alternate-file "find-alternate-file")
+    ("c" dired-do-compress-to "compress-to")
+    ("d" dired-flag-file-deletion)
+    ("i" dired-maybe-insert-subdir "maybe-insert-subdir")
+    ("j" dired-goto-file "goto-file")
+    ("k" dired-do-kill-lines)
+    ("l" dired-do-redisplay)
+    ("o" dired-find-file-other-window)
+    ("s" dired-sort-toggle-or-edit "sort-toggle-or-edit")
+    ("v" dired-view-file)
+    ("w" dired-copy-filename-as-kill)
+    ("x" dired-do-flagged-delete)
+    ("y" dired-show-file-type "show-file-type")
+    ("~" dired-flag-backup-files))
+
+  (defhydra hydra-dired-mark (:color teal :columns 3 :hint nil
+                              :after-exit
+                                (if (eq major-mode 'dired-mode)
+                                    (hydra-dired/body)))
+    "Mark"
+    ("SPC" nil)
+    ("!" dired-unmark-all-marks  "unmark all")
+    ("%" dired-mark-files-regexp "regexp")
+    ("*" dired-mark-executables  "executables")
+    ("/" dired-mark-directories  "directories")
+    ("?" dired-unmark-all-files  "unmark markchar")
+    ("@" dired-mark-symlinks     "symlinks")
+    ("c" dired-change-marks      "change")
+    ("s" dired-mark-subdir-files "subdir-files"))
+
+  (defhydra hydra-dired-regexp (:color teal :columns 3 :hint nil
+                                :after-exit
+                                (if (eq major-mode 'dired-mode)
+                                    (hydra-dired/body)))
+    "Regexp"
+    ("SPC" nil)
+    ("&" dired-flag-garbage-files "flag-garbage-files")
+    ("C" dired-do-copy-regexp "copy")
+    ("H" dired-do-hardlink-regexp "hardlink")
+    ("S" dired-do-symlink-regexp "symlink")
+    ("d" dired-flag-files-regexp "flag-files")
+    ("g" dired-mark-files-containing-regexp "mark-containing")
+    ("l" dired-downcase "downcase")
+    ("m" dired-mark-files-regexp "mark")
+    ("r" dired-do-rename-regexp "rename")
+    ("u" dired-upcase "upcase"))
+
+  (bind-keys :map dired-mode-map
+             ("SPC" . hydra-dired/body)))
+
+(defhydra hydra-smerge
   (:color red :hint nil
           :pre (smerge-mode 1))
     "
@@ -37,13 +173,14 @@ _q_uit      _RET_: current
     ("="   smerge-diff-mine-other)
     (">"   smerge-diff-base-other)
     ("q"   nil :color blue))
-(bind-key "C-x m" 'smerge-hydra/body)
+(bind-key "C-x m" 'hydra-smerge/body)
 
 (use-package magit
   :bind ("C-x g" . magit-status)
   :config
   (setq with-editor-mode-lighter "")
-  (setq magit-last-seen-setup-instructions "1.4.0"))
+  (setq magit-last-seen-setup-instructions "1.4.0")
+  (setq magit-completing-read-function 'ivy-completing-read))
 
 (use-package eldoc :diminish eldoc-mode
   :commands eldoc-mode)
@@ -64,10 +201,10 @@ _q_uit      _RET_: current
 
 (use-package color-identifiers-mode
   :diminish 'color-identifiers-mode
-  :bind ("C-x t i" . color-identifiers-mode)
+  :commands (color-identifiers-mode)
   :config
-  (setq color-identifiers:min-color-saturation 0.3
-        color-identifiers:max-color-saturation 0.5))
+  (setq color-identifiers:min-color-saturation 0.1
+        color-identifiers:max-color-saturation 0.3))
 
 ;; --------------------------------------------------
 (use-package yasnippet :demand ;; :ensure
@@ -76,8 +213,10 @@ _q_uit      _RET_: current
   :init
   (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
   :config
+  (defun yas-ivy-prompt (prompt choices &optional display-fn)
+    (yas-completing-prompt prompt choices display-fn #'ivy-completing-read))
   (setq yas-prompt-functions
-        '(yas-ido-prompt yas-completing-prompt yas-no-prompt)
+        '(yas-ivy-prompt yas-completing-prompt yas-no-prompt)
         yas-wrap-around-region t)
   (yas-global-mode))
 
@@ -90,20 +229,20 @@ _q_uit      _RET_: current
 
 (use-package company :defer 't
   :diminish " ▤"
-  :bind (("C-x t m" . company-mode)
-         ("M-m" . company-complete))
+  :commands (company-mode)
+  :bind (("M-m" . company-complete))
   :config
   (setq company-idle-delay nil))
 
 (use-package flycheck
-  :bind ("C-x t k" . flycheck-mode)
+  :commands (flycheck-mode)
   :config
   (add-hook 'flycheck-mode-hook 'flycheck-status-emoji-mode))
 
 (use-package ycmd :diminish " ☯" :no-require t
   :defines ycmd-server-command ycmd-global-config
   ycmd-extra-conf-whitelist ycmd-idle-change-delay
-  :bind ("C-x t y" . ycmd-mode)
+  :commands (ycmd-mode)
   :config
   (defconst google-ycmd--extra-conf "/usr/lib/youcompleteme/ycm_extra_conf.py")
   (setq ycmd-server-command
@@ -146,7 +285,7 @@ _q_uit      _RET_: current
         org-link-abbrev-alist
         '(("doc" . "https://drive.google.com/drive/search?q=")
           ("ai" . "https://groups.google.com/a/google.com/forum/#!searchin/zhyang-ai/")))
-  (define-key org-mode-map (kbd "M-m") nil)
+  (bind-keys :map org-mode-map ("M-m") ("C-j"))
   (defun z-org-mode-hook ()
     (bug-reference-mode 1)
     (org-bullets-mode 1)
@@ -204,8 +343,8 @@ _q_uit      _RET_: current
          'imenu-generic-expression
          '(nil "^\\s-*(\\(use-package\\)\\s-+\\(\\(\\sw\\|\\s_\\)+\\)" 2)))))
   (add-hook 'emacs-lisp-mode-hook 'z-setup-imenu-for-use-package)
-  (add-hook 'emacs-lisp-mode-hook 'color-identifiers-mode))
-
+  (add-hook 'emacs-lisp-mode-hook 'color-identifiers-mode)
+  (bind-keys :map lisp-interaction-mode-map ("C-j")))
 
 (use-package cc-mode
   :config
@@ -231,7 +370,7 @@ _q_uit      _RET_: current
   (setq-local company-backends '(company-ycmd))
   ;; (ycmd-mode 1)
   ;; (company-mode 1)
-  ;; (go-eldoc-setup)
+  ;;(go-eldoc-setup)
   )
 (add-hook 'go-mode-hook 'z-go-mode-hook)
 
