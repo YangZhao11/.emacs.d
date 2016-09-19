@@ -342,7 +342,10 @@ _q_uit      _RET_: current
                                    buffer-file-name)))
         (add-to-list
          'imenu-generic-expression
-         '(nil "^\\s-*(\\(use-package\\)\\s-+\\(\\(\\sw\\|\\s_\\)+\\)" 2)))))
+         '(nil "^\\s-*(\\(use-package\\)\\s-+\\(\\(\\sw\\|\\s_\\)+\\)" 2))
+        (add-to-list
+         'imenu-generic-expression
+         '(nil "^\\s-*(\\(defhydra\\)\\s-+\\(\\(\\sw\\|\\s_\\)+\\)" 2)))))
   (add-hook 'emacs-lisp-mode-hook 'z-setup-imenu-for-use-package)
   (add-hook 'emacs-lisp-mode-hook 'color-identifiers-mode)
   (bind-keys :map lisp-interaction-mode-map ("C-j")))
