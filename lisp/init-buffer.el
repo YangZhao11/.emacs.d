@@ -1,4 +1,9 @@
 ; -*- coding: utf-8 -*-
+
+(eval-when-compile
+  (require 'use-package)
+  (require 'hydra))
+
 ;; ==================================================
 ;; ibuffer
 (use-package ibuffer
@@ -83,29 +88,13 @@ e.g. no prodaccess.")
                 " "
                 (mode 16 16 :left :elide))))
 
-  (defhydra hydra-ibuffer-mark (:color teal :columns 5)
-    "Mark"
-    ("*" ibuffer-unmark-all "unmark all")
-    ("M" ibuffer-mark-by-mode "mode")
-    ("m" ibuffer-mark-modified-buffers "modified")
-    ("u" ibuffer-mark-unsaved-buffers "unsaved")
-    ("s" ibuffer-mark-special-buffers "special")
-    ("r" ibuffer-mark-read-only-buffers "read-only")
-    ("/" ibuffer-mark-dired-buffers "dired")
-    ("e" ibuffer-mark-dissociated-buffers "dissociated")
-    ("h" ibuffer-mark-help-buffers "help")
-    ("z" ibuffer-mark-compressed-file-buffers "compressed")
-    ("%" hydra-ibuffer-regex/body "regex"))
-
-  (defhydra hydra-ibuffer-regex (:color teal)
-    "Regex"
-    ("*" hydra-ibuffer-mark/body "mark")
-    ("f" ibuffer-mark-by-file-name-regexp "filename")
-    ("m" ibuffer-mark-by-mode-regexp "mode")
-    ("n" ibuffer-mark-by-name-regexp "name"))
-
-  (defhydra hydra-ibuffer-action (:color teal :columns 3)
-    "Action [available directly]"
+  (defhydra hydra-ibuffer (:color pink :columns 3 :hint nil)
+    "Action"
+    ("SPC" nil)
+    ("*" hydra-ibuffer-mark/body :exit t)
+    ("%" hydra-ibuffer-regex/body :exit t)
+    ("/" hydra-ibuffer-filter/body :exit t)
+    ("s" hydra-ibuffer-sort/body "sort" :exit t)
     ("A" ibuffer-do-view "view")
     ("D" ibuffer-do-delete "delete")
     ("E" ibuffer-do-eval "eval")
@@ -126,8 +115,41 @@ e.g. no prodaccess.")
     ("W" ibuffer-do-view-and-eval "view-and-eval")
     ("X" ibuffer-do-shell-command-pipe "shell-command-pipe"))
 
-  (defhydra hydra-ibuffer-sort (:color teal :columns 3)
+  (defhydra hydra-ibuffer-mark (:color teal :columns 5 :hint nil
+                                :after-exit
+                                (if (eq major-mode 'ibuffer-mode)
+                                    (hydra-ibuffer/body)))
+    "Mark"
+    ("SPC" nil)
+    ("*" ibuffer-unmark-all "unmark all")
+    ("M" ibuffer-mark-by-mode "mode")
+    ("m" ibuffer-mark-modified-buffers "modified")
+    ("u" ibuffer-mark-unsaved-buffers "unsaved")
+    ("s" ibuffer-mark-special-buffers "special")
+    ("r" ibuffer-mark-read-only-buffers "read-only")
+    ("/" ibuffer-mark-dired-buffers "dired")
+    ("e" ibuffer-mark-dissociated-buffers "dissociated")
+    ("h" ibuffer-mark-help-buffers "help")
+    ("z" ibuffer-mark-compressed-file-buffers "compressed")
+    ("%" hydra-ibuffer-regex/body "regex"))
+
+  (defhydra hydra-ibuffer-regex (:color teal :hint nil
+                                 :after-exit
+                                (if (eq major-mode 'ibuffer-mode)
+                                    (hydra-ibuffer/body)))
+    "Regex"
+    ("SPC" nil)
+    ("*" hydra-ibuffer-mark/body "mark")
+    ("f" ibuffer-mark-by-file-name-regexp "filename")
+    ("m" ibuffer-mark-by-mode-regexp "mode")
+    ("n" ibuffer-mark-by-name-regexp "name"))
+
+  (defhydra hydra-ibuffer-sort (:color teal :columns 3 :hint nil
+                                :after-exit
+                                (if (eq major-mode 'ibuffer-mode)
+                                    (hydra-ibuffer/body)))
     "Sort"
+    ("SPC" nil)
     ("i" ibuffer-invert-sorting "invert")
     ("a" ibuffer-do-sort-by-alphabetic "alphabetic")
     ("v" ibuffer-do-sort-by-recency "recently used")
@@ -135,8 +157,12 @@ e.g. no prodaccess.")
     ("f" ibuffer-do-sort-by-filename/process "filename")
     ("m" ibuffer-do-sort-by-major-mode "mode"))
 
-  (defhydra hydra-ibuffer-filter (:color blue :columns 4)
+  (defhydra hydra-ibuffer-filter (:color teal :columns 4 :hint nil
+                                  :after-exit
+                                  (if (eq major-mode 'ibuffer-mode)
+                                      (hydra-ibuffer/body)))
     "Filter"
+    ("SPC" nil)
     ("m" ibuffer-filter-by-used-mode "mode")
     ("M" ibuffer-filter-by-derived-mode "derived mode")
     ("n" ibuffer-filter-by-name "name")
@@ -147,11 +173,7 @@ e.g. no prodaccess.")
     ("<" ibuffer-filter-by-size-lt "size")
     ("/" ibuffer-filter-disable "disable"))
   (bind-keys :map ibuffer-mode-map
-             ("SPC" . hydra-ibuffer-action/body)
-             ("*" . hydra-ibuffer-mark/body)
-             ("%" . hydra-ibuffer-regex/body)
-             ("s" . hydra-ibuffer-sort/body)
-             ("/" . hydra-ibuffer-filter/body))
+             ("SPC" . hydra-ibuffer/body))
 
   (defun z-ibuffer-mode-hook ()
     (ibuffer-switch-to-saved-filter-groups "Default"))

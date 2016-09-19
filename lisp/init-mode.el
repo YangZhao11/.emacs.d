@@ -10,6 +10,50 @@
 (add-hook 'text-mode-hook #'visual-line-mode)
 (add-hook 'text-mode-hook #'flyspell-mode)
 
+(defhydra hydra-occur (:color pink :hint nil)
+  "
+_p_rev^^   _RET_: goto      _e_dit
+_n_ext^^   _o_ther window   %s(if next-error-follow-minor-mode \"⇅\" \"☐\") _f_ollow
+_<_ _>_    _d_isplay
+"
+  ("SPC" nil)
+  ("p" occur-prev)
+  ("n" occur-next)
+  ("<" beginning-of-buffer)
+  (">" end-of-buffer)
+  ("d" occur-mode-display-occurrence)
+  ("e" occur-edit-mode :exit t)
+  ("q" quit-window :exit t)
+  ("f" next-error-follow-minor-mode)
+  ("o" occur-mode-goto-occurrence-other-window :exit t)
+  ("RET" occur-mode-goto-occurrence :exit t))
+(bind-keys :map occur-mode-map
+           ("SPC" . hydra-occur/body))
+
+(use-package grep
+  :config
+  (defhydra hydra-grep (:color pink :hint nil)
+  "
+_k_ ↑^^  _p_rev^^  _<__>_  _RET_: goto      _e_dit
+_j_ ↓^^  _n_ext^^  _{__}_  _d_isplay
+"
+  ("SPC" nil)
+  ("p" previous-error-no-select)
+  ("n" next-error-no-select)
+  ("j" compilation-next-error)
+  ("k" compilation-previous-error)
+  ("<" beginning-of-buffer)
+  (">" end-of-buffer)
+  ("{" compilation-previous-file)
+  ("}" compilation-next-file)
+  ("d" compilation-display-error)
+  ("e" wgrep-change-to-wgrep-mode :exit t)
+  ("q" quit-window :exit t)
+  ("f" next-error-follow-minor-mode)
+  ("RET" compile-goto-error :exit t))
+  (bind-keys :map grep-mode-map
+             ("SPC" . hydra-grep/body)))
+
 (use-package dired
   :config
   (defhydra hydra-dired (:color pink :columns 3 :hint nil)
@@ -23,6 +67,7 @@ _u_nmark     _x_: delete   _v_iew          _w_: file name   ^^_R_ename  ch_O_wn
 _U_nmark all ^^            _o_ther window  redisp_l_ay      ^^_T_ouch   ch_G_rp
 "
     ("SPC" nil)
+    ("q" quit-window :exit t)
     ("e" dired-toggle-read-only)
     ("!" dired-do-shell-command)
     ("m" dired-mark)
@@ -300,7 +345,6 @@ _q_uit      _RET_: current
   (add-hook 'emacs-lisp-mode-hook 'z-setup-imenu-for-use-package)
   (add-hook 'emacs-lisp-mode-hook 'color-identifiers-mode)
   (bind-keys :map lisp-interaction-mode-map ("C-j")))
-
 
 (use-package cc-mode
   :config

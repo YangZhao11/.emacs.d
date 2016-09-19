@@ -393,7 +393,7 @@ in ctl-j-map first."
              ("ESC ESC" . hydra-ivy/body)))
 
 (use-package counsel
-  :bind (("C-x C-f" . counsel-find-file)
+  :bind (([remap find-file] . counsel-find-file)
          ("M-x" . counsel-M-x)
          ("M-s M-s" . counsel-grep-or-swiper)
          ("M-s i" . counsel-imenu))
