@@ -10,3 +10,4 @@ eshell/
 **/*.elc
 /bookmarks
 url/
+/lisp/init-gnu-linux.el
