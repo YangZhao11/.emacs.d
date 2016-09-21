@@ -243,7 +243,7 @@ Toggle:
   ("SPC"  nil)
 )
 (bind-key "C-x t" 'hydra-toggle/body)
-(diminish 'abbrev-mode " ∂A")
+(diminish 'abbrev-mode " ∂")
 (diminish 'auto-fill-function " ¶")
 (diminish 'visual-line-mode " ↵")
 

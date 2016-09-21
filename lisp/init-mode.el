@@ -68,6 +68,7 @@ _u_nmark     _x_: delete   _v_iew          _w_: file name   ^^_R_ename  ch_O_wn
 _U_nmark all ^^            _o_ther window  redisp_l_ay      ^^_T_ouch   ch_G_rp
 "
     ("SPC" nil)
+    ("RET" dired-find-file :exit t)
     ("q" quit-window :exit t)
     ("e" dired-toggle-read-only)
     ("!" dired-do-shell-command)
@@ -504,3 +505,5 @@ _q_uit      _RET_: current
   :config
   (defun z-gdb-mode-hook () (setq gdb-many-windows t))
   (add-hook 'gdb-mode-hook 'z-gdb-mode-hook))
+
+;; TODO(zhyang): use emmet-mode for html and css
