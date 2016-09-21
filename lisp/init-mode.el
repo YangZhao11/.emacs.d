@@ -215,10 +215,8 @@ _q_uit      _RET_: current
   :init
   (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
   :config
-  (defun yas-ivy-prompt (prompt choices &optional display-fn)
-    (yas-completing-prompt prompt choices display-fn #'ivy-completing-read))
-  (setq yas-prompt-functions
-        '(yas-ivy-prompt yas-completing-prompt yas-no-prompt)
+(setq yas-prompt-functions
+        '(yas-completing-prompt yas-no-prompt)
         yas-wrap-around-region t)
   (yas-global-mode))
 
@@ -343,12 +341,16 @@ _q_uit      _RET_: current
                                    buffer-file-name)))
         (add-to-list
          'imenu-generic-expression
-         '(nil "^\\s-*(\\(use-package\\)\\s-+\\(\\(\\sw\\|\\s_\\)+\\)" 2))
+         '("Packages" "^\\s-*(\\(use-package\\)\\s-+\\(\\(\\sw\\|\\s_\\)+\\)" 2))
         (add-to-list
          'imenu-generic-expression
          '(nil "^\\s-*(\\(defhydra\\)\\s-+\\(\\(\\sw\\|\\s_\\)+\\)" 2)))))
-  (add-hook 'emacs-lisp-mode-hook 'z-setup-imenu-for-use-package)
-  (add-hook 'emacs-lisp-mode-hook 'color-identifiers-mode)
+
+  (defun z-elisp-mode-hook ()
+    (z-setup-imenu-for-use-package)
+    (color-identifiers-mode)
+    (company-mode))
+  (add-hook 'emacs-lisp-mode-hook 'z-elisp-mode-hook)
   (bind-keys :map lisp-interaction-mode-map ("C-j")))
 
 (use-package cc-mode
@@ -397,7 +399,7 @@ _q_uit      _RET_: current
 
 (use-package ess-site
   :commands (R R-mode julia)
-  :mode ((".R$" . r-mode) (".Rmd$" . r-mode) (".jl$" . julia-mode))
+  :mode (("\\.Rmd\\'" . R-mode))
   :defines ess-company-backends ess-current-process-name
   :functions ess-smart-S-assign ess-debug-command-next
     ess-eval-line-and-step ess-eval-linewise ess-toggle-S-assign
@@ -447,9 +449,14 @@ _q_uit      _RET_: current
     (prettify-symbols-mode))
 
   (defun z-ess-mode-hook ()
-    (when (string-match "\\.Rmd$" buffer-file-name)
+    (when (string-match "\\.Rmd\\'" buffer-file-name)
       (setq-local page-delimiter "^```\\({.*}\\)?$"))
     (rainbow-delimiters-mode 1)
+    (z-ess-mode-symbols)
+    (setq-local company-backends ess-company-backends)
+    (company-mode))
+
+  (defun z-inferior-ess-mode-hook ()
     (z-ess-mode-symbols)
     (setq-local company-backends ess-company-backends)
     (company-mode))
@@ -461,6 +468,12 @@ _q_uit      _RET_: current
   (ess-toggle-S-assign nil)
   (ess-toggle-S-assign nil)
   (ess-toggle-underscore nil)
+
+  ;; imenu recognize Rmd sections and functions. The default did not
+  ;; make much sense.
+  (setq ess-imenu-S-generic-expression
+        '(("Section" "^\\s-*```{r \\(\\sw[a-zA-Z0-9_.]+\\)" 1)
+          ("Functions" "^\\(.+\\)[      \n]*<-[         \n]*function[ ]*(" 1)))
 
   ;; In ESS-R, `$' is by default part of the symbol (_), which makes dabbrev
   ;; ignore variable names after $ for expansion. Fix by making it
@@ -493,10 +506,10 @@ _q_uit      _RET_: current
 
   (add-hook 'ess-mode-hook 'z-ess-mode-hook)
   (add-hook 'ess-help-mode-hook 'z-ess-mode-symbols)
-  (add-hook 'inferior-ess-mode-hook 'z-ess-mode-symbols))
+  (add-hook 'inferior-ess-mode-hook 'z-inferior-ess-mode-hook))
 
 (use-package markdown-mode
-  :mode (".md$" . markdown-mode)
+  :mode ("\\.md\\'" . markdown-mode)
   :config
   (bind-keys :map markdown-mode-map
              ("C-c C-m" . r-mode)))

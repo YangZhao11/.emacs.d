@@ -497,7 +497,7 @@ in ctl-j-map first."
   (dolist (i '("!" "@" "$" "%" "^" "&" "*" "{" "}"
                "<" ">" ";" ":" "|" "\\" "+" "=" "?"))
     (define-key god-local-mode-map (kbd i)
-      (kbd (concat "M-" i))))
+      (key-binding (kbd (concat "M-" i)))))
 
   ;; Bind some second level modifier keys with C- prefix for easier
   ;; god-mode access. Directly bind these to commands, instead of making
@@ -509,7 +509,7 @@ in ctl-j-map first."
           (chars (cdr bindings)))
       (dolist (i chars)
         (global-set-key (kbd (concat prefix " C-" i))
-                        (kbd (concat prefix " " i))))))
+                        (key-binding (kbd (concat prefix " " i)))))))
 
   (defun z-god-mode-enabled-hook ()
     (z-god-set-state z-god-state)
