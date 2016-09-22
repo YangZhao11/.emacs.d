@@ -493,11 +493,28 @@ in ctl-j-map first."
   (bind-key "ESC ESC" #'god-mode-isearch-activate isearch-mode-map)
   (bind-key "ESC ESC" #'god-mode-isearch-disable god-mode-isearch-map)
 
+  (defun god-mode-self-insert-on-meta ()
+  "Copy of `god-mode-self-insert', except binding is M-key."
+  (interactive)
+  (let* ((initial-key (aref (this-command-keys-vector)
+                            (- (length (this-command-keys-vector)) 1)))
+         (key-string (concat "M-" (char-to-string initial-key)))
+         (binding (key-binding (kbd key-string))))
+    (unless binding (error "God: unknown key binding for `%s`" key-string))
+    (setq this-original-command binding)
+    (setq this-command binding)
+    ;; `real-this-command' is used by emacs to populate
+    ;; `last-repeatable-command', which is used by `repeat'.
+    (setq real-this-command binding)
+    (setq god-literal-sequence nil)
+    (if (commandp binding t)
+        (call-interactively binding)
+      (execute-kbd-macro binding))))
+
   ;; bind symbols to M-?
   (dolist (i '("!" "@" "$" "%" "^" "&" "*" "{" "}"
                "<" ">" ";" ":" "|" "\\" "+" "=" "?"))
-    (define-key god-local-mode-map (kbd i)
-      (key-binding (kbd (concat "M-" i)))))
+    (define-key god-local-mode-map (kbd i) 'god-mode-self-insert-on-meta))
 
   ;; Bind some second level modifier keys with C- prefix for easier
   ;; god-mode access. Directly bind these to commands, instead of making
