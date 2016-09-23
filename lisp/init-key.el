@@ -375,6 +375,9 @@ in ctl-j-map first."
   :commands (string-trim-right
              string-trim-left))
 
+(use-package imenu-anywhere
+  :bind ("M-s M-i" . ivy-imenu-anywhere))
+
 (use-package ivy :diminish ""
   :bind (("M-o" . ivy-switch-buffer)
          ("M-O" . ivy-switch-buffer-other-window)
