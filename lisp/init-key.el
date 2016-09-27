@@ -8,7 +8,8 @@
 (use-package browse-kill-ring :ensure
   :bind ("C-M-y" . browse-kill-ring))
 
-(bind-key "<C-M-backspace>" 'backward-kill-sexp)
+(bind-keys ("<C-M-backspace>" . backward-kill-sexp)
+           ("C-x k" . kill-this-buffer))
 
 (use-package anchored-transpose :ensure
   :commands anchored-transpose

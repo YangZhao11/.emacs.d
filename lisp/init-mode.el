@@ -332,7 +332,7 @@ _q_uit      _RET_: current
 (use-package elisp-mode
   :config
   (defun z-setup-imenu-for-use-package ()
-    "Recognize `use-package` in imenu"
+    "Recognize `use-package` and defhydra in imenu, for init files."
     (let ((emacsd (expand-file-name "~/.emacs.d/lisp/"))
           (initel (expand-file-name "init.el" "~/.emacs.d")))
       (when (and buffer-file-name
