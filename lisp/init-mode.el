@@ -148,9 +148,12 @@ _U_nmark all ^^            _o_ther window  redisp_l_ay      ^^_T_ouch   ch_G_rp
   (bind-keys :map dired-mode-map
              ("SPC" . hydra-dired/body)))
 
-(defhydra hydra-smerge
-  (:color red :hint nil
-          :pre (smerge-mode 1))
+(use-package smerge-mode
+  :bind ("C-x m" . hydra-smerge/body)
+  :config
+  (defhydra hydra-smerge
+    (:color red :hint nil
+            :pre (smerge-mode 1))
     "
 ^Move^      ^Keep^         ^Diff^      ^Pair^
 ------------------------------------------------------
@@ -175,7 +178,8 @@ _q_uit      _RET_: current
     ("="   smerge-diff-mine-other)
     (">"   smerge-diff-base-other)
     ("q"   nil :color blue))
-(bind-key "C-x m" 'hydra-smerge/body)
+
+  )
 
 (use-package magit
   :bind ("C-x g" . magit-status)
@@ -518,5 +522,42 @@ _q_uit      _RET_: current
   :config
   (defun z-gdb-mode-hook () (setq gdb-many-windows t))
   (add-hook 'gdb-mode-hook 'z-gdb-mode-hook))
+
+(use-package info
+  :config
+  (defhydra hydra-info (:color pink :hint nil)
+    "
+^ ^       ^^^^Reference   ^^History       ^^Tree
+_k_ ↑     _{__}_ move     _l_: back       _n_ext   _d_irectory _T_OC
+_j_ ↓     ^^_f_ollow      _r_: forward    _p_rev   _<__>_ first/last
+^ ^       ^^_m_enu        _L_: history    _u_p     _[__]_ back/forward
+"
+    ("q" Info-exit :exit t)
+    ("SPC" nil :exit t)
+    ("n" Info-next)
+    ("p" Info-prev)
+    ("u" Info-up)
+    ("m" Info-menu)
+    ("d" Info-directory)
+    ("<" Info-top-node)
+    (">" Info-final-node)
+    ("[" Info-backward-node)
+    ("]" Info-forward-node)
+    ("{" Info-prev-reference)
+    ("}" Info-next-reference)
+    ("f" Info-follow-reference)
+    ("l" Info-history-back)
+    ("r" Info-history-forward)
+    ("L" Info-history)
+    ("T" Info-toc)
+    ("j" Info-scroll-up)
+    ("k" Info-scroll-down))
+  (bind-keys :map Info-mode-map
+             ("SPC" . hydra-info/body)
+             ("{" . Info-prev-reference)
+             ("}" . Info-next-reference)
+             ("j" . Info-scroll-up)
+             ("k" . Info-scroll-down))
+)
 
 ;; TODO(zhyang): use emmet-mode for html and css
