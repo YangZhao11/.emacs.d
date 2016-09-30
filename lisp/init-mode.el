@@ -557,7 +557,33 @@ _j_ ↓     ^^_f_ollow      _r_: forward    _p_rev   _<__>_ first/last
              ("{" . Info-prev-reference)
              ("}" . Info-next-reference)
              ("j" . Info-scroll-up)
-             ("k" . Info-scroll-down))
-)
+             ("k" . Info-scroll-down)))
+
+(use-package help-mode
+  :config
+  (defhydra hydra-help (:color pink :hint nil)
+    "
+_k_ ↑    _<_ _>_ top/bottom   _l_: back
+_j_ ↓    _[_ _]_ buttons           _r_: forward
+"
+    ("SPC" nil :exit t)
+    ("<" beginning-of-buffer)
+    (">" end-of-buffer)
+    ("g" revert-buffer)
+    ("h" describe-mode)
+    ("l" help-go-back)
+    ("q" quit-window :exit t)
+    ("r" help-go-forward)
+    ("k" scroll-down-command)
+    ("j" scroll-up-command)
+    ("[" backward-button)
+    ("]" forward-button))
+
+  (bind-keys :map help-mode-map
+             ("SPC" . hydra-help/body)
+             ("k" . scroll-down-command)
+             ("j" . scroll-up-command)
+             ("[" . backward-button)
+             ("]" . forward-button)))
 
 ;; TODO(zhyang): use emmet-mode for html and css
