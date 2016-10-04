@@ -392,6 +392,15 @@ in ctl-j-map first."
            "^\\*.*Completions\\*$" "^\\*Ediff" "^\\*tramp" "^\\*cvs-"
            "\\[r\\]\\(<[0-9]+>\\)?$" "\\[fundamental\\]\\(<[0-9]+>\\)?$"
            "_region_" " output\\*$" "^TAGS$" "^\*Ido"))
+
+  (defun ivy-insert-action (x)
+    (with-ivy-window
+      (insert x)))
+
+  (ivy-set-actions
+   t
+   '(("s" ivy-insert-action "insert string")))
+
   (bind-keys :map ivy-minibuffer-map
              ("M-s o" . ivy-occur)
              ("C-j" . ivy-avy)
