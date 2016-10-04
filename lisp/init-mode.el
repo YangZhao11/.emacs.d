@@ -7,8 +7,8 @@
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 (add-hook 'text-mode-hook #'abbrev-mode)
-(add-hook 'text-mode-hook #'visual-line-mode)
-(add-hook 'text-mode-hook #'flyspell-mode)
+(add-hook 'text-mode-hook #'turn-on-auto-fill)
+(add-hook 'text-mode-hook #'turn-on-flyspell)
 
 (defhydra hydra-occur (:color pink :hint nil)
   "
