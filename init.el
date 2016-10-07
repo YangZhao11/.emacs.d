@@ -41,6 +41,7 @@
       text-scale-mode-step 1.1
       scroll-margin 3
       shift-select-mode nil
+      mouse-yank-at-point 't
       default-input-method 'TeX)
 
 (menu-bar-mode (if (eq system-type 'darwin) 1 -1)) ; Mac always has menu bar
