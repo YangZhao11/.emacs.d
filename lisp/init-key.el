@@ -5,6 +5,12 @@
   (require 'use-package)
   (require 'hydra))
 
+(eval-after-load "quail/Latin-ltx"
+  '(let ((quail-current-package (assoc "TeX" quail-package-alist)))
+     (quail-define-rules ((append . t))
+                         ("^\\alpha" ?ᵅ)
+                         ("\\sqrt" ?√))))
+
 (use-package browse-kill-ring :ensure
   :bind ("C-M-y" . browse-kill-ring))
 
@@ -411,6 +417,7 @@ in ctl-j-map first."
 
 (use-package counsel
   :bind (([remap find-file] . counsel-find-file)
+         ("C-x 8 8" . counsel-unicode-char)
          ("M-x" . counsel-M-x)
          ("M-s M-s" . counsel-grep-or-swiper)
          ("M-s i" . counsel-imenu))
