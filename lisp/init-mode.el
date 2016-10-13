@@ -148,6 +148,38 @@ _U_nmark all ^^            _o_ther window  redisp_l_ay      ^^_T_ouch   ch_G_rp
   (bind-keys :map dired-mode-map
              ("SPC" . hydra-dired/body)))
 
+(defhydra hydra-package-menu (:color pink :hint nil)
+  "
+_k_ ↑ _p_rev    _U_pgrade      _d_elete   _f_ilter _H_ide       _r_efresh
+_j_ ↓ _n_ext    _~_: obsolete  _i_nstall  _S_ort   _(_: toggle  _g_: revert
+_<_   _>_       e_x_ecute      _?_: info  _u_nmark _q_uit
+"
+  ("SPC" nil)
+  ("(" package-menu-toggle-hiding)
+  ("<" beginning-of-buffer)
+  (">" end-of-buffer)
+  ("?" package-menu-describe-package)
+  ("H" package-menu-hide-package)
+  ("S" tabulated-list-sort)
+  ("U" package-menu-mark-upgrades)
+  ("d" package-menu-mark-delete)
+  ("f" package-menu-filter)
+  ("g" revert-buffer)
+  ("i" package-menu-mark-install)
+  ("n" next-line)
+  ("p" previous-line)
+  ("q" quit-window :color blue)
+  ("r" package-menu-refresh)
+  ("u" package-menu-mark-unmark)
+  ("x" package-menu-execute)
+  ("~" package-menu-mark-obsolete-for-deletion)
+  ("j" scroll-up-command)
+  ("k" scroll-down-command))
+(bind-keys :map package-menu-mode-map
+           ("SPC" . hydra-package-menu/body)
+           ("j" . scroll-up-command)
+           ("k" . scroll-down-command))
+
 (use-package smerge-mode
   :bind ("C-x m" . hydra-smerge/body)
   :config
@@ -564,7 +596,7 @@ _j_ ↓     ^^_f_ollow      _r_: forward    _p_rev   _<__>_ first/last
   (defhydra hydra-help (:color pink :hint nil)
     "
 _k_ ↑    _<_ _>_ top/bottom   _l_: back
-_j_ ↓    _[_ _]_ buttons           _r_: forward
+_j_ ↓    _[_ _]_ buttons      _r_: forward
 "
     ("SPC" nil :exit t)
     ("<" beginning-of-buffer)
