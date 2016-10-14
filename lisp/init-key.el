@@ -387,7 +387,6 @@ in ctl-j-map first."
 
 (use-package ivy :diminish ""
   :bind (("M-o" . ivy-switch-buffer)
-         ("M-O" . ivy-switch-buffer-other-window)
          ("M-s M-d" . ivy-resume))
   :config
   (ivy-mode 1)
