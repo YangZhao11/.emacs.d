@@ -351,15 +351,26 @@ _q_uit      _RET_: current
                    'face 'eshell-prompt
                    'readonly t
                    'rear-nonsticky '(face readonly)))))
-  (defalias 'eshell/x 'eshell/exit)
-  (defalias 'eshell/l 'eshell/ls)
-  (defalias 'eshell/p 'find-file-read-only)
-  (defalias 'eshell/ec 'find-file)
-  (defun z-eshell-mode-hook ()
-    (setq pcomplete-cycle-completions nil))
   (setq eshell-prompt-function 'z-eshell-prompt-function
-        eshell-highlight-prompt nil)
-  (add-hook 'eshell-mode-hook 'z-eshell-mode-hook))
+        eshell-highlight-prompt nil
+        eshell-cmpl-cycle-completions nil)
+
+  (defalias 'eshell/x 'eshell/exit)
+  (defun eshell/p (&rest args)
+    "Call find-file-read-only on files"
+    (mapc #'find-file-read-only
+          (mapcar #'expand-file-name
+                  (eshell-flatten-list (reverse args)))))
+
+  (defun eshell/ec (&rest args)
+    "Call find-file-read-only on files"
+    (mapc #'find-file
+          (mapcar #'expand-file-name
+                  (eshell-flatten-list (reverse args)))))
+  (defun z-eshell-mode-hook ()
+    (company-mode 1))
+  (add-hook 'eshell-mode-hook 'z-eshell-mode-hook)
+  )
 
 
 ;; --------------------------------------------------
