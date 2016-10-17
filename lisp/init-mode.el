@@ -368,9 +368,11 @@ _q_uit      _RET_: current
           (mapcar #'expand-file-name
                   (eshell-flatten-list (reverse args)))))
   (defun z-eshell-mode-hook ()
-    (company-mode 1))
-  (add-hook 'eshell-mode-hook 'z-eshell-mode-hook)
-  )
+    (company-mode 1)
+    ;; somehow eshell-mode-map is buffer-local
+    (bind-keys :map eshell-mode-map
+             ("M-r" . counsel-esh-history)))
+  (add-hook 'eshell-mode-hook 'z-eshell-mode-hook))
 
 
 ;; --------------------------------------------------
