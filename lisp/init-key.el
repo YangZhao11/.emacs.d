@@ -321,7 +321,7 @@ current frame configuration to register 8."
   :bind (("M-i" . goto-last-change)
          ("M-I" . goto-last-change-reverse)))
 
-(use-package avy :ensure
+(use-package avy :ensure :defer 5
   :bind ("C-j" . z-goto-char)
   :bind (:map ctl-j-map
               ("SPC" . avy-goto-line))
@@ -368,7 +368,7 @@ in ctl-j-map first."
            (avy-goto-subword-1 char arg))
           ('t (avy-goto-char char arg))))))
 
-(use-package ace-window :ensure
+(use-package ace-window :ensure :defer 6
   :bind* ("M-j" . ace-window)
   :config
   (setq aw-scope 'frame
@@ -414,7 +414,7 @@ in ctl-j-map first."
              ("M-m" . ivy-restrict-to-matches)
              ("ESC ESC" . hydra-ivy/body)))
 
-(use-package counsel
+(use-package counsel :defer 4
   :bind (([remap find-file] . counsel-find-file)
          ("C-x 8 8" . counsel-unicode-char)
          ("M-x" . counsel-M-x)
@@ -457,6 +457,26 @@ in ctl-j-map first."
   :if (not (featurep 'google))
   :bind (("C-x C-." . xref-find-definitions)
          ("C-x C-," . xref-pop-marker-stack)))
+
+(use-package lisp
+  :bind ("M-]" . hydra-sexp/body)
+  :commands (backward-up-list down-list forward-sexp backward-sexp
+    kill-sexp mark-sexp)
+  :config
+  (defhydra hydra-sexp (:color pink :hint nil)
+    "
+_u_p    _f_oward  _k_ill  _y_ank
+_d_own  _b_ack    _m_ark  _Y_ank-pop
+"
+    ("SPC" nil)
+    ("u" backward-up-list)
+    ("d" down-list)
+    ("f" forward-sexp)
+    ("b" backward-sexp)
+    ("k" kill-sexp)
+    ("m" mark-sexp)
+    ("y" yank)
+    ("Y" yank-pop)))
 
 ;; --------------------------------------------------
 (defvar z-god-mode-lighter "")
@@ -532,7 +552,7 @@ in ctl-j-map first."
 
   ;; bind symbols to M-?
   (dolist (i '("!" "@" "$" "%" "^" "&" "*" "{" "}"
-               "<" ">" ";" ":" "|" "\\" "+" "=" "?"))
+               "<" ">" ";" ":" "|" "\\" "+" "=" "?" "]"))
     (define-key god-local-mode-map (kbd i) 'god-mode-self-insert-on-meta))
 
   ;; Bind some second level modifier keys with C- prefix for easier
