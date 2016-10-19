@@ -458,12 +458,7 @@ in ctl-j-map first."
   :bind (("C-x C-." . xref-find-definitions)
          ("C-x C-," . xref-pop-marker-stack)))
 
-(use-package lisp
-  :bind ("M-]" . hydra-sexp/body)
-  :commands (backward-up-list down-list forward-sexp backward-sexp
-    kill-sexp mark-sexp)
-  :config
-  (defhydra hydra-sexp (:color pink :hint nil)
+(defhydra hydra-sexp (:color pink :hint nil)
     "
 _u_p    _f_oward  _k_ill  _y_ank
 _d_own  _b_ack    _m_ark  _Y_ank-pop
@@ -476,7 +471,8 @@ _d_own  _b_ack    _m_ark  _Y_ank-pop
     ("k" kill-sexp)
     ("m" mark-sexp)
     ("y" yank)
-    ("Y" yank-pop)))
+    ("Y" yank-pop))
+(bind-key "M-]" 'hydra-sexp/body)
 
 ;; --------------------------------------------------
 (defvar z-god-mode-lighter "")
