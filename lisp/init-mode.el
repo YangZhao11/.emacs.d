@@ -5,7 +5,6 @@
   (require 'hydra))
 
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
-
 (add-hook 'text-mode-hook #'abbrev-mode)
 (add-hook 'text-mode-hook #'turn-on-auto-fill)
 (add-hook 'text-mode-hook #'turn-on-flyspell)
@@ -209,9 +208,7 @@ _q_uit      _RET_: current
     ("<"   smerge-diff-base-mine)
     ("="   smerge-diff-mine-other)
     (">"   smerge-diff-base-other)
-    ("q"   nil :color blue))
-
-  )
+    ("q"   nil :color blue)))
 
 (use-package magit
   :bind ("C-x g" . magit-status)
@@ -251,7 +248,7 @@ _q_uit      _RET_: current
   :init
   (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
   :config
-(setq yas-prompt-functions
+  (setq yas-prompt-functions
         '(yas-completing-prompt yas-no-prompt)
         yas-wrap-around-region t)
   (yas-global-mode))
@@ -414,34 +411,42 @@ _q_uit      _RET_: current
   (require 'clang-format nil 't))
 (add-hook 'c++-mode-hook 'z-c++-mode-hook)
 
-(defun z-maybe-clang-format ()
-  (when (eq major-mode 'c++-mode)
-    (clang-format-buffer)))
 (use-package clang-format
   :config
+  (defun z-maybe-clang-format ()
+    (when (eq major-mode 'c++-mode)
+      (clang-format-buffer)))
+
   (add-hook 'before-save-hook 'z-maybe-clang-format))
 
-(defun z-go-mode-hook ()
-  (setq tab-width 4)
-  (setq-local company-backends '(company-ycmd))
-  ;; (ycmd-mode 1)
-  ;; (company-mode 1)
-  ;;(go-eldoc-setup)
-  )
-(add-hook 'go-mode-hook 'z-go-mode-hook)
+(use-package go-mode
+  :config
+  (defun z-go-mode-hook ()
+    (setq tab-width 4)
+    (setq-local company-backends '(company-ycmd))
+    ;; (ycmd-mode 1)
+    ;; (company-mode 1)
+    ;;(go-eldoc-setup)
+    )
+  (add-hook 'go-mode-hook 'z-go-mode-hook))
 
-(defun z-scala-mode-hook ()
-  (setq prettify-symbols-alist
-        (append '(("=>" . ?⇒)
-                  ("->" . ?→))
-                prettify-symbols-alist))
-  (prettify-symbols-mode))
-(add-hook 'scala-mode-hook 'z-scala-mode-hook)
+(use-package scala2-mode
+  :config
+  (defun z-scala-mode-hook ()
+    (setq prettify-symbols-alist
+          (append '(("=>" . ?⇒)
+                    ("->" . ?→))
+                  prettify-symbols-alist))
+    (prettify-symbols-mode))
+  (add-hook 'scala-mode-hook 'z-scala-mode-hook))
 
-(defun z-haskell-mode-hook ()
-  (haskell-indentation-mode))
+
+(use-package haskell-mode
+  :config
+  (defun z-haskell-mode-hook ()
+    (haskell-indentation-mode))
   ;;(setq haskell-font-lock-symbols 't)
-(add-hook 'haskell-mode-hook 'z-haskell-mode-hook)
+  (add-hook 'haskell-mode-hook 'z-haskell-mode-hook))
 
 ;; --------------------------------------------------
 ;; ess

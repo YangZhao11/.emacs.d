@@ -256,6 +256,7 @@ Toggle:
 
 (use-package beacon :ensure :diminish beacon-mode
   :commands (beacon-mode)
+  :init (beacon-mode 1)
   :config
   (add-hook 'beacon-dont-blink-predicates
             (lambda () (not (display-graphic-p))))
@@ -263,7 +264,6 @@ Toggle:
         '(inferior-ess-mode
           magit-status-mode magit-popup-mode
           gnus-summary-mode gnus-group-mode)))
-(beacon-mode 1)
 
 (use-package flyspell :diminish " ⍹"
   :commands (flyspell-mode flyspell-prog-mode))
@@ -315,8 +315,9 @@ current frame configuration to register 8."
       (set-window-buffer w "*Messages*"))))
 (bind-key "M-g 8" #'all-frames-to-messages-buffer register-channel-mode-map)
 
-(defvar ctl-j-map)
-(setq ctl-j-map (make-sparse-keymap))
+(defvar ctl-j-map (make-sparse-keymap)
+  "Keymap behind C-j. Called by `z-goto-char'.")
+
 (use-package goto-chg :ensure
   :bind (("M-i" . goto-last-change)
          ("M-I" . goto-last-change-reverse)))
@@ -391,6 +392,7 @@ in ctl-j-map first."
   :config
   (ivy-mode 1)
   (setq ivy-count-format "")
+  (setq ivy-display-style 'fancy)
   (setq ivy-ignore-buffers
         '("\\` " "^\\*ESS\\*" "^\\*Messages\\*" "^\\*Help\\*" "^\\*Buffer"
           "^\\*LV\\*"
@@ -402,8 +404,7 @@ in ctl-j-map first."
     (with-ivy-window
       (insert x)))
 
-  (ivy-set-actions
-   t
+  (ivy-set-actions t
    '(("s" ivy-insert-action "insert string")))
 
   (bind-keys :map ivy-minibuffer-map
