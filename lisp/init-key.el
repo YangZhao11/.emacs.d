@@ -11,9 +11,6 @@
                          ("^\\alpha" ?ᵅ)
                          ("\\sqrt" ?√))))
 
-(use-package browse-kill-ring :ensure
-  :bind ("C-M-y" . browse-kill-ring))
-
 (bind-keys ("<C-M-backspace>" . backward-kill-sexp)
            ("C-x k" . kill-this-buffer))
 
@@ -167,6 +164,8 @@ instead of inactivate region."
      (next-window (selected-window) nil nil)))
 (bind-keys ("C-x _" . shrink-other-window-if-larger-than-buffer)
            ("C-x 9" . delete-other-windows-vertically))
+
+(bind-key "C-z" nil)
 
 ;; F1 for help.
 (bind-key "<f2>" #'eshell)
@@ -419,6 +418,7 @@ in ctl-j-map first."
   :bind (([remap find-file] . counsel-find-file)
          ("C-x 8 8" . counsel-unicode-char)
          ("M-x" . counsel-M-x)
+         ("M-y" . counsel-yank-pop)
          ("M-s M-s" . counsel-grep-or-swiper)
          ("M-s i" . counsel-imenu))
   :bind (:map help-map

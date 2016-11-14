@@ -47,6 +47,10 @@
 
 (define-abbrev-table 'bibtex-mode-abbrev-table '())
 
+(define-abbrev-table 'bookmark-bmenu-mode-abbrev-table '())
+
+(define-abbrev-table 'bookmark-edit-annotation-mode-abbrev-table '())
+
 (define-abbrev-table 'borg-mode-abbrev-table '())
 
 (define-abbrev-table 'borgmon-mode-abbrev-table '())
@@ -131,6 +135,8 @@
 
 (define-abbrev-table 'go-mode-abbrev-table '())
 
+(define-abbrev-table 'godoc-mode-abbrev-table '())
+
 (define-abbrev-table 'google3-build-mode-abbrev-table '())
 
 (define-abbrev-table 'grep-mode-abbrev-table '())
@@ -153,6 +159,8 @@
 
 (define-abbrev-table 'haskell-presentation-mode-abbrev-table '())
 
+(define-abbrev-table 'haskell-yesod-parse-routes-mode-abbrev-table '())
+
 (define-abbrev-table 'help-mode-abbrev-table '())
 
 (define-abbrev-table 'html-mode-abbrev-table '())
@@ -166,6 +174,10 @@
 (define-abbrev-table 'inferior-julia-mode-abbrev-table '())
 
 (define-abbrev-table 'inferior-python-mode-abbrev-table '())
+
+(define-abbrev-table 'ivy-occur-grep-mode-abbrev-table '())
+
+(define-abbrev-table 'ivy-occur-mode-abbrev-table '())
 
 (define-abbrev-table 'java-mode-abbrev-table
   '(
@@ -208,6 +220,8 @@
 (define-abbrev-table 'magit-reflog-mode-abbrev-table '())
 
 (define-abbrev-table 'magit-refs-mode-abbrev-table '())
+
+(define-abbrev-table 'magit-repolist-mode-abbrev-table '())
 
 (define-abbrev-table 'magit-revision-mode-abbrev-table '())
 
@@ -301,18 +315,21 @@
 
 (define-abbrev-table 'text-mode-abbrev-table
   '(
-    ("ackd" "acknowledged" nil 1)
+    ("ackd" "acknowledged" nil 3)
+    ("agg" "aggregate" nil 0)
+    ("aggd" "aggregated" nil 0)
+    ("aggn" "aggregation" nil 0)
     ("aspn" "assumption" nil 0)
     ("avg" "average" nil 12)
     ("bn" "binomial" nil 16)
     ("bt" "between" nil 1)
-    ("calc" "calculate" nil 12)
+    ("calc" "calculate" nil 13)
     ("calcd" "calculated" nil 5)
-    ("calcn" "calculation" nil 9)
-    ("cdd" "candidate" nil 139)
+    ("calcn" "calculation" nil 13)
+    ("cdd" "candidate" nil 152)
     ("coef" "coefficient" nil 0)
     ("coefs" "coefficients" nil 0)
-    ("confint" "confidence interval" nil 27)
+    ("confint" "confidence interval" nil 30)
     ("corr" "correlate" nil 0)
     ("corrd" "correlated" nil 0)
     ("corrn" "correlation" nil 0)
@@ -360,9 +377,12 @@
     ("statn" "statistician" nil 0)
     ("stats" "statistics" nil 6)
     ("staty" "statistically" nil 0)
-    ("std" "standard" nil 4)
-    ("ud" "understand" nil 4)
-    ("udg" "understanding" nil 1)
+    ("std" "standard" nil 5)
+    ("sugg" "suggest" nil 2)
+    ("suggd" "suggested" nil 0)
+    ("suggn" "suggestion" nil 1)
+    ("ud" "understand" nil 5)
+    ("udg" "understanding" nil 2)
     ("wi" "with" nil 4)
     ("wo" "without" nil 0)
     ("wt" "weight" nil 1)

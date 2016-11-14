@@ -9,6 +9,7 @@
 (add-hook 'text-mode-hook #'turn-on-auto-fill)
 (add-hook 'text-mode-hook #'turn-on-flyspell)
 
+;; replace.el is not a real package
 (defhydra hydra-occur (:color pink :hint nil)
   "
 _p_rev^^   _RET_: goto      _e_dit
@@ -62,9 +63,9 @@ _j_ ↓^^  _n_ext^^  _{__}_: prev/next file    _d_isplay
 ^----^-------^----^--------^--------^------^-^--------------^^-------^^--^-^------
 _*_: hydra   _#_: temp     _Q_uery replace _B_yte compile   _!_shell_&_ _S_ymlink
 _%_: regexp  _~_: backup   _A_: grep       _L_oad           ^^_C_opy    _H_ardlink
-_m_ark       _d_: this     _B_yte compile  _k_ill line      ^^_D_elete  ch_M_od
-_u_nmark     _x_: delete   _v_iew          _w_: file name   ^^_R_ename  ch_O_wn
-_U_nmark all ^^            _o_ther window  redisp_l_ay      ^^_T_ouch   ch_G_rp
+_u_n/_m_ark    _d_: this     _B_yte compile  _k_ill line      ^^_D_elete  ch_M_od
+_t_oggle     _x_: delete   _v_iew          _w_: file name   ^^_R_ename  ch_O_wn
+_U_nmark all ^ ^           _o_ther window  redisp_l_ay      ^^_T_ouch   ch_G_rp
 "
     ("SPC" nil)
     ("RET" dired-find-file :exit t)
@@ -106,6 +107,7 @@ _U_nmark all ^^            _o_ther window  redisp_l_ay      ^^_T_ouch   ch_G_rp
     ("l" dired-do-redisplay)
     ("o" dired-find-file-other-window)
     ("s" dired-sort-toggle-or-edit "sort-toggle-or-edit")
+    ("t" dired-toggle-marks)
     ("v" dired-view-file)
     ("w" dired-copy-filename-as-kill)
     ("x" dired-do-flagged-delete)
