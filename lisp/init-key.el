@@ -27,22 +27,10 @@
       (call-interactively #'transpose-chars)))
   :bind ("C-t" . z-transpose))
 
-(use-package grab-region :diminish " ⊛"
-  :functions grab-region-move
-  :bind ("M-*" . grab-region-mode)
-  :config
-  (grab-region-remap z-goto-char))
-
 (use-package easy-kill :ensure
   :functions easy-kill-mark-region
   :bind ([remap kill-ring-save] . easy-kill)
   :config
-
-  (defun easy-kill-grab-region ()
-    (interactive)
-    (easy-kill-mark-region)
-    (grab-region-mode))
-  (put #'easy-kill-grab-region 'easy-kill-exit t)
 
   (defun easy-kill-transpose ()
     (interactive)
@@ -78,8 +66,6 @@
   (bind-keys
    :map easy-kill-base-map
    ("k"  . easy-kill-region)
-   ("g"  . easy-kill-grab-region)
-   ("*"  . easy-kill-grab-region)
    ("m"  . easy-kill-mark-region)
    ("t"  . easy-kill-transpose)
    (";"  . easy-kill-comment-dwim)
@@ -418,6 +404,7 @@ in ctl-j-map first."
   :bind (([remap find-file] . counsel-find-file)
          ("C-x 8 8" . counsel-unicode-char)
          ("M-x" . counsel-M-x)
+         ("M-y" . counsel-yank-pop)
          ("M-s M-s" . counsel-grep-or-swiper)
          ("M-s i" . counsel-imenu))
   :bind (:map help-map

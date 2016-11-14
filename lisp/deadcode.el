@@ -1,3 +1,17 @@
+(use-package grab-region :diminish " ⊛"
+  :functions grab-region-move
+  :bind ("M-*" . grab-region-mode)
+  :config
+  (grab-region-remap z-goto-char))
+
+
+  (defun easy-kill-grab-region ()
+    (interactive)
+    (easy-kill-mark-region)
+    (grab-region-mode))
+  (put #'easy-kill-grab-region 'easy-kill-exit t)
+
+
 (use-package jump-char :ensure
   :bind (("M-." . jump-char-forward)
          ("M-," . jump-char-backward))
