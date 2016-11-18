@@ -205,7 +205,7 @@ buffer in other window."
   "
 Toggle:
 %s(ballotbox rainbow-delimiters-mode) rainbow-_d_elimiters  ^^ %s(ballotbox abbrev-mode \"∂\") _a_bbrev         %s(ballotbox outline-minor-mode) _o_utline-minor-mode ^^ %s(ballotbox company-mode \"▤\") co_m_pany
-%s(ballotbox color-identifiers-mode) color-_i_dentifiers   ^^ %s(ballotbox auto-fill-function \"¶\") auto-_f_ill      %s(ballotbox view-mode) _v_iew-mode          ^^ %s(ballotbox flycheck-mode) flychec_k_
+%s(ballotbox color-identifiers-mode) color-_i_dentifiers   ^^ %s(ballotbox auto-fill-function \"¶\") auto-_f_ill      %s(ballotbox view-mode) _v_iew-mode          ^^ %s(ballotbox flycheck-mode \"✔\") flychec_k_
 %s(ballotbox beacon-mode) _b_eacon              ^^ %s(ballotbox visual-line-mode \"↵\") visual-lin_e_    %s(if (bound-and-true-p subword-mode) \",\" (if (bound-and-true-p superword-mode) \"²\" \"☐\")) sub_w_ord/super_W_ord   %s(ballotbox ycmd-mode \"☯\") _y_cmd
 %s(ballotbox hi-lock-mode) _h_i-lock/_c_hanges      %s(ballotbox auto-revert-mode \"↻\") auto-_r_evert    %s(ballotbox flyspell-mode \"⍹\") flyspel_l_/_p_rog       %s(ballotbox which-function-mode) which-f_u_nc
 %s(ballotbox whitespace-mode \"␣\") white_s_pace/_t_railing  %s(ballotbox linum-mode) li_n_um
@@ -442,8 +442,9 @@ in ctl-j-map first."
 
 (use-package xref
   :if (not (featurep 'google))
-  :bind (("C-x C-." . xref-find-definitions)
-         ("C-x C-," . xref-pop-marker-stack)))
+  :bind (("C-x ." . xref-find-definitions)
+         ("C-x ?" . xref-find-references)
+         ("C-x ," . xref-pop-marker-stack)))
 
 (defhydra hydra-sexp (:color pink :hint nil)
     "
@@ -542,7 +543,7 @@ _d_own  _b_ack    _m_ark  _Y_ank-pop
   ;; god-mode access. Directly bind these to commands, instead of making
   ;; it a keyboard macro so that messages work in god-mode.
   (dolist (bindings
-           '(("C-x" "0" "1" "2" "3" "9" "[" "]" "$")
+           '(("C-x" "0" "1" "2" "3" "9" "[" "]" "$" "," "." "?")
              ("M-g" "1" "2" "3" "4" "5" "6" "7" "8" "c" "n" "p")))
     (let ((prefix (car bindings))
           (chars (cdr bindings)))

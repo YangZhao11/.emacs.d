@@ -272,7 +272,52 @@ _q_uit      _RET_: current
 (use-package flycheck
   :commands (flycheck-mode)
   :config
-  (add-hook 'flycheck-mode-hook 'flycheck-status-emoji-mode))
+
+  (defface flycheck-status-warning
+    '((t (:foreground "#D8B080")))
+    "Face for flycheck status: warnings" :group 'flycheck)
+  (defface flycheck-status-ok
+    '((t (:foreground "#A0E8A0")))
+    "Face for flycheck status: OK" :group 'flycheck)
+  (defface flycheck-status-error '((t (:foreground "#D88080")))
+    "Face for flycheck status: error" :group 'flycheck)
+
+  (defun z-flycheck-count (s count)
+    (cond ((not count) "")
+          ((> count 1) (concat s (number-to-string count)))
+          ((> count 0) s)
+          ('t "")))
+
+  (defun z-flycheck-mode-line-text (&optional status)
+    "Get a text using emoji to describe STATUS for use in the mode line.
+
+STATUS defaults to `flycheck-last-status-change' if omitted or
+nil.
+
+This function is a drop-in replacement for the standard flycheck
+function `flycheck-mode-line-status-text'.  If the selected emoji
+cannot be displayed on the current frame,
+`flycheck-mode-line-status-text' is automatically used as a
+fallback."
+    (let ((pick (pcase (or status flycheck-last-status-change)
+                  (`finished
+                   (if flycheck-current-errors
+                       (let-alist (flycheck-count-errors flycheck-current-errors)
+                         (concat
+                          (propertize (z-flycheck-count "✖" .error)
+                                      'face 'flycheck-status-error)
+                          (when (and .error .warning) '(?/))
+                          (propertize (z-flycheck-count "•" .warning)
+                                      'face 'flycheck-status-warning)))
+                     (propertize "✔" 'face 'flycheck-status-ok)))
+                  (`running     "⁇")
+                  (`no-checker  "¿")
+                  (`not-checked "⁈")
+                  (`errored     "‼")
+                  (`interrupted "⁉")
+                  (`suspicious  "‽"))))
+      (list " " pick)))
+(setq flycheck-mode-line '(:eval (z-flycheck-mode-line-text))))
 
 (use-package ycmd :diminish " ☯" :no-require t
   :defines ycmd-server-command ycmd-global-config
