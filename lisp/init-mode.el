@@ -262,7 +262,7 @@ _q_uit      _RET_: current
           (match-string count)))))
 
 (use-package company :defer 't
-  :diminish " ▤"
+  :diminish " ©"
   :commands (company-mode)
   :bind (("M-m" . company-complete))
   :config
