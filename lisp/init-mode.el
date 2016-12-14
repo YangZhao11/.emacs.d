@@ -9,6 +9,51 @@
 (add-hook 'text-mode-hook #'turn-on-auto-fill)
 (add-hook 'text-mode-hook #'turn-on-flyspell)
 
+(use-package view
+  :config
+  (defhydra hydra-view (:color pink :hint nil)
+    "
+^^pg/set ^^line ^^half _g_o/_%_ ^^register  ^^mark^^       _s_earch/_r_    _q_uit/_Q_
+_k_↑ _w_   _K_    _u_p   _<_^^    _m_ark      _._ set/p_@_p  regex: _/_ ^\\  _c_ancel/_C_
+_j_↓ _z_   _J_    _d_own _>_^^    _'_: goto   e_x_chg^^      again: _n_ _p_
+"
+    ("SPC" nil)
+    ("j" View-scroll-page-forward)
+    ("k" View-scroll-page-backward)
+    ("z" View-scroll-page-forward-set-page-size)
+    ("w" View-scroll-page-backward-set-page-size)
+    ("J" View-scroll-line-forward)
+    ("K" View-scroll-line-backward)
+    ("u" View-scroll-half-page-backward)
+    ("d" View-scroll-half-page-forward)
+    ("<" beginning-of-buffer)
+    (">" end-of-buffer)
+    ("g" View-goto-line)
+    ("%" View-goto-percent)
+    ("s" isearch-forward)
+    ("r" isearch-backward)
+    ("\\" View-search-regexp-backward)
+    ("/" View-search-regexp-forward)
+    ("n" View-search-last-regexp-forward)
+    ("p" View-search-last-regexp-backward)
+    ("m" point-to-register)
+    ("'" register-to-point)
+    ("." set-mark-command)
+    ("@" View-back-to-mark)
+    ("x" exchange-point-and-mark)
+    ("q" View-quit :color blue)
+    ("Q" View-quit-all :color blue)
+    ("c" View-leave :color blue)
+    ("C" View-kill-and-leave :color blue))
+  (bind-keys :map view-mode-map
+             ("SPC" . hydra-view/body)
+             ("C-j" . nil)
+             ("j" . View-scroll-page-forward)
+             ("k" . View-scroll-page-backward)
+             ("J" . View-scroll-line-forward)
+             ("K" . View-scroll-line-backward)))
+
+
 ;; replace.el is not a real package
 (defhydra hydra-occur (:color pink :hint nil)
   "
