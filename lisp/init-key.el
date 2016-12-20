@@ -11,17 +11,26 @@
                          ("^\\alpha" ?ᵅ)
                          ("\\sqrt" ?√))))
 
+(defun kill-region-or-backward-word ()
+  "If the region is active and non-empty, call `kill-region'.
+Otherwise, call `backward-kill-word'."
+  (interactive)
+  (call-interactively
+   (if (use-region-p) #'kill-region #'backward-kill-word)))
+
 (bind-keys ("<C-M-backspace>" . backward-kill-sexp)
-           ("C-x k" . kill-this-buffer))
+           ("C-x k" . kill-this-buffer)
+           ("C-w" . kill-region-or-backward-word))
 
 (use-package anchored-transpose :ensure
   :commands anchored-transpose
   :preface
   (defun z-transpose (arg)
     (interactive "*P")
-    (if (or arg (use-region-p))
-        (call-interactively #'anchored-transpose)
-      (call-interactively #'transpose-chars)))
+    ""
+    (call-interactively
+     (if (or arg (use-region-p))
+         #'anchored-transpose #'transpose-chars)))
   :bind ("C-t" . z-transpose))
 
 (use-package easy-kill :ensure
