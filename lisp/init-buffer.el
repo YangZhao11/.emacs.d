@@ -53,6 +53,7 @@ e.g. no prodaccess.")
                             (name . "\\[fundamental\\]$")
                             (name . "^\\*Messages\\*$")
                             (name . "^\\*Backtrace\\*$")
+                            (name . "^\\*Quail Completions\\*$")
                             (name . "^\\*.*Help.*\\*$")
                             (name . "^\\*[gP]4[- ]")
                             (name . "^\\*TeX ")
@@ -173,6 +174,7 @@ e.g. no prodaccess.")
     ("<" ibuffer-filter-by-size-lt "size")
     ("/" ibuffer-filter-disable "disable"))
   (bind-keys :map ibuffer-mode-map
+             ("M-o" . nil)             ; ibuffer-visit-buffer-1-window
              ("SPC" . hydra-ibuffer/body))
 
   (defun z-ibuffer-mode-hook ()
