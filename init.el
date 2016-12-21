@@ -59,6 +59,7 @@
 (show-paren-mode 1)
 (setq show-paren-when-point-in-periphery 't)
 (electric-pair-mode 1)
+(recentf-mode 1)
 
 ;; --------------------------------------------------
 (load-theme 'zenburn 't)   ; load this first for many defaults.

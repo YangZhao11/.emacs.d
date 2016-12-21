@@ -150,7 +150,8 @@ instead of inactivate region."
   (if (buffer-modified-p)
       (ediff-current-file)
     (ediff-backup (buffer-file-name))))
-(bind-key "C-x C-d" #'ediff-this-buffer)
+(bind-keys ("C-x =" . #'ediff-this-buffer)
+           ("C-x M-=" . 'what-cursor-position))
 
 (defun shrink-other-window-if-larger-than-buffer ()
     "Shrink other window if larger than buffer."
@@ -387,6 +388,7 @@ in ctl-j-map first."
   (ivy-mode 1)
   (setq ivy-count-format "")
   (setq ivy-display-style 'fancy)
+  (setq ivy-use-virtual-buffers 't)
   (setq ivy-ignore-buffers
         '("\\` " "^\\*ESS\\*" "^\\*Messages\\*" "^\\*Help\\*" "^\\*Buffer"
           "^\\*LV\\*"
@@ -412,6 +414,10 @@ in ctl-j-map first."
 (use-package counsel :defer 4
   :bind (([remap find-file] . counsel-find-file)
          ("C-x 8 8" . counsel-unicode-char)
+         ("C-x b" . counsel-bookmark)
+         ("C-x f" . counsel-file-jump)  ; set-fill-column
+         ("C-x d" . counsel-dired-jump)
+         ("C-x C-d" . dired)
          ("M-x" . counsel-M-x)
          ("M-y" . counsel-yank-pop)
          ("M-s M-s" . counsel-grep-or-swiper)
