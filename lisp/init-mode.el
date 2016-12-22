@@ -9,6 +9,38 @@
 (add-hook 'text-mode-hook #'turn-on-auto-fill)
 (add-hook 'text-mode-hook #'turn-on-flyspell)
 
+(use-package bookmark
+  :config
+  (defhydra hydra-bookmark-bmenu (:color pink :hint nil)
+    "
+_m_ark     _u_nmark    _1_ window  _v_isit    _s_ave/_l_oad    _a_nnotation
+_d_elete   _DEL_: back _2_ window  _r_ename   _t_oggle fname^^ _A_ll
+e_x_ecute  _RET_: go   _o_ther win _R_elocate _w_here^^        _e_dit
+"
+    ("SPC" nil)
+    ("m" bookmark-bmenu-mark)
+    ("v" bookmark-bmenu-select :color blue)
+    ("t" bookmark-bmenu-toggle-filenames)
+    ("w" bookmark-bmenu-locate)
+    ("1" bookmark-bmenu-1-window :color blue)
+    ("2" bookmark-bmenu-2-window :color blue)
+    ("RET" bookmark-bmenu-this-window :color blue)
+    ("o" bookmark-bmenu-other-window :color blue)
+    ("r" bookmark-bmenu-rename)
+    ("R" bookmark-bmenu-relocate)
+    ("d" bookmark-bmenu-delete)
+    ("x" bookmark-bmenu-execute-deletions)
+    ("s" bookmark-bmenu-save)
+    ("l" bookmark-bmenu-load)
+    ("u" bookmark-bmenu-unmark)
+    ("DEL" bookmark-bmenu-backup-unmark)
+    ("a" bookmark-bmenu-show-annotation)
+    ("A" bookmark-bmenu-show-all-annotations)
+    ("e" bookmark-bmenu-edit-annotation))
+  (bind-keys :map bookmark-bmenu-mode-map
+             ("SPC" . hydra-bookmark-bmenu/body))
+)
+
 (use-package view
   :config
   (defhydra hydra-view (:color pink :hint nil)
@@ -101,6 +133,7 @@ _j_ ↓^^  _n_ext^^  _{__}_: prev/next file    _d_isplay
              ("SPC" . hydra-grep/body)))
 
 (use-package dired
+  :bind ("C-x C-d" . dired)
   :config
   (defhydra hydra-dired (:color pink :columns 3 :hint nil)
     "

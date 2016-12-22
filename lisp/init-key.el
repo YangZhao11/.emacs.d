@@ -417,7 +417,6 @@ in ctl-j-map first."
          ("C-x b" . counsel-bookmark)
          ("C-x f" . counsel-file-jump)  ; set-fill-column
          ("C-x d" . counsel-dired-jump)
-         ("C-x C-d" . dired)
          ("M-x" . counsel-M-x)
          ("M-y" . counsel-yank-pop)
          ("M-s M-s" . counsel-grep-or-swiper)
