@@ -771,6 +771,7 @@ _j_ ↓    _[_ _]_ buttons      _r_: forward
   (defface linum-hi
     '((t :inherit linum
          :weight bold))
+    "Linum for multiples of 10s"
     :group 'linum)
   (defun z-linum-format (line)
     (let* ((rem (mod (abs line) 10))
