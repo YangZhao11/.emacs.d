@@ -770,6 +770,7 @@ _j_ ↓    _[_ _]_ buttons      _r_: forward
   (defconst small-digits "₀₁₂₃₄₅₆₇₈₉")
   (defface linum-hi
     '((t :inherit linum
+         :foreground "#C59F9F"
          :weight bold))
     "Linum for multiples of 10s"
     :group 'linum)
@@ -780,7 +781,7 @@ _j_ ↓    _[_ _]_ buttons      _r_: forward
        ((= 0 line) (propertize " " 'face 'linum))
       ((= 0 rem) (propertize (format "%d" (/ (abs line) 10)) 'face 'linum-hi))
       ((< (abs line) 10) (propertize (format "%d" rem) 'face 'linum))
-      ((or (= 5 rem) (< (abs line) 20)) (propertize d 'face 'linum))
+      ((or (= 0 (mod rem 2)) (< (abs line) 20)) (propertize d 'face 'linum))
       ('t " "))))
   (setq linum-format 'z-linum-format)
 
