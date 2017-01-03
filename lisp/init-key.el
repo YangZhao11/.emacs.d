@@ -14,8 +14,6 @@
 (bind-keys ("<C-M-backspace>" . backward-kill-sexp)
            ("C-x k" . kill-this-buffer))
 
-
-
 (defun string-matching-pairs-p (s1 s2)
   "Returns true if s1 and s2 contains matching pairs"
   (when (= (length s1) (length s2))
@@ -48,7 +46,7 @@ if needed. Optional KILLP kills instead of deletes."
 (use-package region-bindings-mode
   :commands (region-bindings-mode-enable)
   :config
-  :bind (:map region-bindings-mode-map
+  (bind-keys :map region-bindings-mode-map
               ("DEL" . z-delete-pairs)))
 (region-bindings-mode-enable)
 
