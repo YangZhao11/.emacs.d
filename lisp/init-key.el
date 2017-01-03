@@ -14,6 +14,44 @@
 (bind-keys ("<C-M-backspace>" . backward-kill-sexp)
            ("C-x k" . kill-this-buffer))
 
+
+
+(defun string-matching-pairs-p (s1 s2)
+  "Returns true if s1 and s2 contains matching pairs"
+  (when (= (length s1) (length s2))
+    (if (= 0 (length s1))
+        t
+      (and (eq (cadr (electric-pair-syntax-info (aref s1 0)))
+              (aref (substring s2 -1) 0))
+           (string-matching-pairs-p
+            (substring s1 1)
+            (substring s2 0 -1))))))
+
+(defun z-delete-pairs (arg beg end &optional killp)
+  "Delete ARG paris at BEG and END locations. Keep region active
+if needed. Optional KILLP kills instead of deletes."
+  (interactive "p\nr\nP")
+  (let ((s1 (buffer-substring-no-properties beg (+ beg arg)))
+        (s2 (buffer-substring-no-properties (- end arg) end))
+        (active mark-active))
+    (if (or (< (- end beg) (* arg 2))
+            (not (string-matching-pairs-p s1 s2)))
+        (progn (goto-char beg)
+               (delete-char (- end beg) killp))
+      (save-excursion
+        (goto-char (- end arg))
+        (delete-char arg)
+        (goto-char beg)
+        (delete-char arg))
+      (setq deactivate-mark (not active)))))
+
+(use-package region-bindings-mode
+  :commands (region-bindings-mode-enable)
+  :config
+  :bind (:map region-bindings-mode-map
+              ("DEL" . z-delete-pairs)))
+(region-bindings-mode-enable)
+
 (use-package anchored-transpose :ensure
   :commands anchored-transpose
   :preface
@@ -58,11 +96,18 @@
      (call-interactively #'comment-dwim)))
   (put #'easy-kill-comment-dwim 'easy-kill-exit t)
 
+  (defun easy-kill-delete-pairs ()
+    (interactive)
+    (z-delete-pairs (prefix-numeric-value current-prefix-arg)
+                    (easy-kill-get start)
+                    (easy-kill-get end)))
+
   (add-to-list 'easy-kill-alist '(?p paragraph "\n"))
   (setq easy-kill-unhighlight-key " ")
 
   (bind-keys
    :map easy-kill-base-map
+   ("DEL" . easy-kill-delete-pairs)
    ("k"  . easy-kill-region)
    ("m"  . easy-kill-mark-region)
    ("t"  . easy-kill-transpose)
