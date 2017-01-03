@@ -11,16 +11,8 @@
                          ("^\\alpha" ?ᵅ)
                          ("\\sqrt" ?√))))
 
-(defun kill-region-or-backward-word ()
-  "If the region is active and non-empty, call `kill-region'.
-Otherwise, call `backward-kill-word'."
-  (interactive)
-  (call-interactively
-   (if (use-region-p) #'kill-region #'backward-kill-word)))
-
 (bind-keys ("<C-M-backspace>" . backward-kill-sexp)
-           ("C-x k" . kill-this-buffer)
-           ("C-w" . kill-region-or-backward-word))
+           ("C-x k" . kill-this-buffer))
 
 (use-package anchored-transpose :ensure
   :commands anchored-transpose
@@ -372,7 +364,8 @@ in ctl-j-map first."
         aw-keys '(?s ?d ?f ?j ?i ?o ?g ?h ?a ?k ?l ?\;)))
 
 (use-package zap-to-char-dwim
-  :bind ("M-z" . zap-to-char-dwim))
+  :bind (("M-z" . zap-to-char-dwim)
+         ("M-Z" . zap-back-to-char-dwim)))
 
 (use-package subr-x
   :commands (string-trim-right
@@ -419,6 +412,7 @@ in ctl-j-map first."
          ("C-x d" . counsel-dired-jump)
          ("M-x" . counsel-M-x)
          ("M-y" . counsel-yank-pop)
+         ("M-?" . counsel-company)
          ("M-s M-s" . counsel-grep-or-swiper)
          ("M-s i" . counsel-imenu))
   :bind (:map help-map

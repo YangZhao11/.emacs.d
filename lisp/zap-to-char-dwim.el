@@ -7,6 +7,7 @@
 (require 'misc)                         ; for zap-up-to-char
 
 (defun zap-to-char-matching-pairs (arg char)
+  "Zap up to ARG'th CHAR, considering matching parens."
   (let ((direction (if (>= arg 0) 1 -1))
         (start (point)))
     (search-forward (char-to-string char) nil nil direction)
@@ -18,6 +19,7 @@
     (kill-region start (point))))
 
 (defun zap-to-space (arg)
+  "Zap up to ARG'th consecutive space."
   (let ((direction (if (>= arg 0) 1 -1))
         (on-space (if (>= arg 0)
                       (looking-at "\\s ")
@@ -39,11 +41,13 @@
 
 ;;;###autoload
 (defun zap-to-char-dwim (arg char)
-  "Like `zap-up-to-char', except:
-- Repeat last key (e.g. if bound to M-z, press M-z a second time)
+  "Delete text up to ARG'th CHAR similar to `zap-up-to-char', except:
+- Repeat last key (press \\[zap-to-char-dwim] a second time)
   again for `zap-to-char'
 - zap to space handles consequtive spaces
-- zap to right parenthses goes to the end of enclosing list"
+- zap to right parenthses goes to the end of enclosing list
+
+ARG is passed to respective functions mentioned here."
   (interactive (list (prefix-numeric-value current-prefix-arg)
                      (read-char "Zap to: " 't)))
   (cond
@@ -59,7 +63,12 @@
    ('t
     (zap-up-to-char arg char))))
 
-
+;;;###autoload
+(defun zap-back-to-char-dwim (arg char)
+  "Call `zap-to-char-dwim' with negated ARG and CHAR."
+  (interactive (list (prefix-numeric-value current-prefix-arg)
+                     (read-char "Zap back to: " 't)))
+  (zap-to-char-dwim (- arg) char))
 
 (provide 'zap-to-char-dwim)
 ;;; zap-to-char-dwim.el ends here

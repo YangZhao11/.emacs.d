@@ -322,7 +322,6 @@ _q_uit      _RET_: current
 ;; --------------------------------------------------
 (use-package yasnippet :demand ;; :ensure
   :diminish yas-minor-mode
-  :bind ("M-?" . yas-insert-snippet)
   :init
   (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
   :config
@@ -350,12 +349,13 @@ _q_uit      _RET_: current
   :config
 
   (defface flycheck-status-warning
-    '((t (:foreground "#D8B080")))
+    '((t (:foreground "#D8B080" :inherit mode-line)))
     "Face for flycheck status: warnings" :group 'flycheck)
   (defface flycheck-status-ok
-    '((t (:foreground "#A0E8A0")))
+    '((t (:foreground "#A0E8A0" :inherit mode-line)))
     "Face for flycheck status: OK" :group 'flycheck)
-  (defface flycheck-status-error '((t (:foreground "#D88080")))
+  (defface flycheck-status-error
+    '((t (:foreground "#D88080" :inherit mode-line)))
     "Face for flycheck status: error" :group 'flycheck)
 
   (defun z-flycheck-count (s count)
