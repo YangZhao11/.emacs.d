@@ -15,7 +15,8 @@
            ("C-x k" . kill-this-buffer))
 
 (defun string-matching-pairs-p (s1 s2)
-  "Returns true if s1 and s2 contains matching pairs"
+  "Returns true if s1 and s2 contains matching pairs, e.g. s1 is
+[( and s2 is)]. Rely on electric-pair logic here."
   (when (= (length s1) (length s2))
     (if (= 0 (length s1))
         t
