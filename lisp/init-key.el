@@ -128,8 +128,7 @@ instead of inactivate region."
   (if (buffer-modified-p)
       (ediff-current-file)
     (ediff-backup (buffer-file-name))))
-(bind-keys ("C-x =" . #'ediff-this-buffer)
-           ("C-x M-=" . 'what-cursor-position))
+(bind-keys ("C-x /" . ediff-this-buffer))
 
 (defun shrink-other-window-if-larger-than-buffer ()
     "Shrink other window if larger than buffer."
