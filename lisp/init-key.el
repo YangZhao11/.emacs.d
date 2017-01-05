@@ -398,6 +398,7 @@ in ctl-j-map first."
          ("C-x d" . counsel-dired-jump)
          ("M-x" . counsel-M-x)
          ("M-y" . counsel-yank-pop)
+         ("C-x C-SPC" . counsel-mark-ring)
          ("M-?" . counsel-company)
          ("M-s M-s" . counsel-grep-or-swiper)
          ("M-s i" . counsel-imenu))
