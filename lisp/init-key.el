@@ -45,7 +45,6 @@ if needed. Optional KILLP kills instead of deletes."
       (setq deactivate-mark (not active)))))
 
 (use-package region-bindings-mode
-  :diminish region-bindings-mode
   :commands (region-bindings-mode-enable)
   :config
   (bind-keys :map region-bindings-mode-map
@@ -62,6 +61,65 @@ if needed. Optional KILLP kills instead of deletes."
      (if (or arg (use-region-p))
          #'anchored-transpose #'transpose-chars)))
   :bind ("C-t" . z-transpose))
+
+(use-package easy-kill :ensure
+  :functions easy-kill-mark-region
+  :bind ([remap kill-ring-save] . easy-kill)
+  :config
+
+  (defun easy-kill-transpose ()
+    (interactive)
+    (save-mark-and-excursion
+     (easy-kill-mark-region)
+     (call-interactively #'anchored-transpose)))
+  (put #'easy-kill-transpose 'easy-kill-exit t)
+
+  (defun easy-kill-wrap-region ()
+    (interactive)
+    (save-mark-and-excursion
+     (easy-kill-mark-region)
+     (call-interactively #'self-insert-command)))
+  (put #'easy-kill-wrap-region 'easy-kill-exit t)
+
+  (defun easy-kill-indent-region ()
+    (interactive)
+    (save-mark-and-excursion
+     (easy-kill-mark-region)
+     (call-interactively #'indent-region)))
+  (put #'easy-kill-indent-region 'easy-kill-exit t)
+
+  (defun easy-kill-comment-dwim ()
+    (interactive)
+    (save-mark-and-excursion
+     (easy-kill-mark-region)
+     (call-interactively #'comment-dwim)))
+  (put #'easy-kill-comment-dwim 'easy-kill-exit t)
+
+  (defun easy-kill-delete-pairs ()
+    (interactive)
+    (z-delete-pairs (prefix-numeric-value current-prefix-arg)
+                    (easy-kill-get start)
+                    (easy-kill-get end)))
+
+  (add-to-list 'easy-kill-alist '(?p paragraph "\n"))
+  (setq easy-kill-unhighlight-key " ")
+
+  (bind-keys
+   :map easy-kill-base-map
+   ("DEL" . easy-kill-delete-pairs)
+   ("k"  . easy-kill-region)
+   ("m"  . easy-kill-mark-region)
+   ("t"  . easy-kill-transpose)
+   (";"  . easy-kill-comment-dwim)
+   ("("  . easy-kill-wrap-region)
+   (")"  . easy-kill-wrap-region)
+   ("["  . easy-kill-wrap-region)
+   ("]"  . easy-kill-wrap-region)
+   ("{"  . easy-kill-wrap-region)
+   ("}"  . easy-kill-wrap-region)
+   ("\"" . easy-kill-wrap-region)
+   ("'"  . easy-kill-wrap-region)
+   ("\\" . easy-kill-indent-region)))
 
 (defun cycle-spacing-0 ()
   "Remove adjacent spaces, but undo if the command is issued the
