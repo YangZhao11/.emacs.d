@@ -99,7 +99,10 @@ if needed. Optional KILLP kills instead of deletes."
     (interactive)
     (z-delete-pairs (prefix-numeric-value current-prefix-arg)
                     (easy-kill-get start)
-                    (easy-kill-get end)))
+                    (easy-kill-get end))
+    (when (eq (easy-kill-get start) (easy-kill-get end))
+      (message "No selection, exit easy-kill")
+      (easy-kill-exit)))
 
   (add-to-list 'easy-kill-alist '(?p paragraph "\n"))
   (setq easy-kill-unhighlight-key " ")
