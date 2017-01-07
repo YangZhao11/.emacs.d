@@ -14,42 +14,15 @@
 (bind-keys ("<C-M-backspace>" . backward-kill-sexp)
            ("C-x k" . kill-this-buffer))
 
-(defun string-matching-pairs-p (s1 s2)
-  "Returns true if s1 and s2 contains matching pairs, e.g. s1 is
-[( and s2 is)]. Rely on electric-pair logic here."
-  (when (= (length s1) (length s2))
-    (if (= 0 (length s1))
-        t
-      (and (eq (cadr (electric-pair-syntax-info (aref s1 0)))
-              (aref (substring s2 -1) 0))
-           (string-matching-pairs-p
-            (substring s1 1)
-            (substring s2 0 -1))))))
-
-(defun z-delete-pairs (arg beg end &optional killp)
-  "Delete ARG paris at BEG and END locations. Keep region active
-if needed. Optional KILLP kills instead of deletes."
-  (interactive "p\nr\nP")
-  (let ((s1 (buffer-substring-no-properties beg (+ beg arg)))
-        (s2 (buffer-substring-no-properties (- end arg) end))
-        (active mark-active))
-    (if (or (< (- end beg) (* arg 2))
-            (not (string-matching-pairs-p s1 s2)))
-        (progn (goto-char beg)
-               (delete-char (- end beg) killp))
-      (save-excursion
-        (goto-char (- end arg))
-        (delete-char arg)
-        (goto-char beg)
-        (delete-char arg))
-      (setq deactivate-mark (not active)))))
-
 (use-package region-bindings-mode
-  :commands (region-bindings-mode-enable)
-  :config
-  (bind-keys :map region-bindings-mode-map
-              ("DEL" . z-delete-pairs)))
+  :commands (region-bindings-mode-enable))
 (region-bindings-mode-enable)
+
+(use-package edit-pairs
+  :commands (z-delete-pairs
+             kill-inside)
+  :bind (:map region-bindings-mode-map
+              ("DEL" . z-delete-pairs)))
 
 (use-package anchored-transpose :ensure
   :commands anchored-transpose
@@ -61,32 +34,6 @@ if needed. Optional KILLP kills instead of deletes."
      (if (or arg (use-region-p))
          #'anchored-transpose #'transpose-chars)))
   :bind ("C-t" . z-transpose))
-
-(defun kill-inside--pair (beg end)
-  (interactive "r")
-  (let* ((s1 (buffer-substring-no-properties beg (1+ beg)))
-         (s2 (buffer-substring-no-properties (1- end) end))
-         (length (- (1- end) (1+ beg))))
-    (if (and (>= length 0)
-             (string-matching-pairs-p s1 s2))
-        (progn (goto-char (1+ beg))
-               (delete-char length t)
-               length))))
-
-(defun kill-inside--sexp-pair (beg end)
-  (interactive "r")
-  (let* ((sbeg (scan-sexps beg 1))
-         (send (scan-sexps end -1))
-         (length (- send sbeg)))
-    (when (>= length 0)
-      (goto-char sbeg)
-      (delete-char length t)
-      length)))
-
-(defun kill-inside (beg end)
-  (interactive "r")
-  (or (kill-inside--pair beg end)
-      (kill-inside--sexp-pair beg end)))
 
 (use-package easy-kill :ensure
   :functions easy-kill-mark-region
