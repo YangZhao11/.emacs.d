@@ -18,11 +18,12 @@
   :commands (region-bindings-mode-enable))
 (region-bindings-mode-enable)
 
-(use-package edit-pairs
-  :commands (z-delete-pairs
-             kill-inside)
+(use-package easy-pair
+  :commands (easy-pair-delete
+             easy-pair-kill-inside)
   :bind (:map region-bindings-mode-map
-              ("DEL" . z-delete-pairs)))
+              ("DEL" . easy-pair-delete)
+              ("i" . easy-pair-kill-inside)))
 
 (use-package anchored-transpose :ensure
   :commands anchored-transpose
@@ -79,7 +80,7 @@
 
   (defun easy-kill-inside ()
     (interactive)
-    (kill-inside (easy-kill-get start) (easy-kill-get end)))
+    (easy-pair-kill-inside (easy-kill-get start) (easy-kill-get end)))
   (put #'easy-kill-inside 'easy-kill-exit t)
 
   (add-to-list 'easy-kill-alist '(?p paragraph "\n"))
