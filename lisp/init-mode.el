@@ -1,4 +1,4 @@
-; -*- coding: utf-8 -*-
+; -*- coding: utf-8; lexical-binding: t -*-
 
 (eval-when-compile
   (require 'use-package)
@@ -448,6 +448,10 @@ fallback."
     (setq-local register-channel-move-by-default 't)
     (setq-local ido-use-filename-at-point nil))
   (add-hook 'org-mode-hook 'z-org-mode-hook))
+
+(use-package better-shell
+  :bind (("<f2>" . better-shell-shell)
+         ("C-x <f2>" . better-shell-remote-open)))
 
 ;; --------------------------------------------------
 ;; eshell

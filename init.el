@@ -133,7 +133,7 @@
     ("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3")))
  '(package-selected-packages
    (quote
-    (region-bindings-mode counsel swiper citc g4-gutter ivy imenu-anywhere wgrep ivy-hydra flx hydra keyfreq color-identifiers-mode org-bullets js2-mode scala-mode2 clang-format markdown-mode use-package magit flycheck go-eldoc company company-go smex beacon anchored-transpose avy csv-mode go-mode easy-kill zenburn-theme yasnippet squery register-channel rainbow-delimiters lua-mode ido-vertical-mode ido-ubiquitous haskell-mode goto-chg god-mode f ess edit-server ace-window)))
+    (better-shell region-bindings-mode counsel swiper citc g4-gutter ivy imenu-anywhere wgrep ivy-hydra flx hydra keyfreq color-identifiers-mode org-bullets js2-mode scala-mode2 clang-format markdown-mode use-package magit flycheck go-eldoc company company-go smex beacon anchored-transpose avy csv-mode go-mode easy-kill zenburn-theme yasnippet squery register-channel rainbow-delimiters lua-mode ido-vertical-mode ido-ubiquitous haskell-mode goto-chg god-mode f ess edit-server ace-window)))
  '(vc-annotate-background "#2B2B2B")
  '(vc-annotate-color-map
    (quote

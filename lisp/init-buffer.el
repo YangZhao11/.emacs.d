@@ -1,4 +1,4 @@
-; -*- coding: utf-8 -*-
+; -*- coding: utf-8; lexical-binding: t -*-
 
 (eval-when-compile
   (require 'use-package)

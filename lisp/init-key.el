@@ -1,4 +1,4 @@
-; -*- coding: utf-8 -*-
+; -*- coding: utf-8; lexical-binding: t -*-
 
 ;;; Code:
 (eval-when-compile
@@ -71,7 +71,7 @@
 
   (defun easy-kill-delete-pairs ()
     (interactive)
-    (z-delete-pairs (prefix-numeric-value current-prefix-arg)
+    (easy-pair-delete (prefix-numeric-value current-prefix-arg)
                     (easy-kill-get start)
                     (easy-kill-get end))
     (when (eq (easy-kill-get start) (easy-kill-get end))
@@ -182,7 +182,7 @@ instead of inactivate region."
 (bind-key "C-z" nil)
 
 ;; F1 for help.
-(bind-key "<f2>" #'eshell)
+;; (bind-key "<f2>" #'eshell)
 ;; F3 and F4 for macros
 ;; F5 and F6 bound for org-mode stuff.
 (use-package gud
@@ -502,9 +502,10 @@ _d_own  _b_ack    _m_ark  _Y_ank-pop
 (defvar z-god-mode-lighter "")
 (defvar-local z-god-saved-input-method nil "Saved input method before god-mode")
 
-(defun set-cursor-type (cursor-type)
+(defun set-cursor-type (type)
+  "Set cursor to TYPE for all frames."
   (dolist (f (frame-list))
-    (modify-frame-parameters f `((cursor-type . ,cursor-type)))))
+    (modify-frame-parameters f `((cursor-type . ,type)))))
 
 (use-package god-mode :ensure
   :bind ("ESC ESC" . god-mode-all)
