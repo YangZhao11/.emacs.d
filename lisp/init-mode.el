@@ -321,14 +321,14 @@ _q_uit      _RET_: current
 
 ;; --------------------------------------------------
 (use-package yasnippet :demand ;; :ensure
-  :diminish yas-minor-mode
   :init
   (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
   :config
   (setq yas-prompt-functions
         '(yas-completing-prompt yas-no-prompt)
         yas-wrap-around-region t)
-  (yas-global-mode))
+  (yas-global-mode)
+  (diminish 'yas-minor-mode))
 
 (defun z-re-backward (re count)
   "Search RE backward, return COUNT submatch.  Used in snippets."

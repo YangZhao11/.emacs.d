@@ -428,6 +428,7 @@ in ctl-j-map first."
              ("C-'" . ivy-alt-done)
              ("M-k" . ivy-yank-word)
              ("M-m" . ivy-restrict-to-matches)
+             ("<home>" . hydra-ivy/body)
              ("ESC ESC" . hydra-ivy/body)))
 
 (use-package counsel :defer 4
@@ -508,7 +509,8 @@ _d_own  _b_ack    _m_ark  _Y_ank-pop
     (modify-frame-parameters f `((cursor-type . ,type)))))
 
 (use-package god-mode :ensure
-  :bind ("ESC ESC" . god-mode-all)
+  :bind (("<home>" . god-mode-all)
+         ("ESC ESC" . god-mode-all))
   :diminish god-local-mode
   :config
 
@@ -550,8 +552,12 @@ _d_own  _b_ack    _m_ark  _Y_ank-pop
              ("#" . server-edit))
 
   (require 'god-mode-isearch)
-  (bind-key "ESC ESC" #'god-mode-isearch-activate isearch-mode-map)
-  (bind-key "ESC ESC" #'god-mode-isearch-disable god-mode-isearch-map)
+  (bind-keys :map isearch-mode-map
+             ("<home>" . god-mode-isearch-activate)
+             ("ESC ESC" . god-mode-isearch-activate))
+  (bind-keys :map god-mode-isearch-map
+             ("<home>" . god-mode-isearch-disable)
+             ("ESC ESC" . god-mode-isearch-disable))
 
   (defun god-mode-self-insert-on-meta ()
   "Copy of `god-mode-self-insert', except binding is M-key."
