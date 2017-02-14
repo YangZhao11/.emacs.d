@@ -293,7 +293,30 @@ _q_uit      _RET_: current
   :bind ("C-x g" . magit-status)
   :config
   (setq with-editor-mode-lighter "")
-  (setq magit-completing-read-function 'ivy-completing-read))
+  (setq magit-completing-read-function 'ivy-completing-read)
+  (defhydra hydra-magit-j (:color blue :hint nil)
+"
+u_n_tracked _s_taged    un_p_ushed  _z_: stashes
+_t_racked   _u_nstaged  un_f_etched "
+    ("SPC" nil)
+    ("n" magit-jump-to-untracked)
+    ("t" magit-jump-to-tracked)
+    ("s" magit-jump-to-staged)
+    ("u" magit-jump-to-unstaged)
+    ("p" hydra-magit-j-p/body)
+    ("f" hydra-magit-j-f/body)
+    ("z" magit-jump-to-stashes))
+  (defhydra hydra-magit-j-p (:color blue)
+    "unpushed"
+    ("SPC" nil nil)
+    ("p" magit-jump-to-unpushed-to-pushremote "pushremote")
+    ("u" magit-jump-to-unpushed-to-upstream "upstream"))
+  (defhydra hydra-magit-j-f (:color blue)
+    "unfetched"
+    ("SPC" nil nil)
+    ("p" magit-jump-to-unpulled-from-pushremote "pushremote")
+    ("u" magit-jump-to-unpulled-from-upstream "upstream"))
+  (bind-keys :map magit-mode-map ("j SPC" . hydra-magit-j/body)))
 
 (use-package eldoc :diminish eldoc-mode
   :commands eldoc-mode)
