@@ -132,7 +132,8 @@ _j_ ↓^^  _n_ext^^  _{__}_: prev/next file    _d_isplay
              ("SPC" . hydra-grep/body)))
 
 (use-package dired
-  :bind ("C-x C-d" . dired)
+  :bind (("C-x C-d" . dired)
+         ("C-x C-j" . dired-jump))
   :config
   (require 'dired-x)
   (defhydra hydra-dired (:color pink :columns 3 :hint nil)
