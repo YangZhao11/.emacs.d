@@ -134,15 +134,16 @@ _j_ ↓^^  _n_ext^^  _{__}_: prev/next file    _d_isplay
 (use-package dired
   :bind ("C-x C-d" . dired)
   :config
+  (require 'dired-x)
   (defhydra hydra-dired (:color pink :columns 3 :hint nil)
     "
 ^Mark^       ^Flag^        ^Emacs Op^      ^ ^              ^^File Op^^ (_e_dit)
 ^----^-------^----^--------^--------^------^-^--------------^^-------^^--^-^------
-_*_: hydra   _#_: temp     _Q_uery replace _B_yte compile   _!_shell_&_ _S_ymlink
+_*_: marks   _#_: temp     _Q_uery replace _F_ind marked    _!_shell_&_ _S_ymlink
 _%_: regexp  _~_: backup   _A_: grep       _L_oad           ^^_C_opy    _H_ardlink
 _u_n/_m_ark    _d_: this     _B_yte compile  _k_ill line      ^^_D_elete  ch_M_od
 _t_oggle     _x_: delete   _v_iew          _w_: file name   ^^_R_ename  ch_O_wn
-_U_nmark all ^ ^           _o_ther window  redisp_l_ay      ^^_T_ouch   ch_G_rp
+_U_nmark all _<_ _>_:dirline _o_ther window  redisp_l_ay      ^^_T_ouch   ch_G_rp
 "
     ("SPC" nil)
     ("RET" dired-find-file :exit t)
@@ -157,11 +158,16 @@ _U_nmark all ^ ^           _o_ther window  redisp_l_ay      ^^_T_ouch   ch_G_rp
     ("&" dired-do-async-shell-command)
     ("(" dired-hide-details-mode "hide details")
     ("*" hydra-dired-mark/body :exit t)
+    ("+" dired-create-directory "create dir")
+    ("." dired-clean-directory "clean dir")
+    ("<" dired-prev-dirline)
     ("=" dired-diff "diff")
+    (">" dired-next-dirline)
     ("A" dired-do-find-regexp)
     ("B" dired-do-byte-compile)
     ("C" dired-do-copy)
     ("D" dired-do-delete)
+    ("F" dired-do-find-marked-files :exit t)
     ("G" dired-do-chgrp)
     ("H" dired-do-hardlink)
     ("L" dired-do-load)
@@ -199,10 +205,13 @@ _U_nmark all ^ ^           _o_ther window  redisp_l_ay      ^^_T_ouch   ch_G_rp
     ("SPC" nil)
     ("!" dired-unmark-all-marks  "unmark all")
     ("%" dired-mark-files-regexp "regexp")
+    ("(" dired-mark-sexp         "sexp")
     ("*" dired-mark-executables  "executables")
+    ("." dired-mark-extension    "extension")
     ("/" dired-mark-directories  "directories")
     ("?" dired-unmark-all-files  "unmark markchar")
     ("@" dired-mark-symlinks     "symlinks")
+    ("O" dired-mark-omitted      "omitted")
     ("c" dired-change-marks      "change")
     ("s" dired-mark-subdir-files "subdir-files"))
 
@@ -215,7 +224,9 @@ _U_nmark all ^ ^           _o_ther window  redisp_l_ay      ^^_T_ouch   ch_G_rp
     ("&" dired-flag-garbage-files "flag-garbage-files")
     ("C" dired-do-copy-regexp "copy")
     ("H" dired-do-hardlink-regexp "hardlink")
+    ("R" dired-do-rename-regexp "rename")
     ("S" dired-do-symlink-regexp "symlink")
+    ("Y" dired-do-relsymlink-regexp "relsymlink")
     ("d" dired-flag-files-regexp "flag-files")
     ("g" dired-mark-files-containing-regexp "mark-containing")
     ("l" dired-downcase "downcase")
@@ -296,8 +307,7 @@ _q_uit      _RET_: current
   (setq magit-completing-read-function 'ivy-completing-read)
   (defhydra hydra-magit-j (:color blue :hint nil)
 "
-u_n_tracked _s_taged    un_p_ushed  _z_: stashes
-_t_racked   _u_nstaged  un_f_etched "
+_u_n/_s_taged   u_n_/_t_racked   un_p_ushed   un_f_etched   _z_: stashes"
     ("SPC" nil)
     ("n" magit-jump-to-untracked)
     ("t" magit-jump-to-tracked)
@@ -306,16 +316,18 @@ _t_racked   _u_nstaged  un_f_etched "
     ("p" hydra-magit-j-p/body)
     ("f" hydra-magit-j-f/body)
     ("z" magit-jump-to-stashes))
-  (defhydra hydra-magit-j-p (:color blue)
-    "unpushed"
+  (defhydra hydra-magit-j-p (:color blue :hint nil)
+    "
+jump to unpushed to: _p_ushremote  _u_pstream"
+    ("SPC" nil)
+    ("p" magit-jump-to-unpushed-to-pushremote)
+    ("u" magit-jump-to-unpushed-to-upstream))
+  (defhydra hydra-magit-j-f (:color blue :hint nil)
+    "
+jump to unfetched from: _p_ushremote  _u_pstream"
     ("SPC" nil nil)
-    ("p" magit-jump-to-unpushed-to-pushremote "pushremote")
-    ("u" magit-jump-to-unpushed-to-upstream "upstream"))
-  (defhydra hydra-magit-j-f (:color blue)
-    "unfetched"
-    ("SPC" nil nil)
-    ("p" magit-jump-to-unpulled-from-pushremote "pushremote")
-    ("u" magit-jump-to-unpulled-from-upstream "upstream"))
+    ("p" magit-jump-to-unpulled-from-pushremote)
+    ("u" magit-jump-to-unpulled-from-upstream))
   (bind-keys :map magit-mode-map ("j SPC" . hydra-magit-j/body)))
 
 (use-package eldoc :diminish eldoc-mode
