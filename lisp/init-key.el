@@ -11,10 +11,15 @@
                          ("^\\alpha" ?ᵅ)
                          ("\\sqrt" ?√))))
 
+(defun z-kill-buffer (arg)
+  (interactive "P")
+  (call-interactively
+   (if arg 'kill-buffer
+     'kill-this-buffer)))
 (bind-keys ("<C-M-backspace>" . backward-kill-sexp)
-           ("C-x k" . kill-this-buffer))
+           ("C-x k" . z-kill-buffer))
 
-(use-package region-bindings-mode
+(use-package region-bindings-mode :diminish 'region-bindings-mode
   :commands (region-bindings-mode-enable))
 (region-bindings-mode-enable)
 
@@ -428,8 +433,7 @@ in ctl-j-map first."
              ("C-'" . ivy-alt-done)
              ("M-k" . ivy-yank-word)
              ("M-m" . ivy-restrict-to-matches)
-             ("<home>" . hydra-ivy/body)
-             ("ESC ESC" . hydra-ivy/body)))
+             ("<home>" . hydra-ivy/body)))
 
 (use-package counsel :defer 4
   :bind (([remap find-file] . counsel-find-file)
@@ -509,8 +513,7 @@ _d_own  _b_ack    _m_ark  _Y_ank-pop
     (modify-frame-parameters f `((cursor-type . ,type)))))
 
 (use-package god-mode :ensure
-  :bind (("<home>" . god-mode-all)
-         ("ESC ESC" . god-mode-all))
+  :bind (("<home>" . god-mode-all))
   :diminish god-local-mode
   :config
 
@@ -553,11 +556,9 @@ _d_own  _b_ack    _m_ark  _Y_ank-pop
 
   (require 'god-mode-isearch)
   (bind-keys :map isearch-mode-map
-             ("<home>" . god-mode-isearch-activate)
-             ("ESC ESC" . god-mode-isearch-activate))
+             ("<home>" . god-mode-isearch-activate))
   (bind-keys :map god-mode-isearch-map
-             ("<home>" . god-mode-isearch-disable)
-             ("ESC ESC" . god-mode-isearch-disable))
+             ("<home>" . god-mode-isearch-disable))
 
   (defun god-mode-self-insert-on-meta ()
   "Copy of `god-mode-self-insert', except binding is M-key."

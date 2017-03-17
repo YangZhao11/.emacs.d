@@ -1,0 +1,12 @@
+# -*- mode: snippet -*-
+# name: dim
+# key: dim
+# --
+// $1 returns dim.
+func ${1:Func}(e *session.Event) ${2:string} \{
+     $0
+\}
+
+func init() \{
+     eventcollector.RegisterFunction("$1", $1)
+\}
