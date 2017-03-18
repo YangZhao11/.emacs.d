@@ -164,27 +164,31 @@ e.g. no prodaccess.")
     ("f" ibuffer-do-sort-by-filename/process "filename")
     ("m" ibuffer-do-sort-by-major-mode "mode"))
 
-  (defhydra hydra-ibuffer-filter (:color teal :columns 4 :hint nil
+  (defhydra hydra-ibuffer-filter (:color teal :hint nil
                                   :after-exit
                                   (if (eq major-mode 'ibuffer-mode)
                                       (hydra-ibuffer/body)))
-    "Filter"
+    "
+Filter by  (_/_ disable):
+_m_ode/derived_M_  _f_ilename mod_i_fied   _c_ontent    _<_ size _>_
+_b_ase/_n_ame      _._ ext    _*_ starred  predicat_e_  _v_isiting
+"
     ("SPC" nil)
-    ("m" ibuffer-filter-by-used-mode "mode")
-    ("M" ibuffer-filter-by-derived-mode "derived mode")
-    ("n" ibuffer-filter-by-name "name")
-    ("b" ibuffer-filter-by-basename "basename")
-    ("." ibuffer-filter-by-file-extension "extension")
+    ("m" ibuffer-filter-by-used-mode)
+    ("M" ibuffer-filter-by-derived-mode)
+    ("n" ibuffer-filter-by-name)
+    ("b" ibuffer-filter-by-basename)
+    ("." ibuffer-filter-by-file-extension)
     ;;    ("/" ibuffer-filter-by-directory "directory")
-    ("*" ibuffer-filter-by-starred-name "starred")
-    ("c" ibuffer-filter-by-content "content")
-    ("e" ibuffer-filter-by-predicate "predicate")
-    ("f" ibuffer-filter-by-filename "filename")
-    ("i" ibuffer-filter-by-modified "modified")
-    ("v" ibuffer-filter-by-visiting-file "visiting")
-    (">" ibuffer-filter-by-size-gt "size")
-    ("<" ibuffer-filter-by-size-lt "size")
-    ("/" ibuffer-filter-disable "disable"))
+    ("*" ibuffer-filter-by-starred-name)
+    ("c" ibuffer-filter-by-content)
+    ("e" ibuffer-filter-by-predicate)
+    ("f" ibuffer-filter-by-filename)
+    ("i" ibuffer-filter-by-modified)
+    ("v" ibuffer-filter-by-visiting-file)
+    (">" ibuffer-filter-by-size-gt)
+    ("<" ibuffer-filter-by-size-lt)
+    ("/" ibuffer-filter-disable))
   (bind-keys :map ibuffer-mode-map
              ("M-o" . nil)             ; ibuffer-visit-buffer-1-window
              ("SPC" . hydra-ibuffer/body))
