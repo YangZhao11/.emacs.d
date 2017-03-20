@@ -89,34 +89,38 @@ e.g. no prodaccess.")
                 " "
                 (mode 16 16 :left :elide))))
 
-  (defhydra hydra-ibuffer (:color pink :columns 3 :hint nil)
-    "Action"
+  (defhydra hydra-ibuffer (:color pink :hint nil)
+    "
+_s_ort     _D_elete  _v_iew     ^^  _Q_uery       Toggle^^    _F_:shell
+_/_ filter _S_ave    _H_:other f^^  _r_eplace     ========^^  _X_:pipe
+_%_ regex  re_V_ert  _o_ther win^^  _I_: qr-regex _T_:RdOnly  _N_:replace
+_*_ mark   _R_ename  vie_W_-_E_val  _O_ccur       _M_odified  _B_:copy bname
+"
     ("SPC" nil)
     ("*" hydra-ibuffer-mark/body :exit t)
     ("%" hydra-ibuffer-regex/body :exit t)
     ("/" hydra-ibuffer-filter/body :exit t)
-    ("s" hydra-ibuffer-sort/body "sort" :exit t)
-    ("A" ibuffer-do-view "view")
-    ("B" ibuffer-copy-buffername-as-kill "copy name")
-    ("D" ibuffer-do-delete "delete")
-    ("E" ibuffer-do-eval "eval")
-    ("F" ibuffer-do-shell-command-file "shell-command-file")
-    ("I" ibuffer-do-query-replace-regexp "query-replace-regexp")
-    ("H" ibuffer-do-view-other-frame "view-other-frame")
-    ("N" ibuffer-do-shell-command-pipe-replace "shell-cmd-pipe-replace")
-    ("M" ibuffer-do-toggle-modified "toggle-modified")
-    ("o" ibuffer-visit-buffer-other-window "other window")
-    ("O" ibuffer-do-occur "occur")
-    ("P" ibuffer-do-print "print")
-    ("Q" ibuffer-do-query-replace "query-replace")
-    ("r" ibuffer-do-replace-regexp "replace-regexp")
-    ("R" ibuffer-do-rename-uniquely "rename-uniquely")
-    ("S" ibuffer-do-save "save")
-    ("T" ibuffer-do-toggle-read-only "toggle-read-only")
-    ("U" ibuffer-unmark-all-marks "Unmark all")
-    ("V" ibuffer-do-revert "revert")
-    ("W" ibuffer-do-view-and-eval "view-and-eval")
-    ("X" ibuffer-do-shell-command-pipe "shell-command-pipe"))
+    ("s" hydra-ibuffer-sort/body :exit t)
+    ("B" ibuffer-copy-buffername-as-kill)
+    ("D" ibuffer-do-delete)
+    ("E" ibuffer-do-eval)
+    ("F" ibuffer-do-shell-command-file)
+    ("H" ibuffer-do-view-other-frame :exit t)
+    ("I" ibuffer-do-query-replace-regexp)
+    ("N" ibuffer-do-shell-command-pipe-replace)
+    ("M" ibuffer-do-toggle-modified)
+    ("o" ibuffer-visit-buffer-other-window :exit t)
+    ("O" ibuffer-do-occur)
+    ("Q" ibuffer-do-query-replace)
+    ("r" ibuffer-do-replace-regexp)
+    ("R" ibuffer-do-rename-uniquely)
+    ("S" ibuffer-do-save)
+    ("T" ibuffer-do-toggle-read-only)
+    ("v" ibuffer-do-view :exit t)
+    ("V" ibuffer-do-revert)
+    ("W" ibuffer-do-view-and-eval)
+    ("X" ibuffer-do-shell-command-pipe)
+    ("x" ibuffer-do-kill-on-deletion-marks))
 
   (defhydra hydra-ibuffer-mark (:color teal :columns 5 :hint nil
                                 :after-exit
