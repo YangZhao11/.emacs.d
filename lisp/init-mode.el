@@ -111,8 +111,8 @@ _<_ _>_    _d_isplay
   (require 'wgrep)
   (defhydra hydra-grep (:color pink :hint nil)
   "
-_k_ ↑^^  _p_rev^^  _<__>_  beg/end of buffer _RET_: goto  _e_dit
-_j_ ↓^^  _n_ext^^  _{__}_: prev/next file    _d_isplay
+_k_↑^^  _p_rev^^  _<__>_  beg/end of buffer _RET_: goto  _e_dit
+_j_↓^^  _n_ext^^  _{__}_: prev/next file    _d_isplay
 "
   ("SPC" nil)
   ("p" previous-error-no-select)
@@ -240,9 +240,9 @@ _U_nmark all _<_ _>_:dirline _o_ther window  redisp_l_ay      ^^_T_ouch   ch_G_r
 
 (defhydra hydra-package-menu (:color pink :hint nil)
   "
-_k_ ↑ _p_rev    _U_pgrade      _d_elete   _f_ilter _H_ide       _r_efresh
-_j_ ↓ _n_ext    _~_: obsolete  _i_nstall  _S_ort   _(_: toggle  _g_: revert
-_<_   _>_       e_x_ecute      _?_: info  _u_nmark _q_uit
+_k_↑ _p_rev    _U_pgrade      _d_elete   _f_ilter _H_ide       _r_efresh
+_j_↓ _n_ext    _~_: obsolete  _i_nstall  _S_ort   _(_: toggle  _g_: revert
+_<_  _>_       e_x_ecute      _?_: info  _u_nmark _q_uit
 "
   ("SPC" nil)
   ("(" package-menu-toggle-hiding)
@@ -274,14 +274,13 @@ _<_   _>_       e_x_ecute      _?_: info  _u_nmark _q_uit
   :bind ("C-x m" . hydra-smerge/body)
   :config
   (defhydra hydra-smerge
-    (:color red :hint nil
-            :pre (smerge-mode 1))
+    (:color red :hint nil :pre (smerge-start-session))
     "
 ^Move^      ^Keep^         ^Diff^      ^Pair^
 ------------------------------------------------------
-_n_ext      _b_ase         _R_efine    _<_: base-mine
-_p_rev      _m_ine         _E_diff     _=_: mine-other
-^ ^         _o_ther        _C_ombine   _>_: base-other
+_n_ext      _b_ase         _R_efine    _<_: base-upper
+_p_rev      _l_ower        _E_diff     _=_: upper-lower
+^ ^         _u_pper        _C_ombine   _>_: base-lower
 ^ ^         _a_ll          _r_esolve
 _q_uit      _RET_: current
 "
@@ -291,14 +290,14 @@ _q_uit      _RET_: current
     ("R"   smerge-refine)
     ("a"   smerge-keep-all)
     ("b"   smerge-keep-base)
-    ("m"   smerge-keep-mine)
+    ("l"   smerge-keep-lower)
     ("n"   smerge-next)
-    ("o"   smerge-keep-other)
     ("p"   smerge-prev)
     ("r"   smerge-resolve)
-    ("<"   smerge-diff-base-mine)
-    ("="   smerge-diff-mine-other)
-    (">"   smerge-diff-base-other)
+    ("u"   smerge-keep-upper)
+    ("<"   smerge-diff-base-upper)
+    ("="   smerge-diff-upper-lower)
+    (">"   smerge-diff-base-lower)
     ("q"   nil :color blue)))
 
 (use-package magit

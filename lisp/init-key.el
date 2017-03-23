@@ -216,6 +216,7 @@ buffer in other window."
   "Switch other window to next buffer."
   (interactive)
   (switch-to-next-buffer (next-window)))
+
 (bind-keys ("M-9" . switch-to-prev-buffer)
            ("M-0" . switch-to-next-buffer)
            ("M-(" . z-prev-buffer-next-window)

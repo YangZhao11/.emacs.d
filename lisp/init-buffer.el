@@ -94,9 +94,10 @@ e.g. no prodaccess.")
 _s_ort     _D_elete  _v_iew     ^^  _Q_uery       Toggle^^    _F_:shell
 _/_ filter _S_ave    _H_:other f^^  _r_eplace     ========^^  _X_:pipe
 _%_ regex  re_V_ert  _o_ther win^^  _I_: qr-regex _T_:RdOnly  _N_:replace
-_*_ mark   _R_ename  vie_W_-_E_val  _O_ccur       _M_odified  _B_:copy bname
+_*_ mark   _R_ename  vie_W_-_E_val  _O_ccur       _M_odified  copy _B_name
 "
     ("SPC" nil)
+    ("RET" ibuffer-visit-buffer :exit t)
     ("*" hydra-ibuffer-mark/body :exit t)
     ("%" hydra-ibuffer-regex/body :exit t)
     ("/" hydra-ibuffer-filter/body :exit t)
