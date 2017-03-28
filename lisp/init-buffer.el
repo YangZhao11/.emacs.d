@@ -91,10 +91,10 @@ e.g. no prodaccess.")
 
   (defhydra hydra-ibuffer (:color pink :hint nil)
     "
-_s_ort     _D_elete  _v_iew     ^^  _Q_uery       Toggle^^    _F_:shell
-_/_ filter _S_ave    _H_:other f^^  _r_eplace     ========^^  _X_:pipe
-_%_ regex  re_V_ert  _o_ther win^^  _I_: qr-regex _T_:RdOnly  _N_:replace
-_*_ mark   _R_ename  vie_W_-_E_val  _O_ccur       _M_odified  copy _B_name
+_s_ort     _D_elete  _v_iew     ^^  _Q_uery      ‗Toggle^^‗  _F_:shell
+_/_ filter _S_ave    _H_:other f^^  _r_eplace    _T_:RdOnly  _X_:pipe
+_%_ regex  re_V_ert  _o_ther win^^  _I_:qr-regex _M_odified  _N_:replace
+_*_ mark   _R_ename  vie_W_-_E_val  _O_ccur      _t_:mark    copy _B_name
 "
     ("SPC" nil)
     ("RET" ibuffer-visit-buffer :exit t)
@@ -113,10 +113,12 @@ _*_ mark   _R_ename  vie_W_-_E_val  _O_ccur       _M_odified  copy _B_name
     ("o" ibuffer-visit-buffer-other-window :exit t)
     ("O" ibuffer-do-occur)
     ("Q" ibuffer-do-query-replace)
+    ("q" quit-window :exit t)
     ("r" ibuffer-do-replace-regexp)
     ("R" ibuffer-do-rename-uniquely)
     ("S" ibuffer-do-save)
     ("T" ibuffer-do-toggle-read-only)
+    ("t" ibuffer-toggle-marks)
     ("v" ibuffer-do-view :exit t)
     ("V" ibuffer-do-revert)
     ("W" ibuffer-do-view-and-eval)

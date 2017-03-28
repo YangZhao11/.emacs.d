@@ -33,6 +33,7 @@ e_x_ecute  _RET_: go   _o_ther win _R_elocate _w_here^^        _e_dit
     ("s" bookmark-bmenu-save)
     ("l" bookmark-bmenu-load)
     ("u" bookmark-bmenu-unmark)
+    ("q" quit-window :exit t)
     ("DEL" bookmark-bmenu-backup-unmark)
     ("a" bookmark-bmenu-show-annotation)
     ("A" bookmark-bmenu-show-all-annotations)
@@ -42,6 +43,7 @@ e_x_ecute  _RET_: go   _o_ther win _R_elocate _w_here^^        _e_dit
 )
 
 (use-package view
+  :bind ("C-x C-v" . view-mode)         ; find-alternate-file
   :config
   (defhydra hydra-view (:color pink :hint nil)
     "
@@ -138,13 +140,12 @@ _j_↓^^  _n_ext^^  _{__}_: prev/next file    _d_isplay
   (require 'dired-x)
   (defhydra hydra-dired (:color pink :columns 3 :hint nil)
     "
-^Mark^       ^Flag^        ^Emacs Op^      ^ ^              ^^File Op^^ (_e_dit)
-^----^-------^----^--------^--------^------^-^--------------^^-------^^--^-^------
-_*_: marks   _#_: temp     _Q_uery replace _F_ind marked    _!_shell_&_ _S_ymlink
-_%_: regexp  _~_: backup   _A_: grep       _L_oad           ^^_C_opy    _H_ardlink
-_u_n/_m_ark    _d_: this     _B_yte compile  _k_ill line      ^^_D_elete  ch_M_od
-_t_oggle     _x_: delete   _v_iew          _w_: file name   ^^_R_ename  ch_O_wn
-_U_nmark all _<_ _>_:dirline _o_ther window  redisp_l_ay      ^^_T_ouch   ch_G_rp
+^Mark^‗‗‗‗‗‗‗^Flag^‗‗‗‗‗‗‗‗^Emacs Op^‗‗‗‗‗‗^‗^‗‗‗‗‗‗‗‗‗‗‗‗‗^^File Op^^‗‗(_e_dit)
+_*_: marks   _#_: temp     _Q_uery replace _F_ind marked   _!_shell_&_ _S_ymlink
+_%_: regexp  _~_: backup   _A_: grep       _L_oad          ^^_C_opy    _H_ardlink
+_u_n/_m_ark    _d_: this     _B_yte compile  _k_ill line     ^^_D_elete  ch_M_od
+_t_oggle     _x_: delete   _v_iew          _w_: file name  ^^_R_ename  ch_O_wn
+_U_nmark all _<_ _>_:dirline _o_ther window  redisp_l_ay     ^^_T_ouch   ch_G_rp
 "
     ("SPC" nil)
     ("RET" dired-find-file :exit t)
@@ -276,8 +277,7 @@ _<_  _>_       e_x_ecute      _?_: info  _u_nmark _q_uit
   (defhydra hydra-smerge
     (:color red :hint nil :pre (smerge-start-session))
     "
-^Move^      ^Keep^         ^Diff^      ^Pair^
-------------------------------------------------------
+^Move^‗‗‗‗‗‗^Keep^‗‗‗‗‗‗‗‗‗^Diff^‗‗‗‗‗‗^Pair^‗‗‗‗‗‗‗‗‗‗
 _n_ext      _b_ase         _R_efine    _<_: base-upper
 _p_rev      _l_ower        _E_diff     _=_: upper-lower
 ^ ^         _u_pper        _C_ombine   _>_: base-lower

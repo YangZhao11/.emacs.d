@@ -171,3 +171,4 @@
  '(font-lock-type-face ((t (:foreground "#90B8BC"))))
  '(link ((t (:foreground "#D0BF8F" :underline t :weight normal))))
  '(org-todo ((t (:foreground "#CC9393" :underline t :weight bold)))))
+(put 'dired-find-alternate-file 'disabled nil)

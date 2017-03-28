@@ -581,7 +581,7 @@ _d_own  _b_ack    _m_ark  _Y_ank-pop
 
   ;; bind symbols to M-?
   (dolist (i '("!" "@" "$" "%" "^" "&" "*" "{" "}"
-               "<" ">" ";" ":" "|" "\\" "+" "=" "?" "]"))
+               "<" ">" ":" "|" "\\" "+" "=" "?" "]"))
     (define-key god-local-mode-map (kbd i) 'god-mode-self-insert-on-meta))
 
   ;; Bind some second level modifier keys with C- prefix for easier
