@@ -90,6 +90,7 @@
 
   (add-to-list 'easy-kill-alist '(?p paragraph "\n"))
   (setq easy-kill-unhighlight-key " ")
+  (setq easy-kill-try-things '(url email sexp line))
 
   (bind-keys
    :map easy-kill-base-map
@@ -127,7 +128,8 @@ second time."
            ("M-c"    . capitalize-dwim)
            ("M-l"    . downcase-dwim)
            ("M-u"    . upcase-dwim)
-           ("C-x $"  . toggle-selective-display))
+           ("C-x $"  . toggle-selective-display)
+           ("M-?"    . completion-at-point))
 
 (defun isearch-exit-other-end ()
   "Exit isearch, but at the other end of the search string. This is
@@ -445,7 +447,6 @@ in ctl-j-map first."
          ("M-x" . counsel-M-x)
          ("M-y" . counsel-yank-pop)
          ("C-x C-SPC" . counsel-mark-ring)
-         ("M-?" . counsel-company)
          ("M-s M-s" . counsel-grep-or-swiper)
          ("M-s i" . counsel-imenu))
   :bind (:map help-map
