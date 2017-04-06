@@ -74,7 +74,7 @@
 (setq-default mode-line-mule-info
               `("" . ,(cddr (default-value 'mode-line-mule-info))))
 (setq-default mode-line-format
-      `("%e" (:eval z-god-mode-lighter) .
+      `("%e" (:eval z-lighter) .
         ,(cdr (default-value 'mode-line-format))))
 
 (use-package server :diminish (server-buffer-clients . " #")

@@ -42,14 +42,14 @@ e_x_ecute  _RET_: go   _o_ther win _R_elocate _w_here^^        _e_dit
              ("SPC" . hydra-bookmark-bmenu/body))
 )
 
-(use-package view
+(use-package view :diminish view-mode
   :bind ("C-x C-v" . view-mode)         ; find-alternate-file
   :config
   (defhydra hydra-view (:color pink :hint nil)
     "
-^^pg/set ^^line ^^half _g_o/_%_ ^^register  ^^mark^^       _s_earch/_r_    _q_uit/_Q_
-_k_↑ _w_   _K_    _u_p   _<_^^    _m_ark      _._ set/p_@_p  regex: _/_ ^\\  _c_ancel/_C_
-_j_↓ _z_   _J_    _d_own _>_^^    _'_: goto   e_x_chg^^      again: _n_ _p_
+^^pg/set^^ line^^ half^^ _g_o/_%_ ^^register  ^^mark   _s_earch/_r_    _q_uit/_Q_
+_k_↑ _w_   _K_    _u_p   _<_^^    _m_ark      _._set   regex: _/_ ^\\  _c_ancel/_C_
+_j_↓ _z_   _J_    _d_own _>_^^    _'_: goto   p_@_p    again: _n_ _p_
 "
     ("SPC" nil)
     ("j" View-scroll-page-forward)
@@ -74,7 +74,6 @@ _j_↓ _z_   _J_    _d_own _>_^^    _'_: goto   e_x_chg^^      again: _n_ _p_
     ("'" register-to-point)
     ("." set-mark-command)
     ("@" View-back-to-mark)
-    ("x" exchange-point-and-mark)
     ("q" View-quit :color blue)
     ("Q" View-quit-all :color blue)
     ("c" View-leave :color blue)
@@ -82,10 +81,14 @@ _j_↓ _z_   _J_    _d_own _>_^^    _'_: goto   e_x_chg^^      again: _n_ _p_
   (bind-keys :map view-mode-map
              ("SPC" . hydra-view/body)
              ("C-j" . nil)
+             ("x" . god-mode-self-insert)
              ("j" . View-scroll-page-forward)
              ("k" . View-scroll-page-backward)
              ("J" . View-scroll-line-forward)
-             ("K" . View-scroll-line-backward)))
+             ("K" . View-scroll-line-backward))
+  (add-hook 'view-mode-hook
+            (lambda () (if view-mode (god-local-mode-pause)
+                         (god-local-mode-resume)))))
 
 ;; replace.el is not a real package
 (defhydra hydra-occur (:color pink :hint nil)

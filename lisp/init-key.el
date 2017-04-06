@@ -221,8 +221,8 @@ buffer in other window."
 
 (bind-keys ("M-9" . switch-to-prev-buffer)
            ("M-0" . switch-to-next-buffer)
-           ("M-(" . z-prev-buffer-next-window)
-           ("M-)" . z-next-buffer-next-window))
+           ("M-(" . switch-to-next-buffer)
+           ("M-)" . switch-to-prev-buffer))
 
 (defun toggle-show-trailing-whitespace ()
    "Toggle `show-trailing-whitespace'."
@@ -507,7 +507,22 @@ _d_own  _b_ack    _m_ark  _Y_ank-pop
 
 ;; --------------------------------------------------
 (defvar z-god-mode-lighter "")
-(defvar-local z-god-saved-input-method nil "Saved input method before god-mode")
+(defvar-local z-god-saved-input-method nil
+  "Saved input method before god-mode")
+(defvar-local z-god-saved-view-mode nil
+  "Saved view-mode before god-mode")
+
+(defconst z-lighter-emacs
+  '(:propertize (" " (:eval (or current-input-method-title "ε")) " ")
+                face (:background "#90E090" :foreground "black")))
+(defconst z-lighter-view
+  '(:propertize " ν "
+                face (:background "#E8BB74" :foreground "black")))
+(defvar z-lighter
+  '(:eval (if god-local-mode
+              z-god-mode-lighter
+            (if view-mode z-lighter-view
+              z-lighter-emacs))))
 
 (defun set-cursor-type (type)
   "Set cursor to TYPE for all frames."
@@ -602,16 +617,18 @@ _d_own  _b_ack    _m_ark  _Y_ank-pop
     (set-cursor-type 'box)
     (setq-local z-god-saved-input-method current-input-method)
     (if current-input-method
-      (deactivate-input-method)))
+        (deactivate-input-method))
+    (setq-local z-god-saved-view-mode view-mode)
+    (if view-mode
+        (view-mode -1)))
   (add-hook 'god-mode-enabled-hook 'z-god-mode-enabled-hook)
 
   (defun z-god-mode-disabled-hook ()
     (set-cursor-type 'bar)
-    (setq z-god-mode-lighter
-          '(:propertize (" " (:eval (or current-input-method-title "ε")) " ")
-                        face (:background "#90E090" :foreground "black")))
     (setq z-god-state 'normal)
     (if z-god-saved-input-method
-        (set-input-method z-god-saved-input-method)))
+        (set-input-method z-god-saved-input-method))
+    (if z-god-saved-view-mode
+        (view-mode 1)))
   (add-hook 'god-mode-disabled-hook 'z-god-mode-disabled-hook))
 (add-hook 'after-init-hook 'god-mode-all)
