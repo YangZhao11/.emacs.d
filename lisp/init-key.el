@@ -469,6 +469,9 @@ in ctl-j-map first."
     "Like isearch-occur, call swiper with current regexp."
     (interactive
      (list (cond
+            ((functionp isearch-regexp-function)
+             (funcall isearch-regexp-function isearch-string))
+            (isearch-regexp-function (word-search-regexp isearch-string))
             (isearch-regexp isearch-string)
             (t (regexp-quote isearch-string)))))
     (let ((case-fold-search isearch-case-fold-search)
@@ -613,6 +616,9 @@ _d_own  _b_ack    _m_ark  _Y_ank-pop
                         (key-binding (kbd (concat prefix " " i)))))))
 
   (defun z-god-mode-enabled-hook ()
+    ;; somehow this hook can be called multiple times on a buffer,
+    ;; which messes up saving states here. Maybe consider using
+    ;; post-command-hook to run this once.
     (z-god-set-state z-god-state)
     (set-cursor-type 'box)
     (setq-local z-god-saved-input-method current-input-method)
