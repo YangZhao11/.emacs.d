@@ -359,7 +359,7 @@ current frame configuration to register 8."
     '(define-key isearch-mode-map (kbd "C-j") #'avy-isearch))
 
   (defun avy-forward-char-in-line (char)
-    "Jump to the currently visible CHAR in the current line."
+    "Jump to the currently visible CHAR in the current line after point."
     (interactive (list (read-char "char: " t)))
     (avy-with avy-goto-char
       (avy--generic-jump
@@ -369,7 +369,7 @@ current frame configuration to register 8."
        (1+ (point))
        (line-end-position))))
   (defun avy-backward-char-in-line (char)
-    "Jump to the currently visible CHAR in the current line."
+    "Jump to the currently visible CHAR in the current line before point."
     (interactive (list (read-char "char: " t)))
     (avy-with avy-goto-char
       (avy--generic-jump
@@ -380,8 +380,8 @@ current frame configuration to register 8."
        (point))))
 
   (defun z-goto-char (char &optional arg)
-  "Call avy-goto-char or avy-goto-subword-1, but respect bindings
-in ctl-j-map first."
+  "Call `avy-goto-char' or `avy-goto-subword-1', but respect bindings
+in `ctl-j-map' first."
   (interactive (list (read-char "C-j ")
                      current-prefix-arg))
   (let ((act (lookup-key ctl-j-map (char-to-string char))))
