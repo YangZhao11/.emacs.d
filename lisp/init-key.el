@@ -390,6 +390,13 @@ in `ctl-j-map' first."
            (avy-goto-subword-1 char arg))
           ('t (avy-goto-char char arg))))))
 
+(defun z-replace-hotkey (x)
+  "replace _x_ constructs with propertized text"
+  (replace-regexp-in-string "_\\(.\\)_"
+    (lambda (y) (propertize (match-string 1 y) 'face 'hydra-face-red))
+    x))
+
+
 (use-package ace-window :ensure :defer 6
   :bind* (("M-j" . z-ace-window)
           ("M-J" . ace-swap-window))
@@ -398,13 +405,14 @@ in `ctl-j-map' first."
         aw-background nil
         aw-keys '(?j ?k ?d ?f ?g ?h ?s ?l ?a ?\;))
   (setq aw-dispatch-alist
-  '((?x aw-delete-window " Ace - Delete Window")
-    (?m aw-swap-window " Ace - Swap Window")
-    (?M aw-move-window " Ace - Move Window")
-    (?c aw-split-window-fair " Ace - Split Fair Window")
-    (?v aw-split-window-vert " Ace - Split Vert Window")
-    (?b aw-split-window-horz " Ace - Split Horz Window")
-    (?i delete-other-windows " Ace - Delete Other Windows")))
+        '((?x aw-delete-window " Ace - Delete Window" "_x_:delete")
+    (?m aw-swap-window " Ace - Swap Window" "_m_:swap")
+    (?M aw-move-window " Ace - Move Window" "_M_ove")
+    (?c aw-split-window-fair " Ace - Split Fair Window" "_c_:split fair")
+    (?v aw-split-window-vert " Ace - Split Vert Window" "_v_ert split")
+    (?b aw-split-window-horz " Ace - Split Horz Window" "_b_:split h")
+    (?i delete-other-windows " Ace - Delete Other Windows" "max_i_mize")))
+
   (defun z-ace-window (arg)
   "Select a window.
 Perform an action based on ARG described below.
@@ -417,14 +425,9 @@ Prefixed with \\[universal-argument], show dispatch action."
         (let ((aw-dispatch-always 't))(ace-select-window)))
     (ace-select-window)))
   (defun ace-window-show-dispatch ()
-    (message (mapconcat (lambda (x)
-                 (concat
-                  (propertize (char-to-string (car x)) 'face 'hydra-face-red)
-                  ":"
-                  (replace-regexp-in-string " Windows?$" ""
-                    (replace-regexp-in-string " Ace - " ""
-                      (or (caddr x) "")))))
-                        aw-dispatch-alist " "))))
+    (message "%s"
+     (mapconcat (lambda (x) (z-replace-hotkey (cadddr x)))
+      aw-dispatch-alist "  "))))
 
 (use-package zap-to-char-dwim
   :bind (("M-z" . zap-to-char-dwim)
