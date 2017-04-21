@@ -92,6 +92,14 @@
   (setq easy-kill-unhighlight-key " ")
   (setq easy-kill-try-things '(url email sexp line))
 
+  (setq easy-kill-alist '((?w word           " ")
+                          (?s sexp           "\n")
+                          (?l list           "\n")
+                          (?f filename       "\n")
+                          (?d defun          "\n\n")
+                          (?D defun-name     " ")
+                          (?n line           "\n") ;changed from ?e
+                          (?b buffer-file-name)))
   (bind-keys
    :map easy-kill-base-map
    ("DEL" . easy-kill-delete-pairs)
