@@ -112,7 +112,8 @@
 			help-echo "mouse-2: Remove narrowing from buffer"
 			mouse-face mode-line-highlight
 			local-map ,(make-mode-line-mouse-map
-                                    'mouse-2 #'mode-line-widen))
+                                    'mouse-2 #'mode-line-widen)
+                        face warning)
                   x))
               mode-line-modes))
 

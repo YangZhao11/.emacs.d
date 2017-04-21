@@ -391,11 +391,40 @@ in `ctl-j-map' first."
           ('t (avy-goto-char char arg))))))
 
 (use-package ace-window :ensure :defer 6
-  :bind* ("M-j" . ace-window)
+  :bind* (("M-j" . z-ace-window)
+          ("M-J" . ace-swap-window))
   :config
   (setq aw-scope 'frame
         aw-background nil
-        aw-keys '(?s ?d ?f ?j ?i ?o ?g ?h ?a ?k ?l ?\;)))
+        aw-keys '(?j ?k ?d ?f ?g ?h ?s ?l ?a ?\;))
+  (setq aw-dispatch-alist
+  '((?x aw-delete-window " Ace - Delete Window")
+    (?m aw-swap-window " Ace - Swap Window")
+    (?M aw-move-window " Ace - Move Window")
+    (?c aw-split-window-fair " Ace - Split Fair Window")
+    (?v aw-split-window-vert " Ace - Split Vert Window")
+    (?b aw-split-window-horz " Ace - Split Horz Window")
+    (?i delete-other-windows " Ace - Delete Other Windows")))
+  (defun z-ace-window (arg)
+  "Select a window.
+Perform an action based on ARG described below.
+
+Prefixed with \\[universal-argument], show dispatch action."
+  (interactive "P")
+  (if arg
+      (progn
+        (ace-window-show-dispatch)
+        (let ((aw-dispatch-always 't))(ace-select-window)))
+    (ace-select-window)))
+  (defun ace-window-show-dispatch ()
+    (message (mapconcat (lambda (x)
+                 (concat
+                  (propertize (char-to-string (car x)) 'face 'hydra-face-red)
+                  ":"
+                  (replace-regexp-in-string " Windows?$" ""
+                    (replace-regexp-in-string " Ace - " ""
+                      (or (caddr x) "")))))
+                        aw-dispatch-alist " "))))
 
 (use-package zap-to-char-dwim
   :bind (("M-z" . zap-to-char-dwim)

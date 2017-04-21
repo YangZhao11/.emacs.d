@@ -740,10 +740,10 @@ fallback."
   :config
   (defhydra hydra-info (:color pink :hint nil)
     "
-^ ^       ^^^^Reference   ^^History       ^^Tree
-_k_ ↑     _{__}_ move     _l_: back       _n_ext   _d_irectory _T_OC
-_j_ ↓     ^^_f_ollow      _r_: forward    _p_rev   _<__>_ first/last
-^ ^       ^^_m_enu        _L_: history    _u_p     _[__]_ back/forward
+^ ^      ^^^^Reference   ^^History       ^^Tree
+_k_↑     _{__}_ move     _l_: back       _n_ext   _d_irectory _T_OC
+_j_↓     ^^_f_ollow      _r_: forward    _p_rev   _<__>_ first/last
+^ ^      ^^_m_enu        _L_: history    _u_p     _[__]_ back/forward
 "
     ("q" Info-exit :exit t)
     ("SPC" nil :exit t)
@@ -776,8 +776,8 @@ _j_ ↓     ^^_f_ollow      _r_: forward    _p_rev   _<__>_ first/last
   :config
   (defhydra hydra-help (:color pink :hint nil)
     "
-_k_ ↑    _<_ _>_ top/bottom   _l_: back
-_j_ ↓    _[_ _]_ buttons      _r_: forward
+_k_↑    _<_ _>_ top/bottom   _l_: back
+_j_↓    _[_ _]_ buttons      _r_: forward
 "
     ("SPC" nil :exit t)
     ("<" beginning-of-buffer)
