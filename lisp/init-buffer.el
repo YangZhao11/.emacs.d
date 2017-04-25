@@ -198,6 +198,8 @@ _b_ase/_n_ame      _._ ext    _*_ starred  predicat_e_  _v_isiting
     ("/" ibuffer-filter-disable))
   (bind-keys :map ibuffer-mode-map
              ("M-o" . nil)             ; ibuffer-visit-buffer-1-window
+             ("[" . ibuffer-backward-filter-group)
+             ("]" . ibuffer-forward-filter-group)
              ("SPC" . hydra-ibuffer/body))
 
   (defun z-ibuffer-mode-hook ()
