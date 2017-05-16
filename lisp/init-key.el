@@ -139,6 +139,11 @@ second time."
            ("C-x $"  . toggle-selective-display)
            ("M-?"    . completion-at-point))
 
+(use-package string-inflection
+  :bind (("M-U" . string-inflection-camelcase)
+         ("M-C" . string-inflection-lower-camelcase)
+         ("M-L" . string-inflection-underscore)))
+
 (defun isearch-exit-other-end ()
   "Exit isearch, but at the other end of the search string. This is
 useful when followed by an immediate kill."
