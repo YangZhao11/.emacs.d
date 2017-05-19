@@ -1,9 +1,8 @@
 # -*- mode: snippet; require-final-newline: nil -*-
 # name: lingo
 # key: lingo
-# expand-env: ((last-name (z-re-backward "name *= *\"\\([^\"]+\\)\"" 1)))
 # --
 lingo_binary(
-        name = "lingo-${1:`last-name`}",
+        name = "lingo-${1:`(z-re-backward "name *= *\"\\([^\"]+\\)\"" 1)`}",
         package = ":$1",
 )$0

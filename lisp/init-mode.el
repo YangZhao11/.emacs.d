@@ -359,14 +359,14 @@ jump to unfetched from: _p_ushremote  _u_pstream"
 
 ;; --------------------------------------------------
 (use-package yasnippet :demand ;; :ensure
+  :diminish yas-global-mode yas-minor-mode
   :init
   (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
   :config
   (setq yas-prompt-functions
         '(yas-completing-prompt yas-no-prompt)
         yas-wrap-around-region t)
-  (yas-global-mode)
-  (diminish 'yas-minor-mode))
+  (yas-global-mode))
 
 (defun z-re-backward (re count)
   "Search RE backward, return COUNT submatch.  Used in snippets."
