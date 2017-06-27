@@ -604,6 +604,12 @@ fallback."
     (prettify-symbols-mode))
   (add-hook 'scala-mode-hook 'z-scala-mode-hook))
 
+(use-package js
+  :config
+  (bind-keys :map js-mode-map
+             ("M-." . nil)
+             ("C-x ." . js-find-symbol)))
+
 (use-package haskell-mode
   :config
   (defun z-haskell-mode-hook ()

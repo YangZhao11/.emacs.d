@@ -474,7 +474,27 @@ Prefixed with \\[universal-argument], show dispatch action."
              ("C-'" . ivy-alt-done)
              ("M-k" . ivy-yank-word)
              ("M-m" . ivy-restrict-to-matches)
-             ("<home>" . hydra-ivy/body)))
+             ("<home>" . hydra-ivy/body))
+
+  (defhydra hydra-ivy-occur (:color pink :hint nil)
+    "
+_k_↑  _h_←   tg _c_alling   _f_:press   _g_:revert
+_j_↓  _l_→   set _a_ction   _RET_:go    _o_ther    _q_uit
+"
+    ("SPC" nil)
+    ("RET" ivy-occur-press-and-switch :exit t)
+    ("a" ivy-occur-read-action)
+    ("c" ivy-occur-toggle-calling)
+    ("f" ivy-occur-press)
+    ("g" ivy-occur-revert-buffer)
+    ("h" backward-char)
+    ("j" ivy-occur-next-line)
+    ("k" ivy-occur-previous-line)
+    ("l" forward-char)
+    ("o" ivy-occur-dispatch :exit t)
+    ("q" quit-window :exit t))
+  (bind-keys :map ivy-occur-mode-map
+             ("SPC" . hydra-ivy-occur/body)))
 
 (use-package counsel :defer 4
   :bind (([remap find-file] . counsel-find-file)
