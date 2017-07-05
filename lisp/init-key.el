@@ -359,7 +359,8 @@ current frame configuration to register 8."
 (use-package avy :ensure :defer 5
   :bind ("C-j" . z-goto-char)
   :bind (:map ctl-j-map
-              ("SPC" . avy-goto-line))
+              ("SPC" . avy-goto-line)
+              ("C-j" . avy-show-dispatch))
   :bind (("M-," . avy-backward-char-in-line)
          ("M-." . avy-forward-char-in-line))
   :config
@@ -401,7 +402,16 @@ in `ctl-j-map' first."
     (cond (act (call-interactively act))
           ((string-match-p "[[:alpha:]]" (char-to-string char))
            (avy-goto-subword-1 char arg))
-          ('t (avy-goto-char char arg))))))
+          ('t (avy-goto-char char arg)))))
+
+  (defun avy-show-dispatch ()
+    "show help for using `avy-dispatch-alist'"
+    (interactive)
+    (message "%s"
+             (mapconcat 'z-replace-hotkey
+                        '("_x_:kill" "_X_:kill-stay" "_t_eleport" "_m_ark"
+                          "_n_:copy" "_y_ank" "_i_spell")
+                        "  "))))
 
 (defun z-replace-hotkey (x)
   "replace _x_ constructs with propertized text"
@@ -472,6 +482,7 @@ Prefixed with \\[universal-argument], show dispatch action."
              ("M-s o" . ivy-occur)
              ("C-j" . ivy-avy)
              ("C-'" . ivy-alt-done)
+             ("C-M-m" . ivy-immediate-done)
              ("M-k" . ivy-yank-word)
              ("M-m" . ivy-restrict-to-matches)
              ("<home>" . hydra-ivy/body))
@@ -507,6 +518,8 @@ _j_↓  _l_→   set _a_ction   _RET_:go    _o_ther    _q_uit
          ("C-x C-SPC" . counsel-mark-ring)
          ("M-s M-s" . counsel-grep-or-swiper)
          ("M-s i" . counsel-imenu))
+  :bind (:map ctl-j-map
+              ("C-i" . counsel-imenu))
   :bind (:map help-map
               ("v" . counsel-describe-variable)
               ("f" . counsel-describe-function)
