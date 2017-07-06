@@ -482,7 +482,6 @@ Prefixed with \\[universal-argument], show dispatch action."
              ("M-s o" . ivy-occur)
              ("C-j" . ivy-avy)
              ("C-'" . ivy-alt-done)
-             ("C-M-m" . ivy-immediate-done)
              ("M-k" . ivy-yank-word)
              ("M-m" . ivy-restrict-to-matches)
              ("<home>" . hydra-ivy/body))
