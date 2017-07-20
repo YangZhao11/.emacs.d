@@ -29,8 +29,8 @@
   :bind (:map region-bindings-mode-map
               ("DEL" . easy-pair-delete)
               ("i" . easy-pair-kill-inside))
-  :bind (("M-(" . easy-pair-slurp)
-         ("M-)" . easy-pair-barf)))
+  :bind (("M-(" . easy-pair-barf)
+         ("M-)" . easy-pair-slurp)))
 
 (use-package anchored-transpose :ensure
   :commands anchored-transpose
