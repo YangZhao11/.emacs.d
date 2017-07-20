@@ -3,17 +3,22 @@
 ;;
 
 ;;; Code:
-
 (require 'misc)                         ; for zap-up-to-char
+
+(defun backward-sexp-point (arg)
+  "Returns point after calling `backward-sexp'."
+  (save-excursion
+    (backward-sexp arg)
+    (point)))
 
 (defun zap-to-char-matching-pairs (arg char)
   "Zap up to ARG'th CHAR, considering matching parens."
   (let ((direction (if (>= arg 0) 1 -1))
         (start (point)))
     (search-forward (char-to-string char) nil nil direction)
-    (while (>= (let ((p (point)))
-                 (backward-sexp direction)
-                 (prog1 (point) (goto-char p))) start)
+    (while (if (> direction 0)
+               (>= (backward-sexp-point direction) start)
+               (<= (backward-sexp-point direction) start))
       (search-forward (char-to-string char) nil nil direction))
     (backward-char direction)
     (kill-region start (point))))

@@ -350,12 +350,13 @@ jump to unfetched from: _p_ushremote  _u_pstream"
         bug-reference-bug-regexp
         "\\(\\b\\)\\(b/[0-9]+\\|c[rl]/[0-9]+\\|t/[0-9]+\\|\\(g\\|go\\|goto\\)/[-a-zA-z0-9_]+\\|[a-z]+@\\)"))
 
-(use-package color-identifiers-mode
-  :diminish 'color-identifiers-mode
-  :commands (color-identifiers-mode)
+(use-package rainbow-identifiers
+  :commands (rainbow-identifiers-mode)
   :config
-  (setq color-identifiers:min-color-saturation 0.1
-        color-identifiers:max-color-saturation 0.3))
+  (setq rainbow-identifiers-choose-face-function
+        'rainbow-identifiers-cie-l*a*b*-choose-face
+        rainbow-identifiers-cie-l*a*b*-lightness 85
+        rainbow-identifiers-cie-l*a*b*-saturation 8))
 
 ;; --------------------------------------------------
 (use-package yasnippet :demand ;; :ensure
@@ -558,7 +559,6 @@ fallback."
 
   (defun z-elisp-mode-hook ()
     (z-setup-imenu-for-use-package)
-    (color-identifiers-mode)
     (company-mode))
   (add-hook 'emacs-lisp-mode-hook 'z-elisp-mode-hook)
   (bind-keys :map lisp-interaction-mode-map ("C-j")))

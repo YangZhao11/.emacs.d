@@ -28,7 +28,9 @@
              easy-pair-kill-inside)
   :bind (:map region-bindings-mode-map
               ("DEL" . easy-pair-delete)
-              ("i" . easy-pair-kill-inside)))
+              ("i" . easy-pair-kill-inside))
+  :bind (("M-(" . easy-pair-slurp)
+         ("M-)" . easy-pair-barf)))
 
 (use-package anchored-transpose :ensure
   :commands anchored-transpose
@@ -233,9 +235,7 @@ buffer in other window."
   (switch-to-next-buffer (next-window)))
 
 (bind-keys ("M-9" . switch-to-prev-buffer)
-           ("M-0" . switch-to-next-buffer)
-           ("M-(" . switch-to-next-buffer)
-           ("M-)" . switch-to-prev-buffer))
+           ("M-0" . switch-to-next-buffer))
 
 (defun toggle-show-trailing-whitespace ()
    "Toggle `show-trailing-whitespace'."
@@ -254,7 +254,7 @@ buffer in other window."
   "
 Toggle:
 %s(ballotbox rainbow-delimiters-mode) rainbow-_d_elimiters  ^^ %s(ballotbox abbrev-mode \"∂\") _a_bbrev         %s(ballotbox outline-minor-mode) _o_utline-minor-mode ^^ %s(ballotbox company-mode \"©\") co_m_pany
-%s(ballotbox color-identifiers-mode) color-_i_dentifiers   ^^ %s(ballotbox auto-fill-function \"¶\") auto-_f_ill      %s(ballotbox view-mode) _v_iew-mode          ^^ %s(ballotbox flycheck-mode \"✔\") flychec_k_
+%s(ballotbox rainbow-identifiers-mode) rainbow-_i_dentifiers ^^ %s(ballotbox auto-fill-function \"¶\") auto-_f_ill      %s(ballotbox view-mode) _v_iew-mode          ^^ %s(ballotbox flycheck-mode \"✔\") flychec_k_
 %s(ballotbox beacon-mode) _b_eacon              ^^ %s(ballotbox visual-line-mode \"↵\") visual-lin_e_    %s(if (bound-and-true-p subword-mode) \",\" (if (bound-and-true-p superword-mode) \"²\" \"☐\")) sub_w_ord/super_W_ord   %s(ballotbox ycmd-mode \"☯\") _y_cmd
 %s(ballotbox hi-lock-mode) _h_i-lock/_c_hanges      %s(ballotbox auto-revert-mode \"↻\") auto-_r_evert    %s(ballotbox flyspell-mode \"⍹\") flyspel_l_/_p_rog       %s(ballotbox which-function-mode) which-f_u_nc
 %s(ballotbox whitespace-mode \"␣\") white_s_pace/_t_railing  %s(ballotbox linum-mode) li_n_um
@@ -266,7 +266,7 @@ Toggle:
   ("e"    visual-line-mode)
   ("f"    auto-fill-mode)
   ("h"    hi-lock-mode)
-  ("i"    color-identifiers-mode)
+  ("i"    rainbow-identifiers-mode)
   ("k"    flycheck-mode)
   ("l"    flyspell-mode)
   ("p"    flyspell-prog-mode)

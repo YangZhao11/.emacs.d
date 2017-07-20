@@ -71,5 +71,62 @@ The list boundary is kept."
   (or (easy-pair--kill-inside-pair beg end)
       (easy-pair--kill-inside-sexp-pair beg end)))
 
+(defun easy-pair-slurp (&optional arg)
+  "Slurp ARG sexps into current list"
+  (interactive "p")
+  (if (< arg 0) (easy-pair-backward-slurp (- arg))
+    (save-excursion
+      (let (s beg)
+        (up-list)
+        (setq beg (point))
+        (forward-sexp arg)
+        (setq s (filter-buffer-substring beg (point) 'delete))
+        (backward-char)
+        (insert s)))))
+
+(defun easy-pair-backward-slurp (&optional arg)
+  "Slurp ARG sexps before current list into current lisp"
+  (interactive "p")
+  (if (< arg 0) (easy-pair-slurp (- arg))
+    (save-excursion
+      (let (end s)
+        (backward-up-list)
+        (backward-char)
+        (setq end (point))
+        (backward-sexp arg)
+        (setq s (filter-buffer-substring (point) end 'delete))
+        (forward-char)
+        (insert s)))))
+
+(defun easy-pair-barf (&optional arg)
+  "Barf ARG sexps out of current list"
+  (interactive "p")
+  (if (< arg 0) (easy-pair-backward-barf (- arg))
+  (save-excursion
+    (let (s end)
+      (up-list)
+      (backward-char)
+      (setq end (point))
+      (backward-sexp arg)
+      (while (looking-back "\\s-" (1- (point))) (backward-char))
+      (setq s (filter-buffer-substring (point) end 'delete))
+      (forward-char)
+      (insert s)))))
+
+(defun easy-pair-backward-barf (&optional arg)
+  "Barf ARG sexps out of current list"
+  (interactive "p")
+  (if (< arg 0) (easy-pair-barf (- arg))
+  (save-excursion
+    (let (beg s)
+      (backward-up-list)
+      (forward-char)
+      (setq beg (point))
+      (forward-sexp arg)
+      (while (looking-at "\\s-") (forward-char))
+      (setq s (filter-buffer-substring beg (point) 'delete))
+      (backward-char)
+      (insert s)))))
+
 (provide 'easy-pair)
 ;;; easy-pair.el ends here
