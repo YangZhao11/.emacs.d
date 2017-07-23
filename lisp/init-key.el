@@ -17,7 +17,8 @@
    (if arg 'kill-buffer
      'kill-this-buffer)))
 (bind-keys ("<C-M-backspace>" . backward-kill-sexp)
-           ("C-x k" . z-kill-buffer))
+           ("C-x k" . z-kill-buffer)
+           ("C-M-o" . up-list))
 
 (use-package region-bindings-mode :diminish 'region-bindings-mode
   :commands (region-bindings-mode-enable))
