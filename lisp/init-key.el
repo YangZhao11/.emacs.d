@@ -368,7 +368,7 @@ current frame configuration to register 8."
   (require 'subword)
   (setq avy-styles-alist '((avy-goto-char . de-bruijn))
         avy-keys
-        '(?s ?d ?f ?g ?h ?j ?k ?l ?w ?e ?r ?u ?i ?o)
+        '(?s ?d ?f ?g ?h ?j ?k ?l)
         avy-subword-extra-word-chars nil)
   (eval-after-load "isearch"
     '(define-key isearch-mode-map (kbd "C-j") #'avy-isearch))
