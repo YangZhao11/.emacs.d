@@ -46,20 +46,19 @@
 
 
 (defvar z-align-alist
-  '((? "\\s-" 0)
+  '((?  "\\s-" 0)
     (?\" "\\s-\"" 0)))
 
 (defun z-align-char (char beg end no-space)
   "align char in region"
   (interactive "cAlign char: \nr\nP")
   (let* ((a (alist-get char z-align-alist))
-         (regexp (if a (car a)
-                   (concat  "\\(\\s-*\\)" (regexp-quote (char-to-string char)))))
-         (spacing (if a (cdr a)
+         (regexp (concat  "\\(\\s-*\\)"
+                          (if a (car a)
+                            (regexp-quote (char-to-string char)))))
+         (spacing (if a (cadr a)
                     (if no-space 0 1))))
-    (if (eq char ? )
-        (z-align-whitespace beg end)
-      (align-regexp beg end regexp 1 spacing t))))
+    (align-regexp beg end regexp 1 spacing t)))
 (bind-key "C-x ;" 'z-align-char)
 
 (use-package easy-kill :ensure
@@ -113,13 +112,13 @@
   (setq easy-kill-unhighlight-key " ")
   (setq easy-kill-try-things '(url email sexp line))
 
-  (setq easy-kill-alist '((?w word           " ")
-                          (?s sexp           "\n")
-                          (?l list           "\n")
-                          (?f filename       "\n")
-                          (?d defun          "\n\n")
-                          (?D defun-name     " ")
-                          (?n line           "\n") ;changed from ?e
+  (setq easy-kill-alist '((?w word       " ")
+                          (?s sexp       "\n")
+                          (?l list       "\n")
+                          (?f filename   "\n")
+                          (?d defun      "\n\n")
+                          (?D defun-name " ")
+                          (?n line       "\n") ;changed from ?e
                           (?b buffer-file-name)))
   (bind-keys
    :map easy-kill-base-map
