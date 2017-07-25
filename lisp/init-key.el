@@ -17,8 +17,8 @@
    (if arg 'kill-buffer
      'kill-this-buffer)))
 (bind-keys ("<C-M-backspace>" . backward-kill-sexp)
-           ("C-x k" . z-kill-buffer)
-           ("C-M-o" . up-list))
+           ("C-x k"           . z-kill-buffer)
+           ("C-M-o"           . up-list))
 
 (use-package region-bindings-mode :diminish 'region-bindings-mode
   :commands (region-bindings-mode-enable))
@@ -47,7 +47,8 @@
 
 (defvar z-align-alist
   '((?  "\\s-" 0)
-    (?\" "\\s-\"" 0)))
+    (?\" "\\s-\"" 0))
+  "Specify regexp and spacing for z-align-char.")
 
 (defun z-align-char (char beg end no-space)
   "align char in region"
@@ -172,7 +173,7 @@ useful when followed by an immediate kill."
   (goto-char isearch-other-end))
 (bind-keys :map isearch-mode-map
            ("M-RET" . isearch-exit-other-end)
-           ("M-k" . isearch-yank-word-or-char))
+           ("M-k"   . isearch-yank-word-or-char))
 (bind-keys ("M-s M-o" . multi-occur-in-matching-buffers)
            ("M-s g"   . grep)
            ("M-s M-g" . rgrep))
