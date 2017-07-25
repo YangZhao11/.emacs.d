@@ -44,6 +44,24 @@
          #'anchored-transpose #'transpose-chars)))
   :bind ("C-t" . z-transpose))
 
+
+(defvar z-align-alist
+  '((? "\\s-" 0)
+    (?\" "\\s-\"" 0)))
+
+(defun z-align-char (char beg end no-space)
+  "align char in region"
+  (interactive "cAlign char: \nr\nP")
+  (let* ((a (alist-get char z-align-alist))
+         (regexp (if a (car a)
+                   (concat  "\\(\\s-*\\)" (regexp-quote (char-to-string char)))))
+         (spacing (if a (cdr a)
+                    (if no-space 0 1))))
+    (if (eq char ? )
+        (z-align-whitespace beg end)
+      (align-regexp beg end regexp 1 spacing t))))
+(bind-key "C-x ;" 'z-align-char)
+
 (use-package easy-kill :ensure
   :functions easy-kill-mark-region
   :bind ([remap kill-ring-save] . easy-kill)
