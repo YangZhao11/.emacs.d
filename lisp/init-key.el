@@ -276,7 +276,7 @@ Toggle:
 %s(ballotbox rainbow-identifiers-mode) rainbow-_i_dentifiers ^^ %s(ballotbox auto-fill-function \"¶\") auto-_f_ill      %s(ballotbox view-mode) _v_iew-mode          ^^ %s(ballotbox flycheck-mode \"✔\") flychec_k_
 %s(ballotbox beacon-mode) _b_eacon              ^^ %s(ballotbox visual-line-mode \"↵\") visual-lin_e_    %s(if (bound-and-true-p subword-mode) \",\" (if (bound-and-true-p superword-mode) \"²\" \"☐\")) sub_w_ord/super_W_ord   %s(ballotbox ycmd-mode \"☯\") _y_cmd
 %s(ballotbox hi-lock-mode) _h_i-lock/_c_hanges      %s(ballotbox auto-revert-mode \"↻\") auto-_r_evert    %s(ballotbox flyspell-mode \"⍹\") flyspel_l_/_p_rog       %s(ballotbox which-function-mode) which-f_u_nc
-%s(ballotbox whitespace-mode \"␣\") white_s_pace/_t_railing  %s(ballotbox linum-mode) li_n_um
+%s(ballotbox whitespace-mode \"␣\") white_s_pace/_t_railing  %s(ballotbox display-line-numbers-mode) line _n_um
 "
   ("a"    abbrev-mode)
   ("b"    beacon-mode)
@@ -290,7 +290,7 @@ Toggle:
   ("l"    flyspell-mode)
   ("p"    flyspell-prog-mode)
   ("m"    company-mode)
-  ("n"    linum-mode)
+  ("n"    display-line-numbers-mode)
   ("o"    outline-minor-mode)
   ("r"    auto-revert-mode)
   ("s"    whitespace-mode)
@@ -306,6 +306,8 @@ Toggle:
 (diminish 'abbrev-mode " ∂")
 (diminish 'auto-fill-function " ¶")
 (diminish 'visual-line-mode " ↵")
+(setq display-line-numbers-type 'relative)
+
 
 (use-package beacon :ensure :diminish beacon-mode
   :commands (beacon-mode)

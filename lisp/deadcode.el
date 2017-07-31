@@ -1,3 +1,86 @@
+(use-package linum
+  :config
+  (defun linum-go-back-to (pos)
+    "Go back to pos line by line, and return number of lines passed."
+    (let ((line 0))
+      (while (> (point) pos)
+        (let ((inhibit-point-motion-hooks t))
+          (forward-line -1))
+        (setq line (1- line)))
+      line))
+  (defconst small-digits "₀₁₂₃₄₅₆₇₈₉")
+  (defface linum-hi
+    '((t :inherit linum
+         :foreground "#C59F9F"
+         :weight bold))
+    "Linum for multiples of 10s"
+    :group 'linum)
+  (defun z-linum-format (line)
+    (let* ((rem (mod (abs line) 10))
+           (d (substring-no-properties small-digits rem (1+ rem))))
+      (cond
+       ((= 0 line) (propertize " " 'face 'linum))
+      ((= 0 rem) (propertize (format "%d" (/ (abs line) 10)) 'face 'linum-hi))
+      ((< (abs line) 10) (propertize (format "%d" rem) 'face 'linum))
+      ((or (= 0 (mod rem 2)) (< (abs line) 20)) (propertize d 'face 'linum))
+      ('t " "))))
+  (setq linum-format 'z-linum-format)
+
+  ;; re-define linum-update-window. The only thing that is changed is
+  ;; the initial assigned value to `line'. It is now given the
+  ;; relative line number from point.
+  (defun linum-update-window (win)
+  "Update line numbers for the portion visible in window WIN."
+  (let ((line (linum-go-back-to (window-start win)))
+        (limit (window-end win t))
+        (fmt (cond ((stringp linum-format) linum-format)
+                   ((eq linum-format 'dynamic)
+                    (let ((w (length (number-to-string
+                                      (count-lines (point-min) (point-max))))))
+                      (concat "%" (number-to-string w) "d")))))
+        (width 0))
+    (goto-char (window-start win))
+    (run-hooks 'linum-before-numbering-hook)
+    ;; Create an overlay (or reuse an existing one) for each
+    ;; line visible in this window, if necessary.
+    (while (and (not (eobp)) (< (point) limit))
+      (let* ((str (if fmt
+                      (propertize (format fmt line) 'face 'linum)
+                    (funcall linum-format line)))
+             (visited (catch 'visited
+                        (dolist (o (overlays-in (point) (point)))
+                          (when (equal-including-properties
+                                 (overlay-get o 'linum-str) str)
+                            (unless (memq o linum-overlays)
+                              (push o linum-overlays))
+                            (setq linum-available (delq o linum-available))
+                            (throw 'visited t))))))
+        (setq width (max width (length str)))
+        (unless visited
+          (let ((ov (if (null linum-available)
+                        (make-overlay (point) (point))
+                      (move-overlay (pop linum-available) (point) (point)))))
+            (push ov linum-overlays)
+            (overlay-put ov 'before-string
+                         (propertize " " 'display `((margin left-margin) ,str)))
+            (overlay-put ov 'linum-str str))))
+      ;; Text may contain those nasty intangible properties, but that
+      ;; shouldn't prevent us from counting those lines.
+      (let ((inhibit-point-motion-hooks t))
+        (forward-line))
+      (setq line (1+ line)))
+    (when (display-graphic-p)
+      (setq width (ceiling
+                   (/ (* width 1.0 (linum--face-width 'linum))
+                      (frame-char-width)))))
+    ;; open up space in the left margin, if needed, and record that
+    ;; fact as the window-parameter `linum--set-margins'
+    (let ((existing-margins (window-margins win)))
+      (when (> width (or (car existing-margins) 0))
+        (set-window-margins win width (cdr existing-margins))
+        (set-window-parameter win 'linum--set-margins (window-margins win))))))
+  )
+
 (use-package grab-region :diminish " ⊛"
   :functions grab-region-move
   :bind ("M-*" . grab-region-mode)
