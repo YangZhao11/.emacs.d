@@ -1,3 +1,10 @@
+(use-package company :defer 't
+  :diminish " ©"
+  :commands (company-mode)
+  :bind (("M-m" . company-complete))
+  :config
+  (setq company-idle-delay nil))
+
 (use-package linum
   :config
   (defun linum-go-back-to (pos)

@@ -376,13 +376,6 @@ jump to unfetched from: _p_ushremote  _u_pstream"
       (when (re-search-backward re (point-min) t)
           (match-string count)))))
 
-(use-package company :defer 't
-  :diminish " ©"
-  :commands (company-mode)
-  :bind (("M-m" . company-complete))
-  :config
-  (setq company-idle-delay nil))
-
 (use-package flycheck
   :commands (flycheck-mode)
   :config
@@ -531,7 +524,7 @@ fallback."
           (mapcar #'expand-file-name
                   (eshell-flatten-list (reverse args)))))
   (defun z-eshell-mode-hook ()
-    (company-mode 1)
+    ;;(company-mode 1)
     ;; somehow eshell-mode-map is buffer-local
     (bind-keys :map eshell-mode-map
              ("M-r" . counsel-esh-history)))
@@ -559,7 +552,8 @@ fallback."
 
   (defun z-elisp-mode-hook ()
     (z-setup-imenu-for-use-package)
-    (company-mode))
+    ;;(company-mode)
+    )
   (add-hook 'emacs-lisp-mode-hook 'z-elisp-mode-hook)
   (bind-keys :map lisp-interaction-mode-map ("C-j")))
 
@@ -676,13 +670,15 @@ fallback."
       (setq-local page-delimiter "^```\\({.*}\\)?$"))
     (rainbow-delimiters-mode 1)
     (z-ess-mode-symbols)
-    (setq-local company-backends ess-company-backends)
-    (company-mode))
+    ;; (setq-local company-backends ess-company-backends)
+    ;; (company-mode)
+    )
 
   (defun z-inferior-ess-mode-hook ()
     (z-ess-mode-symbols)
-    (setq-local company-backends ess-company-backends)
-    (company-mode))
+    ;; (setq-local company-backends ess-company-backends)
+    ;; (company-mode)
+    )
 
   (setq inferior-julia-program-name "~/bin/julia"
         ess-tab-complete-in-script 't
