@@ -427,19 +427,6 @@ fallback."
       (list " " pick)))
 (setq flycheck-mode-line '(:eval (z-flycheck-mode-line-text))))
 
-(use-package ycmd :diminish " ☯" :no-require t
-  :defines ycmd-server-command ycmd-global-config
-  ycmd-extra-conf-whitelist ycmd-idle-change-delay
-  :commands (ycmd-mode)
-  :config
-  (defconst google-ycmd--extra-conf "/usr/lib/youcompleteme/ycm_extra_conf.py")
-  (setq ycmd-server-command
-        '("/usr/grte/v4/bin/python2.7"
-          "/usr/lib/youcompleteme/third_party/ycmd/ycmd"))
-  (setq ycmd-global-config google-ycmd--extra-conf)
-  (add-to-list 'ycmd-extra-conf-whitelist google-ycmd--extra-conf)
-  (setq ycmd-idle-change-delay 0.5))
-
 ;; ----------------------------------------
 (use-package org
   :defer 't
