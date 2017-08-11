@@ -381,13 +381,13 @@ jump to unfetched from: _p_ushremote  _u_pstream"
   :config
 
   (defface flycheck-status-warning
-    '((t (:foreground "#D8B080" :inherit mode-line)))
+    '((t (:foreground "#D8B080")))
     "Face for flycheck status: warnings" :group 'flycheck)
   (defface flycheck-status-ok
-    '((t (:foreground "#A0E8A0" :inherit mode-line)))
+    '((t (:foreground "#98DC98")))
     "Face for flycheck status: OK" :group 'flycheck)
   (defface flycheck-status-error
-    '((t (:foreground "#D88080" :inherit mode-line)))
+    '((t (:foreground "#D88080")))
     "Face for flycheck status: error" :group 'flycheck)
 
   (defun z-flycheck-count (s count)
@@ -418,7 +418,7 @@ fallback."
                           (propertize (z-flycheck-count "•" .warning)
                                       'face 'flycheck-status-warning)))
                      (propertize "✔" 'face 'flycheck-status-ok)))
-                  (`running     "⁇")
+                  (`running     (propertize "•" 'face 'flycheck-status-ok))
                   (`no-checker  "¿")
                   (`not-checked "⁈")
                   (`errored     "‼")
@@ -568,7 +568,9 @@ fallback."
   :config
   (defun z-go-mode-hook ()
     (setq tab-width 4)
-    (setq-local company-backends '(company-ycmd))
+    (flycheck-mode)
+    (flycheck-select-checker 'go-gofmt)
+    ;; (setq-local company-backends '(company-ycmd))
     ;; (ycmd-mode 1)
     ;; (company-mode 1)
     ;;(go-eldoc-setup)
