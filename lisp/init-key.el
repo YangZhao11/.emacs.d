@@ -12,6 +12,7 @@
                          ("\\sqrt" ?√))))
 
 (defun z-kill-buffer (arg)
+  "Kill this buffer, or with ARG, call `kill-buffer` instead."
   (interactive "P")
   (call-interactively
    (if arg 'kill-buffer
@@ -51,7 +52,8 @@
   "Specify regexp and spacing for z-align-char.")
 
 (defun z-align-char (char beg end no-space)
-  "align char in region"
+  "Align CHAR in region specified by BEG and END.
+With prefix arg (NO-SPACE), do not leave space before CHAR."
   (interactive "cAlign char: \nr\nP")
   (let* ((a (alist-get char z-align-alist))
          (regexp (concat  "\\(\\s-*\\)"
@@ -140,12 +142,11 @@
    ("\\"  . easy-kill-indent-region)))
 
 (defun cycle-spacing-0 ()
-  "Remove adjacent spaces, but undo if the command is issued the
-second time."
+  "Remove adjacent spaces, but undo if the command is issued a second time."
   (interactive) (cycle-spacing 0))
 
 (defun toggle-selective-display (column)
-  "Toggle selective display, defaulting to current column."
+  "Toggle selective display at COLUMN, defaulting to current column."
   (interactive "P")
   (set-selective-display
    (or column
