@@ -419,13 +419,18 @@ fallback."
                                       'face 'flycheck-status-warning)))
                      (propertize "✔" 'face 'flycheck-status-ok)))
                   (`running     (propertize "•" 'face 'flycheck-status-ok))
+                  (`not-checked (propertize "•" 'face 'flycheck-status-error))
                   (`no-checker  "¿")
-                  (`not-checked "⁈")
                   (`errored     "‼")
                   (`interrupted "⁉")
                   (`suspicious  "‽"))))
       (list " " pick)))
-(setq flycheck-mode-line '(:eval (z-flycheck-mode-line-text))))
+  (setq flycheck-mode-line '(:eval (z-flycheck-mode-line-text))))
+
+
+(use-package lsp-mode :diminish "£"
+  :config
+  (require 'lsp-flycheck))
 
 ;; ----------------------------------------
 (use-package org

@@ -272,10 +272,10 @@ buffer in other window."
 (defhydra hydra-toggle (:color blue :hint nil)
   "
 Toggle:
-%s(ballotbox rainbow-delimiters-mode) rainbow-_d_elimiters  ^^ %s(ballotbox abbrev-mode \"∂\") _a_bbrev         %s(ballotbox outline-minor-mode) _o_utline-minor-mode ^^ %s(ballotbox company-mode \"©\") co_m_pany
+%s(ballotbox rainbow-delimiters-mode) rainbow-_d_elimiters  ^^ %s(ballotbox abbrev-mode \"∂\") _a_bbrev         %s(ballotbox outline-minor-mode) _o_utline-minor-mode ^^ %s(ballotbox lsp-mode \"£\") _l_sp-mode
 %s(ballotbox rainbow-identifiers-mode) rainbow-_i_dentifiers ^^ %s(ballotbox auto-fill-function \"¶\") auto-_f_ill      %s(ballotbox view-mode) _v_iew-mode          ^^ %s(ballotbox flycheck-mode \"✔\") flychec_k_
-%s(ballotbox beacon-mode) _b_eacon              ^^ %s(ballotbox visual-line-mode \"↵\") visual-lin_e_    %s(if (bound-and-true-p subword-mode) \",\" (if (bound-and-true-p superword-mode) \"²\" \"☐\")) sub_w_ord/super_W_ord   %s(ballotbox ycmd-mode \"☯\") _y_cmd
-%s(ballotbox hi-lock-mode) _h_i-lock/_c_hanges      %s(ballotbox auto-revert-mode \"↻\") auto-_r_evert    %s(ballotbox flyspell-mode \"⍹\") flyspel_l_/_p_rog       %s(ballotbox which-function-mode) which-f_u_nc
+%s(ballotbox beacon-mode) _b_eacon              ^^ %s(ballotbox visual-line-mode \"↵\") visual-lin_e_    %s(if (bound-and-true-p subword-mode) \",\" (if (bound-and-true-p superword-mode) \"²\" \"☐\")) sub_w_ord/super_W_ord
+%s(ballotbox hi-lock-mode) _h_i-lock/_c_hanges      %s(ballotbox auto-revert-mode \"↻\") auto-_r_evert    %s(ballotbox flyspell-mode \"⍹\") fl_y_spell/_p_rog       %s(ballotbox which-function-mode) which-f_u_nc
 %s(ballotbox whitespace-mode \"␣\") white_s_pace/_t_railing  %s(ballotbox display-line-numbers-mode) line _n_um
 "
   ("a"    abbrev-mode)
@@ -287,9 +287,8 @@ Toggle:
   ("h"    hi-lock-mode)
   ("i"    rainbow-identifiers-mode)
   ("k"    flycheck-mode)
-  ("l"    flyspell-mode)
+  ("l"    lsp-mode)
   ("p"    flyspell-prog-mode)
-  ("m"    company-mode)
   ("n"    display-line-numbers-mode)
   ("o"    outline-minor-mode)
   ("r"    auto-revert-mode)
@@ -299,7 +298,7 @@ Toggle:
   ("v"    view-mode)
   ("w"    subword-mode)
   ("W"    superword-mode)
-  ("y"    ycmd-mode)
+  ("y"    flyspell-mode)
   ("SPC"  nil)
 )
 (bind-key "C-x t" 'hydra-toggle/body)
