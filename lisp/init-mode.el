@@ -392,8 +392,7 @@ jump to unfetched from: _p_ushremote  _u_pstream"
 
   (defun z-flycheck-count (s count)
     (cond ((not count) "")
-          ((> count 1) (concat s (number-to-string count)))
-          ((> count 0) s)
+          ((> count 0) (concat s (number-to-string count)))
           ('t "")))
 
   (defun z-flycheck-mode-line-text (&optional status)
@@ -418,8 +417,8 @@ fallback."
                           (propertize (z-flycheck-count "•" .warning)
                                       'face 'flycheck-status-warning)))
                      (propertize "✔" 'face 'flycheck-status-ok)))
-                  (`running     (propertize "•" 'face 'flycheck-status-ok))
-                  (`not-checked (propertize "•" 'face 'flycheck-status-error))
+                  (`running     (propertize "✔" 'face 'flycheck-status-warning))
+                  (`not-checked (propertize "✔" 'face 'flycheck-status-error))
                   (`no-checker  "¿")
                   (`errored     "‼")
                   (`interrupted "⁉")
