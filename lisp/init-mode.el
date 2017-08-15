@@ -428,7 +428,7 @@ fallback."
   (setq flycheck-mode-line '(:eval (z-flycheck-mode-line-text))))
 
 
-(use-package lsp-mode :diminish "£"
+(use-package lsp-mode :diminish (lsp-mode . " £")
   :config
   (require 'lsp-flycheck))
 
