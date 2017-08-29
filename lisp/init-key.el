@@ -7,9 +7,12 @@
 
 (eval-after-load "quail/Latin-ltx"
   '(let ((quail-current-package (assoc "TeX" quail-package-alist)))
-     (quail-define-rules ((append . t))
-                         ("^\\alpha" ?ᵅ)
-                         ("\\sqrt" ?√))))
+     (quail-define-rules
+      ((append . t))
+      ("^\\alpha" ?ᵅ)
+      ("\\sqrt" ?√)
+      ("\\rarr" ?→) ("\\larr" ?←) ("\\uarr" ?↑) ("\\darr" ?↓)
+      ("\\Rarr" ?⇒) ("\\Larr" ?⇐) ("\\Uarr" ?⇑) ("\\Darr" ?⇓))))
 
 (defun z-kill-buffer (arg)
   "Kill this buffer, or with ARG, call `kill-buffer` instead."

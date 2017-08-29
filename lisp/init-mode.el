@@ -434,7 +434,7 @@ fallback."
 ;; ----------------------------------------
 (use-package org
   :defer 't
-  :bind (("<f5>" . org-capture) ("<f6>" . org-agenda))
+  :bind ("<f6>" . org-agenda)
   :config
   (defface org-todo-open '((t :foreground "#90A8D0" :inherit org-todo))
            "face for org mode OPEN keyword" :group 'org-faces)
@@ -609,12 +609,26 @@ fallback."
 
 (use-package ess-site
   :commands (R R-mode julia)
+  :bind ("<f5>" . z-switch-to-R)
   :mode (("\\.Rmd\\'" . R-mode))
   :defines ess-company-backends ess-current-process-name
   :functions ess-smart-S-assign ess-debug-command-next
     ess-eval-line-and-step ess-eval-linewise ess-toggle-S-assign
     ess-toggle-underscore
   :config
+  (defun z-switch-to-R ()
+    "Go to R session or create one if none exists"
+    (interactive)
+    (let ((b (or (get-buffer "*R*")
+                (cl-find-if (lambda (b)
+                              (with-current-buffer b
+                                (eq major-mode 'inferior-ess-mode)))
+                            (buffer-list)))))
+      (if b (switch-to-buffer b)
+        (let ((ess-ask-for-ess-directory nil)
+              (ess-directory "~/Projects"))
+          (R)))))
+
   (defun ess-smart-pipe ()
     "Similar to ess-smart-S-assign, but insert %>% instead."
     (interactive)
