@@ -1,7 +1,8 @@
 # -*- mode: snippet; require-final-newline: nil -*-
 # name: CacheGet
 # key: CacheGet
+# condition: (prog1 t (setq z-s-id (z-re-backward "\\([^ =]*\\)\s*=\s*cache.NewID" 1)))
 # --
-CacheGet(${1:`(z-re-backward "\\([^ =]*\\)\s*=\s*cache.NewID" 1)`}${2:, nil}, func() interface\{\} \{
+CacheGet(${1:`z-s-id`}${2:, nil}, func() interface\{\} \{
              $0
 \}).(${3:type})

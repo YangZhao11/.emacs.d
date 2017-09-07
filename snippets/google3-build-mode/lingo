@@ -1,8 +1,9 @@
 # -*- mode: snippet; require-final-newline: nil -*-
 # name: lingo
 # key: lingo
+# condition: (progn (setq z-s-name (z-re-backward "name *= *\"\\([^\"]+\\)\"" 1)) t)
 # --
 lingo_binary(
-        name = "lingo-${1:`(z-re-backward "name *= *\"\\([^\"]+\\)\"" 1)`}",
+        name = "lingo-${1:`z-s-name`}",
         package = ":$1",
 )$0

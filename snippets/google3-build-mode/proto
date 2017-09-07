@@ -5,5 +5,4 @@
 proto_library(
         name = "$1_proto",
         srcs = ["$1.proto"],
-        go_api_version = 2,
 )$0

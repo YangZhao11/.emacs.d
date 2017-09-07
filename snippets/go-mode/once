@@ -1,7 +1,8 @@
 # -*- mode: snippet; require-final-newline: nil -*-
 # name: once
 # key: once
+# condition: (prog1 t (setq z-s-var (z-re-backward "\\b\\([a-zA-Z0-9_]+\\) +sync.Once" 1)))
 # --
-${1:`(z-re-backward "\\b\\([a-zA-Z0-9_]+\\) +sync.Once" 1)`}.Do(func() {
+${1:`z-s-var`}.Do(func() {
      $0
 })

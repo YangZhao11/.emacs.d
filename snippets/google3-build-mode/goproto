@@ -1,0 +1,9 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: goproto
+# key: goproto
+# condition: (prog1 t (setq z-s-name (z-re-backward "name *= *\"\\([^\"]+\\)_proto\"" 1)))
+# --
+go_proto_library(
+        name = "${1:`z-s-name`}_go_proto",
+        deps = [":$1_proto"],
+)$0

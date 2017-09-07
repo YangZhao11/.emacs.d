@@ -1,7 +1,8 @@
 # -*- mode: snippet; require-final-newline: nil -*-
 # name: meth
 # key: meth
+# condition: (prog1 t (setq z-s-owner (z-re-backward "func (\\([^()]*\\))" 1)))
 # --
-func (${1:`(z-re-backward "func (\\([^()]*\\))" 1)`}) ${2:Method}(${3:args}) ${4:bool} {
+func (${1:`z-s-owner`}) ${2:Method}(${3:args}) ${4:bool} {
      $0
 }

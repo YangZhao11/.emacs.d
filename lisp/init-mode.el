@@ -4,7 +4,7 @@
   (require 'use-package)
   (require 'hydra))
 
-(add-hook 'before-save-hook 'delete-trailing-whitespace)
+(add-hook 'before-save-hook #'delete-trailing-whitespace)
 (add-hook 'text-mode-hook #'abbrev-mode)
 (add-hook 'text-mode-hook #'turn-on-auto-fill)
 (add-hook 'text-mode-hook #'turn-on-flyspell)
@@ -361,12 +361,18 @@ jump to unfetched from: _p_ushremote  _u_pstream"
 ;; --------------------------------------------------
 (use-package yasnippet :demand ;; :ensure
   :diminish yas-global-mode yas-minor-mode
-  :init
-  (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
   :config
+  (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
   (setq yas-prompt-functions
         '(yas-completing-prompt yas-no-prompt)
         yas-wrap-around-region t)
+
+  (defun z-snippet-mode-hook ()
+    ;; turn off minor modes derived from text-mode
+    (auto-fill-mode -1)
+    (abbrev-mode -1)
+    (flyspell-mode -1))
+  (add-hook 'snippet-mode-hook #'z-snippet-mode-hook)
   (yas-global-mode))
 
 (defun z-re-backward (re count)
@@ -470,7 +476,7 @@ fallback."
     (org-bullets-mode 1)
     (setq-local register-channel-move-by-default 't)
     (setq-local ido-use-filename-at-point nil))
-  (add-hook 'org-mode-hook 'z-org-mode-hook))
+  (add-hook 'org-mode-hook #'z-org-mode-hook))
 
 (use-package better-shell
   :bind (("<f2>" . better-shell-shell)
@@ -519,7 +525,7 @@ fallback."
     ;; somehow eshell-mode-map is buffer-local
     (bind-keys :map eshell-mode-map
              ("M-r" . counsel-esh-history)))
-  (add-hook 'eshell-mode-hook 'z-eshell-mode-hook))
+  (add-hook 'eshell-mode-hook #'z-eshell-mode-hook))
 
 ;; --------------------------------------------------
 ;; modes
@@ -545,7 +551,7 @@ fallback."
     (z-setup-imenu-for-use-package)
     ;;(company-mode)
     )
-  (add-hook 'emacs-lisp-mode-hook 'z-elisp-mode-hook)
+  (add-hook 'emacs-lisp-mode-hook #'z-elisp-mode-hook)
   (bind-keys :map lisp-interaction-mode-map ("C-j")))
 
 (use-package cc-mode
@@ -558,7 +564,7 @@ fallback."
         flycheck-gcc-language-standard "c++14")
   (abbrev-mode -1)
   (require 'clang-format nil 't))
-(add-hook 'c++-mode-hook 'z-c++-mode-hook)
+(add-hook 'c++-mode-hook #'z-c++-mode-hook)
 
 (use-package clang-format
   :config
@@ -566,7 +572,7 @@ fallback."
     (when (eq major-mode 'c++-mode)
       (clang-format-buffer)))
 
-  (add-hook 'before-save-hook 'z-maybe-clang-format))
+  (add-hook 'before-save-hook #'z-maybe-clang-format))
 
 (use-package go-mode
   :config
@@ -579,7 +585,7 @@ fallback."
     ;; (company-mode 1)
     ;;(go-eldoc-setup)
     )
-  (add-hook 'go-mode-hook 'z-go-mode-hook))
+  (add-hook 'go-mode-hook #'z-go-mode-hook))
 
 (use-package scala2-mode
   :config
@@ -589,7 +595,7 @@ fallback."
                     ("->" . ?→))
                   prettify-symbols-alist))
     (prettify-symbols-mode))
-  (add-hook 'scala-mode-hook 'z-scala-mode-hook))
+  (add-hook 'scala-mode-hook #'z-scala-mode-hook))
 
 (use-package js
   :config
@@ -602,7 +608,7 @@ fallback."
   (defun z-haskell-mode-hook ()
     (haskell-indentation-mode))
   ;;(setq haskell-font-lock-symbols 't)
-  (add-hook 'haskell-mode-hook 'z-haskell-mode-hook))
+  (add-hook 'haskell-mode-hook #'z-haskell-mode-hook))
 
 ;; --------------------------------------------------
 ;; ess
@@ -730,9 +736,9 @@ fallback."
              ("<f8>" . ess-eval-line-and-step)
              ("<f9>" . ess-eval-function-or-paragraph-and-step))
 
-  (add-hook 'ess-mode-hook 'z-ess-mode-hook)
-  (add-hook 'ess-help-mode-hook 'z-ess-mode-symbols)
-  (add-hook 'inferior-ess-mode-hook 'z-inferior-ess-mode-hook))
+  (add-hook 'ess-mode-hook #'z-ess-mode-hook)
+  (add-hook 'ess-help-mode-hook #'z-ess-mode-symbols)
+  (add-hook 'inferior-ess-mode-hook #'z-inferior-ess-mode-hook))
 
 (use-package markdown-mode
   :mode ("\\.md\\'" . markdown-mode)
@@ -743,7 +749,7 @@ fallback."
 (use-package gdb-mi
   :config
   (defun z-gdb-mode-hook () (setq gdb-many-windows t))
-  (add-hook 'gdb-mode-hook 'z-gdb-mode-hook))
+  (add-hook 'gdb-mode-hook #'z-gdb-mode-hook))
 
 (use-package info
   :config
