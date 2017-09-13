@@ -495,12 +495,30 @@ Prefixed with \\[universal-argument], show dispatch action."
   (setq ivy-count-format "")
   (setq ivy-display-style 'fancy)
   (setq ivy-use-virtual-buffers 't)
+  (setq ivy-switch-buffer-faces-alist '((dired-mode . dired-directory)
+                                        (org-mode . org-level-4)))
   (setq ivy-ignore-buffers
         '("\\` " "^\\*ESS\\*" "^\\*Messages\\*" "^\\*Help\\*" "^\\*Buffer"
           "^\\*LV\\*"
            "^\\*.*Completions\\*$" "^\\*Ediff" "^\\*tramp" "^\\*cvs-"
            "\\[r\\]\\(<[0-9]+>\\)?$" "\\[fundamental\\]\\(<[0-9]+>\\)?$"
            "_region_" " output\\*$" "^TAGS$" "^\*Ido"))
+
+  (defvar z-ivy-switch-buffer-padding 50
+    "padding for g3 client name column")
+  (defun z-ivy-switch-buffer-transformer (bufname)
+    "Add g3 client name as a separate column"
+    (let* ((buf (get-buffer bufname))
+           (filename (and buf (buffer-file-name buf)))
+           (g3 (and filename
+                    (s-contains-p "/google3/" filename)
+                    (replace-regexp-in-string
+                     ".*/\\([^/]+\\)/google3/.*" "\\1" filename)))
+          (s bufname))
+      (if g3 (setq s (s-concat (s-pad-right z-ivy-switch-buffer-padding " " s) " "
+                               (propertize g3 'face 'ivy-virtual))))
+      (if buf s bufname)))
+  (ivy-set-display-transformer 'ivy-switch-buffer 'z-ivy-switch-buffer-transformer)
 
   (bind-keys :map ivy-minibuffer-map
              ("M-s o" . ivy-occur)
