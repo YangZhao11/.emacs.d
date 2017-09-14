@@ -8,5 +8,5 @@
 (setenv "PATH" (concat "/usr/local/git/current/bin:/usr/local/bin:"
                        (getenv "PATH")))
 (setenv "LANG" "en_US.UTF-8")
-(set-fontset-font t 'unicode
-                  (font-spec :name "Apple Color Emoji" :size 11) nil 'prepend)
+;; (set-fontset-font t 'unicode
+;;                   (font-spec :name "Apple Color Emoji" :size 11) nil 'prepend)
