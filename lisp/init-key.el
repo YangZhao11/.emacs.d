@@ -37,35 +37,22 @@
   :bind (("M-(" . easy-pair-barf)
          ("M-)" . easy-pair-slurp)))
 
+(defun z-transpose (arg)
+  (interactive "*P")
+  ""
+  (call-interactively
+   (if (or arg (use-region-p))
+       #'anchored-transpose #'transpose-chars)))
+(bind-key "C-t" #'z-transpose)
 (use-package anchored-transpose :ensure
-  :commands anchored-transpose
-  :preface
-  (defun z-transpose (arg)
-    (interactive "*P")
-    ""
-    (call-interactively
-     (if (or arg (use-region-p))
-         #'anchored-transpose #'transpose-chars)))
-  :bind ("C-t" . z-transpose))
+  :commands anchored-transpose)
 
-
-(defvar z-align-alist
-  '((?  "\\s-" 0)
-    (?\" "\\s-\"" 0))
-  "Specify regexp and spacing for z-align-char.")
-
-(defun z-align-char (char beg end no-space)
-  "Align CHAR in region specified by BEG and END.
-With prefix arg (NO-SPACE), do not leave space before CHAR."
-  (interactive "cAlign char: \nr\nP")
-  (let* ((a (alist-get char z-align-alist))
-         (regexp (concat  "\\(\\s-*\\)"
-                          (if a (car a)
-                            (regexp-quote (char-to-string char)))))
-         (spacing (if a (cadr a)
-                    (if no-space 0 1))))
-    (align-regexp beg end regexp 1 spacing t)))
-(bind-key "C-x ;" 'z-align-char)
+(use-package z-misc
+  :bind
+  ("C-x ;" . z-align-char)
+  ("C-x $" . z-toggle-selective-display)
+  ("C-x /" . z-ediff-this-buffer)
+  ("C-x _" . z-shrink-other-window-if-larger-than-buffer))
 
 (use-package easy-kill :ensure
   :functions easy-kill-mark-region
@@ -148,20 +135,11 @@ With prefix arg (NO-SPACE), do not leave space before CHAR."
   "Remove adjacent spaces, but undo if the command is issued a second time."
   (interactive) (cycle-spacing 0))
 
-(defun toggle-selective-display (column)
-  "Toggle selective display at COLUMN, defaulting to current column."
-  (interactive "P")
-  (set-selective-display
-   (or column
-       (unless selective-display
-         (1+ (current-column))))))
-
 (bind-keys ("M-SPC"  . cycle-spacing)
            ("M-\\"   . cycle-spacing-0)
            ("M-c"    . capitalize-dwim)
            ("M-l"    . downcase-dwim)
            ("M-u"    . upcase-dwim)
-           ("C-x $"  . toggle-selective-display)
            ("M-?"    . completion-at-point))
 
 (use-package string-inflection
@@ -206,24 +184,7 @@ instead of inactivate region."
 (use-package find-file
   :bind ("C-x C-r" . ff-find-other-file))
 
-(defun ediff-this-buffer ()
-  "Call ediff on this buffer, with the version on disk or backup."
-  (interactive)
-  (unless buffer-file-name
-    (user-error "Buffer is not associated with a file"))
-  (if (buffer-modified-p)
-      (ediff-current-file)
-    (ediff-backup (buffer-file-name))))
-(bind-keys ("C-x /" . ediff-this-buffer))
-
-(defun shrink-other-window-if-larger-than-buffer ()
-    "Shrink other window if larger than buffer."
-    (interactive)
-    (shrink-window-if-larger-than-buffer
-     (next-window (selected-window) nil nil)))
-(bind-keys ("C-x _" . shrink-other-window-if-larger-than-buffer)
-           ("C-x 9" . delete-other-windows-vertically))
-
+(bind-keys ("C-x 9" . delete-other-windows-vertically))
 (bind-key "C-z" nil)
 
 ;; F1 for help.
@@ -247,15 +208,6 @@ buffer in other window."
 (bind-keys ("<f10>" . toggle-one-window)
            ("<f11>" . shrink-window)
            ("<f12>" . enlarge-window))
-
-(defun z-prev-buffer-next-window ()
-  "Switch other window to previous buffer."
-  (interactive)
-  (switch-to-prev-buffer (next-window)))
-(defun z-next-buffer-next-window ()
-  "Switch other window to next buffer."
-  (interactive)
-  (switch-to-next-buffer (next-window)))
 
 (bind-keys ("M-9" . switch-to-prev-buffer)
            ("M-0" . switch-to-next-buffer))
