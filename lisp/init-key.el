@@ -34,12 +34,14 @@
   :bind (:map region-bindings-mode-map
               ("DEL" . easy-pair-delete)
               ("i" . easy-pair-kill-inside))
-  :bind (("M-(" . easy-pair-barf)
-         ("M-)" . easy-pair-slurp)))
+  :bind (("M-(" . easy-pair-backward-slurp)
+         ("M-)" . easy-pair-backward-barf)
+         ("M-9" . easy-pair-barf)
+         ("M-0" . easy-pair-slurp)))
 
 (defun z-transpose (arg)
   (interactive "*P")
-  ""
+  "Call `transpose-chars' or `anchored-transpose' if region is active"
   (call-interactively
    (if (or arg (use-region-p))
        #'anchored-transpose #'transpose-chars)))
@@ -209,8 +211,8 @@ buffer in other window."
            ("<f11>" . shrink-window)
            ("<f12>" . enlarge-window))
 
-(bind-keys ("M-9" . switch-to-prev-buffer)
-           ("M-0" . switch-to-next-buffer))
+(bind-keys ("M-7" . switch-to-prev-buffer)
+           ("M-8" . switch-to-next-buffer))
 
 (defun toggle-show-trailing-whitespace ()
    "Toggle `show-trailing-whitespace'."
@@ -310,20 +312,23 @@ Toggle:
 (use-package register-channel :ensure
   :config
   (register-channel-mode)
-  (set-register ?5 '(file . "~/Projects/notes/NOTES.org"))
-  (bind-key "M-g 5" #'register-channel-describe-register
-            register-channel-mode-map))
+  (defun all-frames-to-messages-buffer ()
+    "Make all frames display the *Messages* buffer, only after storing
+current frame configuration to register 6."
+    (interactive)
+    (frameset-to-register ?6)
+    (dolist (f (frame-list))
+      (let ((w (frame-first-window f)))
+        (delete-other-windows w)
+        (set-window-buffer w "*Messages*"))))
 
-(defun all-frames-to-messages-buffer ()
-  "Make all frames display the *Messages* buffer, only after storing
-current frame configuration to register 8."
-  (interactive)
-  (frameset-to-register ?8)
-  (dolist (f (frame-list))
-    (let ((w (frame-first-window f)))
-      (delete-other-windows w)
-      (set-window-buffer w "*Messages*"))))
-(bind-key "M-g 8" #'all-frames-to-messages-buffer register-channel-mode-map)
+  (bind-keys :map register-channel-mode-map
+             ("M-g 4" . register-channel-save-window-configuration)
+             ("M-g 5" . register-channel-save-window-configuration)
+             ("M-g 6" . all-frames-to-messages-buffer)
+             ("M-g 7") ("M-g 8") ("M-7") ("M-8")))
+
+
 
 (defvar ctl-j-map (make-sparse-keymap)
   "Keymap behind C-j. Called by `z-goto-char'.")

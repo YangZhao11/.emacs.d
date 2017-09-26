@@ -1,3 +1,5 @@
+  (set-register ?5 '(file . "~/Projects/notes/NOTES.org"))
+
 (use-package ycmd :diminish " ☯" :no-require t
   :defines ycmd-server-command ycmd-global-config
   ycmd-extra-conf-whitelist ycmd-idle-change-delay

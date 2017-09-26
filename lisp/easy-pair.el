@@ -91,7 +91,6 @@ The list boundary is kept."
     (save-excursion
       (let (end s)
         (backward-up-list 1 't 't)
-        (backward-char)
         (setq end (point))
         (backward-sexp arg)
         (setq s (filter-buffer-substring (point) end 'delete))
