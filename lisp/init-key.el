@@ -34,10 +34,10 @@
   :bind (:map region-bindings-mode-map
               ("DEL" . easy-pair-delete)
               ("i" . easy-pair-kill-inside))
-  :bind (("M-(" . easy-pair-backward-slurp)
-         ("M-)" . easy-pair-backward-barf)
-         ("M-9" . easy-pair-barf)
-         ("M-0" . easy-pair-slurp)))
+  :bind (("M-7" . easy-pair-backward-slurp)
+         ("M-8" . easy-pair-backward-barf)
+         ("M-(" . easy-pair-barf)
+         ("M-)" . easy-pair-slurp)))
 
 (defun z-transpose (arg)
   (interactive "*P")
@@ -211,8 +211,8 @@ buffer in other window."
            ("<f11>" . shrink-window)
            ("<f12>" . enlarge-window))
 
-(bind-keys ("M-7" . switch-to-prev-buffer)
-           ("M-8" . switch-to-next-buffer))
+(bind-keys ("M-9" . switch-to-prev-buffer)
+           ("M-0" . switch-to-next-buffer))
 
 (defun toggle-show-trailing-whitespace ()
    "Toggle `show-trailing-whitespace'."
@@ -668,7 +668,7 @@ _d_own  _b_ack    _m_ark  _Y_ank-pop
       (execute-kbd-macro binding))))
 
   ;; bind symbols to M-?
-  (dolist (i '("!" "@" "$" "%" "^" "&" "*" "{" "}"
+  (dolist (i '("~" "!" "@" "$" "%" "^" "&" "*" "{" "}"
                "<" ">" ":" "|" "\\" "+" "=" "?" "]"))
     (define-key god-local-mode-map (kbd i) 'god-mode-self-insert-on-meta))
 
