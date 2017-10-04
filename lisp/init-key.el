@@ -57,7 +57,7 @@
   ("C-x _" . z-shrink-other-window-if-larger-than-buffer))
 
 (use-package easy-kill :ensure
-  :functions easy-kill-mark-region
+  :functions (easy-kill-mark-region easy-kill-exit)
   :bind ([remap kill-ring-save] . easy-kill)
   :config
 
@@ -596,10 +596,24 @@ _d_own  _b_ack    _m_ark  _Y_ank-pop
             (if view-mode z-lighter-view
               z-lighter-emacs))))
 
-(defun set-cursor-type (type)
-  "Set cursor to TYPE for all frames."
+(defun set-cursor-type (spec)
+  "Set cursor type for current frame. This also works for
+terminals with support for setting cursor type."
+  (cond
+   ((display-graphic-p)
+    (setq cursor-type spec))
+   ((frame-terminal)
+    (let* ((shape (or (car-safe spec) spec))
+           (param (cond ((eq shape 'bar) "6")
+                        ((eq shape 'hbar) "4")
+                        (t "2"))))
+      (send-string-to-terminal
+       (concat "\e[" param " q"))))))
+
+(defun set-cursor-type-all-frames (spec)
+  "Set cursor to SPEC for all frames."
   (dolist (f (frame-list))
-    (modify-frame-parameters f `((cursor-type . ,type)))))
+    (with-selected-frame f (set-cursor-type spec))))
 
 (use-package god-mode :ensure
   :bind (("<home>" . god-mode-all))
