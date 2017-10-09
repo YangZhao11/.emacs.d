@@ -15,7 +15,7 @@
       ("\\Rarr" ?⇒) ("\\Larr" ?⇐) ("\\Uarr" ?⇑) ("\\Darr" ?⇓))))
 
 (defun z-kill-buffer (arg)
-  "Kill this buffer, or with ARG, call `kill-buffer` instead."
+  "Kill this buffer, or with ARG, call `kill-buffer' instead."
   (interactive "P")
   (call-interactively
    (if arg 'kill-buffer
@@ -40,8 +40,8 @@
          ("M-)" . easy-pair-slurp)))
 
 (defun z-transpose (arg)
-  (interactive "*P")
   "Call `transpose-chars' or `anchored-transpose' if region is active"
+  (interactive "*P")
   (call-interactively
    (if (or arg (use-region-p))
        #'anchored-transpose #'transpose-chars)))
@@ -601,7 +601,7 @@ _d_own  _b_ack    _m_ark  _Y_ank-pop
 terminals with support for setting cursor type."
   (cond
    ((display-graphic-p)
-    (setq cursor-type spec))
+    (modify-frame-parameters nil `((cursor-type . ,spec))))
    ((frame-terminal)
     (let* ((shape (or (car-safe spec) spec))
            (param (cond ((eq shape 'bar) "6")
