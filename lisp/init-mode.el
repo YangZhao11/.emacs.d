@@ -141,14 +141,15 @@ _j_↓^^  _n_ext^^  _{__}_: prev/next file    _d_isplay
          ("C-x C-j" . dired-jump))
   :config
   (require 'dired-x)
+
   (defhydra hydra-dired (:color pink :columns 3 :hint nil)
     "
 ^Mark^‗‗‗‗‗‗‗^Flag^‗‗‗‗‗‗‗‗^Emacs Op^‗‗‗‗‗‗^‗^‗‗‗‗‗‗‗‗‗‗‗‗‗^^File Op^^‗‗(_e_dit)
-_*_: marks   _#_: temp     _Q_uery replace _F_ind marked   _!_shell_&_ _S_ymlink
-_%_: regexp  _~_: backup   _A_: grep       _L_oad          ^^_C_opy    _H_ardlink
+_*_: marks   _#_: temp     ^^_Q_uery replace _F_ind marked   _!_shell_&_ _S_ymlink
+_%_: regexp  _~_: backup   ^^_A_: grep       _L_oad          ^^_C_opy    _H_ardlink
 _u_n/_m_ark    _d_: this     _B_yte compile  _k_ill line     ^^_D_elete  ch_M_od
-_t_oggle     _x_: delete   _v_iew          _w_: file name  ^^_R_ename  ch_O_wn
-_U_nmark all _<_ _>_:dirline _o_ther window  redisp_l_ay     ^^_T_ouch   ch_G_rp
+_t_oggle/_U_   _x_: delete   _v_iew          _w_: file name  ^^_R_ename  ch_O_wn
+_[_ _]_:page   _<_ _>_:dirline _o_ther window  redisp_l_ay     ^^_T_ouch   ch_G_rp
 "
     ("SPC" nil)
     ("RET" dired-find-file :exit t)
@@ -168,6 +169,8 @@ _U_nmark all _<_ _>_:dirline _o_ther window  redisp_l_ay     ^^_T_ouch   ch_G_rp
     ("<" dired-prev-dirline)
     ("=" dired-diff "diff")
     (">" dired-next-dirline)
+    ("[" backward-page)
+    ("]" forward-page)
     ("A" dired-do-find-regexp)
     ("B" dired-do-byte-compile)
     ("C" dired-do-copy)
@@ -184,6 +187,7 @@ _U_nmark all _<_ _>_:dirline _o_ther window  redisp_l_ay     ^^_T_ouch   ch_G_rp
     ("S" dired-do-symlink)
     ("T" dired-do-touch)
     ("U" dired-unmark-all-marks)
+    ("W" browse-url-of-dired-file "Web")
     ("Z" dired-do-compress "compress")
     ("^" dired-up-directory "up-directory")
     ("a" dired-find-alternate-file "find-alternate-file")
@@ -193,10 +197,10 @@ _U_nmark all _<_ _>_:dirline _o_ther window  redisp_l_ay     ^^_T_ouch   ch_G_rp
     ("j" dired-goto-file "goto-file")
     ("k" dired-do-kill-lines)
     ("l" dired-do-redisplay)
-    ("o" dired-find-file-other-window)
+    ("o" dired-find-file-other-window :exit t)
     ("s" dired-sort-toggle-or-edit "sort-toggle-or-edit")
     ("t" dired-toggle-marks)
-    ("v" dired-view-file)
+    ("v" dired-view-file :exit t)
     ("w" dired-copy-filename-as-kill)
     ("x" dired-do-flagged-delete)
     ("y" dired-show-file-type "show-file-type")
@@ -240,6 +244,9 @@ _U_nmark all _<_ _>_:dirline _o_ther window  redisp_l_ay     ^^_T_ouch   ch_G_rp
     ("u" dired-upcase "upcase"))
 
   (bind-keys :map dired-mode-map
+             ("[" . backward-page)
+             ("]" . forward-page)
+             ("e" . dired-toggle-read-only)
              ("SPC" . hydra-dired/body)))
 
 (defhydra hydra-package-menu (:color pink :hint nil)

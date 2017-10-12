@@ -126,9 +126,9 @@ _*_ mark   _R_ename  vie_W_-_E_val  _O_ccur      _t_:mark    copy _B_name
     ("x" ibuffer-do-kill-on-deletion-marks))
 
   (defhydra hydra-ibuffer-mark (:color teal :columns 5 :hint nil
-                                :after-exit
-                                (if (eq major-mode 'ibuffer-mode)
-                                    (hydra-ibuffer/body)))
+                                       :after-exit
+                                       (if (eq major-mode 'ibuffer-mode)
+                                           (hydra-ibuffer/body)))
     "Mark"
     ("SPC" nil)
     ("*" ibuffer-unmark-all "unmark all")
@@ -145,9 +145,9 @@ _*_ mark   _R_ename  vie_W_-_E_val  _O_ccur      _t_:mark    copy _B_name
     ("%" hydra-ibuffer-regex/body "regex"))
 
   (defhydra hydra-ibuffer-regex (:color teal :hint nil
-                                 :after-exit
-                                (if (eq major-mode 'ibuffer-mode)
-                                    (hydra-ibuffer/body)))
+                                        :after-exit
+                                        (if (eq major-mode 'ibuffer-mode)
+                                            (hydra-ibuffer/body)))
     "Regex"
     ("SPC" nil)
     ("*" hydra-ibuffer-mark/body "mark")
@@ -156,12 +156,12 @@ _*_ mark   _R_ename  vie_W_-_E_val  _O_ccur      _t_:mark    copy _B_name
     ("n" ibuffer-mark-by-name-regexp "name")
     ("g" ibuffer-mark-by-content-regexp "grep")
     ("L" ibuffer-mark-by-locked "locked") ; maybe default binding will change
-)
+    )
 
   (defhydra hydra-ibuffer-sort (:color teal :columns 3 :hint nil
-                                :after-exit
-                                (if (eq major-mode 'ibuffer-mode)
-                                    (hydra-ibuffer/body)))
+                                       :after-exit
+                                       (if (eq major-mode 'ibuffer-mode)
+                                           (hydra-ibuffer/body)))
     "Sort"
     ("SPC" nil)
     ("i" ibuffer-invert-sorting "invert")
@@ -172,34 +172,54 @@ _*_ mark   _R_ename  vie_W_-_E_val  _O_ccur      _t_:mark    copy _B_name
     ("m" ibuffer-do-sort-by-major-mode "mode"))
 
   (defhydra hydra-ibuffer-filter (:color teal :hint nil
-                                  :after-exit
-                                  (if (eq major-mode 'ibuffer-mode)
-                                      (hydra-ibuffer/body)))
+                                         :after-exit
+                                         (if (eq major-mode 'ibuffer-mode)
+                                             (hydra-ibuffer/body)))
     "
-Filter by  (_/_ disable):
-_m_ode/derived_M_  _f_ilename mod_i_fied   _c_ontent    _<_ size _>_
-_b_ase/_n_ame      _._ ext    _*_ starred  predicat_e_  _v_isiting
+Filter by  (_DEL_ disable)‗‗‗‗‗‗‗‗‗‗‗^^^^^^  Op‗‗‗‗‗‗‗^^^^^^   _g_roups‗‗‗‗‗‗
+_m_ode/derived_M_  _/_ dir      mod_i_fied   _!_ _&_ _|_       _S_ave/_R_evive
+_b_ase/_n_ame      _._ ext      predicat_e_  _t_:exchg^^^^     _X_:delete
+_f_ilename^^       _*_ starred  _v_isiting   _d_ecompose^^^^   _D_ecompose
+_<_ size _>_       _c_ontent    ^^           _<up>_ pop^^^^    _P_op \\:clear
 "
     ("SPC" nil)
+    ("DEL" ibuffer-filter-disable)
     ("m" ibuffer-filter-by-used-mode)
     ("M" ibuffer-filter-by-derived-mode)
     ("n" ibuffer-filter-by-name)
     ("b" ibuffer-filter-by-basename)
     ("." ibuffer-filter-by-file-extension)
-    ;;    ("/" ibuffer-filter-by-directory "directory")
+    ("/" ibuffer-filter-by-directory)
     ("*" ibuffer-filter-by-starred-name)
     ("c" ibuffer-filter-by-content)
     ("e" ibuffer-filter-by-predicate)
     ("f" ibuffer-filter-by-filename)
+    ("g" ibuffer-filter-to-filter-group)
     ("i" ibuffer-filter-by-modified)
     ("v" ibuffer-filter-by-visiting-file)
     (">" ibuffer-filter-by-size-gt)
     ("<" ibuffer-filter-by-size-lt)
-    ("/" ibuffer-filter-disable))
+    ("D" ibuffer-decompose-filter-group)
+    ("P" ibuffer-pop-filter-group)
+    ("R" ibuffer-switch-to-saved-filter-groups)
+    ("S" ibuffer-save-filter-groups)
+    ("X" ibuffer-delete-saved-filter-groups)
+    ("\\" ibuffer-clear-filter-groups)
+    ("!" ibuffer-negate-filter)
+    ("&" ibuffer-and-filter)
+    ("a" ibuffer-add-saved-filters)
+    ("d" ibuffer-decompose-filter)
+    ("t" ibuffer-exchange-filters)
+    ("|" ibuffer-or-filter)
+    ("x" ibuffer-delete-saved-filters)
+    ("<up>" ibuffer-pop-filter)
+    )
   (bind-keys :map ibuffer-mode-map
              ("M-o" . nil)             ; ibuffer-visit-buffer-1-window
              ("[" . ibuffer-backward-filter-group)
              ("]" . ibuffer-forward-filter-group)
+             ("/ /" . ibuffer-filter-by-directory) ;somehow not default
+             ("/ DEL" . ibuffer-filter-disable)    ;somehow not default
              ("SPC" . hydra-ibuffer/body))
 
   (defun z-ibuffer-mode-hook ()
