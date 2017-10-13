@@ -71,6 +71,7 @@ The list boundary is kept."
   (or (easy-pair--kill-inside-pair beg end)
       (easy-pair--kill-inside-sexp-pair beg end)))
 
+;;;###autoload
 (defun easy-pair-slurp (&optional arg)
   "Slurp ARG sexps into current list"
   (interactive "p")
@@ -84,6 +85,7 @@ The list boundary is kept."
         (backward-char)
         (insert s)))))
 
+;;;###autoload
 (defun easy-pair-backward-slurp (&optional arg)
   "Slurp ARG sexps before current list into current lisp"
   (interactive "p")
@@ -97,6 +99,7 @@ The list boundary is kept."
         (forward-char)
         (insert s)))))
 
+;;;###autoload
 (defun easy-pair-barf (&optional arg)
   "Barf ARG sexps out of current list"
   (interactive "p")
@@ -112,6 +115,7 @@ The list boundary is kept."
       (forward-char)
       (insert s)))))
 
+;;;###autoload
 (defun easy-pair-backward-barf (&optional arg)
   "Barf ARG sexps out of current list"
   (interactive "p")
