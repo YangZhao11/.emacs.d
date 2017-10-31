@@ -821,4 +821,16 @@ _j_↓    _[_ _]_ buttons      _r_: forward
              ("[" . backward-button)
              ("]" . forward-button)))
 
+(use-package server :diminish (server-buffer-clients . " #")
+  :config (add-hook 'after-init-hook 'server-start))
+
+(use-package edit-server :ensure
+  :diminish (edit-server-edit-mode . " ✆")
+  :config
+  (setq edit-server-new-frame nil
+        edit-server-url-major-mode-alist
+        '(("mail\\.google\\.com" . html-mode)
+          ("snippets\\.googleplex\\.com" . markdown-mode)))
+  (add-hook 'after-init-hook 'edit-server-start))
+
 ;; TODO(zhyang): use emmet-mode for html and css

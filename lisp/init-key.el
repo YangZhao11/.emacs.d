@@ -14,6 +14,12 @@
       ("\\rarr" ?→) ("\\larr" ?←) ("\\uarr" ?↑) ("\\darr" ?↓)
       ("\\Rarr" ?⇒) ("\\Larr" ?⇐) ("\\Uarr" ?⇑) ("\\Darr" ?⇓))))
 
+(use-package kmarcro
+  :config
+  (setcdr (assq 'defining-kbd-macro minor-mode-alist)
+          '((:propertize " ●" face (:foreground "#D04020")
+                         help-echo "Recording keyboard macro"))))
+
 (defun z-kill-buffer (arg)
   "Kill this buffer, or with ARG, call `kill-buffer' instead."
   (interactive "P")
@@ -143,24 +149,34 @@
            ("M-l"    . downcase-dwim)
            ("M-u"    . upcase-dwim)
            ("M-?"    . completion-at-point))
+(use-package simple
+  :config
+  (diminish 'next-error-follow-minor-mode " ⇅"))
 
 (use-package string-inflection
   :bind (("M-U" . string-inflection-camelcase)
          ("M-C" . string-inflection-lower-camelcase)
          ("M-L" . string-inflection-underscore)))
 
-(defun isearch-exit-other-end ()
-  "Exit isearch, but at the other end of the search string. This is
+(use-package isearch
+  :bind ("M-s M-o" . multi-occur-in-matching-buffers)
+  ("M-s g"   . grep)
+  ("M-s M-g" . rgrep)
+  :config
+  (defun isearch-exit-other-end ()
+    "Exit isearch, but at the other end of the search string. This is
 useful when followed by an immediate kill."
-  (interactive)
-  (isearch-exit)
-  (goto-char isearch-other-end))
-(bind-keys :map isearch-mode-map
-           ("M-RET" . isearch-exit-other-end)
-           ("M-k"   . isearch-yank-word-or-char))
-(bind-keys ("M-s M-o" . multi-occur-in-matching-buffers)
-           ("M-s g"   . grep)
-           ("M-s M-g" . rgrep))
+    (interactive)
+    (isearch-exit)
+    (goto-char isearch-other-end))
+  (bind-keys :map isearch-mode-map
+             ("M-RET" . isearch-exit-other-end)
+             ("M-k"   . isearch-yank-word-or-char))
+
+  (setcdr (assq 'isearch-mode minor-mode-alist)
+          '((:eval (if isearch-forward " ⇉" " ⇇"))))
+  )
+
 
 ;; Decouple exchange-point-and-mark and activating region.
 (defun z-exchange-point-and-mark (&optional arg)
@@ -232,10 +248,11 @@ buffer in other window."
 Toggle:
 %s(ballotbox rainbow-delimiters-mode) rainbow-_d_elimiters  ^^ %s(ballotbox abbrev-mode \"∂\") _a_bbrev         %s(ballotbox outline-minor-mode) _o_utline-minor-mode ^^ %s(ballotbox lsp-mode \"£\") _l_sp-mode
 %s(ballotbox rainbow-identifiers-mode) rainbow-_i_dentifiers ^^ %s(ballotbox auto-fill-function \"¶\") auto-_f_ill      %s(ballotbox view-mode) _v_iew-mode          ^^ %s(ballotbox flycheck-mode \"✔\") flychec_k_
-%s(ballotbox beacon-mode) _b_eacon              ^^ %s(ballotbox visual-line-mode \"↵\") visual-lin_e_    %s(if (bound-and-true-p subword-mode) \",\" (if (bound-and-true-p superword-mode) \"²\" \"☐\")) sub_w_ord/super_W_ord
+%s(ballotbox beacon-mode) _b_eacon              ^^ %s(ballotbox visual-line-mode \"↵\") visual-lin_e_    %s(if (bound-and-true-p subword-mode) \",\" (if (bound-and-true-p superword-mode) \"²\" \"☐\")) sub_w_ord/super_W_ord   %s(ballotbox electric-quote-mode) elec-_'_
 %s(ballotbox hi-lock-mode) _h_i-lock/_c_hanges      %s(ballotbox auto-revert-mode \"↻\") auto-_r_evert    %s(ballotbox flyspell-mode \"⍹\") fl_y_spell/_p_rog       %s(ballotbox which-function-mode) which-f_u_nc
 %s(ballotbox whitespace-mode \"␣\") white_s_pace/_t_railing  %s(ballotbox display-line-numbers-mode) line _n_um
 "
+  ("'"    electric-quote-mode)
   ("a"    abbrev-mode)
   ("b"    beacon-mode)
   ("c"    highlight-changes-mode)
@@ -327,8 +344,6 @@ current frame configuration to register 6."
              ("M-g 5" . register-channel-save-window-configuration)
              ("M-g 6" . all-frames-to-messages-buffer)
              ("M-g 7") ("M-g 8") ("M-7") ("M-8")))
-
-
 
 (defvar ctl-j-map (make-sparse-keymap)
   "Keymap behind C-j. Called by `z-goto-char'.")
@@ -437,6 +452,7 @@ Prefixed with \\[universal-argument], show dispatch action."
   :bind (("M-z" . zap-to-char-dwim)
          ("M-Z" . zap-back-to-char-dwim)))
 
+;; TODO: check this is fixed.
 (use-package subr-x
   :commands (string-trim-right
              string-trim-left))

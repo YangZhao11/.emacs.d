@@ -70,32 +70,7 @@
 (load "init-buffer")
 (load "init-mode")
 (load "init-key")
-
-(setq-default mode-line-mule-info
-              `("" . ,(cddr (default-value 'mode-line-mule-info))))
-(setq-default mode-line-format
-      `("%e" (:eval z-lighter) .
-        ,(cdr (default-value 'mode-line-format))))
-
-(use-package server :diminish (server-buffer-clients . " #")
-  :config (add-hook 'after-init-hook 'server-start))
-
-(use-package edit-server :ensure
-  :diminish (edit-server-edit-mode . " ✆")
-  :config
-  (setq edit-server-new-frame nil
-        edit-server-url-major-mode-alist
-        '(("mail\\.google\\.com" . html-mode)
-          ("snippets\\.googleplex\\.com" . markdown-mode)))
-  (add-hook 'after-init-hook 'edit-server-start))
-
-(setcdr (assq 'defining-kbd-macro minor-mode-alist)
-        '((:propertize " ●" face (:foreground "#D04020")
-                       help-echo "Recording keyboard macro")))
-(setcdr (assq 'isearch-mode minor-mode-alist)
-        '((:eval (if isearch-forward " ⇉" " ⇇"))))
-(diminish 'next-error-follow-minor-mode " ⇅")
-(setq overlay-arrow-string "➡")
+(load "init-modeline")
 
 ;; line wrap symbol under terminal
 (set-display-table-slot standard-display-table 'truncation ?↔)
@@ -103,19 +78,6 @@
 (set-display-table-slot standard-display-table 'selective-display [?…])
 (set-display-table-slot standard-display-table 'vertical-border ?│)
 
-
-;; `Narrow' in mode line changed to §
-(setq mode-line-modes
-      (mapcar (lambda (x)
-                (if (and (stringp x) (string= x "%n"))
-                    `(:propertize (:eval (if (buffer-narrowed-p) " §"))
-			help-echo "mouse-2: Remove narrowing from buffer"
-			mouse-face mode-line-highlight
-			local-map ,(make-mode-line-mouse-map
-                                    'mouse-2 #'mode-line-widen)
-                        face warning)
-                  x))
-              mode-line-modes))
 
 ;; --------------------------------------------------
 ;; customs
