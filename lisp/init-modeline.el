@@ -5,11 +5,13 @@
  (:eval z-lighter)
  mode-line-front-space mode-line-mule-info
  mode-line-client mode-line-modified
- mode-line-remote mode-line-frame-identification mode-line-buffer-identification "   " mode-line-position
+ mode-line-remote mode-line-frame-identification
+ mode-line-buffer-identification "   " mode-line-position
  (vc-mode vc-mode)
  "  " mode-line-modes mode-line-misc-info mode-line-end-spaces))
 
-;; remove input method from mode-line-mule-info
+;; remove input method from mode-line-mule-info, this is already
+;; handled by z-lighter.
 (setq-default mode-line-mule-info
               (mapcar (lambda (x)
                         (if (and (listp x) (eq (car x) 'current-input-method))
@@ -19,14 +21,10 @@
 ;; mark emacsclient frames using ©
 (setq-default mode-line-client '(#1=""
     (:propertize
-      (#1#
-        (:eval
-          (if
-              (frame-parameter nil 'client)
-              "©" #1#)))
+      (#1# (:eval (if (frame-parameter nil 'client) "©" #1#)))
       help-echo "emacsclient frame")))
 
-(setq overlay-arrow-string "➡")
+(setq overlay-arrow-string "►")
 
 ;; `Narrow' in mode line changed to §
 (setq mode-line-modes

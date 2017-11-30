@@ -423,14 +423,6 @@ in `ctl-j-map' first."
   (setq aw-scope 'frame
         aw-background nil
         aw-keys '(?j ?k ?d ?f ?g ?h ?s ?l ?a ?\;))
-  (setq aw-dispatch-alist
-        '((?x aw-delete-window " Ace - Delete Window" "_x_:delete")
-    (?m aw-swap-window " Ace - Swap Window" "_m_:swap")
-    (?M aw-move-window " Ace - Move Window" "_M_ove")
-    (?c aw-split-window-fair " Ace - Split Fair Window" "_c_:split fair")
-    (?v aw-split-window-vert " Ace - Split Vert Window" "_v_ert split")
-    (?b aw-split-window-horz " Ace - Split Horz Window" "_b_:split h")
-    (?i delete-other-windows " Ace - Delete Other Windows" "max_i_mize")))
 
   (defun z-ace-window (arg)
   "Select a window.
@@ -439,14 +431,8 @@ Perform an action based on ARG described below.
 Prefixed with \\[universal-argument], show dispatch action."
   (interactive "P")
   (if arg
-      (progn
-        (ace-window-show-dispatch)
-        (let ((aw-dispatch-always 't))(ace-select-window)))
-    (ace-select-window)))
-  (defun ace-window-show-dispatch ()
-    (message "%s"
-     (mapconcat (lambda (x) (z-replace-hotkey (cadddr x)))
-      aw-dispatch-alist "  "))))
+        (let ((aw-dispatch-always 't))(aw-show-dispatch-help))
+    (ace-select-window))))
 
 (use-package zap-to-char-dwim
   :bind (("M-z" . zap-to-char-dwim)
@@ -468,6 +454,7 @@ Prefixed with \\[universal-argument], show dispatch action."
   (setq ivy-count-format "")
   (setq ivy-display-style 'fancy)
   (setq ivy-use-virtual-buffers 't)
+  (setq ivy-use-selectable-prompt 't)
   (setq ivy-switch-buffer-faces-alist '((dired-mode . dired-directory)
                                         (org-mode . org-level-4)))
   (setq ivy-ignore-buffers

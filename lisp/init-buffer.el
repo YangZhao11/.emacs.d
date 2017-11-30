@@ -234,8 +234,7 @@ _<_ size _>_       _c_ontent    ^^           _<up>_ pop^^^^    _P_op \\:clear
 ;; how to solve collision of buffer names: filename:pathpart
 (use-package uniquify
   :init
-  (setq uniquify-buffer-name-style 'post-forward
-        uniquify-separator ":"))
+  (setq uniquify-buffer-name-style 'post-forward))
 
 ;; midnight mode cleans up unused buffer
 (use-package midnight
