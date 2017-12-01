@@ -485,10 +485,6 @@ fallback."
     (setq-local ido-use-filename-at-point nil))
   (add-hook 'org-mode-hook #'z-org-mode-hook))
 
-(use-package better-shell
-  :bind (("<f2>" . better-shell-shell)
-         ("C-x <f2>" . better-shell-remote-open)))
-
 ;; --------------------------------------------------
 ;; eshell
 (use-package eshell

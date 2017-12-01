@@ -510,6 +510,7 @@ _j_↓  _l_→   set _a_ction   _RET_:go    _o_ther    _q_uit
 
 (use-package counsel :defer 4
   :bind (([remap find-file] . counsel-find-file)
+         ("<f2>" . counsel-switch-to-shell-buffer)
          ("C-x 8 8" . counsel-unicode-char)
          ("C-x b" . counsel-bookmark)
          ("C-x f" . counsel-file-jump)  ; set-fill-column
