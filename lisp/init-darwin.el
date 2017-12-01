@@ -1,5 +1,5 @@
-(set-frame-font "Menlo-15" nil 't)
-(setq mac-option-modifier 'super
+(set-frame-font "Menlo-14" nil 't)
+(setq mac-option-modifier 'none
       mac-command-modifier 'meta
       mac-right-option-modifier 'meta
       mac-right-command-modifier 'super)
@@ -10,3 +10,7 @@
 (setenv "LANG" "en_US.UTF-8")
 ;; (set-fontset-font t 'unicode
 ;;                   (font-spec :name "Apple Color Emoji" :size 11) nil 'prepend)
+(add-hook 'after-init-hook
+          (lambda ()
+            (when window-system
+              (set-frame-size (selected-frame) 80 46))))

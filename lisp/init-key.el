@@ -374,7 +374,7 @@ current frame configuration to register 6."
     (avy-with avy-goto-char
       (avy--generic-jump
        (regexp-quote (string char))
-       avy-all-windows
+       nil
        avy-style
        (1+ (point))
        (line-end-position))))
@@ -384,7 +384,7 @@ current frame configuration to register 6."
     (avy-with avy-goto-char
       (avy--generic-jump
        (regexp-quote (string char))
-       avy-all-windows
+       nil
        avy-style
        (line-beginning-position)
        (point))))
@@ -404,17 +404,13 @@ in `ctl-j-map' first."
     "show help for using `avy-dispatch-alist'"
     (interactive)
     (message "%s"
-             (mapconcat 'z-replace-hotkey
-                        '("_x_:kill" "_X_:kill-stay" "_t_eleport" "_m_ark"
-                          "_n_:copy" "_y_ank" "_i_spell")
-                        "  "))))
-
-(defun z-replace-hotkey (x)
-  "replace _x_ constructs with propertized text"
-  (replace-regexp-in-string "_\\(.\\)_"
-    (lambda (y) (propertize (match-string 1 y) 'face 'hydra-face-red))
-    x))
-
+       (mapconcat
+        (lambda (x)
+          (concat (propertize (char-to-string (car x)) 'face 'hydra-face-red)
+                  ":" (replace-regexp-in-string "avy-action-" ""
+                                                (symbol-name (cdr x)))))
+        avy-dispatch-alist
+        "  "))))
 
 (use-package ace-window :ensure :defer 6
   :bind* (("M-j" . z-ace-window)
