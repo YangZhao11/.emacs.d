@@ -12,7 +12,12 @@
   :config
   (defun g3-clients ()
     "Returns all g3 clients by iterating through all open files."
-    (let* ((files (delq nil (mapcar 'buffer-file-name (buffer-list))))
+    (let* ((files (delq nil
+                        (mapcar (lambda (x)
+                                  (or (buffer-file-name x)
+                                      (with-current-buffer x
+                                        (expand-file-name default-directory))))
+                                (buffer-list))))
            (f (cl-remove-if-not (lambda (x) (s-contains-p "/google3/" x)) files))
            (dirs (mapcar (lambda (x)
                            (replace-regexp-in-string

@@ -675,6 +675,7 @@ fallback."
                     ("%<>%" . ?⇄) ;⇋⇌⇆
                     ("<=" . ?≤)
                     (">=" . ?≥)
+                    ("!=" . ?≠)
                     ("%in%" . ?∈)
                     ("%*%" . ?×)
                     ("function" ?ƒ))
@@ -692,6 +693,8 @@ fallback."
 
   (defun z-inferior-ess-mode-hook ()
     (z-ess-mode-symbols)
+    (setq-local scroll-margin 0)
+    (setq-local comint-move-point-for-output t)
     ;; (setq-local company-backends ess-company-backends)
     ;; (company-mode)
     )
