@@ -389,6 +389,14 @@ jump to unfetched from: _p_ushremote  _u_pstream"
       (when (re-search-backward re (point-min) t)
           (match-string count)))))
 
+(use-package flymake
+  :commands (flymake-mode)
+  :config
+  (bind-keys :map flymake-mode-map
+             ("M-g `" . flymake-goto-next-error)
+             ("M-g f" . flymake-goto-next-error)
+             ("M-g b" . flymake-goto-prev-error)))
+
 (use-package flycheck
   :commands (flycheck-mode)
   :config

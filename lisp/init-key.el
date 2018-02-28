@@ -250,7 +250,7 @@ Toggle:
 %s(ballotbox rainbow-identifiers-mode) rainbow-_i_dentifiers ^^ %s(ballotbox auto-fill-function \"¶\") auto-_f_ill      %s(ballotbox view-mode) _v_iew-mode          ^^ %s(ballotbox flycheck-mode \"✔\") flychec_k_
 %s(ballotbox beacon-mode) _b_eacon              ^^ %s(ballotbox visual-line-mode \"↵\") visual-lin_e_    %s(if (bound-and-true-p subword-mode) \",\" (if (bound-and-true-p superword-mode) \"²\" \"☐\")) sub_w_ord/super_W_ord   %s(ballotbox electric-quote-mode) elec-_'_
 %s(ballotbox hi-lock-mode) _h_i-lock/_c_hanges      %s(ballotbox auto-revert-mode \"↻\") auto-_r_evert    %s(ballotbox flyspell-mode \"⍹\") fl_y_spell/_p_rog       %s(ballotbox which-function-mode) which-f_u_nc
-%s(ballotbox whitespace-mode \"␣\") white_s_pace/_t_railing  %s(ballotbox display-line-numbers-mode) line _n_um
+%s(ballotbox whitespace-mode \"␣\") white_s_pace/_t_railing  %s(ballotbox display-line-numbers-mode) line _n_um       %s(ballotbox flymake-mode) fly_m_ake
 "
   ("'"    electric-quote-mode)
   ("a"    abbrev-mode)
@@ -263,6 +263,7 @@ Toggle:
   ("i"    rainbow-identifiers-mode)
   ("k"    flycheck-mode)
   ("l"    lsp-mode)
+  ("m"    flymake-mode)
   ("p"    flyspell-prog-mode)
   ("n"    display-line-numbers-mode)
   ("o"    outline-minor-mode)

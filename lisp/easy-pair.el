@@ -46,11 +46,11 @@ deletes."
   (let* ((s1 (buffer-substring-no-properties beg (1+ beg)))
          (s2 (buffer-substring-no-properties (1- end) end))
          (length (- (1- end) (1+ beg))))
-    (if (and (>= length 0)
-             (easy-pair-match-p s1 s2))
-        (progn (goto-char (1+ beg))
-               (delete-char length t)
-               length))))
+    (when (and (>= length 0)
+               (easy-pair-match-p s1 s2))
+      (goto-char (1+ beg))
+      (delete-char length t)
+      length)))
 
 (defun easy-pair--kill-inside-sexp-pair (beg end)
   (interactive "r")
@@ -69,7 +69,8 @@ deletes."
 The list boundary is kept."
   (interactive "r")
   (or (easy-pair--kill-inside-pair beg end)
-      (easy-pair--kill-inside-sexp-pair beg end)))
+      (easy-pair--kill-inside-sexp-pair beg end)
+      (kill-region beg end)))
 
 ;;;###autoload
 (defun easy-pair-slurp (&optional arg)
