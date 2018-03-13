@@ -450,7 +450,7 @@ fallback."
 
 (use-package lsp-mode :diminish (lsp-mode . " £")
   :config
-  (require 'lsp-flycheck))
+  (require 'lsp-ui-flycheck))
 
 ;; ----------------------------------------
 (use-package org
@@ -686,7 +686,7 @@ fallback."
                     ("!=" . ?≠)
                     ("%in%" . ?∈)
                     ("%*%" . ?×)
-                    ("function" ?ƒ))
+                    ("function" . ?ƒ))
                   prettify-symbols-alist))
     (prettify-symbols-mode))
 

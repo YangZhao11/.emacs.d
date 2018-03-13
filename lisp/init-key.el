@@ -45,15 +45,9 @@
          ("M-(" . easy-pair-barf)
          ("M-)" . easy-pair-slurp)))
 
-(defun z-transpose (arg)
-  "Call `transpose-chars' or `anchored-transpose' if region is active"
-  (interactive "*P")
-  (call-interactively
-   (if (or arg (use-region-p))
-       #'anchored-transpose #'transpose-chars)))
-(bind-key "C-t" #'z-transpose)
 (use-package anchored-transpose :ensure
-  :commands anchored-transpose)
+    :bind (:map region-bindings-mode-map
+                ("C-t" . anchored-transpose)))
 
 (use-package z-misc
   :bind

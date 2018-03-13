@@ -186,7 +186,7 @@ Filter by  (_DEL_ disable)‗‗‗‗‗‗‗‗‗‗‗^^^^^^  Op‗‗‗�
 _m_ode/derived_M_  _/_ dir      mod_i_fied   _!_ _&_ _|_       _S_ave/_R_evive
 _b_ase/_n_ame      _._ ext      predicat_e_  _t_:exchg^^^^     _X_:delete
 _f_ilename^^       _*_ starred  _v_isiting   _d_ecompose^^^^   _D_ecompose
-_<_ size _>_       _c_ontent    ^^           _<up>_ pop^^^^    _P_op \\:clear
+_<_ size _>_       _c_ontent    proc_E_ss    _<up>_ _p_op^^    _P_op \\:clear
 "
     ("SPC" nil)
     ("DEL" ibuffer-filter-disable)
@@ -199,6 +199,7 @@ _<_ size _>_       _c_ontent    ^^           _<up>_ pop^^^^    _P_op \\:clear
     ("*" ibuffer-filter-by-starred-name)
     ("c" ibuffer-filter-by-content)
     ("e" ibuffer-filter-by-predicate)
+    ("E" ibuffer-filter-by-process)
     ("f" ibuffer-filter-by-filename)
     ("g" ibuffer-filters-to-filter-group)
     ("i" ibuffer-filter-by-modified)
@@ -207,6 +208,7 @@ _<_ size _>_       _c_ontent    ^^           _<up>_ pop^^^^    _P_op \\:clear
     ("<" ibuffer-filter-by-size-lt)
     ("D" ibuffer-decompose-filter-group)
     ("P" ibuffer-pop-filter-group)
+    ("p" ibuffer-pop-filter)
     ("R" ibuffer-switch-to-saved-filter-groups)
     ("S" ibuffer-save-filter-groups)
     ("X" ibuffer-delete-saved-filter-groups)
