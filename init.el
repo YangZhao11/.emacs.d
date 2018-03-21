@@ -1,9 +1,9 @@
 ; -*- coding: utf-8 -*-
 
 ;; Make elpa packages available
-(require 'package)
-(setq package-enable-at-startup nil)
-(package-initialize)
+;; (require 'package)
+;; (setq package-enable-at-startup nil)
+;; (package-initialize)
 (add-to-list 'package-archives
              '("melpa" . "http://melpa.org/packages/") t)
 (add-to-list 'package-archives

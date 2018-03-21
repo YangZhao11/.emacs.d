@@ -452,92 +452,6 @@ fallback."
   :config
   (require 'lsp-ui-flycheck))
 
-;; ----------------------------------------
-(use-package org
-  :defer 't
-  :bind ("<f6>" . org-agenda)
-  :config
-  (defface org-todo-open '((t :foreground "#90A8D0" :inherit org-todo))
-           "face for org mode OPEN keyword" :group 'org-faces)
-  (defface org-todo-wait '((t :foreground "#CCA060" :inherit org-todo))
-           "face for org mode WAIT keyword" :group 'org-faces)
-  (defface org-done-obsolete '((t :foreground "#909090" :inherit org-done))
-           "face for org mode OBSOLETE keyword" :group 'org-faces)
-  (setq org-speed-commands-user
-        '(("S" . org-schedule) ("d" . org-deadline))
-        org-todo-keywords
-        '((sequence "TODO(t)" "OPEN(o)" "WAIT(w)"
-                    "|" "OBSOLETE(e)" "DONE(d)"))
-        org-todo-keyword-faces
-        '(("OPEN" . org-todo-open)
-          ("OBSOLETE" . org-done-obsolete) ("WAIT" . org-todo-wait))
-        org-use-speed-commands 't
-        org-sparse-tree-default-date-type 'closed
-        org-agenda-files '("~/Projects/notes/NOTES.org")
-        org-refile-targets '((nil :level . 1) (nil :tag . "OLD"))
-        org-capture-templates
-        '(("r" "Requests" entry
-           (file+headline "~/Projects/notes/NOTES.org" "Requests")
-           "** TODO %t %?")
-          ("n" "Notes" entry
-           (file+headline "~/Projects/notes/NOTES.org" "Captured Notes")
-           "** %? %T"))
-        org-link-abbrev-alist
-        '(("doc" . "https://drive.google.com/drive/search?q=")
-          ("ai" . "https://groups.google.com/a/google.com/forum/#!searchin/zhyang-ai/")))
-  (bind-keys :map org-mode-map ("M-m") ("C-j"))
-  (defun z-org-mode-hook ()
-    (bug-reference-mode 1)
-    (org-bullets-mode 1)
-    (setq-local register-channel-move-by-default 't)
-    (setq-local ido-use-filename-at-point nil))
-  (add-hook 'org-mode-hook #'z-org-mode-hook))
-
-;; --------------------------------------------------
-;; eshell
-(use-package eshell
-  :commands eshell
-  :functions eshell/pwd
-  :config
-  (defun z-eshell-prompt-function ()
-    (let* ((pwd (eshell/pwd))
-           (short-pwd (abbreviate-file-name pwd))
-           (pwd-face 'default))
-      (setq pwd-face
-            (cond ((string= (nth 2 (file-attributes pwd 'string)) user-login-name)
-                   'eshell-ls-symlink)
-                  ((file-writable-p pwd) 'font-lock-constant-face)
-                  ((file-readable-p pwd) 'eshell-ls-readonly)
-                  (t 'eshell-ls-missing)))
-      (concat
-       (propertize short-pwd 'face pwd-face 'readonly t)
-       (propertize (if (= (user-uid) 0) " # " " $ ")
-                   'face 'eshell-prompt
-                   'readonly t
-                   'rear-nonsticky '(face readonly)))))
-  (setq eshell-prompt-function 'z-eshell-prompt-function
-        eshell-highlight-prompt nil
-        eshell-cmpl-cycle-completions nil)
-
-  (defalias 'eshell/x 'eshell/exit)
-  (defun eshell/p (&rest args)
-    "Call find-file-read-only on files"
-    (mapc #'find-file-read-only
-          (mapcar #'expand-file-name
-                  (eshell-flatten-list (reverse args)))))
-
-  (defun eshell/ec (&rest args)
-    "Call find-file-read-only on files"
-    (mapc #'find-file
-          (mapcar #'expand-file-name
-                  (eshell-flatten-list (reverse args)))))
-  (defun z-eshell-mode-hook ()
-    ;;(company-mode 1)
-    ;; somehow eshell-mode-map is buffer-local
-    (bind-keys :map eshell-mode-map
-             ("M-r" . counsel-esh-history)))
-  (add-hook 'eshell-mode-hook #'z-eshell-mode-hook))
-
 ;; --------------------------------------------------
 ;; modes
 
@@ -756,6 +670,8 @@ fallback."
 
 (use-package markdown-mode
   :mode ("\\.md\\'" . markdown-mode)
+  :init
+  (setq markdown-header-scaling 't)
   :config
   (bind-keys :map markdown-mode-map
              ("C-c C-m" . r-mode)))

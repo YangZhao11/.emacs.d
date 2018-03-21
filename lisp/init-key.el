@@ -49,6 +49,22 @@
     :bind (:map region-bindings-mode-map
                 ("C-t" . anchored-transpose)))
 
+(use-package shell
+  :bind ("<f6>" . z-switch-to-shell)
+
+  :config
+  (defun z-switch-to-shell ()
+    "Go to shell or create one if none exists"
+    (interactive)
+    (let ((b (or (get-buffer "*shell*")
+                 (cl-find-if (lambda (b)
+                               (with-current-buffer b
+                                 (eq major-mode 'shell-mode)))
+                             (buffer-list)))))
+      (if b (switch-to-buffer b)
+        (shell)))))
+
+
 (use-package z-misc
   :bind
   ("C-x ;" . z-align-char)
@@ -202,7 +218,6 @@ instead of inactivate region."
 ;; F1 for help.
 ;; (bind-key "<f2>" #'eshell)
 ;; F3 and F4 for macros
-;; F5 and F6 bound for org-mode stuff.
 (use-package gud
   :bind (("<f7>"   . gud-up)
          ("S-<f7>" . gud-down)
@@ -502,7 +517,6 @@ _j_↓  _l_→   set _a_ction   _RET_:go    _o_ther    _q_uit
 
 (use-package counsel :defer 4
   :bind (([remap find-file] . counsel-find-file)
-         ("<f2>" . counsel-switch-to-shell-buffer)
          ("C-x 8 8" . counsel-unicode-char)
          ("C-x b" . counsel-bookmark)
          ("C-x f" . counsel-file-jump)  ; set-fill-column
