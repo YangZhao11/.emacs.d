@@ -123,6 +123,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(comint-highlight-prompt ((t nil)))
  '(company-template-field ((t (:background "#4d5d6d"))))
  '(font-lock-builtin-face ((t (:foreground "#C0C8D0" :weight normal))))
  '(font-lock-constant-face ((t (:foreground "#BFDBBF"))))

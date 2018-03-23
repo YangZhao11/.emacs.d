@@ -681,6 +681,37 @@ fallback."
   (defun z-gdb-mode-hook () (setq gdb-many-windows t))
   (add-hook 'gdb-mode-hook #'z-gdb-mode-hook))
 
+(use-package man
+  :config
+  (defhydra hydra-man (:color pink :hint nil)
+    "
+_k_↑ _<__>_ top/bottom  _p_rev sec   _g_oto sec  _m_an        _K_ill
+_j_↓ _[__]_ button      _n_ext sec   _s_ee also  _r_eference  _q_uit
+"
+    ("SPC" nil :exit t)
+    ("j" scroll-up-command)
+    ("k" scroll-down-command)
+    ("K" Man-kill :exit t)
+    ("q" quit-window :exit t)
+    ("<" beginning-of-buffer)
+    (">" end-of-buffer)
+    ("[" backward-button)
+    ("]" forward-button)
+    ("n" Man-next-section)
+    ("p" Man-prev-section)
+    ("g" Man-goto-section)
+    ("s" Man-goto-see-also-section)
+    ("m" man)
+    ("r" Man-follow-manual-reference))
+  (bind-keys :map Man-mode-map
+             ("SPC" . hydra-man/body)
+             ("j" . scroll-up-command)
+             ("k" . scroll-down-command)
+             ("K" . Man-kill)
+             ("[" . backward-button)
+             ("]" . forward-button)
+             ("x" . god-mode-self-insert)))
+
 (use-package info
   :config
   (defhydra hydra-info (:color pink :hint nil)
@@ -715,7 +746,8 @@ _j_↓     ^^_f_ollow      _r_: forward    _p_rev   _<__>_ first/last
              ("{" . Info-prev-reference)
              ("}" . Info-next-reference)
              ("j" . Info-scroll-up)
-             ("k" . Info-scroll-down)))
+             ("k" . Info-scroll-down)
+             ("x" . god-mode-self-insert)))
 
 (use-package help-mode
   :config
@@ -742,7 +774,8 @@ _j_↓    _[_ _]_ buttons      _r_: forward
              ("k" . scroll-down-command)
              ("j" . scroll-up-command)
              ("[" . backward-button)
-             ("]" . forward-button)))
+             ("]" . forward-button)
+             ("x" . god-mode-self-insert)))
 
 (use-package server :diminish (server-buffer-clients . " #")
   :config (add-hook 'after-init-hook 'server-start))
