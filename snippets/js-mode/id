@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: id
+# key: id
+# --
+let $1 = document.getElementById("${2:$1}")

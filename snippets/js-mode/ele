@@ -1,0 +1,5 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: ele
+# key: ele
+# --
+let $1 = document.createElement("${2:$1}")

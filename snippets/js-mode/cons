@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: cons
+# key: cons
+# --
+constructor($1) {
+    ${1:$(mapconcat (function (lambda (x) (setq x (s-trim x)) (if (string= x "") "" (concat "    this." x " = " x)))) (split-string yas-text ",") "\n")}
+    $0
+}
