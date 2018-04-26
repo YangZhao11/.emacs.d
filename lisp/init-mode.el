@@ -528,6 +528,11 @@ fallback."
              ("M-." . nil)
              ("C-x ." . js-find-symbol)))
 
+(use-package js2-mode
+  :mode "\\.js\\'"
+  :config
+  (setq js2-strict-missing-semi-warning nil))
+
 (use-package haskell-mode
   :config
   (defun z-haskell-mode-hook ()
