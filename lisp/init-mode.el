@@ -457,7 +457,7 @@ fallback."
 
 (use-package elisp-mode
   :config
-  (defun z-setup-imenu-for-use-package ()
+  (defun z-setup-imenu-for-elisp ()
     "Recognize `use-package` and defhydra in imenu, for init files."
     (let ((emacsd (expand-file-name "~/.emacs.d/lisp/"))
           (initel (expand-file-name "init.el" "~/.emacs.d")))
@@ -473,7 +473,7 @@ fallback."
          '(nil "^\\s-*(\\(defhydra\\)\\s-+\\(\\(\\sw\\|\\s_\\)+\\)" 2)))))
 
   (defun z-elisp-mode-hook ()
-    (z-setup-imenu-for-use-package)
+    (z-setup-imenu-for-elisp)
     ;;(company-mode)
     )
   (add-hook 'emacs-lisp-mode-hook #'z-elisp-mode-hook)
@@ -511,16 +511,6 @@ fallback."
     ;;(go-eldoc-setup)
     )
   (add-hook 'go-mode-hook #'z-go-mode-hook))
-
-(use-package scala2-mode
-  :config
-  (defun z-scala-mode-hook ()
-    (setq prettify-symbols-alist
-          (append '(("=>" . ?⇒)
-                    ("->" . ?→))
-                  prettify-symbols-alist))
-    (prettify-symbols-mode))
-  (add-hook 'scala-mode-hook #'z-scala-mode-hook))
 
 (use-package js
   :config

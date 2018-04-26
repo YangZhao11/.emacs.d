@@ -36,24 +36,44 @@ e.g. no prodaccess.")
           (cons 'filename
                 (format "/%s/google3/" d))))
 
+  (defun z-magit-repos ()
+    "Return all magit top level directories"
+    (let* ((dirs (delq nil
+                       (mapcar (lambda (x)
+                                 (with-current-buffer x
+                                   (and (eq major-mode 'magit-status-mode)
+                                        (magit-toplevel))))
+                               (buffer-list)))))
+      (cl-delete-duplicates dirs
+                            :test (lambda (x y) (equal x y)))))
+  (defun z-magit-group (d)
+    "Function to map magit root dir to ibuffer group"
+    `(,(format "Git: %s" (file-name-nondirectory (s-chop-suffix "/" d)))
+      (or ,(cons 'filename (format "^%s" d))
+          (and (mode . magit-status-mode)
+               (predicate . (string= (magit-toplevel) ,d))))))
+
   (defun z-ibuffer-groups (name)
     "Generate ibuffer filter group definition. Each G3 client has its own group."
     (let ((g3 (g3-clients))
-          (grps z-default-g3-group))
+          (grps z-default-g3-group)
+          (git (mapcar 'z-magit-group (z-magit-repos))))
       (if g3
           (setq grps (mapcar 'z-g3-group g3)))
       (append (list name)
               grps
-              `(("G3"
-                 (filename . "/google3/"))
-                (,(format "%s Home" (getenv "USER"))
-                 ,(cons 'filename
-                        (format "^%s/" (getenv "HOME"))))
+              '(("G3" (filename . "/google3/")))
+              git
+              `((,(format "%s Home" (getenv "USER"))
+                 ,(cons 'filename (format "^%s/" (getenv "HOME"))))
                 ("Misc" (or (mode . Custom-mode)
                             (mode . help-mode)
                             (mode . ess-help-mode)
                             (mode . apropos-mode)
                             (mode . completion-list-mode)
+                            (mode . magit-diff-mode)
+                            (mode . magit-log-mode)
+                            (mode . magit-process-mode)
                             (name . "\\[r\\]$")
                             (name . "\\[fundamental\\]$")
                             (name . "^\\*Messages\\*$")
