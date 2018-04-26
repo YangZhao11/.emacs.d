@@ -1,9 +1,10 @@
 ; -*- coding: utf-8 -*-
 
 ;; Make elpa packages available
-;; (require 'package)
-;; (setq package-enable-at-startup nil)
-;; (package-initialize)
+(when (< emacs-major-version 27)
+    (require 'package)
+    (setq package-enable-at-startup nil)
+    (package-initialize))
 (add-to-list 'package-archives
              '("melpa" . "http://melpa.org/packages/") t)
 (add-to-list 'package-archives
@@ -93,7 +94,7 @@
  '(nrepl-message-colors
    '("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3"))
  '(package-selected-packages
-   '(indium lsp-ui ivy-posframe indent-guide dired-rainbow diredfl lsp-mode rainbow-identifiers string-inflection ace-window region-bindings-mode counsel swiper citc g4-gutter ivy imenu-anywhere wgrep ivy-hydra flx hydra keyfreq color-identifiers-mode org-bullets js2-mode scala-mode2 clang-format markdown-mode use-package magit flycheck go-eldoc smex beacon anchored-transpose csv-mode go-mode easy-kill zenburn-theme yasnippet squery register-channel rainbow-delimiters lua-mode ido-vertical-mode ido-ubiquitous haskell-mode goto-chg god-mode f ess edit-server))
+   '(indium ivy-posframe indent-guide dired-rainbow diredfl rainbow-identifiers string-inflection ace-window region-bindings-mode counsel swiper citc g4-gutter ivy imenu-anywhere wgrep ivy-hydra flx hydra keyfreq color-identifiers-mode org-bullets js2-mode scala-mode2 clang-format markdown-mode use-package magit flycheck go-eldoc smex beacon anchored-transpose csv-mode go-mode easy-kill zenburn-theme yasnippet squery register-channel rainbow-delimiters lua-mode ido-vertical-mode ido-ubiquitous haskell-mode goto-chg god-mode f ess edit-server))
  '(vc-annotate-background "#2B2B2B")
  '(vc-annotate-color-map
    '((20 . "#BC8383")

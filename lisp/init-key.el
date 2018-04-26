@@ -20,6 +20,40 @@
           '((:propertize " ●" face (:foreground "#D04020")
                          help-echo "Recording keyboard macro"))))
 
+(defhydra hydra-ctl-x-r (:color blue :hint nil)
+  "
+^^Rectangle^^‗‗‗‗‗‗‗‗‗‗‗‗‗^^   ^^Register^^‗‗save‗‗‗‗‗‗‗‗‗^^  ^^Bookmark‗‗‗‗‗‗
+_c_lear     _N_umber-lines^^   _+_: inc^^    _SPC_: point     _m_: set
+_d_elete    _o_pen  s_t_ring   _i_nsert^^    _f_rameset       _b_: jump
+_k_ill      _y_ank^^           _j_ump^^      _w_indow-config  _l_ist
+M-w:copy^^  _r_egister^^       _x_/_s_:copy  _n_umber         _M_: no-overwrite
+"
+  ("SPC" point-to-register)
+  ("+" increment-register)
+  ("M" bookmark-set-no-overwrite)
+  ("N" rectangle-number-lines)
+  ("b" bookmark-jump)
+  ("c" clear-rectangle)
+  ("d" delete-rectangle)
+  ("f" frameset-to-register)
+  ("g" insert-register)
+  ("i" insert-register)
+  ("j" jump-to-register)
+  ("k" kill-rectangle)
+  ("l" bookmark-bmenu-list)
+  ("m" bookmark-set)
+  ("n" number-to-register)
+  ("o" open-rectangle)
+  ("r" copy-rectangle-to-register)
+  ("s" copy-to-register)
+  ("t" string-rectangle)
+  ("w" window-configuration-to-register)
+  ("x" copy-to-register)
+  ("y" yank-rectangle)
+  )
+(bind-key "C-x r ?" 'hydra-ctl-x-r/body)
+
+
 (defun z-kill-buffer (arg)
   "Kill this buffer, or with ARG, call `kill-buffer' instead."
   (interactive "P")
@@ -168,10 +202,14 @@
          ("M-C" . string-inflection-lower-camelcase)
          ("M-L" . string-inflection-underscore)))
 
+(use-package grep
+  :bind (("M-s g"   . grep)
+         ("M-s M-g" . rgrep)))
+
+(use-package replace
+  :bind ("M-s M-o" . multi-occur-in-matching-buffers))
+
 (use-package isearch
-  :bind ("M-s M-o" . multi-occur-in-matching-buffers)
-  ("M-s g"   . grep)
-  ("M-s M-g" . rgrep)
   :config
   (defun isearch-exit-other-end ()
     "Exit isearch, but at the other end of the search string. This is

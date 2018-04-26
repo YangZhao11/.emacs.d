@@ -434,3 +434,13 @@
     (bind-keys :map eshell-mode-map
              ("M-r" . counsel-esh-history)))
   (add-hook 'eshell-mode-hook #'z-eshell-mode-hook))
+
+(use-package scala2-mode
+  :config
+  (defun z-scala-mode-hook ()
+    (setq prettify-symbols-alist
+          (append '(("=>" . ?⇒)
+                    ("->" . ?→))
+                  prettify-symbols-alist))
+    (prettify-symbols-mode))
+  (add-hook 'scala-mode-hook #'z-scala-mode-hook))
