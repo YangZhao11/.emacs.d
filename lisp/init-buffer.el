@@ -38,12 +38,13 @@ e.g. no prodaccess.")
 
   (defun z-magit-repos ()
     "Return all magit top level directories"
-    (let* ((dirs (delq nil
-                       (mapcar (lambda (x)
-                                 (with-current-buffer x
-                                   (and (eq major-mode 'magit-status-mode)
-                                        (magit-toplevel))))
-                               (buffer-list)))))
+    (let* ((dirs (delq nil (mapcar
+      (lambda (buf)
+        (with-current-buffer buf
+          (or (and (eq major-mode 'magit-status-mode)
+                   (magit-toplevel))
+              (if-let* ((d (vc-root-dir))) (expand-file-name d)))))
+      (buffer-list)))))
       (cl-delete-duplicates dirs
                             :test (lambda (x y) (equal x y)))))
   (defun z-magit-group (d)
