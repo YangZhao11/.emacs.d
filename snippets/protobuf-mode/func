@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: func
+# key: func
+# condition: (prog1 t (setq z-s-var (or (z-re-backward " \\([_a-zA-Z0-9]+\\) =" 1) "var")))
+# --
+[(collopt.tag).func = "${1:`(s-upper-camel-case z-s-var)`}"]

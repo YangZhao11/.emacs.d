@@ -1,6 +1,6 @@
 # -*- mode: snippet; require-final-newline: nil -*-
 # name: op
 # key: op
-# condition: (prog1 t (setq z-s-num (string-to-number (z-re-backward "= *\\([0-9]+\\) *;" 1))))
+# condition: (prog1 t (setq z-s-num (string-to-number (or (z-re-backward "= *\\([0-9]+\\) *" 1) "0"))))
 # --
 optional ${1:bool} ${2:field_name} = ${3:`(number-to-string (1+ z-s-num))`};
