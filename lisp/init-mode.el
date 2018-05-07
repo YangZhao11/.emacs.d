@@ -47,9 +47,9 @@ e_x_ecute  _RET_: go   _o_ther win _R_elocate _w_here^^        _e_dit
   :config
   (defhydra hydra-view (:color pink :hint nil)
     "
-^^pg/set^^ line^^ half^^ _g_o/_%_ ^^register  ^^mark   _s_earch/_r_    _q_uit/_Q_
-_k_↑ _w_   _K_    _u_p   _<_^^    _m_ark      _._set   regex: _/_ ^\\  _c_ancel/_C_
-_j_↓ _z_   _J_    _d_own _>_^^    _'_: goto   p_@_p    again: _n_ _p_
+^^pg/set^^ line^^ half^^ _g_o/_%_ _{__}_ parag ^^register  ^^mark   _s_earch/_r_    _q_uit/_Q_
+_k_↑ _w_   _K_    _u_p   _<_^^    _[__]_ page  _m_ark      _._set   regex: _/_ ^\\
+_j_↓ _z_   _J_    _d_own _>_^^    _(__)_ list  _'_: goto   p_@_p    again: _n_ _p_
 "
     ("SPC" nil)
     ("j" View-scroll-page-forward)
@@ -74,14 +74,28 @@ _j_↓ _z_   _J_    _d_own _>_^^    _'_: goto   p_@_p    again: _n_ _p_
     ("'" register-to-point)
     ("." set-mark-command)
     ("@" View-back-to-mark)
-    ("q" View-quit :color blue)
-    ("Q" View-quit-all :color blue)
-    ("c" View-leave :color blue)
+    ("{" backward-paragraph)
+    ("}" forward-paragraph)
+    ("[" backward-page)
+    ("]" forward-page)
+    ("(" backward-list)
+    (")" forward-list)
+    ("q" View-leave :color blue)
+    ("Q" View-quit :color blue)
     ("C" View-kill-and-leave :color blue))
   (bind-keys :map view-mode-map
              ("SPC" . hydra-view/body)
              ("C-j" . nil)
              ("x" . god-mode-self-insert)
+             ("c" . god-mode-self-insert)
+             ("{" . backward-paragraph)
+             ("}" . forward-paragraph)
+             ("[" . backward-page)
+             ("]" . forward-page)
+             ("(" . backward-list)
+             (")" . forward-list)
+             ("q" . View-leave)
+             ("Q" . View-quit)
              ("j" . View-scroll-page-forward)
              ("k" . View-scroll-page-backward)
              ("J" . View-scroll-line-forward)
@@ -779,4 +793,7 @@ _j_↓    _[_ _]_ buttons      _r_: forward
           ("snippets\\.googleplex\\.com" . markdown-mode)))
   (add-hook 'after-init-hook 'edit-server-start))
 
-;; TODO(zhyang): use emmet-mode for html and css
+(use-package shell
+  :config
+  (bind-keys :map shell-mode-map
+             ("C-c C-l" . counsel-shell-history)))
