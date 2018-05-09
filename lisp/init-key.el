@@ -509,20 +509,25 @@ Prefixed with \\[universal-argument], show dispatch action."
            "\\[r\\]\\(<[0-9]+>\\)?$" "\\[fundamental\\]\\(<[0-9]+>\\)?$"
            "_region_" " output\\*$" "^TAGS$" "^\*Ido"))
 
-  (defvar z-ivy-switch-buffer-padding 50
-    "padding for g3 client name column")
-  (defun z-ivy-switch-buffer-transformer (bufname)
-    "Add g3 client name as a separate column"
+  (defun z-ivy-repo (bufname)
     (let* ((buf (get-buffer bufname))
            (filename (and buf (buffer-file-name buf)))
            (g3 (and filename
                     (s-contains-p "/google3/" filename)
                     (replace-regexp-in-string
-                     ".*/\\([^/]+\\)/google3/.*" "\\1" filename)))
-          (s bufname))
-      (if g3 (setq s (s-concat (s-pad-right z-ivy-switch-buffer-padding " " s) " "
-                               (propertize g3 'face 'ivy-virtual))))
-      (if buf s bufname)))
+                     ".*/\\([^/]+\\)/google3/.*" "\\1" filename))))
+      (or g3 (and buf
+                  (if-let* ((d (with-current-buffer buf (vc-root-dir))))
+                      (file-name-nondirectory (s-chop-suffix "/" d)))))))
+
+  (defvar z-ivy-switch-buffer-padding 50
+    "padding for g3 client name column")
+  (defun z-ivy-switch-buffer-transformer (bufname)
+    "Add g3 client name as a separate column"
+    (if-let* ((repo (z-ivy-repo bufname)))
+        (s-concat (s-pad-right z-ivy-switch-buffer-padding " " bufname) " "
+                  (propertize repo 'face 'ivy-virtual))
+      bufname))
   (ivy-set-display-transformer 'ivy-switch-buffer 'z-ivy-switch-buffer-transformer)
 
   (bind-keys :map ivy-minibuffer-map
