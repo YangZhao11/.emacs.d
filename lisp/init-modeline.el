@@ -4,8 +4,9 @@
 '("%e"
  (:eval z-lighter)
  mode-line-front-space mode-line-mule-info
- mode-line-client mode-line-modified
- mode-line-remote mode-line-frame-identification
+ ;; mode-line-client
+ mode-line-modified
+ mode-line-remote " " ;mode-line-frame-identification
  mode-line-buffer-identification "   " mode-line-position
  (vc-mode vc-mode)
  "  " mode-line-modes mode-line-misc-info mode-line-end-spaces))
@@ -21,7 +22,9 @@
 ;; mark emacsclient frames using ©
 (setq-default mode-line-client '(#1=""
     (:propertize
-      (#1# (:eval (if (frame-parameter nil 'client) "©" #1#)))
+     (#1# (:eval (if (frame-parameter nil 'client)
+                     (if (eq (framep (selected-frame)) 't) "𝕋" "ℂ")
+                        #1#)))
       help-echo "emacsclient frame")))
 
 (setq overlay-arrow-string "►")

@@ -88,6 +88,7 @@ _j_↓ _z_   _J_    _d_own _>_^^    _(__)_ list  _'_: goto   p_@_p    again: _n_
              ("C-j" . nil)
              ("x" . god-mode-self-insert)
              ("c" . god-mode-self-insert)
+             ("l" . god-mode-self-insert)
              ("{" . backward-paragraph)
              ("}" . forward-paragraph)
              ("[" . backward-page)
