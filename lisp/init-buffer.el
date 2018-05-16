@@ -4,6 +4,22 @@
   (require 'use-package)
   (require 'hydra))
 
+(use-package project
+  :init
+  (defun project-try-g3 (dir)
+    (when (s-contains-p "/google3/" dir)
+    (let ((root (replace-regexp-in-string "\\(.*/google3/\\).*" "\\1" dir)))
+      (cons 'g3 root))))
+  (cl-defmethod project-roots ((project (head g3)))
+    (let ((root (cdr project)))
+      (list (concat root "quality/ui/analysis/")
+            (concat root "evaluation/analysis/")
+            (concat root "logs/lib/session/")
+            (concat root "logs/lib/gws/")
+            (concat root "logs/proto/wireless/android/play/playlog/")
+            (concat root "experimental/users/" (getenv "USER") "/"))))
+  (setq project-find-functions (list #'project-try-g3 #'project-try-vc)))
+
 ;; ==================================================
 ;; ibuffer
 (use-package ibuffer

@@ -785,7 +785,9 @@ _j_↓    _[_ _]_ buttons      _r_: forward
              ("j" . scroll-up-command)
              ("[" . backward-button)
              ("]" . forward-button)
-             ("x" . god-mode-self-insert)))
+             ("x" . god-mode-self-insert)
+             ("<mouse-8>" . help-go-back)
+             ("<mouse-9>" . help-go-forward)))
 
 (use-package server :diminish (server-buffer-clients . " #")
   :config (add-hook 'after-init-hook 'server-start))
