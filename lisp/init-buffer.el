@@ -4,21 +4,55 @@
   (require 'use-package)
   (require 'hydra))
 
-(use-package project
-  :init
-  (defun project-try-g3 (dir)
+
+;; z-project maps buffers to project names, with caching in z-projects-alist
+(defvar z-project-alist nil
+  "`z-project-alist` maps directory to project names")
+(defun z-project-lookup (directory)
+  (let ((entry (cl-find-if (lambda (entry) (s-prefix-p (car entry) directory))
+                           z-project-alist)))
+    (when entry (cdr entry))))
+
+(defun z-project-buffer-dir (buf)
+  "return effective directory of buffer"
+  (or (buffer-file-name buf)
+      (with-current-buffer buf
+        (and (memq major-mode '(help-mode ibuffer-mode)) "~"))
+      (with-current-buffer buf
+        (expand-file-name default-directory))))
+
+(defun z-project-lookup-buffer (buf)
+  "lookup buf in z-project-alist"
+(let ((fname (z-project-buffer-dir buf)))
+    (if fname (z-project-lookup fname))))
+
+(defun z-project-try-g3 (buf)
+  (let ((dir (or (buffer-file-name buf)
+                  (with-current-buffer buf
+                    (expand-file-name default-directory)))))
     (when (s-contains-p "/google3/" dir)
-    (let ((root (replace-regexp-in-string "\\(.*/google3/\\).*" "\\1" dir)))
-      (cons 'g3 root))))
-  (cl-defmethod project-roots ((project (head g3)))
-    (let ((root (cdr project)))
-      (list (concat root "quality/ui/analysis/")
-            (concat root "evaluation/analysis/")
-            (concat root "logs/lib/session/")
-            (concat root "logs/lib/gws/")
-            (concat root "logs/proto/wireless/android/play/playlog/")
-            (concat root "experimental/users/" (getenv "USER") "/"))))
-  (setq project-find-functions (list #'project-try-g3 #'project-try-vc)))
+      (let* ((root (replace-regexp-in-string "\\(.*/google3/\\).*" "\\1" dir))
+             (name (replace-regexp-in-string ".*/\\([^/]*\\)/google3/.*" "\\1" root))
+             (proj (concat "G3:" name)))
+        (cons root proj)))))
+
+(defun z-project-try-vc (buf)
+  (with-current-buffer buf
+    (if-let* ((d (vc-root-dir))
+              (proj (file-name-nondirectory (s-chop-suffix "/" d))))
+        (cons (expand-file-name d) proj))))
+
+(defvar z-project-try-functions (list #'z-project-try-g3 #'z-project-try-vc)
+  "List of functions to try to get a (dir . project) mapping")
+
+(defun z-project (buf)
+  "returns project for buf, potentially modifying `z-project-alist'"
+  (if-let* ((proj (z-project-lookup-buffer buf)))
+      proj
+    (when-let* ((entry (run-hook-with-args-until-success
+                        'z-project-try-functions buf)))
+        (add-to-list 'z-project-alist entry)
+        (cdr entry))))
 
 ;; ==================================================
 ;; ibuffer
@@ -26,61 +60,17 @@
   :bind ("C-x C-b" . ibuffer)
   :functions ibuffer-switch-to-saved-filter-groups
   :config
-  (defun g3-clients ()
-    "Returns all g3 clients by iterating through all open files."
-    (let* ((files (delq nil
-                        (mapcar (lambda (x)
-                                  (or (buffer-file-name x)
-                                      (with-current-buffer x
-                                        (expand-file-name default-directory))))
-                                (buffer-list))))
-           (f (cl-remove-if-not (lambda (x) (s-contains-p "/google3/" x)) files))
-           (dirs (mapcar (lambda (x)
-                           (replace-regexp-in-string
-                            ".*/\\([^/]+\\)/google3/.*" "\\1" x)) f)))
-      (cl-delete-duplicates dirs
-                            :test (lambda (x y) (equal x y)))))
-
-  (defvar z-default-g3-group
-    '(("G3" (filename . "/googl3/")))
-    "Default g3 group when g3 clients are not available,
-e.g. no prodaccess.")
-
-  (defun z-g3-group (d)
-    "Function to map g3 client name to ibuffer filter group"
-    (list (format "G3: %s" d)
-          (cons 'filename
-                (format "/%s/google3/" d))))
-
-  (defun z-magit-repos ()
-    "Return all magit top level directories"
-    (let* ((dirs (delq nil (mapcar
-      (lambda (buf)
-        (with-current-buffer buf
-          (or (and (eq major-mode 'magit-status-mode)
-                   (magit-toplevel))
-              (if-let* ((d (vc-root-dir))) (expand-file-name d)))))
-      (buffer-list)))))
-      (cl-delete-duplicates dirs
-                            :test (lambda (x y) (equal x y)))))
-  (defun z-magit-group (d)
-    "Function to map magit root dir to ibuffer group"
-    `(,(format "Git: %s" (file-name-nondirectory (s-chop-suffix "/" d)))
-      (or ,(cons 'filename (format "^%s" d))
-          (and (mode . magit-status-mode)
-               (predicate . (string= (magit-toplevel) ,d))))))
+  (defun z-project-group (entry)
+    "Function to map `z-project-alist' entries to ibuffer filters"
+    `(,(cdr entry)
+      (predicate . (string= (z-project (current-buffer)) ,(cdr entry)))))
 
   (defun z-ibuffer-groups (name)
     "Generate ibuffer filter group definition. Each G3 client has its own group."
-    (let ((g3 (g3-clients))
-          (grps z-default-g3-group)
-          (git (mapcar 'z-magit-group (z-magit-repos))))
-      (if g3
-          (setq grps (mapcar 'z-g3-group g3)))
+    (let ((proj (mapcar 'z-project-group z-project-alist)))
       (append (list name)
-              grps
+              proj
               '(("G3" (filename . "/google3/")))
-              git
               `((,(format "%s Home" (getenv "USER"))
                  ,(cons 'filename (format "^%s/" (getenv "HOME"))))
                 ("Misc" (or (mode . Custom-mode)

@@ -467,7 +467,7 @@ in `ctl-j-map' first."
   :config
   (setq aw-scope 'frame
         aw-background nil
-        aw-keys '(?j ?k ?d ?f ?g ?h ?s ?l ?a ?\;))
+        aw-keys '(?j ?d ?k ?f ?g ?h ?s ?l ?a ?\;))
 
   (defun z-ace-window (arg)
   "Select a window.
@@ -476,7 +476,8 @@ Perform an action based on ARG described below.
 Prefixed with \\[universal-argument], show dispatch action."
   (interactive "P")
   (if arg
-        (let ((aw-dispatch-always 't))(aw-show-dispatch-help))
+      (let ((aw-dispatch-always 't))
+        (aw-show-dispatch-help))
     (ace-select-window))))
 
 (use-package zap-to-char-dwim
@@ -510,20 +511,13 @@ Prefixed with \\[universal-argument], show dispatch action."
            "_region_" " output\\*$" "^TAGS$" "^\*Ido"))
 
   (defun z-ivy-repo (bufname)
-    (let* ((buf (get-buffer bufname))
-           (filename (and buf (buffer-file-name buf)))
-           (g3 (and filename
-                    (s-contains-p "/google3/" filename)
-                    (replace-regexp-in-string
-                     ".*/\\([^/]+\\)/google3/.*" "\\1" filename))))
-      (or g3 (and buf
-                  (if-let* ((d (with-current-buffer buf (vc-root-dir))))
-                      (file-name-nondirectory (s-chop-suffix "/" d)))))))
+    (let* ((buf (get-buffer bufname)))
+      (and buf (z-project buf))))
 
   (defvar z-ivy-switch-buffer-padding 50
     "padding for g3 client name column")
   (defun z-ivy-switch-buffer-transformer (bufname)
-    "Add g3 client name as a separate column"
+    "Add project name as a separate column"
     (if-let* ((repo (z-ivy-repo bufname)))
         (s-concat (s-pad-right z-ivy-switch-buffer-padding " " bufname) " "
                   (propertize repo 'face 'ivy-virtual))
