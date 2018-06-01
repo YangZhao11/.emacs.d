@@ -160,11 +160,11 @@ _j_↓^^  _n_ext^^  _{__}_: prev/next file    _d_isplay
   (defhydra hydra-dired (:color pink :columns 3 :hint nil)
     "
 ^Mark^‗‗‗‗‗‗‗^Flag^‗‗‗‗‗‗‗‗^Emacs Op^‗‗‗‗‗‗^‗^‗‗‗‗‗‗‗‗‗‗‗‗‗^^File Op^^‗‗(_e_dit)
-_*_: marks   _#_: temp     ^^_Q_uery replace _F_ind marked   _!_shell_&_ _S_ymlink
-_%_: regexp  _~_: backup   ^^_A_: grep       _L_oad          ^^_C_opy    _H_ardlink
-_u_n/_m_ark    _d_: this     _B_yte compile  _k_ill line     ^^_D_elete  ch_M_od
-_t_oggle/_U_   _x_: delete   _v_iew          _w_: file name  ^^_R_ename  ch_O_wn
-_[_ _]_:page   _<_ _>_:dirline _o_ther window  redisp_l_ay     ^^_T_ouch   ch_G_rp
+_*_: marks^^   _#_: temp^^     _Q_uery/rep     _F_ind marked   _!_shell_&_ _S_ymlink
+_%_: regexp^^  _~_: backup^^   _A_: grep       _L_oad          ^^_C_opy    _H_ardlink
+_u_n/_m_ark    _d_: this^^     _B_yte compile  _k_ill line     ^^_D_elete  ch_M_od
+_t_oggle/_U_   _x_: delete^^   _v_iew          _w_: file name  ^^_R_ename  ch_O_wn
+_[_ _]_:page   _<_ _>_:dirline _o_ther win     redisp_l_ay     ^^_T_ouch   ch_G_rp
 "
     ("SPC" nil)
     ("RET" dired-find-file :exit t)

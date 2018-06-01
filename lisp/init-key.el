@@ -57,9 +57,8 @@ M-w:copy^^  _r_egister^^       _x_/_s_:copy  _n_umber         _M_: no-overwrite
 (defun z-kill-buffer (arg)
   "Kill this buffer, or with ARG, call `kill-buffer' instead."
   (interactive "P")
-  (call-interactively
-   (if arg 'kill-buffer
-     'kill-this-buffer)))
+  (if arg (call-interactively 'kill-buffer)
+    (kill-buffer)))
 (bind-keys ("<C-M-backspace>" . backward-kill-sexp)
            ("C-x k"           . z-kill-buffer)
            ("C-M-o"           . up-list))
@@ -84,20 +83,7 @@ M-w:copy^^  _r_egister^^       _x_/_s_:copy  _n_umber         _M_: no-overwrite
                 ("C-t" . anchored-transpose)))
 
 (use-package shell
-  :bind ("<f6>" . z-switch-to-shell)
-
-  :config
-  (defun z-switch-to-shell ()
-    "Go to shell or create one if none exists"
-    (interactive)
-    (let ((b (or (get-buffer "*shell*")
-                 (cl-find-if (lambda (b)
-                               (with-current-buffer b
-                                 (eq major-mode 'shell-mode)))
-                             (buffer-list)))))
-      (if b (switch-to-buffer b)
-        (shell)))))
-
+  :bind ("<f6>" . shell))
 
 (use-package z-misc
   :bind
@@ -222,7 +208,7 @@ useful when followed by an immediate kill."
              ("M-k"   . isearch-yank-word-or-char))
 
   (setcdr (assq 'isearch-mode minor-mode-alist)
-          '((:eval (if isearch-forward " ⇉" " ⇇"))))
+          '((:eval (if isearch-forward " »" " «"))))
   )
 
 
@@ -512,7 +498,7 @@ Prefixed with \\[universal-argument], show dispatch action."
 
   (defun z-ivy-repo (bufname)
     (let* ((buf (get-buffer bufname)))
-      (and buf (z-project buf))))
+      (and buf (cdr (z-project buf)))))
 
   (defvar z-ivy-switch-buffer-padding 50
     "padding for g3 client name column")

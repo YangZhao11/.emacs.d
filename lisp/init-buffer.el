@@ -4,14 +4,13 @@
   (require 'use-package)
   (require 'hydra))
 
-
+;; ==================================================
 ;; z-project maps buffers to project names, with caching in z-projects-alist
 (defvar z-project-alist nil
   "`z-project-alist` maps directory to project names")
 (defun z-project-lookup (directory)
-  (let ((entry (cl-find-if (lambda (entry) (s-prefix-p (car entry) directory))
-                           z-project-alist)))
-    (when entry (cdr entry))))
+  (cl-find-if (lambda (entry) (s-prefix-p (car entry) directory))
+              z-project-alist))
 
 (defun z-project-buffer-dir (buf)
   "return effective directory of buffer"
@@ -46,13 +45,17 @@
   "List of functions to try to get a (dir . project) mapping")
 
 (defun z-project (buf)
-  "returns project for buf, potentially modifying `z-project-alist'"
+  "Returns project entry for buf by trying everything in
+`z-project-try-functions'. Results are cached in
+`z-project-alist'."
   (if-let* ((proj (z-project-lookup-buffer buf)))
       proj
     (when-let* ((entry (run-hook-with-args-until-success
                         'z-project-try-functions buf)))
-        (add-to-list 'z-project-alist entry)
-        (cdr entry))))
+      (add-to-list 'z-project-alist entry)
+      entry)))
+
+(z-project (current-buffer))
 
 ;; ==================================================
 ;; ibuffer
@@ -63,7 +66,7 @@
   (defun z-project-group (entry)
     "Function to map `z-project-alist' entries to ibuffer filters"
     `(,(cdr entry)
-      (predicate . (string= (z-project (current-buffer)) ,(cdr entry)))))
+      (predicate . (string= (cdr (z-project (current-buffer))) ,(cdr entry)))))
 
   (defun z-ibuffer-groups (name)
     "Generate ibuffer filter group definition. Each G3 client has its own group."
