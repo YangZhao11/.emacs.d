@@ -208,8 +208,7 @@ useful when followed by an immediate kill."
              ("M-k"   . isearch-yank-word-or-char))
 
   (setcdr (assq 'isearch-mode minor-mode-alist)
-          '((:eval (if isearch-forward " »" " «"))))
-  )
+          '((:eval (if isearch-forward " »" " «")))))
 
 
 ;; Decouple exchange-point-and-mark and activating region.
