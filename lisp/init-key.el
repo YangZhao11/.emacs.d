@@ -248,19 +248,34 @@ instead of inactivate region."
          ("S-<f8>" . gud-step)
          ("<f9>"   . gud-finish)))
 
-(defun toggle-one-window ()
-  "Change to one window (C-x 1) if applicable, otherwise show other
+(use-package window
+  :bind  (("<f10>" . toggle-one-window)
+          ("<f11>" . shrink-window)
+          ("<f12>" . enlarge-window)
+          ("C-x ^" . hydra-resize-window/body)
+          ("M-9" . switch-to-prev-buffer)
+          ("M-0" . switch-to-next-buffer))
+  :config
+  (defun toggle-one-window ()
+    "Change to one window (C-x 1) if applicable, otherwise show other
 buffer in other window."
-  (interactive)
-  (if (window-parent)
-      (delete-other-windows)
-    (display-buffer (other-buffer) t)))
-(bind-keys ("<f10>" . toggle-one-window)
-           ("<f11>" . shrink-window)
-           ("<f12>" . enlarge-window))
-
-(bind-keys ("M-9" . switch-to-prev-buffer)
-           ("M-0" . switch-to-next-buffer))
+    (interactive)
+    (if (window-parent)
+        (delete-other-windows)
+      (display-buffer (other-buffer) t)))
+  (defhydra hydra-resize-window (:color pink :hint nil)
+    "
+use arrow keys or:  _{_ _}_ horizontal   _[_ _]_ vertical
+"
+    ("{" shrink-window-horizontally)
+    ("<left>" shrink-window-horizontally)
+    ("}" enlarge-window-horizontally)
+    ("<right>" enlarge-window-horizontally)
+    ("[" shrink-window)
+    ("<up>" shrink-window)
+    ("]" enlarge-window)
+    ("<down>" enlarge-window)
+    ("SPC" nil)))
 
 (defun toggle-show-trailing-whitespace ()
    "Toggle `show-trailing-whitespace'."
