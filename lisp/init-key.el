@@ -474,6 +474,11 @@ Prefixed with \\[universal-argument], show dispatch action."
   :commands (string-trim-right
              string-trim-left))
 
+(use-package imenu-list
+  :bind ("M-s l" . imenu-list-smart-toggle)
+  :config
+  (setq imenu-list-position 'left))
+
 (use-package imenu-anywhere
   :bind ("M-s M-i" . ivy-imenu-anywhere))
 
