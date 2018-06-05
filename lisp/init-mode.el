@@ -157,7 +157,8 @@ _j_↓^^  _n_ext^^  _{__}_: prev/next file    _d_isplay
 
 (use-package dired
   :bind (("C-x C-d" . dired)
-         ("C-x C-j" . dired-jump))
+         ("C-x C-j" . dired-jump)
+         ("C-x 4 j" . dired-jump-other-window))
   :config
   (require 'dired-x)
 

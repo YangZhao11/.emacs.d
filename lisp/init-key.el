@@ -752,6 +752,20 @@ terminals with support for setting cursor type."
         (global-set-key (kbd (concat prefix " C-" i))
                         (key-binding (kbd (concat prefix " " i)))))))
 
+  (defun god-mode-call-with-prefix (prefix)
+    "Call god-mode key binding, as if prefix and literal key are in effect"
+    (interactive)
+    (let ((god-literal-sequence t))
+      (call-interactively (god-mode-lookup-key-sequence nil prefix))))
+  (global-set-key (kbd "C-x C-4")
+                  (lambda () (interactive) (god-mode-call-with-prefix "C-x 4")))
+  (global-set-key (kbd "C-x C-5")
+                  (lambda () (interactive) (god-mode-call-with-prefix "C-x 5")))
+  (global-set-key (kbd "C-x C-6")
+                  (lambda () (interactive) (god-mode-call-with-prefix "C-x 6")))
+  (global-set-key (kbd "C-x C-8")
+                  (lambda () (interactive) (god-mode-call-with-prefix "C-x 8")))
+
   (defun z-god-mode-enabled-hook ()
     ;; somehow this hook can be called multiple times on a buffer,
     ;; which messes up saving states here. Maybe consider using
