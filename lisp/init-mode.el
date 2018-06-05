@@ -15,7 +15,7 @@
     "
 _m_ark     _u_nmark    _1_ window  _v_isit    _s_ave/_l_oad    _a_nnotation
 _d_elete   _DEL_: back _2_ window  _r_ename   _t_oggle fname^^ _A_ll
-e_x_ecute  _RET_: go   _o_ther win _R_elocate _w_here^^        _e_dit
+_z_ap      _RET_: go   _o_ther win _R_elocate _w_here^^        _e_dit
 "
     ("SPC" nil)
     ("m" bookmark-bmenu-mark)
@@ -29,7 +29,7 @@ e_x_ecute  _RET_: go   _o_ther win _R_elocate _w_here^^        _e_dit
     ("r" bookmark-bmenu-rename)
     ("R" bookmark-bmenu-relocate)
     ("d" bookmark-bmenu-delete)
-    ("x" bookmark-bmenu-execute-deletions)
+    ("z" bookmark-bmenu-execute-deletions)
     ("s" bookmark-bmenu-save)
     ("l" bookmark-bmenu-load)
     ("u" bookmark-bmenu-unmark)
@@ -39,7 +39,9 @@ e_x_ecute  _RET_: go   _o_ther win _R_elocate _w_here^^        _e_dit
     ("A" bookmark-bmenu-show-all-annotations)
     ("e" bookmark-bmenu-edit-annotation))
   (bind-keys :map bookmark-bmenu-mode-map
-             ("SPC" . hydra-bookmark-bmenu/body))
+             ("SPC" . hydra-bookmark-bmenu/body)
+             ("z" . bookmark-bmenu-execute-deletions)
+             ("x" . god-mode-self-insert))
 )
 
 (use-package view :diminish view-mode
@@ -124,7 +126,8 @@ _<_ _>_    _d_isplay
   ("o" occur-mode-goto-occurrence-other-window :exit t)
   ("RET" occur-mode-goto-occurrence :exit t))
 (bind-keys :map occur-mode-map
-           ("SPC" . hydra-occur/body))
+           ("SPC" . hydra-occur/body)
+           ("x" . god-mode-self-insert))
 
 (use-package grep
   :config
@@ -149,7 +152,8 @@ _j_↓^^  _n_ext^^  _{__}_: prev/next file    _d_isplay
   ("f" next-error-follow-minor-mode)
   ("RET" compile-goto-error :exit t))
   (bind-keys :map grep-mode-map
-             ("SPC" . hydra-grep/body)))
+             ("SPC" . hydra-grep/body)
+             ("x" . god-mode-self-insert)))
 
 (use-package dired
   :bind (("C-x C-d" . dired)
@@ -163,7 +167,7 @@ _j_↓^^  _n_ext^^  _{__}_: prev/next file    _d_isplay
 _*_: marks^^   _#_: temp^^     _Q_uery/rep     _F_ind marked   _!_shell_&_ _S_ymlink
 _%_: regexp^^  _~_: backup^^   _A_: grep       _L_oad          ^^_C_opy    _H_ardlink
 _u_n/_m_ark    _d_: this^^     _B_yte compile  _k_ill line     ^^_D_elete  ch_M_od
-_t_oggle/_U_   _x_: delete^^   _v_iew          _w_: file name  ^^_R_ename  ch_O_wn
+_t_oggle/_U_   _z_ap^^         _v_iew          _w_: file name  ^^_R_ename  ch_O_wn
 _[_ _]_:page   _<_ _>_:dirline _o_ther win     redisp_l_ay     ^^_T_ouch   ch_G_rp
 "
     ("SPC" nil)
@@ -217,7 +221,7 @@ _[_ _]_:page   _<_ _>_:dirline _o_ther win     redisp_l_ay     ^^_T_ouch   ch_G_
     ("t" dired-toggle-marks)
     ("v" dired-view-file :exit t)
     ("w" dired-copy-filename-as-kill)
-    ("x" dired-do-flagged-delete)
+    ("z" dired-do-flagged-delete)
     ("y" dired-show-file-type "show-file-type")
     ("~" dired-flag-backup-files))
 
@@ -261,6 +265,8 @@ _[_ _]_:page   _<_ _>_:dirline _o_ther win     redisp_l_ay     ^^_T_ouch   ch_G_
   (bind-keys :map dired-mode-map
              ("[" . backward-page)
              ("]" . forward-page)
+             ("z" . dired-do-flagged-delete)
+             ("x" . god-mode-self-insert)
              ("e" . dired-toggle-read-only)
              ("SPC" . hydra-dired/body)))
 
@@ -268,7 +274,7 @@ _[_ _]_:page   _<_ _>_:dirline _o_ther win     redisp_l_ay     ^^_T_ouch   ch_G_
   "
 _k_↑ _p_rev    _U_pgrade      _d_elete   _f_ilter _H_ide       _r_efresh
 _j_↓ _n_ext    _~_: obsolete  _i_nstall  _S_ort   _(_: toggle  _g_: revert
-_<_  _>_       e_x_ecute      _?_: info  _u_nmark _q_uit
+_<_  _>_       _z_: execute   _?_: info  _u_nmark _q_uit
 "
   ("SPC" nil)
   ("(" package-menu-toggle-hiding)
@@ -287,12 +293,14 @@ _<_  _>_       e_x_ecute      _?_: info  _u_nmark _q_uit
   ("q" quit-window :color blue)
   ("r" package-menu-refresh)
   ("u" package-menu-mark-unmark)
-  ("x" package-menu-execute)
+  ("z" package-menu-execute)
   ("~" package-menu-mark-obsolete-for-deletion)
   ("j" scroll-up-command)
   ("k" scroll-down-command))
 (bind-keys :map package-menu-mode-map
            ("SPC" . hydra-package-menu/body)
+           ("z" . package-menu-execute)
+           ("x" . god-mode-self-insert)
            ("j" . scroll-up-command)
            ("k" . scroll-down-command))
 

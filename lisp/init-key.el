@@ -512,6 +512,7 @@ Prefixed with \\[universal-argument], show dispatch action."
   (bind-keys :map ivy-minibuffer-map
              ("M-s o" . ivy-occur)
              ("C-j" . ivy-avy)
+             ("C-c C-c" . ivy-toggle-calling)
              ("C-'" . ivy-alt-done)
              ("M-k" . ivy-yank-word)
              ("M-m" . ivy-restrict-to-matches)

@@ -159,7 +159,7 @@ _*_ mark   _R_ename  vie_W_-_E_val  _O_ccur      _t_:mark    copy _B_name
     ("s" hydra-ibuffer-sort/body :exit t)
     ("t" ibuffer-toggle-marks)
     ("v" ibuffer-do-view :exit t)
-    ("x" ibuffer-do-kill-on-deletion-marks))
+    ("z" ibuffer-do-kill-on-deletion-marks))
 
   (defhydra hydra-ibuffer-mark (:color teal :columns 5 :hint nil
                                        :after-exit
@@ -256,6 +256,8 @@ _<_ size _>_       _c_ontent    proc_E_ss    _<up>_ _p_op^^    _P_op \\:clear
              ("M-o" . nil)             ; ibuffer-visit-buffer-1-window
              ("[" . ibuffer-backward-filter-group)
              ("]" . ibuffer-forward-filter-group)
+             ("z" . ibuffer-do-kill-on-deletion-marks)
+             ("x" . god-mode-self-insert)
              ("/ /" . ibuffer-filter-by-directory) ;somehow not default
              ("/ DEL" . ibuffer-filter-disable)    ;somehow not default
              ("SPC" . hydra-ibuffer/body))
