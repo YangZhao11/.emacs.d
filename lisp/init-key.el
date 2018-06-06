@@ -248,21 +248,14 @@ instead of inactivate region."
          ("S-<f8>" . gud-step)
          ("<f9>"   . gud-finish)))
 
-(use-package window
-  :bind  (("<f10>" . hydra-resize-window/body)
-          ("<f11>" . shrink-window)
-          ("<f12>" . enlarge-window)
-          ("M-9" . switch-to-prev-buffer)
-          ("M-0" . switch-to-next-buffer)
-          ("C-x 4 o" . display-buffer))
-  :config
-  (defun toggle-one-window ()
+(defun toggle-one-window ()
     "Change to one window (C-x 1) if applicable, otherwise show other
 buffer in other window."
     (interactive)
     (if (window-parent)
         (delete-other-windows)
       (display-buffer (other-buffer) t)))
+
   (defhydra hydra-resize-window (:color pink :hint nil)
     "
 use arrow keys or:  _{_ _}_ horizontal   _[_ _]_ vertical
@@ -276,7 +269,13 @@ use arrow keys or:  _{_ _}_ horizontal   _[_ _]_ vertical
     ("]" enlarge-window)
     ("<down>" enlarge-window)
     ("SPC" nil)
-    ("<f10>" nil)))
+    ("<f10>" nil))
+(bind-keys ("<f10>" . hydra-resize-window/body)
+          ("<f11>" . shrink-window)
+          ("<f12>" . enlarge-window)
+          ("M-9" . switch-to-prev-buffer)
+          ("M-0" . switch-to-next-buffer)
+          ("C-x 4 o" . display-buffer))
 
 (defun toggle-show-trailing-whitespace ()
    "Toggle `show-trailing-whitespace'."
