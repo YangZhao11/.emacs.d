@@ -273,8 +273,8 @@ use arrow keys or:  _{_ _}_ horizontal   _[_ _]_ vertical
 (bind-keys ("<f10>" . hydra-resize-window/body)
           ("<f11>" . shrink-window)
           ("<f12>" . enlarge-window)
-          ("M-9" . switch-to-prev-buffer)
-          ("M-0" . switch-to-next-buffer)
+          ("M-9" . previous-buffer)
+          ("M-0" . next-buffer)
           ("C-x 4 o" . display-buffer))
 
 (defun toggle-show-trailing-whitespace ()
@@ -535,6 +535,7 @@ Prefixed with \\[universal-argument], show dispatch action."
              ("C-c C-c" . ivy-toggle-calling)
              ("C-'" . ivy-alt-done)
              ("M-k" . ivy-yank-word)
+             ("M-s ." . ivy-yank-symbol)
              ("M-m" . ivy-restrict-to-matches)
              ("<home>" . hydra-ivy/body))
 
@@ -643,11 +644,27 @@ _d_own  _b_ack    _m_ark  _Y_ank-pop
 (defconst z-lighter-view
   '(:propertize " ν "
                 face (:background "#E8BB74" :foreground "black")))
+(defconst z-lighter-x
+  '(:propertize " x "
+                face (:background "#80E0D0" :foreground "black")))
+(defvar z-x-modes
+  '(bookmark-bmenu-mode
+    dired-mode
+    package-menu-mode
+    ibuffer-mode
+    occur-mode
+    grep-mode
+    Man-mode
+    Info-mode
+    help-mode)
+  "list of modes that bind x to god-mode-self-insert")
+
 (defvar z-lighter
-  '(:eval (if god-local-mode
-              z-god-mode-lighter
-            (if view-mode z-lighter-view
-              z-lighter-emacs))))
+  '(:eval (cond (god-local-mode z-god-mode-lighter)
+                (view-mode z-lighter-view)
+                ((memq major-mode z-x-modes) z-lighter-x)
+                (t z-lighter-emacs)))
+  "Leftmost lighter in mode line")
 
 (defun set-cursor-type (spec)
   "Set cursor type for current frame. This also works for
