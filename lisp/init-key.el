@@ -645,8 +645,8 @@ _d_own  _b_ack    _m_ark  _Y_ank-pop
   '(:propertize " ν "
                 face (:background "#E8BB74" :foreground "black")))
 (defconst z-lighter-x
-  '(:propertize " x "
-                face (:background "#80E0D0" :foreground "black")))
+  '(:propertize " × "
+                face (:background "#80D0E0" :foreground "black")))
 (defvar z-x-modes
   '(bookmark-bmenu-mode
     dired-mode

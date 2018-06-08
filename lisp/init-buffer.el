@@ -252,7 +252,21 @@ _<_ size _>_       _c_ontent    proc_E_ss    _<up>_ _p_op^^    _P_op \\:clear
     ("x" ibuffer-delete-saved-filters)
     ("<up>" ibuffer-pop-filter)
     )
+
+  (defun ibuffer-dired-jump ()
+    "jump to current file in dired"
+    (interactive)
+    (let ((file-name (buffer-file-name (ibuffer-current-buffer))))
+      (dired-jump nil file-name)))
+  (defun ibuffer-dired-jump-other-window ()
+    "jump to current file in dired in other window"
+    (interactive)
+    (let ((file-name (buffer-file-name (ibuffer-current-buffer))))
+      (dired-jump 't file-name)))
   (bind-keys :map ibuffer-mode-map
+             ("C-x C-j" . ibuffer-dired-jump)
+             ("C-x 4 j" . ibuffer-dired-jump-other-window)
+
              ("M-o" . nil)             ; ibuffer-visit-buffer-1-window
              ("[" . ibuffer-backward-filter-group)
              ("]" . ibuffer-forward-filter-group)
