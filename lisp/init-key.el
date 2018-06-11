@@ -557,6 +557,9 @@ _j_↓  _l_→   set _a_ction   _RET_:go    _o_ther    _q_uit
     ("o" ivy-occur-dispatch :exit t)
     ("q" quit-window :exit t))
   (bind-keys :map ivy-occur-mode-map
+             ("n" . ivy-occur-next-line)
+             ("p" . ivy-occur-previous-line)
+             ("x" . god-mode-self-insert)
              ("SPC" . hydra-ivy-occur/body)))
 
 (use-package counsel :defer 4
@@ -653,6 +656,7 @@ _d_own  _b_ack    _m_ark  _Y_ank-pop
     package-menu-mode
     ibuffer-mode
     occur-mode
+    ivy-occur-mode
     grep-mode
     Man-mode
     Info-mode
