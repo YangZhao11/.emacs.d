@@ -53,7 +53,6 @@ M-w:copy^^  _r_egister^^       _x_/_s_:copy  _n_umber         _M_: no-overwrite
   )
 (bind-key "C-x r ?" 'hydra-ctl-x-r/body)
 
-
 (defun z-kill-buffer (arg)
   "Kill this buffer, or with ARG, call `kill-buffer' instead."
   (interactive "P")
@@ -650,23 +649,11 @@ _d_own  _b_ack    _m_ark  _Y_ank-pop
 (defconst z-lighter-x
   '(:propertize " × "
                 face (:background "#80D0E0" :foreground "black")))
-(defvar z-x-modes
-  '(bookmark-bmenu-mode
-    dired-mode
-    package-menu-mode
-    ibuffer-mode
-    occur-mode
-    ivy-occur-mode
-    grep-mode
-    Man-mode
-    Info-mode
-    help-mode)
-  "list of modes that bind x to god-mode-self-insert")
 
 (defvar z-lighter
   '(:eval (cond (god-local-mode z-god-mode-lighter)
                 (view-mode z-lighter-view)
-                ((memq major-mode z-x-modes) z-lighter-x)
+                ((eq (local-key-binding "x") 'god-mode-self-insert) z-lighter-x)
                 (t z-lighter-emacs)))
   "Leftmost lighter in mode line")
 
