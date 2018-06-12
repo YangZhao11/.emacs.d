@@ -155,6 +155,37 @@ _j_↓^^  _n_ext^^  _{__}_: prev/next file    _d_isplay
              ("SPC" . hydra-grep/body)
              ("x" . god-mode-self-insert)))
 
+(use-package compile
+  :config
+  (defhydra hydra-compilation (:color pink :hint nil)
+    "
+_k_↑^^  _p_rev^^  _<__>_  beg/end of buffer _RET_: goto
+_j_↓^^  _n_ext^^  _{__}_: prev/next file
+"
+    ("<" beginning-of-buffer)
+    (">" end-of-buffer)
+    ("g" recompile)
+    ("q" quit-window :color blue)
+    ("j" scroll-up-command)
+    ("k" scroll-down-command)
+    ("n" compilation-next-error)
+    ("p" compilation-previous-error)
+    ("{" compilation-previous-file)
+    ("}" compilation-next-file)
+    ("RET" compile-goto-error)
+    ("SPC" nil))
+  (bind-keys :map compilation-mode-map
+             ("SPC" . hydra-compilation/body)
+             ("x" . god-mode-self-insert)
+             ("c" . god-mode-self-insert)
+             ("`" . next-error)
+             ("j" . scroll-up-command)
+             ("k" . scroll-down-command)
+             ("n" . compilation-next-error)
+             ("p" . compilation-previous-error)
+             ("{" . compilation-previous-file)
+             ("}" . compilation-next-file)))
+
 (use-package dired
   :bind (("C-x C-d" . dired)
          ("C-x C-j" . dired-jump)
