@@ -393,7 +393,10 @@ jump to unfetched from: _p_ushremote  _u_pstream"
     ("SPC" nil nil)
     ("p" magit-jump-to-unpulled-from-pushremote)
     ("u" magit-jump-to-unpulled-from-upstream))
-  (bind-keys :map magit-mode-map ("j SPC" . hydra-magit-j/body)))
+  (bind-keys :map magit-mode-map
+             ("j SPC" . hydra-magit-j/body)
+             ("[" . magit-section-backward-sibling)
+             ("]" . magit-section-forward-sibling)))
 
 (use-package eldoc :diminish eldoc-mode
   :commands eldoc-mode)
@@ -547,7 +550,7 @@ fallback."
 (add-hook 'c++-mode-hook #'z-c++-mode-hook)
 
 (use-package clang-format
-  :command z-maybe-clang-format
+  :commands z-maybe-clang-format
   :config
   (defun z-maybe-clang-format ()
     (when (eq major-mode 'c++-mode)
@@ -672,7 +675,7 @@ fallback."
     ;; (company-mode)
     )
 
-  (setq inferior-julia-program-name "~/bin/julia"
+  (setq inferior-julia-program "~/bin/julia"
         ess-tab-complete-in-script 't
         ess-smart-S-assign-key ";"
         ess-busy-strings '("  " " ◴" " ◷" " ◶" " ◵"))
@@ -698,6 +701,7 @@ fallback."
              ("C-x <f8>" . ess-tracebug)
              ("C-c SPC" . ess-render-markdown)
              ("C-c C-m" . markdown-mode)
+             ("_")
              ("\\" . ess-smart-pipe)
              (";" . ess-smart-S-assign))
 
@@ -705,12 +709,64 @@ fallback."
              ("\C-cw" . ess-execute-screen-options)
              ("<f7>" . ess-show-R-traceback)
              ("C-x <f8>" . ess-tracebug)
+             ("_")
              ("\\" . ess-smart-pipe)
              (";" .  ess-smart-S-assign))
 
+  (defhydra hydra-ess-help (:color pink :hint nil)
+    "
+_k_↑  _p_rev   _[_ _]_: _s_ection _h_elp-on-obj  _v_ignettes _/_isearch
+_j_↓  _n_ext   _<_ _>_: buf^^     _g_:revert^^     _a_propos      _i_ndex     _q_uit
+eval: _f_unction  _l_ine  _r_egion
+"
+    ("/" isearch-forward)
+    ("<" beginning-of-buffer)
+    (">" end-of-buffer)
+    ("a" ess-display-help-apropos)
+    ("f" ess-eval-function-or-paragraph-and-step)
+    ("g" revert-buffer)
+    ("h" ess-display-help-on-object)
+    ("i" ess-display-package-index)
+    ("j" scroll-up-command)
+    ("k" scroll-down-command)
+    ("l" ess-eval-line-and-step)
+    ("[" ess-skip-to-previous-section)
+    ("]" ess-skip-to-next-section)
+    ("q" quit-window :color blue)
+    ("r" ess-eval-region-and-go)
+    ("s" hydra-ess-help-s/body :color blue)
+    ("v" ess-display-vignettes)
+    ("n" next-line)
+    ("p" previous-line)
+    ("SPC" nil))
+
+  (defhydra hydra-ess-help-s (:color pink :hint nil)
+    "
+section: _a_rguments  _d_escription  _D_e_t_ails  _e_xamples  _n_ote  _r_eferences  _s_ee-also  _u_sage  _v_alue[s]
+"
+    ("a" ess-skip-to-help-section)
+    ("d" ess-skip-to-help-section)
+    ("D" ess-skip-to-help-section)
+    ("t" ess-skip-to-help-section)
+    ("e" ess-skip-to-help-section)
+    ("n" ess-skip-to-help-section)
+    ("r" ess-skip-to-help-section)
+    ("s" ess-skip-to-help-section)
+    ("u" ess-skip-to-help-section)
+    ("v" ess-skip-to-help-section)
+    ("SPC" nil))
   (bind-keys :map ess-help-mode-map
              ("<f8>" . ess-eval-line-and-step)
-             ("<f9>" . ess-eval-function-or-paragraph-and-step))
+             ("<f9>" . ess-eval-function-or-paragraph-and-step)
+             ("SPC" . hydra-ess-help/body)
+             ("j" . scroll-up-command)
+             ("k" . scroll-down-command)
+             ("[" . ess-skip-to-previous-section)
+             ("]" . ess-skip-to-next-section)
+             ("n" . next-line)
+             ("p" . previous-line)
+             ("x" . god-mode-self-insert)
+             ("c" . god-mode-self-insert))
 
   (add-hook 'ess-mode-hook #'z-ess-mode-hook)
   (add-hook 'ess-help-mode-hook #'z-ess-mode-symbols)
