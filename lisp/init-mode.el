@@ -675,9 +675,6 @@ fallback."
         ess-tab-complete-in-script 't
         ess-smart-S-assign-key ";"
         ess-busy-strings '("  " " ◴" " ◷" " ◶" " ◵"))
-  (ess-toggle-S-assign nil)
-  (ess-toggle-S-assign nil)
-  (ess-toggle-underscore nil)
 
   ;; imenu recognize Rmd sections and functions. The default did not
   ;; make much sense.
