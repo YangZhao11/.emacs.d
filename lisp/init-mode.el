@@ -547,6 +547,7 @@ fallback."
 (add-hook 'c++-mode-hook #'z-c++-mode-hook)
 
 (use-package clang-format
+  :command z-maybe-clang-format
   :config
   (defun z-maybe-clang-format ()
     (when (eq major-mode 'c++-mode)
@@ -745,7 +746,7 @@ _j_↓ _[__]_ button      _n_ext sec   _s_ee also  _r_eference  _q_uit
     ("[" backward-button)
     ("]" forward-button)
     ("n" Man-next-section)
-    ("p" Man-prev-section)
+    ("p" Man-previous-section)
     ("g" Man-goto-section)
     ("s" Man-goto-see-also-section)
     ("m" man)
