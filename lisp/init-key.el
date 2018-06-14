@@ -293,7 +293,7 @@ use arrow keys or:  _{_ _}_ horizontal   _[_ _]_ vertical
 (defhydra hydra-toggle (:color blue :hint nil)
   "
 Toggle:
-%s(ballotbox rainbow-delimiters-mode) rainbow-_d_elimiters  ^^ %s(ballotbox abbrev-mode \"∂\") _a_bbrev         %s(ballotbox outline-minor-mode) _o_utline-minor-mode ^^ %s(ballotbox lsp-mode \"£\") _l_sp-mode
+%s(ballotbox rainbow-delimiters-mode) rainbow-_d_elimiters  ^^ %s(ballotbox abbrev-mode \"∂\") _a_bbrev         %s(ballotbox outline-minor-mode) _o_utline-minor-mode ^^
 %s(ballotbox rainbow-identifiers-mode) rainbow-_i_dentifiers ^^ %s(ballotbox auto-fill-function \"¶\") auto-_f_ill      %s(ballotbox view-mode) _v_iew-mode          ^^ %s(ballotbox flycheck-mode \"✔\") flychec_k_
 %s(ballotbox beacon-mode) _b_eacon              ^^ %s(ballotbox visual-line-mode \"↵\") visual-lin_e_    %s(if (bound-and-true-p subword-mode) \",\" (if (bound-and-true-p superword-mode) \"²\" \"☐\")) sub_w_ord/super_W_ord   %s(ballotbox electric-quote-mode) elec-_'_
 %s(ballotbox hi-lock-mode) _h_i-lock/_c_hanges      %s(ballotbox auto-revert-mode \"↻\") auto-_r_evert    %s(ballotbox flyspell-mode \"⍹\") fl_y_spell/_p_rog       %s(ballotbox which-function-mode) which-f_u_nc
@@ -309,7 +309,6 @@ Toggle:
   ("h"    hi-lock-mode)
   ("i"    rainbow-identifiers-mode)
   ("k"    flycheck-mode)
-  ("l"    lsp-mode)
   ("m"    flymake-mode)
   ("p"    flyspell-prog-mode)
   ("n"    display-line-numbers-mode)

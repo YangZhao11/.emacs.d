@@ -187,17 +187,32 @@ _j_↓^^  _n_ext^^  _{__}_: prev/next file
              ("}" . compilation-next-file)))
 
 (use-package imenu-list
-  :bind ("M-s l" . imenu-list-smart-toggle)
+  :bind ("M-s l" . z-imenu-list)
   :config
-  (setq imenu-list-position 'left))
+  (setq imenu-list-position 'left)
+  (defun z-imenu-list ()
+    "toggle imenu-list, but switch off ibuffer-sidebar and dired-sidebar first."
+    (interactive)
+    (dired-sidebar-hide-sidebar)
+    (ibuffer-sidebar-hide-sidebar)
+    (imenu-list-smart-toggle)))
 
 (use-package ibuffer-sidebar
-  :bind ("M-s b" . ibuffer-sidebar-toggle-sidebar))
+  :bind ("M-s b" . z-ibuffer-sidebar)
+  :config
+  (defun z-ibuffer-sidebar ()
+    (interactive)
+    (imenu-list-minor-mode -1)
+    (ibuffer-sidebar-toggle-sidebar)))
 
 (use-package dired-sidebar
-  :bind ("M-s j" . dired-sidebar-toggle-sidebar)
+  :bind ("M-s j" . z-dired-sidebar)
   :config
-  (setq dired-sidebar-theme 'nerd))
+  (setq dired-sidebar-theme 'nerd)
+  (defun z-dired-sidebar ()
+    (interactive)
+    (imenu-list-minor-mode -1)
+    (dired-sidebar-toggle-sidebar)))
 
 (use-package dired
   :bind (("C-x C-d" . dired)
