@@ -186,6 +186,19 @@ _j_↓^^  _n_ext^^  _{__}_: prev/next file
              ("{" . compilation-previous-file)
              ("}" . compilation-next-file)))
 
+(use-package imenu-list
+  :bind ("M-s l" . imenu-list-smart-toggle)
+  :config
+  (setq imenu-list-position 'left))
+
+(use-package ibuffer-sidebar
+  :bind ("M-s b" . ibuffer-sidebar-toggle-sidebar))
+
+(use-package dired-sidebar
+  :bind ("M-s j" . dired-sidebar-toggle-sidebar)
+  :config
+  (setq dired-sidebar-theme 'nerd))
+
 (use-package dired
   :bind (("C-x C-d" . dired)
          ("C-x C-j" . dired-jump)

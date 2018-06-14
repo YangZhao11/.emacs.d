@@ -62,7 +62,8 @@ M-w:copy^^  _r_egister^^       _x_/_s_:copy  _n_umber         _M_: no-overwrite
            ("C-x k"           . z-kill-buffer)
            ("C-M-o"           . up-list))
 
-(use-package region-bindings-mode :diminish 'region-bindings-mode
+(use-package region-bindings-mode
+  :diminish 'region-bindings-mode
   :commands (region-bindings-mode-enable))
 (region-bindings-mode-enable)
 
@@ -484,14 +485,9 @@ Prefixed with \\[universal-argument], show dispatch action."
          ("M-Z" . zap-back-to-char-dwim)))
 
 ;; TODO: check this is fixed.
-(use-package subr-x
-  :commands (string-trim-right
-             string-trim-left))
-
-(use-package imenu-list
-  :bind ("M-s l" . imenu-list-smart-toggle)
-  :config
-  (setq imenu-list-position 'left))
+;; (use-package subr-x
+;;   :commands (string-trim-right
+;;              string-trim-left))
 
 (use-package imenu-anywhere
   :bind ("M-s M-i" . ivy-imenu-anywhere))

@@ -55,8 +55,6 @@
       (add-to-list 'z-project-alist entry)
       entry)))
 
-(z-project (current-buffer))
-
 ;; ==================================================
 ;; ibuffer
 (use-package ibuffer
