@@ -189,7 +189,8 @@ _j_↓^^  _n_ext^^  _{__}_: prev/next file
 (use-package imenu-list
   :bind ("M-s l" . z-imenu-list)
   :config
-  (setq imenu-list-position 'left)
+  (setq imenu-list-position 'left
+        imenu-list-size 30)
   (defun z-imenu-list ()
     "toggle imenu-list, but switch off ibuffer-sidebar and dired-sidebar first."
     (interactive)
@@ -200,6 +201,7 @@ _j_↓^^  _n_ext^^  _{__}_: prev/next file
 (use-package ibuffer-sidebar
   :bind ("M-s b" . z-ibuffer-sidebar)
   :config
+  (setq ibuffer-sidebar-width 30)
   (defun z-ibuffer-sidebar ()
     (interactive)
     (imenu-list-minor-mode -1)
@@ -208,7 +210,8 @@ _j_↓^^  _n_ext^^  _{__}_: prev/next file
 (use-package dired-sidebar
   :bind ("M-s j" . z-dired-sidebar)
   :config
-  (setq dired-sidebar-theme 'nerd)
+  (setq dired-sidebar-theme 'nerd
+        dired-sidebar-width 30)
   (defun z-dired-sidebar ()
     (interactive)
     (imenu-list-minor-mode -1)
@@ -532,11 +535,6 @@ fallback."
                   (`suspicious  "‽"))))
       (list " " pick)))
   (setq flycheck-mode-line '(:eval (z-flycheck-mode-line-text))))
-
-
-(use-package lsp-mode :diminish (lsp-mode . " £")
-  :config
-  (require 'lsp-ui-flycheck))
 
 ;; --------------------------------------------------
 ;; modes

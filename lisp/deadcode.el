@@ -1,3 +1,7 @@
+(use-package lsp-mode :diminish (lsp-mode . " £")
+  :config
+  (require 'lsp-ui-flycheck))
+
   (set-register ?5 '(file . "~/Projects/notes/NOTES.org"))
 
 (use-package ycmd :diminish " ☯" :no-require t
