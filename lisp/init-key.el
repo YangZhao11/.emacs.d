@@ -256,7 +256,7 @@ buffer in other window."
         (delete-other-windows)
       (display-buffer (other-buffer) t)))
 
-  (defhydra hydra-resize-window (:color pink :hint nil)
+(defhydra hydra-resize-window (:color pink :hint nil)
     "
 use arrow keys or:  _{_ _}_ horizontal   _[_ _]_ vertical
 "
@@ -483,10 +483,8 @@ Prefixed with \\[universal-argument], show dispatch action."
   :bind (("M-z" . zap-to-char-dwim)
          ("M-Z" . zap-back-to-char-dwim)))
 
-;; TODO: check this is fixed.
-;; (use-package subr-x
-;;   :commands (string-trim-right
-;;              string-trim-left))
+(use-package find-dired
+  :bind ("C-x d" . find-name-dired))
 
 (use-package imenu-anywhere
   :bind ("M-s M-i" . ivy-imenu-anywhere))
@@ -504,7 +502,8 @@ Prefixed with \\[universal-argument], show dispatch action."
                                         (org-mode . org-level-4)))
   (setq ivy-ignore-buffers
         '("\\` " "^\\*ESS\\*" "^\\*Messages\\*" "^\\*Help\\*" "^\\*Buffer"
-          "^\\*LV\\*"
+          "^\\*LV\\*" "^\\*Ilist\\*" "^\\*:Buffers:\\*"
+          "^:"        ; see `dired-sidebar-buffer-name'
            "^\\*.*Completions\\*$" "^\\*Ediff" "^\\*tramp" "^\\*cvs-"
            "\\[r\\]\\(<[0-9]+>\\)?$" "\\[fundamental\\]\\(<[0-9]+>\\)?$"
            "_region_" " output\\*$" "^TAGS$" "^\*Ido"))
@@ -561,7 +560,6 @@ _j_↓  _l_→   set _a_ction   _RET_:go    _o_ther    _q_uit
          ("C-x 8 8" . counsel-unicode-char)
          ("C-x b" . counsel-bookmark)
          ("C-x f" . counsel-file-jump)  ; set-fill-column
-         ("C-x d" . counsel-dired-jump)
          ("M-x" . counsel-M-x)
          ("M-y" . counsel-yank-pop)
          ("C-x C-SPC" . counsel-mark-ring)
