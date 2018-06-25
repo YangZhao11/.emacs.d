@@ -905,6 +905,8 @@ _j_↓    _[_ _]_ buttons      _r_: forward
              ("SPC" . hydra-help/body)
              ("k" . scroll-down-command)
              ("j" . scroll-up-command)
+             ("n" . next-line)
+             ("p" . previous-line)
              ("[" . backward-button)
              ("]" . forward-button)
              ("x" . god-mode-self-insert)
