@@ -499,6 +499,9 @@ jump to unfetched from: _p_ushremote  _u_pstream"
   (defface flycheck-status-error
     '((t (:foreground "#D88080")))
     "Face for flycheck status: error" :group 'flycheck)
+  (defface flycheck-status-info
+    '((t (:foreground "#80D8D8")))
+    "Face for flycheck status: error" :group 'flycheck)
 
   (defun z-flycheck-count (s count)
     (cond ((not count) "")
@@ -525,7 +528,10 @@ fallback."
                                       'face 'flycheck-status-error)
                           (when (and .error .warning) '(?/))
                           (propertize (z-flycheck-count "•" .warning)
-                                      'face 'flycheck-status-warning)))
+                                      'face 'flycheck-status-warning)
+                          (when (and .info (or .error .warning)))
+                          (propertize (z-flycheck-count "•" .info)
+                                      'face 'flycheck-status-info)))
                      (propertize "✔" 'face 'flycheck-status-ok)))
                   (`running     (propertize "✔" 'face 'flycheck-status-warning))
                   (`not-checked (propertize "✔" 'face 'flycheck-status-error))
