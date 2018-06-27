@@ -620,8 +620,12 @@ fallback."
 ;; --------------------------------------------------
 ;; ess
 
-(use-package ess-site
-  :commands (R R-mode julia)
+(use-package ess-julia
+  :config
+  (setq inferior-julia-program "~/bin/julia"))
+
+(use-package ess-mode
+  :commands (R R-mode)
   :bind ("<f5>" . z-switch-to-R)
   :mode (("\\.Rmd\\'" . R-mode))
   :defines ess-company-backends ess-current-process-name
@@ -643,7 +647,7 @@ fallback."
           (R)))))
 
   (defun ess-smart-pipe ()
-    "Similar to ess-smart-S-assign, but insert %>% instead."
+    "Similar to `ess-smart-S-assign', but insert %>% instead."
     (interactive)
     (let ((ess-S-assign " %>% ")
           (ess-smart-S-assign-key "\\"))
@@ -690,25 +694,18 @@ fallback."
     (when (string-match "\\.Rmd\\'" buffer-file-name)
       (setq-local page-delimiter "^```\\({.*}\\)?$"))
     (rainbow-delimiters-mode 1)
-    (z-ess-mode-symbols)
-    ;; (setq-local company-backends ess-company-backends)
-    ;; (company-mode)
-    )
+    (z-ess-mode-symbols))
 
   (defun z-inferior-ess-mode-hook ()
     (z-ess-mode-symbols)
     (setq-local scroll-margin 0)
-    (setq-local comint-move-point-for-output t)
-    ;; (setq-local company-backends ess-company-backends)
-    ;; (company-mode)
-    )
+    (setq-local comint-move-point-for-output t))
 
-  (setq inferior-julia-program "~/bin/julia"
-        ess-tab-complete-in-script 't
+  (setq ess-tab-complete-in-script 't
         ess-smart-S-assign-key ";"
         ess-busy-strings '("  " " ◴" " ◷" " ◶" " ◵"))
 
-  ;; imenu recognize Rmd sections and functions. The default did not
+  ;; Make imenu recognize Rmd sections and functions. The default did not
   ;; make much sense.
   (setq ess-imenu-S-generic-expression
         '(("Section" "^\\s-*```{r \\(\\sw[a-zA-Z0-9_.]+\\)" 1)
