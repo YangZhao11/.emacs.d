@@ -105,7 +105,7 @@ _j_↓ _z_   _J_    _d_own _>_^^    _(__)_ list  _'_: goto   p_@_p    again: _n_
              ("K" . View-scroll-line-backward))
   (add-hook 'view-mode-hook
             (lambda () (if view-mode (god-local-mode-pause)
-                         (god-local-mode-resume)))))
+                    (god-local-mode-resume)))))
 
 ;; replace.el is not a real package
 (defhydra hydra-occur (:color pink :hint nil)
@@ -526,10 +526,10 @@ fallback."
                          (concat
                           (propertize (z-flycheck-count "✖" .error)
                                       'face 'flycheck-status-error)
-                          (when (and .error .warning) '(?/))
+                          (when (and .warning .error) '(?/))
                           (propertize (z-flycheck-count "•" .warning)
                                       'face 'flycheck-status-warning)
-                          (when (and .info (or .error .warning)))
+                          (when (and .info (or .error .warning)) '(?/))
                           (propertize (z-flycheck-count "•" .info)
                                       'face 'flycheck-status-info)))
                      (propertize "✔" 'face 'flycheck-status-ok)))
@@ -681,17 +681,21 @@ fallback."
              "\", output_dir = getwd())") nil 'eob))
 
   (defun z-ess-mode-symbols ()
+    ;; ESS has some hacks on the arrow symbols, but it breaks
+    ;; terminal display. Use all our customization instead.
     (setq prettify-symbols-alist
-          (append '(("%>%" . ?↦)
-                    ("%T>%" . ?↧) ;↴
-                    ("%<>%" . ?⇄) ;⇋⇌⇆
-                    ("<=" . ?≤)
-                    (">=" . ?≥)
-                    ("!=" . ?≠)
-                    ("%in%" . ?∈)
-                    ("%*%" . ?×)
-                    ("function" . ?ƒ))
-                  prettify-symbols-alist))
+          '(("%>%" . ?↦)
+            ("%T>%" . ?↧) ;↴
+            ("%<>%" . ?⇄) ;⇋⇌⇆
+            ("<-" . ?←)
+            ("->" . ?→)
+            ("<=" . ?≤)
+            (">=" . ?≥)
+            ("!=" . ?≠)
+            ("%in%" . ?∈)
+            ("%*%" . ?×)
+            ("function" . ?ƒ)))
+          ;; (append . prettify-symbols-alist)
     (prettify-symbols-mode))
 
   (defun z-ess-mode-hook ()
@@ -705,7 +709,8 @@ fallback."
     (setq-local scroll-margin 0)
     (setq-local comint-move-point-for-output t))
 
-  (setq ess-tab-complete-in-script 't
+  (setq ess-use-flymake nil
+        ess-tab-complete-in-script 't
         ess-smart-S-assign-key ";"
         ess-busy-strings '("  " " ◴" " ◷" " ◶" " ◵"))
 
