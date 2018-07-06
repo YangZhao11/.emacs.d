@@ -110,11 +110,12 @@ _j_↓ _z_   _J_    _d_own _>_^^    _(__)_ list  _'_: goto   p_@_p    again: _n_
 ;; replace.el is not a real package
 (defhydra hydra-occur (:color pink :hint nil)
   "
-_p_rev^^   _RET_: goto      _e_dit
-_n_ext^^   _o_ther window   %s(if next-error-follow-minor-mode \"⇅\" \"☐\") _f_ollow
-_<_ _>_    _d_isplay
+_k_↑   _p_rev^^   _<_ _>_       _RET_: goto      _e_dit
+_j_↓   _n_ext^^   _d_isplay^^   _o_ther window   %s(if next-error-follow-minor-mode \"⇅\" \"☐\") _f_ollow
 "
   ("SPC" nil)
+  ("j" scroll-down-command)
+  ("k" scroll-up-command)
   ("p" occur-prev)
   ("n" occur-next)
   ("<" beginning-of-buffer)
@@ -126,12 +127,18 @@ _<_ _>_    _d_isplay
   ("o" occur-mode-goto-occurrence-other-window :exit t)
   ("RET" occur-mode-goto-occurrence :exit t))
 (bind-keys :map occur-mode-map
-           ("SPC" . hydra-occur/body)
-           ("x" . god-mode-self-insert))
+           ("d" . occur-mode-display-occurrence)
+           ("j" . scroll-down-command)
+           ("k" . scroll-up-command)
+           ("n" . occur-next)
+           ("p" . occur-prev)
+           ("x" . god-mode-self-insert)
+           ("c" . god-mode-self-insert)
+           ("SPC" . hydra-occur/body))
 
 (use-package grep
   :config
-  (require 'wgrep)
+  ;;(require 'wgrep)
   (defhydra hydra-grep (:color pink :hint nil)
   "
 _k_↑^^  _p_rev^^  _<__>_  beg/end of buffer _RET_: goto  _e_dit
@@ -153,7 +160,15 @@ _j_↓^^  _n_ext^^  _{__}_: prev/next file    _d_isplay
   ("RET" compile-goto-error :exit t))
   (bind-keys :map grep-mode-map
              ("SPC" . hydra-grep/body)
-             ("x" . god-mode-self-insert)))
+             ("j" . compilation-next-error)
+             ("k" . compilation-previous-error)
+             ("e" . wgrep-change-to-wgrep-mode)
+             ("d" . compilation-display-error)
+             ("x" . god-mode-self-insert)
+             ("c" . god-mode-self-insert)))
+
+(use-package wgrep
+  :commands wgrep-change-to-wgrep-mode)
 
 (use-package compile
   :config
@@ -364,6 +379,8 @@ _<_  _>_       _z_: execute   _?_: info  _u_nmark _q_uit
            ("SPC" . hydra-package-menu/body)
            ("z" . package-menu-execute)
            ("x" . god-mode-self-insert)
+           ("a" . god-mode-self-insert)
+           ("e" . god-mode-self-insert)
            ("j" . scroll-up-command)
            ("k" . scroll-down-command))
 
@@ -540,7 +557,11 @@ fallback."
                   (`interrupted "⁉")
                   (`suspicious  "‽"))))
       (list " " pick)))
-  (setq flycheck-mode-line '(:eval (z-flycheck-mode-line-text))))
+  (setq flycheck-mode-line '(:eval (z-flycheck-mode-line-text)))
+  (bind-keys :map flycheck-mode-map
+             ("M-g `" . flycheck-next-error)
+             ("M-g f" . flycheck-next-error)
+             ("M-g b" . flycheck-previous-error)))
 
 ;; --------------------------------------------------
 ;; modes
@@ -567,7 +588,11 @@ fallback."
     ;;(company-mode)
     )
   (add-hook 'emacs-lisp-mode-hook #'z-elisp-mode-hook)
-  (bind-keys :map lisp-interaction-mode-map ("C-j")))
+  (bind-keys :map emacs-lisp-mode-map
+             ("M-L" . string-inflection-kebab-case))
+  (bind-keys :map lisp-interaction-mode-map
+             ("C-j")
+             ("M-L" . string-inflection-kebab-case)))
 
 (use-package cc-mode
   :config

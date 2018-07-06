@@ -640,7 +640,8 @@ _d_own  _b_ack    _m_ark  _Y_ank-pop
   '(:propertize " ν "
                 face (:background "#E8BB74" :foreground "black")))
 (defconst z-lighter-x
-  '(:propertize " × "
+  '(:propertize (" " (:eval (if (eq (local-key-binding "c") 'god-mode-self-insert)
+                                "¢" "×")) " ")
                 face (:background "#80D0E0" :foreground "black")))
 
 (defvar z-lighter
