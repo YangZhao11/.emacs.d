@@ -114,8 +114,8 @@ _k_↑   _p_rev^^   _<_ _>_       _RET_: goto      _e_dit
 _j_↓   _n_ext^^   _d_isplay^^   _o_ther window   %s(if next-error-follow-minor-mode \"⇅\" \"☐\") _f_ollow
 "
   ("SPC" nil)
-  ("j" scroll-down-command)
-  ("k" scroll-up-command)
+  ("j" scroll-up-command)
+  ("k" scroll-down-command)
   ("p" occur-prev)
   ("n" occur-next)
   ("<" beginning-of-buffer)
@@ -128,8 +128,8 @@ _j_↓   _n_ext^^   _d_isplay^^   _o_ther window   %s(if next-error-follow-minor
   ("RET" occur-mode-goto-occurrence :exit t))
 (bind-keys :map occur-mode-map
            ("d" . occur-mode-display-occurrence)
-           ("j" . scroll-down-command)
-           ("k" . scroll-up-command)
+           ("j" . scroll-up-command)
+           ("k" . scroll-down-command)
            ("n" . occur-next)
            ("p" . occur-prev)
            ("x" . god-mode-self-insert)
