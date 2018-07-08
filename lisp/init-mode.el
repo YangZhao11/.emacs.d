@@ -675,19 +675,17 @@ fallback."
               (ess-directory "~/Projects"))
           (R)))))
 
-  (defun ess-smart-pipe ()
+  (defun ess-smart-pipe (arg)
     "Similar to `ess-smart-S-assign', but insert %>% instead."
-    (interactive)
-    (let ((ess-S-assign " %>% ")
-          (ess-smart-S-assign-key "\\"))
-      (ess-smart-S-assign)))
+    (interactive "p")
+    (let ((ess-assign-list `(" %>% " . ,ess-assign-list)))
+      (ess-smart-S-assign arg)))
 
-  (defun ess-smart-tpipe ()
+  (defun ess-smart-tpipe (arg)
     "Similar to ess-smart-S-assign, but insert %T>% instead."
-    (interactive)
-    (let ((ess-S-assign " %T>% ")
-          (ess-smart-S-assign-key "?"))
-      (ess-smart-S-assign)))
+    (interactive "p")
+    (let ((ess-assign-list `(" %T>% " . ,ess-assign-list)))
+      (ess-smart-S-assign arg)))
 
   (defun ess-debug-next-or-eval-line ()
     (interactive)
