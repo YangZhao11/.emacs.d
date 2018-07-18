@@ -40,7 +40,7 @@
       require-final-newline 't
       tramp-default-method "ssh"
       text-scale-mode-step 1.1
-      scroll-margin 3
+      scroll-margin 2
       shift-select-mode nil
       mouse-yank-at-point 't
       default-input-method 'TeX)

@@ -489,6 +489,11 @@ Prefixed with \\[universal-argument], show dispatch action."
 (use-package imenu-anywhere
   :bind ("M-s M-i" . ivy-imenu-anywhere))
 
+(use-package recentf
+  :config
+  (setq recentf-max-saved-items 80)
+  (setq recentf-exclude '("/elpa/")))
+
 (use-package ivy :diminish ""
   :bind (("M-o" . ivy-switch-buffer)
          ("M-s M-d" . ivy-resume))

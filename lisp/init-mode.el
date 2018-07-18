@@ -653,7 +653,7 @@ fallback."
   :config
   (setq inferior-julia-program "~/bin/julia"))
 
-(use-package ess-mode
+(use-package ess
   :commands (R R-mode)
   :bind ("<f5>" . z-switch-to-R)
   :mode (("\\.Rmd\\'" . R-mode))
@@ -747,6 +747,7 @@ fallback."
   ;; ignore variable names after $ for expansion. Fix by making it
   ;; punctuation.
   (modify-syntax-entry ?$ "." ess-r-syntax-table)
+  (modify-syntax-entry ?@ "." ess-r-syntax-table) ; for S4 objects
 
   ;; For Rmd editing, do not treat ` as quote.
   (modify-syntax-entry ?` "." ess-r-syntax-table)
