@@ -658,9 +658,11 @@ fallback."
   :bind ("<f5>" . z-switch-to-R)
   :mode (("\\.Rmd\\'" . R-mode))
   :defines ess-company-backends ess-current-process-name
-  :functions ess-smart-S-assign ess-debug-command-next
+  :functions ess-debug-command-next
     ess-eval-line-and-step ess-eval-linewise ess-toggle-S-assign
     ess-toggle-underscore
+  :init
+    (setq ess-smart-S-assign-key ";")
   :config
   (defun z-switch-to-R ()
     "Go to R session or create one if none exists"
@@ -676,16 +678,16 @@ fallback."
           (R)))))
 
   (defun ess-smart-pipe (arg)
-    "Similar to `ess-smart-S-assign', but insert %>% instead."
+    "Similar to `ess-insert-assign', but insert %>% instead."
     (interactive "p")
     (let ((ess-assign-list `(" %>% " . ,ess-assign-list)))
-      (ess-smart-S-assign arg)))
+      (ess-insert-assign arg)))
 
   (defun ess-smart-tpipe (arg)
-    "Similar to ess-smart-S-assign, but insert %T>% instead."
+    "Similar to ess-insert-assign, but insert %T>% instead."
     (interactive "p")
     (let ((ess-assign-list `(" %T>% " . ,ess-assign-list)))
-      (ess-smart-S-assign arg)))
+      (ess-insert-assign arg)))
 
   (defun ess-debug-next-or-eval-line ()
     (interactive)
@@ -734,7 +736,6 @@ fallback."
 
   (setq ess-use-flymake nil
         ess-tab-complete-in-script 't
-        ess-smart-S-assign-key ";"
         ess-busy-strings '("  " " ◴" " ◷" " ◶" " ◵"))
 
   ;; Make imenu recognize Rmd sections and functions. The default did not
@@ -761,7 +762,7 @@ fallback."
              ("C-c C-m" . markdown-mode)
              ("_")
              ("\\" . ess-smart-pipe)
-             (";" . ess-smart-S-assign))
+             (";" . ess-insert-assign))
 
   (bind-keys :map inferior-ess-mode-map
              ("\C-cw" . ess-execute-screen-options)
@@ -769,7 +770,7 @@ fallback."
              ("C-x <f8>" . ess-tracebug)
              ("_")
              ("\\" . ess-smart-pipe)
-             (";" .  ess-smart-S-assign))
+             (";" .  ess-insert-assign))
 
   (defhydra hydra-ess-help (:color pink :hint nil)
     "

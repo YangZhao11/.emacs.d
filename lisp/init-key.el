@@ -181,7 +181,10 @@ M-w:copy^^  _r_egister^^       _x_/_s_:copy  _n_umber         _M_: no-overwrite
            ("M-?"    . completion-at-point))
 (use-package simple
   :config
-  (diminish 'next-error-follow-minor-mode " ⇅"))
+  (diminish 'next-error-follow-minor-mode " ⇅")
+  (bind-keys :map special-mode-map
+             ("x" . god-mode-self-insert)
+             ("c" . god-mode-self-insert)))
 
 (use-package string-inflection
   :bind (("M-U" . string-inflection-camelcase)
