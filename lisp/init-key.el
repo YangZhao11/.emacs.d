@@ -407,7 +407,7 @@ current frame configuration to register 6."
   :bind ("C-j" . z-goto-char)
   :bind (:map ctl-j-map
               ("SPC" . avy-goto-line)
-              ("C-j" . avy-show-dispatch))
+              ("RET" . avy-show-dispatch))
   :bind (("M-," . avy-backward-char-in-line)
          ("M-." . avy-forward-char-in-line))
   :config
@@ -415,7 +415,9 @@ current frame configuration to register 6."
   (setq avy-styles-alist '((avy-goto-char . de-bruijn))
         avy-keys
         '(?s ?d ?f ?g ?h ?j ?k ?l ?w ?e ?r ?u ?i ?o)
-        avy-subword-extra-word-chars nil)
+        avy-subword-extra-word-chars nil
+        avy-orders-alist '((avy-goto-char . avy-order-closest)
+                           (avy-goto-subword-1 . avy-order-closest)))
   (eval-after-load "isearch"
     '(define-key isearch-mode-map (kbd "C-j") #'avy-isearch))
 
@@ -452,7 +454,7 @@ in `ctl-j-map' first."
           ('t (avy-goto-char char arg)))))
 
   (defun avy-show-dispatch ()
-    "show help for using `avy-dispatch-alist'"
+    "Show help for using `avy-dispatch-alist'"
     (interactive)
     (message "%s"
        (mapconcat
