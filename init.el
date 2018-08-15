@@ -2,8 +2,8 @@
 
 ;; Make elpa packages available
 (when (< emacs-major-version 27)
-    (require 'package)
     (setq package-enable-at-startup nil)
+    (require 'package)
     (package-initialize))
 (add-to-list 'package-archives
              '("melpa" . "http://melpa.org/packages/") t)
