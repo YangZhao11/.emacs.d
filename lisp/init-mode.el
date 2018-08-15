@@ -647,6 +647,7 @@ fallback."
   (add-hook 'haskell-mode-hook #'z-haskell-mode-hook))
 
 (use-package julia-repl
+  :config
   (julia-repl-set-executable "~/bin/julia"))
 
 ;; --------------------------------------------------
