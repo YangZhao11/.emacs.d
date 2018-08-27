@@ -180,11 +180,13 @@ M-w:copy^^  _r_egister^^       _x_/_s_:copy  _n_umber         _M_: no-overwrite
            ("M-u"    . upcase-dwim)
            ("M-?"    . completion-at-point))
 (use-package simple
+  :bind ("<XF86Eject>" . keyboard-escape-quit)
   :config
   (diminish 'next-error-follow-minor-mode " ⇅")
   (bind-keys :map special-mode-map
              ("x" . god-mode-self-insert)
              ("c" . god-mode-self-insert)))
+
 
 (use-package string-inflection
   :bind (("M-U" . string-inflection-camelcase)
@@ -278,6 +280,8 @@ use arrow keys or:  _{_ _}_ horizontal   _[_ _]_ vertical
           ("<f12>" . enlarge-window)
           ("M-9" . previous-buffer)
           ("M-0" . next-buffer)
+          ("<mouse-8>" . previous-buffer)
+          ("<mouse-9>" . next-buffer)
           ("C-x 4 o" . display-buffer))
 
 (defun toggle-show-trailing-whitespace ()
@@ -583,7 +587,30 @@ _j_↓  _l_→   set _a_ction   _RET_:go    _o_ther    _q_uit
               ("S" . counsel-info-lookup-symbol))
   :config
   (setq counsel-find-file-ignore-regexp
-        "\\(?:\\`[#.]\\)\\|\\(?:[#~]\\'\\)\\|\\(\\`\\.\\)"))
+        "\\(?:\\`[#.]\\)\\|\\(?:[#~]\\'\\)\\|\\(\\`\\.\\)")
+
+  (defun counsel-jump-to-register ()
+    "Jump to register with markers"
+    (interactive)
+  (ivy-read "Register: "
+            (mapcar (lambda (register-alist-entry)
+                      (if (markerp (cdr register-alist-entry))
+                          (let* ((mk (cdr register-alist-entry))
+                                 (buf (marker-buffer mk)))
+                            (concat (char-to-string (car register-alist-entry))
+                                    "    "
+                                    (if (null buf)
+                                        "in no buffer"
+                                      (concat (buffer-name buf) ":"
+                                              (number-to-string (marker-position mk))))))))
+                    register-alist)
+            :require-match t
+            :initial-input "^"
+            :history 'counsel-jump-toregister
+            :caller 'counsel-jump-toregister
+            :action (lambda (register-line)
+                      (jump-to-register (elt register-line 0)))
+            )))
 
 (use-package swiper
   :bind (("M-s s" . swiper-all))
