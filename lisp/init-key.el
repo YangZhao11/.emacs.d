@@ -280,8 +280,6 @@ use arrow keys or:  _{_ _}_ horizontal   _[_ _]_ vertical
           ("<f12>" . enlarge-window)
           ("M-9" . previous-buffer)
           ("M-0" . next-buffer)
-          ("<mouse-8>" . previous-buffer)
-          ("<mouse-9>" . next-buffer)
           ("C-x 4 o" . display-buffer))
 
 (defun toggle-show-trailing-whitespace ()
@@ -673,16 +671,20 @@ _d_own  _b_ack    _m_ark  _Y_ank-pop
 (defconst z-lighter-emacs
   '(:propertize (" " (:eval (or current-input-method-title "ε")) " ")
                 face (:background "#90E090" :foreground "black")))
+(defconst z-lighter-mortal
+  '(:propertize (" " (:eval (or current-input-method-title "ɪ")) " ")
+                face (:background "#C8E058" :foreground "black")))
 (defconst z-lighter-view
   '(:propertize " ν "
                 face (:background "#E8BB74" :foreground "black")))
 (defconst z-lighter-x
   '(:propertize (" " (:eval (if (eq (local-key-binding "c") 'god-mode-self-insert)
-                                "¢" "×")) " ")
+                                "*" "×")) " ")
                 face (:background "#80D0E0" :foreground "black")))
 
 (defvar z-lighter
   '(:eval (cond (god-local-mode z-god-mode-lighter)
+                (mortal-mode z-lighter-mortal)
                 (view-mode z-lighter-view)
                 ((eq (local-key-binding "x") 'god-mode-self-insert) z-lighter-x)
                 (t z-lighter-emacs)))
@@ -690,7 +692,9 @@ _d_own  _b_ack    _m_ark  _Y_ank-pop
 
 (defun set-cursor-type (spec)
   "Set cursor type for current frame. This also works for
-terminals with support for setting cursor type."
+terminals with support for setting cursor type.
+
+SPEC could be `box', 'bar', or `hbar'."
   (cond
    ((display-graphic-p)
     (modify-frame-parameters nil `((cursor-type . ,spec))))
@@ -706,6 +710,20 @@ terminals with support for setting cursor type."
   "Set cursor to SPEC for all frames."
   (dolist (f (frame-list))
     (with-selected-frame f (set-cursor-type spec))))
+
+(define-minor-mode mortal-mode
+  "Allow temporary departures from god-mode."
+  :keymap '(([return] . (lambda ()
+                          "Exit mortal-mode and resume god mode." (interactive)
+                          (god-local-mode-resume)
+                          (mortal-mode 0))))
+  (when mortal-mode
+    (condition-case nil
+        (progn (barf-if-buffer-read-only)
+               (god-local-mode-pause))
+      (buffer-read-only
+       (mortal-mode 0)
+       (message "Buffer is read-only.")))))
 
 (use-package god-mode :ensure
   :bind (("<home>" . god-mode-all))
@@ -742,6 +760,7 @@ terminals with support for setting cursor type."
         god-exempt-predicates nil)
   (defalias 'true-self-insert-command 'self-insert-command)
   (bind-keys :map god-local-mode-map
+             ("i" . mortal-mode)
              ("z" . repeat)
              ("[" . z-god-mode-toggle-cm)
              ("(" . true-self-insert-command)
@@ -808,6 +827,7 @@ terminals with support for setting cursor type."
     ;; somehow this hook can be called multiple times on a buffer,
     ;; which messes up saving states here. Maybe consider using
     ;; post-command-hook to run this once.
+    (mortal-mode 0)
     (z-god-set-state z-god-state)
     (set-cursor-type 'box)
     (setq-local z-god-saved-input-method current-input-method)
