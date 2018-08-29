@@ -673,14 +673,14 @@ _d_own  _b_ack    _m_ark  _Y_ank-pop
                 face (:background "#90E090" :foreground "black")))
 (defconst z-lighter-mortal
   '(:propertize (" " (:eval (or current-input-method-title "ɪ")) " ")
-                face (:background "#C8E058" :foreground "black")))
+                face (:background "#80E0D0" :foreground "black")))
 (defconst z-lighter-view
   '(:propertize " ν "
                 face (:background "#E8BB74" :foreground "black")))
 (defconst z-lighter-x
   '(:propertize (" " (:eval (if (eq (local-key-binding "c") 'god-mode-self-insert)
                                 "*" "×")) " ")
-                face (:background "#80D0E0" :foreground "black")))
+                face (:background "#4D88FF" :foreground "black")))
 
 (defvar z-lighter
   '(:eval (cond (god-local-mode z-god-mode-lighter)
@@ -723,7 +723,7 @@ SPEC could be `box', 'bar', or `hbar'."
                (god-local-mode-pause))
       (buffer-read-only
        (mortal-mode 0)
-       (message "Buffer is read-only.")))))
+       (user-error "Buffer is read-only.")))))
 
 (use-package god-mode :ensure
   :bind (("<home>" . god-mode-all))
@@ -736,10 +736,10 @@ SPEC could be `box', 'bar', or `hbar'."
                    (:background "#4DB0FF" :foreground "black"))
                   (nil . "C-") ("g" . "M-") ("h" . "C-M-"))
           (cm (:propertize "⌥⌘ " face
-                   (:background "#FF6088" :foreground "black"))
+                   (:background "#FF5090" :foreground "black"))
               (nil . "C-M-") ("g" . "C-"))
           (meta (:propertize " ⌥ " face
-                   (:background "#FF38E0" :foreground "black"))
+                   (:background "#FF58E0" :foreground "black"))
                 (nil . "M-"))))
 
   (defun z-god-set-state (state)
