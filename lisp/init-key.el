@@ -53,6 +53,37 @@ M-w:copy^^  _r_egister^^       _x_/_s_:copy  _n_umber         _M_: no-overwrite
   )
 (bind-key "C-x r ?" 'hydra-ctl-x-r/body)
 
+(defhydra hydra-ctl-x-v (:color blue :hint nil)
+  "
+_+_:update   ch_a_nge log     print _l_og   _b_ackend   _h_istory    _m_erge
+_=_:diff     log _I_ncoming   root _L_og    _P_ush      _d_ir        reg_i_ster   _r_etrieve tag
+root-_D_iff  log _O_utgoing   _~_:revision  i_G_nore    _g_:annotate _u_:revert
+"
+  ("+" vc-update)
+  ("=" vc-diff)
+  ("D" vc-root-diff)
+  ("G" vc-ignore)
+  ("I" vc-log-incoming)
+  ("L" vc-print-root-log)
+  ("O" vc-log-outgoing)
+  ("P" vc-push)
+  ("a" vc-update-change-log)
+  ("b" vc-switch-backend)
+  ("d" vc-dir)
+  ("g" vc-annotate)
+  ("h" vc-region-history)
+  ("i" vc-register)
+  ("l" vc-print-log)
+  ("m" vc-merge)
+  ("r" vc-retrieve-tag)
+  ("s" vc-create-tag)
+  ("u" vc-revert)
+  ("v" vc-next-action)
+  ("x" vc-delete-file)
+  ("~" vc-revision-other-window)
+  )
+(bind-key "C-x v ?" 'hydra-ctl-x-v/body)
+
 (defun z-kill-buffer (arg)
   "Kill this buffer, or with ARG, call `kill-buffer' instead."
   (interactive "P")
