@@ -699,31 +699,6 @@ _d_own  _b_ack    _m_ark  _Y_ank-pop
 (defvar-local z-god-saved-view-mode nil
   "Saved view-mode before god-mode")
 
-(defconst z-lighter-emacs
-  '(:propertize (" " (:eval (or current-input-method-title "ε")) " ")
-                face (:background "#90E090" :foreground "black")))
-(defconst z-lighter-mortal
-  '(:propertize (" " (:eval (or current-input-method-title "ɪ")) " ")
-                face (:background "#80E0D0" :foreground "black")))
-(defconst z-lighter-view
-  '(:propertize " ν "
-                face (:background "#E8BB74" :foreground "black")))
-(defconst z-lighter-special
-  '(:propertize (" " (:eval
-                      (cond
-                       ((eq (local-key-binding "c") 'god-mode-self-insert) "*")
-                       ((eq (local-key-binding "x") 'god-mode-self-insert) "×")
-                       (t "•"))) " ")
-                face (:background "#4D88FF" :foreground "black")))
-
-(defvar z-lighter
-  '(:eval (cond (god-local-mode z-god-mode-lighter)
-                (mortal-mode z-lighter-mortal)
-                (view-mode z-lighter-view)
-                ((derived-mode-p 'special-mode) z-lighter-special)
-                (t z-lighter-emacs)))
-  "Leftmost lighter in mode line")
-
 (defun set-cursor-type (spec)
   "Set cursor type for current frame. This also works for
 terminals with support for setting cursor type.

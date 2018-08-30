@@ -1,5 +1,30 @@
 ; -*- coding: utf-8; lexical-binding: t -*-
 
+(setq z-lighter-emacs
+  '(:propertize (" " (:eval (or current-input-method-title "ε")) " ")
+                face (:background "#90E090" :foreground "black")))
+(setq z-lighter-mortal
+  '(:propertize (" " (:eval (or current-input-method-title "ɪ")) " ")
+                face (:background "#80E0D0" :foreground "black")))
+(setq z-lighter-view
+  '(:propertize " ν "
+                face (:background "#E8BB74" :foreground "black")))
+(setq z-lighter-special
+  '(:propertize (" " (:eval
+                      (cond
+                       ((eq (local-key-binding "c") 'god-mode-self-insert) "*")
+                       ((eq (local-key-binding "x") 'god-mode-self-insert) "×")
+                       (t "•"))) " ")
+                face (:background "#4D88FF" :foreground "black")))
+
+(defvar z-lighter
+  '(:eval (cond (god-local-mode z-god-mode-lighter)
+                (mortal-mode z-lighter-mortal)
+                (view-mode z-lighter-view)
+                ((derived-mode-p 'special-mode) z-lighter-special)
+                (t z-lighter-emacs)))
+  "Leftmost lighter in mode line")
+
 (setq-default mode-line-format
 '("%e"
  (:eval z-lighter)
