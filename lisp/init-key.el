@@ -708,16 +708,19 @@ _d_own  _b_ack    _m_ark  _Y_ank-pop
 (defconst z-lighter-view
   '(:propertize " ν "
                 face (:background "#E8BB74" :foreground "black")))
-(defconst z-lighter-x
-  '(:propertize (" " (:eval (if (eq (local-key-binding "c") 'god-mode-self-insert)
-                                "*" "×")) " ")
+(defconst z-lighter-special
+  '(:propertize (" " (:eval
+                      (cond
+                       ((eq (local-key-binding "c") 'god-mode-self-insert) "*")
+                       ((eq (local-key-binding "x") 'god-mode-self-insert) "×")
+                       (t "•"))) " ")
                 face (:background "#4D88FF" :foreground "black")))
 
 (defvar z-lighter
   '(:eval (cond (god-local-mode z-god-mode-lighter)
                 (mortal-mode z-lighter-mortal)
                 (view-mode z-lighter-view)
-                ((eq (local-key-binding "x") 'god-mode-self-insert) z-lighter-x)
+                ((derived-mode-p 'special-mode) z-lighter-special)
                 (t z-lighter-emacs)))
   "Leftmost lighter in mode line")
 
