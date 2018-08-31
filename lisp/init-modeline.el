@@ -21,7 +21,8 @@
   '(:eval (cond (god-local-mode z-god-mode-lighter)
                 (mortal-mode z-lighter-mortal)
                 (view-mode z-lighter-view)
-                ((derived-mode-p 'special-mode 'dired-mode 'Info-mode)
+                ((derived-mode-p 'special-mode 'dired-mode
+                                 'Info-mode 'ess-help-mode)
                  z-lighter-special)
                 (t z-lighter-emacs)))
   "Leftmost lighter in mode line")
