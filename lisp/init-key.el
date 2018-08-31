@@ -678,12 +678,17 @@ _j_↓  _l_→   set _a_ction   _RET_:go    _o_ther    _q_uit
 
 (defhydra hydra-sexp (:color pink :hint nil)
     "
-_u_p    _f_oward  _k_ill  _y_ank
-_d_own  _b_ack    _m_ark  _Y_ank-pop
+_u_p(_d_own )_o_ut   ^^ _f_oward  _k_ill  _y_ank
+_[__]_barf/slurp_(__)_  _b_ack    _m_ark  _Y_ank-pop
 "
     ("SPC" nil)
+    ("[" easy-pair-backward-slurp)
+    ("]" easy-pair-backward-barf)
+    ("(" easy-pair-barf)
+    (")" easy-pair-slurp)
     ("u" backward-up-list)
     ("d" down-list)
+    ("o" up-list)
     ("f" forward-sexp)
     ("b" backward-sexp)
     ("k" kill-sexp)
