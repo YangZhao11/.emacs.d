@@ -5,7 +5,7 @@
                 face (:background "#90E090" :foreground "black")))
 (setq z-lighter-mortal
   '(:propertize (" " (:eval (or current-input-method-title "ɪ")) " ")
-                face (:background "#80E0D0" :foreground "black")))
+                face (:background "#88E0C0" :foreground "black")))
 (setq z-lighter-view
   '(:propertize " ν "
                 face (:background "#E8BB74" :foreground "black")))
@@ -46,13 +46,13 @@
                             "" x))
                       (default-value 'mode-line-mule-info)))
 
-;; mark emacsclient frames using ©
-(setq-default mode-line-client '(#1=""
-    (:propertize
-     (#1# (:eval (if (frame-parameter nil 'client)
-                     (if (eq (framep (selected-frame)) 't) "𝕋" "ℂ")
-                        #1#)))
-      help-echo "emacsclient frame")))
+;; ;; mark emacsclient frames using ©
+;; (setq-default mode-line-client '(#1=""
+;;     (:propertize
+;;      (#1# (:eval (if (frame-parameter nil 'client)
+;;                      (if (eq (framep (selected-frame)) 't) "𝕋" "ℂ")
+;;                         #1#)))
+;;       help-echo "emacsclient frame")))
 
 (setq overlay-arrow-string "►")
 

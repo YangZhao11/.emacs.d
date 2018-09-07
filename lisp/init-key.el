@@ -200,19 +200,21 @@ root-_D_iff  log _O_utgoing   _~_:revision  i_G_nore    _g_:annotate _u_:revert
    ("'"   . easy-kill-wrap-region)
    ("\\"  . easy-kill-indent-region)))
 
-(defun cycle-spacing-0 ()
-  "Remove adjacent spaces, but undo if the command is issued a second time."
-  (interactive) (cycle-spacing 0))
+(bind-keys ("M-?" . completion-at-point))
 
-(bind-keys ("M-SPC"  . cycle-spacing)
-           ("M-\\"   . cycle-spacing-0)
-           ("M-c"    . capitalize-dwim)
-           ("M-l"    . downcase-dwim)
-           ("M-u"    . upcase-dwim)
-           ("M-?"    . completion-at-point))
 (use-package simple
-  :bind ("<XF86Eject>" . keyboard-escape-quit)
+  :commands (cycle-spacing-0)
+  :bind (("M-SPC"       . cycle-spacing)
+         ("M-\\"        . cycle-spacing-0)
+         ("M-c"         . capitalize-dwim)
+         ("M-l"         . downcase-dwim)
+         ("M-u"         . upcase-dwim)
+         ("<XF86Eject>" . keyboard-escape-quit))
   :config
+  (defun cycle-spacing-0 ()
+    "Remove adjacent spaces, but undo if the command is issued a second time."
+    (interactive)
+    (cycle-spacing 0))
   (diminish 'next-error-follow-minor-mode " ⇅")
   (bind-keys :map special-mode-map
              ("x" . god-mode-self-insert)
@@ -329,9 +331,9 @@ use arrow keys or:  _{_ _}_ horizontal   _[_ _]_ vertical
 (defhydra hydra-toggle (:color blue :hint nil)
   "
 Toggle:
-%s(ballotbox rainbow-delimiters-mode) rainbow-_d_elimiters  ^^ %s(ballotbox abbrev-mode \"∂\") _a_bbrev         %s(ballotbox outline-minor-mode) _o_utline-minor-mode ^^
+%s(ballotbox rainbow-delimiters-mode) rainbow-_d_elimiters  ^^ %s(ballotbox abbrev-mode \"∂\") _a_bbrev         %s(ballotbox outline-minor-mode) _o_utline-minor-mode ^^ %s(ballotbox beacon-mode) _b_eacon
 %s(ballotbox rainbow-identifiers-mode) rainbow-_i_dentifiers ^^ %s(ballotbox auto-fill-function \"¶\") auto-_f_ill      %s(ballotbox view-mode) _v_iew-mode          ^^ %s(ballotbox flycheck-mode \"✔\") flychec_k_
-%s(ballotbox beacon-mode) _b_eacon              ^^ %s(ballotbox visual-line-mode \"↵\") visual-lin_e_    %s(if (bound-and-true-p subword-mode) \",\" (if (bound-and-true-p superword-mode) \"²\" \"☐\")) sub_w_ord/super_W_ord   %s(ballotbox electric-quote-mode) elec-_'_
+%s(ballotbox rainbow-mode) _R_ainbow              %s(ballotbox visual-line-mode \"↵\") visual-lin_e_    %s(if (bound-and-true-p subword-mode) \",\" (if (bound-and-true-p superword-mode) \"²\" \"☐\")) sub_w_ord/super_W_ord   %s(ballotbox electric-quote-mode) elec-_'_
 %s(ballotbox hi-lock-mode) _h_i-lock/_c_hanges      %s(ballotbox auto-revert-mode \"↻\") auto-_r_evert    %s(ballotbox flyspell-mode \"⍹\") fl_y_spell/_p_rog       %s(ballotbox which-function-mode) which-f_u_nc
 %s(ballotbox whitespace-mode \"␣\") white_s_pace/_t_railing  %s(ballotbox display-line-numbers-mode) line _n_um       %s(ballotbox flymake-mode) fly_m_ake
 "
@@ -350,6 +352,7 @@ Toggle:
   ("n"    display-line-numbers-mode)
   ("o"    outline-minor-mode)
   ("r"    auto-revert-mode)
+  ("R"    rainbow-mode)
   ("s"    whitespace-mode)
   ("t"    toggle-show-trailing-whitespace)
   ("u"    which-function-mode)
@@ -364,6 +367,8 @@ Toggle:
 (diminish 'auto-fill-function " ¶")
 (diminish 'visual-line-mode " ↵")
 (setq display-line-numbers-type 'relative)
+
+(use-package rainbow-mode :diminish rainbow-mode)
 
 
 (use-package beacon :ensure :diminish beacon-mode
