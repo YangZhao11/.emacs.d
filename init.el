@@ -81,14 +81,7 @@
 (load "init-buffer")
 (load "init-mode")
 (load "init-key")
-(load "init-modeline")
-
-;; line wrap symbol under terminal
-(set-display-table-slot standard-display-table 'truncation ?↔)
-(set-display-table-slot standard-display-table 'wrap ?↵)
-(set-display-table-slot standard-display-table 'selective-display [?…])
-(set-display-table-slot standard-display-table 'vertical-border ?│)
-
+(load "init-display")
 
 ;; --------------------------------------------------
 ;; customs
