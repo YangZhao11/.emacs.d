@@ -46,14 +46,6 @@
                             "" x))
                       (default-value 'mode-line-mule-info)))
 
-;; ;; mark emacsclient frames using ©
-;; (setq-default mode-line-client '(#1=""
-;;     (:propertize
-;;      (#1# (:eval (if (frame-parameter nil 'client)
-;;                      (if (eq (framep (selected-frame)) 't) "𝕋" "ℂ")
-;;                         #1#)))
-;;       help-echo "emacsclient frame")))
-
 (setq overlay-arrow-string "►")
 
 ;; `Narrow' in mode line changed to §
@@ -70,6 +62,7 @@
               mode-line-modes))
 
 ;; line wrap symbol under terminal
+(or standard-display-table (setq standard-display-table (make-display-table)))
 (set-display-table-slot standard-display-table 'truncation ?↔)
 (set-display-table-slot standard-display-table 'wrap ?↵)
 (set-display-table-slot standard-display-table 'selective-display [?…])
