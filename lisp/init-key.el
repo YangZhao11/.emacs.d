@@ -217,6 +217,8 @@ root-_D_iff  log _O_utgoing   _~_:revision  i_G_nore    _g_:annotate _u_:revert
     (cycle-spacing 0))
   (diminish 'next-error-follow-minor-mode " ⇅")
   (bind-keys :map special-mode-map
+             ("j" . scroll-up-command)
+             ("k" . scroll-down-command)
              ("x" . god-mode-self-insert)
              ("c" . god-mode-self-insert)))
 

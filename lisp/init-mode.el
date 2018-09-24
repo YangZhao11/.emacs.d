@@ -503,6 +503,12 @@ jump to unfetched from: _p_ushremote  _u_pstream"
              ("M-g f" . flymake-goto-next-error)
              ("M-g b" . flymake-goto-prev-error)))
 
+(use-package citc
+  :config
+  (bind-keys :map citc-status-mode-map
+             ("x" . god-mode-self-insert)
+             ("z" . citc-client-shell)))
+
 (use-package flycheck
   :commands (flycheck-mode)
   :config
