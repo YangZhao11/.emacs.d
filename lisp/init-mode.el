@@ -503,12 +503,6 @@ jump to unfetched from: _p_ushremote  _u_pstream"
              ("M-g f" . flymake-goto-next-error)
              ("M-g b" . flymake-goto-prev-error)))
 
-(use-package citc
-  :config
-  (bind-keys :map citc-status-mode-map
-             ("x" . god-mode-self-insert)
-             ("z" . citc-client-shell)))
-
 (use-package flycheck
   :commands (flycheck-mode)
   :config
@@ -590,9 +584,7 @@ fallback."
          '(nil "^\\s-*(\\(defhydra\\)\\s-+\\(\\(\\sw\\|\\s_\\)+\\)" 2)))))
 
   (defun z-elisp-mode-hook ()
-    (z-setup-imenu-for-elisp)
-    ;;(company-mode)
-    )
+    (z-setup-imenu-for-elisp))
   (add-hook 'emacs-lisp-mode-hook #'z-elisp-mode-hook)
   (bind-keys :map emacs-lisp-mode-map
              ("M-L" . string-inflection-kebab-case))

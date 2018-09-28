@@ -224,9 +224,39 @@ root-_D_iff  log _O_utgoing   _~_:revision  i_G_nore    _g_:annotate _u_:revert
 
 
 (use-package string-inflection
-  :bind (("M-U" . string-inflection-camelcase)
-         ("M-C" . string-inflection-lower-camelcase)
-         ("M-L" . string-inflection-underscore)))
+  :bind (("M-U" . string-inflection-upcase)
+         ("M-C" . string-inflection-camelcase-cycle)
+         ("M-L" . string-inflection-underscore-cycle))
+  :config
+  (defun string-inflection-camelcase-cycle ()
+  "fooBar => FooBar => fooBar"
+  (interactive)
+  (string-inflection-insert
+   (string-inflection-camelcase-cycle-function
+    (string-inflection-get-current-word))))
+
+  (defun string-inflection-camelcase-cycle-function (str)
+  "fooBar => FooBar => fooBar"
+  (cond
+   ((string-inflection-upper-camelcase-p str)
+    (string-inflection-lower-camelcase-function str))
+   (t
+    (string-inflection-upper-camelcase-function str))))
+
+  (defun string-inflection-underscore-cycle ()
+  "foo_bar => foo-bar => foo_bar"
+  (interactive)
+  (string-inflection-insert
+   (string-inflection-underscore-cycle-function
+    (string-inflection-get-current-word))))
+
+  (defun string-inflection-underscore-cycle-function (str)
+  "foo_bar => foo-bar => foo_bar"
+  (cond
+   ((string-inflection-underscore-p str)
+    (string-inflection-kebab-case-function str))
+   (t
+    (string-inflection-underscore-function str)))))
 
 (use-package grep
   :bind (("M-s g"   . grep)
