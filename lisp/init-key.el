@@ -128,33 +128,29 @@ root-_D_iff  log _O_utgoing   _~_:revision  i_G_nore    _g_:annotate _u_:revert
   :bind ([remap kill-ring-save] . easy-kill)
   :config
 
-  (defun easy-kill-transpose ()
+  (easy-kill-defun easy-kill-transpose ()
     (interactive)
     (save-mark-and-excursion
      (easy-kill-mark-region)
      (call-interactively #'anchored-transpose)))
-  (put #'easy-kill-transpose 'easy-kill-exit t)
 
-  (defun easy-kill-wrap-region ()
+  (easy-kill-defun easy-kill-wrap-region ()
     (interactive)
     (save-mark-and-excursion
      (easy-kill-mark-region)
      (call-interactively #'self-insert-command)))
-  (put #'easy-kill-wrap-region 'easy-kill-exit t)
 
-  (defun easy-kill-indent-region ()
+  (easy-kill-defun easy-kill-indent-region ()
     (interactive)
     (save-mark-and-excursion
      (easy-kill-mark-region)
      (call-interactively #'indent-region)))
-  (put #'easy-kill-indent-region 'easy-kill-exit t)
 
-  (defun easy-kill-comment-dwim ()
+  (easy-kill-defun easy-kill-comment-dwim ()
     (interactive)
     (save-mark-and-excursion
      (easy-kill-mark-region)
      (call-interactively #'comment-dwim)))
-  (put #'easy-kill-comment-dwim 'easy-kill-exit t)
 
   (defun easy-kill-delete-pairs ()
     (interactive)
@@ -165,13 +161,13 @@ root-_D_iff  log _O_utgoing   _~_:revision  i_G_nore    _g_:annotate _u_:revert
       (message "No selection, exit easy-kill")
       (easy-kill-exit)))
 
-  (defun easy-kill-inside ()
+  (easy-kill-defun easy-kill-inside ()
     (interactive)
     (easy-pair-kill-inside (easy-kill-get start) (easy-kill-get end)))
   (put #'easy-kill-inside 'easy-kill-exit t)
 
   (add-to-list 'easy-kill-alist '(?p paragraph "\n"))
-  (setq easy-kill-unhighlight-key " ")
+  (setq easy-kill-unhighlight-key (kbd "SPC"))
   (setq easy-kill-try-things '(url email sexp line))
 
   (setq easy-kill-alist '((?w word       " ")
