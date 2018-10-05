@@ -663,8 +663,6 @@ fallback."
   :functions ess-debug-command-next
     ess-eval-line-and-step ess-eval-linewise ess-toggle-S-assign
     ess-toggle-underscore
-  :init
-    (setq ess-smart-S-assign-key ";")
   :config
   (defun z-switch-to-R ()
     "Go to R session or create one if none exists"
@@ -745,12 +743,6 @@ fallback."
   (setq ess-imenu-S-generic-expression
         '(("Section" "^\\s-*```{r \\(\\sw[a-zA-Z0-9_.]+\\)" 1)
           ("Functions" "^\\(.+\\)[      \n]*<-[         \n]*function[ ]*(" 1)))
-
-  ;; In ESS-R, `$' is by default part of the symbol (_), which makes dabbrev
-  ;; ignore variable names after $ for expansion. Fix by making it
-  ;; punctuation.
-  (modify-syntax-entry ?$ "." ess-r-syntax-table)
-  (modify-syntax-entry ?@ "." ess-r-syntax-table) ; for S4 objects
 
   ;; For Rmd editing, do not treat ` as quote.
   (modify-syntax-entry ?` "." ess-r-syntax-table)
