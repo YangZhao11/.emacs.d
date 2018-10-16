@@ -50,7 +50,7 @@ _z_ap      _RET_: go   _o_ther win _R_elocate _w_here^^        _e_dit
   (defhydra hydra-view (:color pink :hint nil)
     "
 ^^pg/set^^ line^^ half^^ _g_o/_%_ _{__}_ parag ^^register  ^^mark   _s_earch/_r_    _q_uit/_Q_
-_k_↑ _w_   _K_    _u_p   _<_^^    _[__]_ page  _m_ark      _._set   regex: _/_ ^\\
+_k_↑ _w_   _K_    _u_p   _<_^^    _[__]_ page  _m_ark      _._set   regex: _/_ ^\\   _i_menu
 _j_↓ _z_   _J_    _d_own _>_^^    _(__)_ list  _'_: goto   p_@_p    again: _n_ _p_
 "
     ("SPC" nil)
@@ -84,10 +84,12 @@ _j_↓ _z_   _J_    _d_own _>_^^    _(__)_ list  _'_: goto   p_@_p    again: _n_
     (")" forward-list)
     ("q" View-leave :color blue)
     ("Q" View-quit :color blue)
-    ("C" View-kill-and-leave :color blue))
+    ("C" View-kill-and-leave :color blue)
+    ("i" counsel-imenu))
   (bind-keys :map view-mode-map
              ("SPC" . hydra-view/body)
              ("C-j" . nil)
+             ("i" . counsel-imenu)
              ("x" . god-mode-self-insert)
              ("c" . god-mode-self-insert)
              ("l" . god-mode-self-insert)
