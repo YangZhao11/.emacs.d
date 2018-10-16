@@ -567,7 +567,9 @@ Prefixed with \\[universal-argument], show dispatch action."
 
 (use-package ivy :diminish ""
   :bind (("M-o" . ivy-switch-buffer)
-         ("M-s M-d" . ivy-resume))
+         ("M-s M-d" . ivy-resume)
+         ("M-g v" . ivy-push-view)
+         ("M-g M-v" . ivy-pop-view))
   :config
   (ivy-mode 1)
   (setq ivy-count-format "")

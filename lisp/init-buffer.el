@@ -4,7 +4,7 @@
   (require 'use-package)
   (require 'hydra))
 
-;; ==================================================
+;; --------------------------------------------------
 ;; z-project maps buffers to project names, with caching in z-projects-alist
 (defvar z-project-alist nil
   "`z-project-alist` maps directory to project names")
@@ -55,7 +55,7 @@
       (add-to-list 'z-project-alist entry)
       entry)))
 
-;; ==================================================
+;; --------------------------------------------------
 ;; ibuffer
 (use-package ibuffer
   :bind ("C-x C-b" . ibuffer)
