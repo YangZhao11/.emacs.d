@@ -746,6 +746,7 @@ fallback."
 
   ;; For Rmd editing, do not treat ` as quote.
   (modify-syntax-entry ?` "." ess-r-syntax-table)
+  (modify-syntax-entry ?% "." ess-r-syntax-table)
 
   (bind-keys :map ess-mode-map
              ("<f7>" . ess-show-traceback)

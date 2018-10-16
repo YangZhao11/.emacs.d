@@ -640,7 +640,8 @@ _j_↓  _l_→   set _a_ction   _RET_:go    _o_ther    _q_uit
          ("M-y" . counsel-yank-pop)
          ("C-x C-SPC" . counsel-mark-ring)
          ("M-s M-s" . counsel-grep-or-swiper)
-         ("M-s i" . counsel-imenu))
+         ("M-s i" . counsel-imenu)
+         ("M-s r" . counsel-jump-to-register))
   :bind (:map ctl-j-map
               ("C-i" . counsel-imenu))
   :bind (:map help-map
