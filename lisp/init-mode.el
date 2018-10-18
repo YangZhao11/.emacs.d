@@ -383,6 +383,7 @@ _<_  _>_       _z_: execute   _?_: info  _u_nmark _q_uit
            ("x" . god-mode-self-insert)
            ("a" . god-mode-self-insert)
            ("e" . god-mode-self-insert)
+           ("s" . swiper)
            ("j" . scroll-up-command)
            ("k" . scroll-down-command))
 
