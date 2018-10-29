@@ -447,7 +447,8 @@ jump to unfetched from: _p_ushremote  _u_pstream"
   (bind-keys :map magit-mode-map
              ("j SPC" . hydra-magit-j/body)
              ("[" . magit-section-backward-sibling)
-             ("]" . magit-section-forward-sibling)))
+             ("]" . magit-section-forward-sibling)
+             ("x" . god-mode-self-insert)))
 
 (use-package eldoc :diminish eldoc-mode
   :commands eldoc-mode)

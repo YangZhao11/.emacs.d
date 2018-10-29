@@ -215,6 +215,8 @@ root-_D_iff  log _O_utgoing   _~_:revision  i_G_nore    _g_:annotate _u_:revert
   (bind-keys :map special-mode-map
              ("j" . scroll-up-command)
              ("k" . scroll-down-command)
+             ("[" . backward-page)
+             ("]" . forward-page)
              ("x" . god-mode-self-insert)
              ("c" . god-mode-self-insert)))
 
@@ -788,11 +790,16 @@ SPEC could be `box', 'bar', or `hbar'."
   (setq god-exempt-major-modes nil
         god-exempt-predicates nil)
   (defalias 'true-self-insert-command 'self-insert-command)
+  (defun god-mode-except-special (command)
+    "Execute the command key if it is bound locally, otherwise run COMMAND."
+    (let ((cmd (local-key-binding (this-command-keys))))
+      (call-interactively (or cmd command))))
+
   (bind-keys :map god-local-mode-map
              ("i" . mortal-mode)
              ("z" . repeat)
-             ("[" . backward-sexp)
-             ("]" . forward-sexp)
+             ("[" . (lambda () (interactive) (god-mode-except-special 'backward-sexp)))
+             ("]" . (lambda () (interactive) (god-mode-except-special 'forward-sexp)))
              ("(" . true-self-insert-command)
              (")" . true-self-insert-command)
              ("`" . next-error)
