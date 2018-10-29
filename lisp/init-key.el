@@ -761,31 +761,7 @@ SPEC could be `box', 'bar', or `hbar'."
   :diminish god-local-mode
   :config
 
-  (defvar z-god-state 'normal)
-  (defvar z-god-states
-        `((normal (:propertize " ⌘ " face
-                   (:background "#4DB0FF" :foreground "black"))
-                  (nil . "C-") ("g" . "M-") ("h" . "C-M-"))
-          (cm (:propertize "⌥⌘ " face
-                   (:background "#FF5090" :foreground "black"))
-              (nil . "C-M-") ("g" . "C-"))
-          (meta (:propertize " ⌥ " face
-                   (:background "#FF58E0" :foreground "black"))
-                (nil . "M-"))))
-
-  (defun z-god-set-state (state)
-    (let ((s (cdr (assq state z-god-states))))
-      (setq z-god-mode-lighter (car s)
-            god-mod-alist (cdr s)
-            z-god-state state))
-    (force-mode-line-update))
-
-  (defun z-god-mode-toggle-meta ()
-    (interactive)
-    (z-god-set-state (if (eq z-god-state 'meta) 'normal 'meta)))
-  (defun z-god-mode-toggle-cm ()
-    (interactive)
-    (z-god-set-state (if (eq z-god-state 'cm) 'normal 'cm)))
+  (setq god-mod-alist '((nil . "C-") ("g" . "M-") ("h" . "C-M-")))
 
   (setq god-exempt-major-modes nil
         god-exempt-predicates nil)
@@ -865,7 +841,6 @@ SPEC could be `box', 'bar', or `hbar'."
     ;; which messes up saving states here. Maybe consider using
     ;; post-command-hook to run this once.
     (mortal-mode 0)
-    (z-god-set-state z-god-state)
     (set-cursor-type 'box)
     (setq-local z-god-saved-input-method current-input-method)
     (if current-input-method
@@ -877,7 +852,6 @@ SPEC could be `box', 'bar', or `hbar'."
 
   (defun z-god-mode-disabled-hook ()
     (set-cursor-type 'bar)
-    (setq z-god-state 'normal)
     (if z-god-saved-input-method
         (set-input-method z-god-saved-input-method))
     (if z-god-saved-view-mode

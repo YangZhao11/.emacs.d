@@ -3,6 +3,9 @@
 (setq z-lighter-emacs
   '(:propertize (" " (:eval (or current-input-method-title "ε")) " ")
                 face (:background "#90E090" :foreground "black")))
+(setq z-lighter-god
+  '(:propertize " ⌘ "
+                face (:background "#4DB0FF" :foreground "black")))
 (setq z-lighter-mortal
   '(:propertize (" " (:eval (or current-input-method-title "ɪ")) " ")
                 face (:background "#88E0C0" :foreground "black")))
@@ -18,7 +21,7 @@
                 face (:background "#4D88FF" :foreground "black")))
 
 (defvar z-lighter
-  '(:eval (cond (god-local-mode z-god-mode-lighter)
+  '(:eval (cond (god-local-mode z-lighter-god)
                 (mortal-mode z-lighter-mortal)
                 (view-mode z-lighter-view)
                 ((derived-mode-p 'special-mode 'dired-mode
