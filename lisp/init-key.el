@@ -712,27 +712,6 @@ _j_↓  _l_→   set _a_ction   _RET_:go    _o_ther    _q_uit
          ("C-x ?" . xref-find-references)
          ("C-x ," . xref-pop-marker-stack)))
 
-(defhydra hydra-sexp (:color pink :hint nil)
-    "
-_u_p(_d_own )_o_ut   ^^ _f_oward  _k_ill  _y_ank
-_[__]_barf/slurp_(__)_  _b_ack    _m_ark  _Y_ank-pop
-"
-    ("SPC" nil)
-    ("[" easy-pair-backward-slurp)
-    ("]" easy-pair-backward-barf)
-    ("(" easy-pair-barf)
-    (")" easy-pair-slurp)
-    ("u" backward-up-list)
-    ("d" down-list)
-    ("o" up-list)
-    ("f" forward-sexp)
-    ("b" backward-sexp)
-    ("k" kill-sexp)
-    ("m" mark-sexp)
-    ("y" yank)
-    ("Y" yank-pop))
-(bind-key "M-]" 'hydra-sexp/body)
-
 ;; --------------------------------------------------
 (defvar z-god-mode-lighter "")
 (defvar-local z-god-saved-input-method nil
@@ -812,7 +791,8 @@ SPEC could be `box', 'bar', or `hbar'."
   (bind-keys :map god-local-mode-map
              ("i" . mortal-mode)
              ("z" . repeat)
-             ("[" . z-god-mode-toggle-cm)
+             ("[" . backward-sexp)
+             ("]" . forward-sexp)
              ("(" . true-self-insert-command)
              (")" . true-self-insert-command)
              ("`" . next-error)
@@ -844,7 +824,7 @@ SPEC could be `box', 'bar', or `hbar'."
 
   ;; bind symbols to M-?
   (dolist (i '("~" "!" "@" "$" "%" "^" "&" "*" "{" "}"
-               "<" ">" ":" "|" "\\" "+" "=" "?" "]"))
+               "<" ">" ":" "|" "\\" "+" "=" "?"))
     (define-key god-local-mode-map (kbd i) 'god-mode-self-insert-on-meta))
 
   ;; Bind some second level modifier keys with C- prefix for easier

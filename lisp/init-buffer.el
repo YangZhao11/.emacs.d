@@ -281,7 +281,8 @@ _<_ size _>_       _c_ontent    proc_E_ss    _↑_ _p_op^^       _P_op \\:clear
              ("SPC" . hydra-ibuffer/body))
 
   (defun z-ibuffer-mode-hook ()
-    (ibuffer-switch-to-saved-filter-groups "Default"))
+    (ibuffer-switch-to-saved-filter-groups "Default")
+    (setq-local page-delimiter "^\\[ \\(.*\\)? \\]$"))
   (add-hook 'ibuffer-mode-hook 'z-ibuffer-mode-hook)
   (defun z-ibuffer-hook ()
     (setq ibuffer-saved-filter-groups (list (z-ibuffer-groups "Default"))))
