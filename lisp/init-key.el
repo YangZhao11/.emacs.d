@@ -779,14 +779,14 @@ SPEC could be `box', 'bar', or `hbar'."
              ("]" . forward-sexp)
              ("(" . true-self-insert-command)
              (")" . true-self-insert-command)
-             ("`" . next-error))
+             ("`" . next-error)
+             ("#" . server-edit))
 
   (bind-keys :map god-local-mode-map
              ;; Unmask keys bound in low priority map
-             ("[") ("]") ("(") (")") ("`")
+             ("[") ("]") ("(") (")") ("`") ("#")
              ("i" . mortal-mode)
-             ("z" . repeat)
-             ("#" . server-edit))
+             ("z" . repeat))
 
   (require 'god-mode-isearch)
   (bind-keys :map isearch-mode-map
@@ -812,10 +812,12 @@ SPEC could be `box', 'bar', or `hbar'."
         (call-interactively binding)
       (execute-kbd-macro binding))))
 
-  ;; bind symbols to M-?
+  ;; bind symbols to M-? with low priority
   (dolist (i '("~" "!" "@" "$" "%" "^" "&" "*" "{" "}"
                "<" ">" ":" "|" "\\" "+" "=" "?"))
-    (define-key god-local-mode-map (kbd i) 'god-mode-self-insert-on-meta))
+    (define-key god-local-mode-map (kbd i) nil)
+    (define-key god-mode-low-priority-map (kbd i)
+      'god-mode-self-insert-on-meta))
 
   ;; Bind some second level modifier keys with C- prefix for easier
   ;; god-mode access. Directly bind these to commands, instead of making
