@@ -814,6 +814,7 @@ SPEC could be `box', 'bar', or `hbar'."
         (execute-kbd-macro binding))))
 
   (bind-keys :map god-mode-low-priority-map
+             ("q" . quoted-insert)
              ("[" . backward-sexp)
              ("]" . forward-sexp)
              ("(" . true-self-insert-command)
@@ -852,7 +853,6 @@ SPEC could be `box', 'bar', or `hbar'."
   (dolist (b (cdr god-mode-low-priority-map))
     (define-key god-local-mode-map (char-to-string (car b))
       'god-mode-low-priority))
-
 
   ;; Bind some second level modifier keys with C- prefix for easier
   ;; god-mode access. Directly bind these to commands, instead of making
