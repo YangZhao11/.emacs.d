@@ -475,7 +475,9 @@ current frame configuration to register 6."
   :bind ("C-j" . z-goto-char)
   :bind (:map ctl-j-map
               ("SPC" . avy-goto-line)
-              ("RET" . avy-show-dispatch))
+              ("RET" . avy-show-dispatch)
+              ("TAB" . avy-yank-word-1)
+              ("C-e" . avy-goto-end-of-line))
   :bind (("M-," . avy-backward-char-in-line)
          ("M-." . avy-forward-char-in-line))
   :config
@@ -488,6 +490,27 @@ current frame configuration to register 6."
                            (avy-goto-subword-1 . avy-order-closest)))
   (eval-after-load "isearch"
     '(define-key isearch-mode-map (kbd "C-j") #'avy-isearch))
+
+
+  (defun avy-yank-word-1 (char &optional arg beg end symbol)
+    "Like `avy-goto-word-1', but yank instead."
+    (interactive (list (read-char "char: " t)
+                       current-prefix-arg))
+    (avy-with avy-goto-word-1
+      (setq avy-action 'avy-action-yank)
+      (let* ((str (string char))
+             (regex (cond ((string= str ".")
+                           "\\.")
+                          ((and avy-word-punc-regexp
+                                (string-match avy-word-punc-regexp str))
+                           (regexp-quote str))
+                          ((<= char 26)
+                           str)
+                          (t
+                           (concat
+                            (if symbol "\\_<" "\\b")
+                            str)))))
+        (avy--generic-jump regex arg avy-style beg end))))
 
   (defun avy-forward-char-in-line (char)
     "Jump to the currently visible CHAR in the current line after point."
@@ -646,8 +669,6 @@ _j_↓  _l_→   set _a_ction   _RET_:go    _o_ther    _q_uit
          ("M-s M-s" . counsel-grep-or-swiper)
          ("M-s i" . counsel-imenu)
          ("M-s r" . counsel-jump-to-register))
-  :bind (:map ctl-j-map
-              ("C-i" . counsel-imenu))
   :bind (:map help-map
               ("v" . counsel-describe-variable)
               ("f" . counsel-describe-function)
