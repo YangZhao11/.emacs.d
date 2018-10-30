@@ -782,31 +782,48 @@ SPEC could be `box', 'bar', or `hbar'."
   :diminish god-local-mode
   :config
 
-  (setq god-mod-alist '((nil . "C-") ("g" . "M-") ("h" . "C-M-")))
-
-  (setq god-exempt-major-modes nil
-        god-exempt-predicates nil)
-  (defalias 'true-self-insert-command 'self-insert-command)
-  (defun god-mode-except-special (command)
-    "Execute the command key if it is bound locally, otherwise run COMMAND."
-    (let ((cmd (local-key-binding (this-command-keys))))
-      (call-interactively (or cmd command))))
-
-  (bind-keys :map god-local-mode-map
-             ("i" . mortal-mode)
-             ("z" . repeat)
-             ("[" . (lambda () (interactive) (god-mode-except-special 'backward-sexp)))
-             ("]" . (lambda () (interactive) (god-mode-except-special 'forward-sexp)))
-             ("(" . true-self-insert-command)
-             (")" . true-self-insert-command)
-             ("`" . next-error)
-             ("#" . server-edit))
-
   (require 'god-mode-isearch)
   (bind-keys :map isearch-mode-map
              ("<home>" . god-mode-isearch-activate))
   (bind-keys :map god-mode-isearch-map
              ("<home>" . god-mode-isearch-disable))
+
+  (setq god-mod-alist '((nil . "C-") ("g" . "M-") ("h" . "C-M-")))
+  (setq god-exempt-major-modes nil
+        god-exempt-predicates nil)
+
+  ;; Avoid remapped self-insert-command
+  (defalias 'true-self-insert-command 'self-insert-command)
+
+  ;; A low priority map that takes precedence after local maps.
+  (setq god-mode-low-priority-map (make-sparse-keymap))
+  (defun god-mode-low-priority ()
+    "Honor local binding first, then use `god-mode-low-priority-map'."
+    (interactive)
+    (let* ((keys (this-command-keys))
+           (binding (or (local-key-binding keys)
+                        (lookup-key god-mode-low-priority-map keys))))
+      (unless binding (error "God: unknown binding for `%s'"  keys))
+      (setq this-original-command binding)
+      (setq this-command binding)
+      ;; `real-this-command' is used by emacs to populate
+      ;; `last-repeatable-command', which is used by `repeat'.
+      (setq real-this-command binding)
+      (if (commandp binding t)
+          (call-interactively binding)
+        (execute-kbd-macro binding))))
+
+  (bind-keys :map god-mode-low-priority-map
+             ("[" . backward-sexp)
+             ("]" . forward-sexp)
+             ("(" . true-self-insert-command)
+             (")" . true-self-insert-command)
+             ("`" . next-error)
+             ("#" . server-edit))
+
+  (bind-keys :map god-local-mode-map
+             ("i" . mortal-mode)
+             ("z" . repeat))
 
   (defun god-mode-self-insert-on-meta ()
   "Copy of `god-mode-self-insert', except binding is M-key."
@@ -826,10 +843,16 @@ SPEC could be `box', 'bar', or `hbar'."
         (call-interactively binding)
       (execute-kbd-macro binding))))
 
-  ;; bind symbols to M-?
+  ;; bind symbols to M-? with low priority
   (dolist (i '("~" "!" "@" "$" "%" "^" "&" "*" "{" "}"
                "<" ">" ":" "|" "\\" "+" "=" "?"))
-    (define-key god-local-mode-map (kbd i) 'god-mode-self-insert-on-meta))
+    (define-key god-mode-low-priority-map (kbd i)
+      'god-mode-self-insert-on-meta))
+
+  (dolist (b (cdr god-mode-low-priority-map))
+    (define-key god-local-mode-map (char-to-string (car b))
+      'god-mode-low-priority))
+
 
   ;; Bind some second level modifier keys with C- prefix for easier
   ;; god-mode access. Directly bind these to commands, instead of making
