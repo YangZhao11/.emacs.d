@@ -761,19 +761,37 @@ SPEC could be `box', 'bar', or `hbar'."
   :diminish god-local-mode
   :config
 
-  (setq god-mod-alist '((nil . "C-") ("g" . "M-") ("h" . "C-M-")))
+  (require 'god-mode-isearch)
+  (bind-keys :map isearch-mode-map
+             ("<home>" . god-mode-isearch-activate))
+  (bind-keys :map god-mode-isearch-map
+             ("<home>" . god-mode-isearch-disable))
 
+  (setq god-mod-alist '((nil . "C-") ("g" . "M-") ("h" . "C-M-")))
   (setq god-exempt-major-modes nil
         god-exempt-predicates nil)
+
   ;; Avoid remapped self-insert-command
   (defalias 'true-self-insert-command 'self-insert-command)
 
-  ;; A low priority map that takes precedence after local maps. This
-  ;; is done by replacing the glbal map temporarily.
-  (setq god-mode-low-priority-map
-        (let ((map (make-sparse-keymap)))
-          (set-keymap-parent map global-map)
-          map))
+  ;; A low priority map that takes precedence after local maps.
+  (setq god-mode-low-priority-map (make-sparse-keymap))
+  (defun god-mode-low-priority ()
+    "Honor local binding first, then use `god-mode-low-priority-map'."
+    (interactive)
+    (let* ((keys (this-command-keys))
+           (binding (or (local-key-binding keys)
+                        (lookup-key god-mode-low-priority-map keys))))
+      (unless binding (error "God: unknown binding for `%s'"  keys))
+      (setq this-original-command binding)
+      (setq this-command binding)
+      ;; `real-this-command' is used by emacs to populate
+      ;; `last-repeatable-command', which is used by `repeat'.
+      (setq real-this-command binding)
+      (if (commandp binding t)
+          (call-interactively binding)
+        (execute-kbd-macro binding))))
+
   (bind-keys :map god-mode-low-priority-map
              ("[" . backward-sexp)
              ("]" . forward-sexp)
@@ -783,16 +801,8 @@ SPEC could be `box', 'bar', or `hbar'."
              ("#" . server-edit))
 
   (bind-keys :map god-local-mode-map
-             ;; Unmask keys bound in low priority map
-             ("[") ("]") ("(") (")") ("`") ("#")
              ("i" . mortal-mode)
              ("z" . repeat))
-
-  (require 'god-mode-isearch)
-  (bind-keys :map isearch-mode-map
-             ("<home>" . god-mode-isearch-activate))
-  (bind-keys :map god-mode-isearch-map
-             ("<home>" . god-mode-isearch-disable))
 
   (defun god-mode-self-insert-on-meta ()
   "Copy of `god-mode-self-insert', except binding is M-key."
@@ -815,9 +825,13 @@ SPEC could be `box', 'bar', or `hbar'."
   ;; bind symbols to M-? with low priority
   (dolist (i '("~" "!" "@" "$" "%" "^" "&" "*" "{" "}"
                "<" ">" ":" "|" "\\" "+" "=" "?"))
-    (define-key god-local-mode-map (kbd i) nil)
     (define-key god-mode-low-priority-map (kbd i)
       'god-mode-self-insert-on-meta))
+
+  (dolist (b (cdr god-mode-low-priority-map))
+    (define-key god-local-mode-map (char-to-string (car b))
+      'god-mode-low-priority))
+
 
   ;; Bind some second level modifier keys with C- prefix for easier
   ;; god-mode access. Directly bind these to commands, instead of making
@@ -849,7 +863,6 @@ SPEC could be `box', 'bar', or `hbar'."
     ;; somehow this hook can be called multiple times on a buffer,
     ;; which messes up saving states here. Maybe consider using
     ;; post-command-hook to run this once.
-    (use-global-map god-mode-low-priority-map)
     (mortal-mode 0)
     (set-cursor-type 'box)
     (setq-local z-god-saved-input-method current-input-method)
@@ -861,7 +874,6 @@ SPEC could be `box', 'bar', or `hbar'."
   (add-hook 'god-mode-enabled-hook 'z-god-mode-enabled-hook)
 
   (defun z-god-mode-disabled-hook ()
-    (use-global-map global-map)
     (set-cursor-type 'bar)
     (if z-god-saved-input-method
         (set-input-method z-god-saved-input-method))
