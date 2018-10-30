@@ -765,20 +765,27 @@ SPEC could be `box', 'bar', or `hbar'."
 
   (setq god-exempt-major-modes nil
         god-exempt-predicates nil)
+  ;; Avoid remapped self-insert-command
   (defalias 'true-self-insert-command 'self-insert-command)
-  (defun god-mode-except-special (command)
-    "Execute the command key if it is bound locally, otherwise run COMMAND."
-    (let ((cmd (local-key-binding (this-command-keys))))
-      (call-interactively (or cmd command))))
 
-  (bind-keys :map god-local-mode-map
-             ("i" . mortal-mode)
-             ("z" . repeat)
-             ("[" . (lambda () (interactive) (god-mode-except-special 'backward-sexp)))
-             ("]" . (lambda () (interactive) (god-mode-except-special 'forward-sexp)))
+  ;; A low priority map that takes precedence after local maps. This
+  ;; is done by replacing the glbal map temporarily.
+  (setq god-mode-low-priority-map
+        (let ((map (make-sparse-keymap)))
+          (set-keymap-parent map global-map)
+          map))
+  (bind-keys :map god-mode-low-priority-map
+             ("[" . backward-sexp)
+             ("]" . forward-sexp)
              ("(" . true-self-insert-command)
              (")" . true-self-insert-command)
-             ("`" . next-error)
+             ("`" . next-error))
+
+  (bind-keys :map god-local-mode-map
+             ;; Unmask keys bound in low priority map
+             ("[") ("]") ("(") (")") ("`")
+             ("i" . mortal-mode)
+             ("z" . repeat)
              ("#" . server-edit))
 
   (require 'god-mode-isearch)
@@ -840,6 +847,7 @@ SPEC could be `box', 'bar', or `hbar'."
     ;; somehow this hook can be called multiple times on a buffer,
     ;; which messes up saving states here. Maybe consider using
     ;; post-command-hook to run this once.
+    (use-global-map god-mode-low-priority-map)
     (mortal-mode 0)
     (set-cursor-type 'box)
     (setq-local z-god-saved-input-method current-input-method)
@@ -851,6 +859,7 @@ SPEC could be `box', 'bar', or `hbar'."
   (add-hook 'god-mode-enabled-hook 'z-god-mode-enabled-hook)
 
   (defun z-god-mode-disabled-hook ()
+    (use-global-map global-map)
     (set-cursor-type 'bar)
     (if z-god-saved-input-method
         (set-input-method z-god-saved-input-method))
