@@ -166,7 +166,6 @@ root-_D_iff  log _O_utgoing   _~_:revision  i_G_nore    _g_:annotate _u_:revert
     (easy-pair-kill-inside (easy-kill-get start) (easy-kill-get end)))
   (put #'easy-kill-inside 'easy-kill-exit t)
 
-  (add-to-list 'easy-kill-alist '(?p paragraph "\n"))
   (setq easy-kill-unhighlight-key (kbd "SPC"))
   (setq easy-kill-try-things '(url email sexp line))
 
@@ -176,10 +175,13 @@ root-_D_iff  log _O_utgoing   _~_:revision  i_G_nore    _g_:annotate _u_:revert
                           (?f filename   "\n")
                           (?d defun      "\n\n")
                           (?D defun-name " ")
+                          (?p paragraph "\n")
                           (?n line       "\n") ;changed from ?e
                           (?b buffer-file-name)))
   (bind-keys
    :map easy-kill-base-map
+   ("<f1>" . easy-kill-help)
+   ("C-h" . easy-kill-help)
    ("DEL" . easy-kill-delete-pairs)
    ("k"   . easy-kill-region)
    ("m"   . easy-kill-mark-region)
@@ -196,7 +198,8 @@ root-_D_iff  log _O_utgoing   _~_:revision  i_G_nore    _g_:annotate _u_:revert
    ("'"   . easy-kill-wrap-region)
    ("\\"  . easy-kill-indent-region)))
 
-(bind-keys ("M-?" . completion-at-point))
+(use-package minibuffer
+  :bind ("M-?" . completion-at-point))
 
 (use-package simple
   :commands (cycle-spacing-0)
@@ -219,7 +222,6 @@ root-_D_iff  log _O_utgoing   _~_:revision  i_G_nore    _g_:annotate _u_:revert
              ("]" . forward-page)
              ("x" . god-mode-self-insert)
              ("c" . god-mode-self-insert)))
-
 
 (use-package string-inflection
   :bind (("M-U" . string-inflection-upcase)
@@ -665,7 +667,7 @@ _j_↓  _l_→   set _a_ction   _RET_:go    _o_ther    _q_uit
          ("C-x f" . counsel-file-jump)  ; set-fill-column
          ("M-x" . counsel-M-x)
          ("M-y" . counsel-yank-pop)
-         ("C-x C-SPC" . counsel-mark-ring)
+         ("M-@" . counsel-mark-ring)    ; no use for mark-word
          ("M-s M-s" . counsel-grep-or-swiper)
          ("M-s i" . counsel-imenu)
          ("M-s r" . counsel-jump-to-register))
@@ -813,6 +815,7 @@ SPEC could be `box', 'bar', or `hbar'."
       (setq real-this-command binding)
       (if (commandp binding t)
           (call-interactively binding)
+        ;; TODO: not handling prefix keys correctly.
         (execute-kbd-macro binding))))
 
   (bind-keys :map god-mode-low-priority-map
