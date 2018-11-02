@@ -667,8 +667,8 @@ _j_↓  _l_→   set _a_ction   _RET_:go    _o_ther    _q_uit
          ("C-x f" . counsel-file-jump)  ; set-fill-column
          ("M-x" . counsel-M-x)
          ("M-y" . counsel-yank-pop)
-         ("M-@" . counsel-mark-ring)    ; no use for mark-word
          ("M-s M-s" . counsel-grep-or-swiper)
+         ("M-s m" . counsel-mark-ring)
          ("M-s i" . counsel-imenu)
          ("M-s r" . counsel-jump-to-register))
   :bind (:map help-map
