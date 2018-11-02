@@ -801,7 +801,9 @@ SPEC could be `box', 'bar', or `hbar'."
     "Honor local binding first, then use `god-mode-low-priority-map'."
     (interactive)
     (let* ((keys (this-command-keys))
-           (binding (or (local-key-binding keys)
+           (local-b (local-key-binding keys))
+           (use-local (commandp local-b))
+           (binding (if use-local local-b
                         (lookup-key god-mode-low-priority-map keys))))
       (unless binding (error "God: unknown binding for `%s'"  keys))
       (setq this-original-command binding)
