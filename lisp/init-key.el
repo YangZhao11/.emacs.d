@@ -803,20 +803,21 @@ SPEC could be `box', 'bar', or `hbar'."
     "Honor local binding first, then use `god-mode-low-priority-map'."
     (interactive)
     (let* ((keys (this-command-keys))
-           (local-b (local-key-binding keys))
-           (use-local (commandp local-b))
-           (binding (if use-local local-b
+           (binding (or (local-key-binding keys)
                         (lookup-key god-mode-low-priority-map keys))))
       (unless binding (error "God: unknown binding for `%s'"  keys))
-      (setq this-original-command binding)
-      (setq this-command binding)
-      ;; `real-this-command' is used by emacs to populate
-      ;; `last-repeatable-command', which is used by `repeat'.
-      (setq real-this-command binding)
-      (if (commandp binding t)
-          (call-interactively binding)
-        ;; TODO: not handling prefix keys correctly.
-        (execute-kbd-macro binding))))
+      (cond ((commandp binding t)
+             (setq this-original-command binding)
+             (setq this-command binding)
+             ;; `real-this-command' is used by emacs to populate
+             ;; `last-repeatable-command', which is used by `repeat'.
+             (setq real-this-command binding)
+             (call-interactively binding))
+            ((keymapp binding)
+             ;; help-form does not work, but actual key is.
+             (setq help-form `(describe-vector ,(vector binding)))
+             (set-transient-map binding nil (lambda () (setq help-form nil))))
+            (t (execute-kbd-macro binding)))))
 
   (bind-keys :map god-mode-low-priority-map
              ("q" . quoted-insert)
