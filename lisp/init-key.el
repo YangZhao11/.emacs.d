@@ -631,6 +631,7 @@ Prefixed with \\[universal-argument], show dispatch action."
              ("M-s o" . ivy-occur)
              ("C-j" . ivy-avy)
              ("C-c C-c" . ivy-toggle-calling)
+             ("C-c C-f" . ivy-toggle-calling)
              ("C-'" . ivy-alt-done)
              ("M-k" . ivy-yank-word)
              ("M-s ." . ivy-yank-symbol)

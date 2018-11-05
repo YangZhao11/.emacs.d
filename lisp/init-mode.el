@@ -109,34 +109,35 @@ _j_↓ _z_   _J_    _d_own _>_^^    _(__)_ list  _'_: goto   p_@_p    again: _n_
             (lambda () (if view-mode (god-local-mode-pause)
                     (god-local-mode-resume)))))
 
-;; replace.el is not a real package
-(defhydra hydra-occur (:color pink :hint nil)
-  "
+(use-package replace
+  :config
+  (defhydra hydra-occur (:color pink :hint nil)
+    "
 _k_↑   _p_rev^^   _<_ _>_       _RET_: goto      _e_dit
 _j_↓   _n_ext^^   _d_isplay^^   _o_ther window   %s(if next-error-follow-minor-mode \"⇅\" \"☐\") _f_ollow
 "
-  ("SPC" nil)
-  ("j" scroll-up-command)
-  ("k" scroll-down-command)
-  ("p" occur-prev)
-  ("n" occur-next)
-  ("<" beginning-of-buffer)
-  (">" end-of-buffer)
-  ("d" occur-mode-display-occurrence)
-  ("e" occur-edit-mode :exit t)
-  ("q" quit-window :exit t)
-  ("f" next-error-follow-minor-mode)
-  ("o" occur-mode-goto-occurrence-other-window :exit t)
-  ("RET" occur-mode-goto-occurrence :exit t))
-(bind-keys :map occur-mode-map
-           ("d" . occur-mode-display-occurrence)
-           ("j" . scroll-up-command)
-           ("k" . scroll-down-command)
-           ("n" . occur-next)
-           ("p" . occur-prev)
-           ("x" . god-mode-self-insert)
-           ("c" . god-mode-self-insert)
-           ("SPC" . hydra-occur/body))
+    ("SPC" nil)
+    ("j" scroll-up-command)
+    ("k" scroll-down-command)
+    ("p" occur-prev)
+    ("n" occur-next)
+    ("<" beginning-of-buffer)
+    (">" end-of-buffer)
+    ("d" occur-mode-display-occurrence)
+    ("e" occur-edit-mode :exit t)
+    ("q" quit-window :exit t)
+    ("f" next-error-follow-minor-mode)
+    ("o" occur-mode-goto-occurrence-other-window :exit t)
+    ("RET" occur-mode-goto-occurrence :exit t))
+  (bind-keys :map occur-mode-map
+             ("d" . occur-mode-display-occurrence)
+             ("j" . scroll-up-command)
+             ("k" . scroll-down-command)
+             ("n" . occur-next)
+             ("p" . occur-prev)
+             ("x" . god-mode-self-insert)
+             ("c" . god-mode-self-insert)
+             ("SPC" . hydra-occur/body)))
 
 (use-package grep
   :config
