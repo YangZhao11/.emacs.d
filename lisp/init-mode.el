@@ -600,14 +600,14 @@ fallback."
 (use-package cc-mode
   :config
   (setq c-electric-pound-behavior '(alignleft)) ;make a #define left-aligned
-  (bind-key "RET" 'newline-and-indent c-mode-base-map))
+  (bind-key "RET" 'newline-and-indent c-mode-base-map)
 
-(defun z-c++-mode-hook ()
-  (setq flycheck-clang-language-standard "c++14"
-        flycheck-gcc-language-standard "c++14")
-  (abbrev-mode -1)
-  (require 'clang-format nil 't))
-(add-hook 'c++-mode-hook #'z-c++-mode-hook)
+  (defun z-c++-mode-hook ()
+    (setq flycheck-clang-language-standard "c++14"
+          flycheck-gcc-language-standard "c++14")
+    (abbrev-mode -1)
+    (require 'clang-format nil 't))
+  (add-hook 'c++-mode-hook #'z-c++-mode-hook))
 
 (use-package clang-format
   :commands z-maybe-clang-format

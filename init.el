@@ -32,7 +32,7 @@
               indicate-empty-lines 't
               frame-title-format "%b @Emacs"
               ispell-program-name "aspell"
-              page-delimiter "\\(^\f\\|-\\{5,\\}$\\)")
+              page-delimiter "\\(^\f\\|-\\{20,\\}$\\)")
 (setq inhibit-startup-screen t
       visible-bell 't
       set-mark-command-repeat-pop 't
