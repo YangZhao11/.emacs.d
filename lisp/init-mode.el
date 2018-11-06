@@ -740,6 +740,7 @@ fallback."
     (setq-local comint-move-point-for-output t))
 
   (setq ess-use-flymake nil
+        ess-use-ido nil
         ess-tab-complete-in-script 't
         ess-busy-strings '("  " " ◴" " ◷" " ◶" " ◵"))
 
@@ -760,7 +761,8 @@ fallback."
              ("C-x <f8>" . ess-tracebug)
              ("C-c SPC" . ess-render-markdown)
              ("C-c C-m" . markdown-mode)
-             ("_")
+             ("_")                 ; unbind ess-smart-S-assign
+             ("{") ("}")           ; unbind skeleton-pair-insert-maybe
              ("\\" . ess-smart-pipe)
              (";" . ess-insert-assign))
 
