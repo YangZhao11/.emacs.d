@@ -265,6 +265,9 @@ root-_D_iff  log _O_utgoing   _~_:revision  i_G_nore    _g_:annotate _u_:revert
 (use-package replace
   :bind ("M-s M-o" . multi-occur-in-matching-buffers))
 
+(use-package visual-regexp
+  :bind ("C-M-%" . vr/query-replace))
+
 (use-package isearch
   :config
   (defun isearch-exit-other-end ()

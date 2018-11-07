@@ -836,7 +836,9 @@ section: _a_rguments  _d_escription  _D_e_t_ails  _e_xamples  _n_ote  _r_eferenc
 (use-package markdown-mode
   :mode ("\\.md\\'" . markdown-mode)
   :init
-  (setq markdown-header-scaling 't)
+  (setq markdown-header-scaling 't
+        markdown-header-scaling-values
+        '(1.86 1.39 1.24 1 1 0.93))
   :config
   (bind-keys :map markdown-mode-map
              ("C-c C-m" . r-mode)))
@@ -946,8 +948,8 @@ _j_↓    _[_ _]_ buttons      _r_: forward
              ("<mouse-8>" . help-go-back)
              ("<mouse-9>" . help-go-forward)))
 
-(use-package server :diminish (server-buffer-clients . " #")
-  :config (add-hook 'after-init-hook 'server-start))
+(use-package server :diminish (server-buffer-clients . " #"))
+(add-hook 'after-init-hook 'server-start)
 
 (use-package edit-server :ensure
   :diminish (edit-server-edit-mode . " ✆")
@@ -955,8 +957,8 @@ _j_↓    _[_ _]_ buttons      _r_: forward
   (setq edit-server-new-frame nil
         edit-server-url-major-mode-alist
         '(("mail\\.google\\.com" . html-mode)
-          ("snippets\\.googleplex\\.com" . markdown-mode)))
-  (add-hook 'after-init-hook 'edit-server-start))
+          ("snippets\\.googleplex\\.com" . markdown-mode))))
+(add-hook 'after-init-hook 'edit-server-start)
 
 (use-package shell
   :config
