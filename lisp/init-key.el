@@ -123,6 +123,11 @@ root-_D_iff  log _O_utgoing   _~_:revision  i_G_nore    _g_:annotate _u_:revert
   ("C-x /" . z-ediff-this-buffer)
   ("C-x _" . z-shrink-other-window-if-larger-than-buffer))
 
+(use-package like-this
+  :bind
+  ("M-n" . like-this-next)
+  ("M-p" . like-this-prev))
+
 (use-package easy-kill :ensure
   :functions (easy-kill-mark-region easy-kill-exit)
   :bind ([remap kill-ring-save] . easy-kill)
