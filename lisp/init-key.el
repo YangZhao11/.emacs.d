@@ -283,7 +283,8 @@ useful when followed by an immediate kill."
     (goto-char isearch-other-end))
   (bind-keys :map isearch-mode-map
              ("M-RET" . isearch-exit-other-end)
-             ("M-k"   . isearch-yank-word-or-char))
+             ("M-k"   . isearch-yank-word-or-char)
+             ("C-j"   . avy-isearch))
 
   (setcdr (assq 'isearch-mode minor-mode-alist)
           '((:eval (if isearch-forward " »" " «")))))
@@ -498,9 +499,6 @@ current frame configuration to register 6."
         avy-subword-extra-word-chars nil
         avy-orders-alist '((avy-goto-char . avy-order-closest)
                            (avy-goto-subword-1 . avy-order-closest)))
-  (eval-after-load "isearch"
-    '(define-key isearch-mode-map (kbd "C-j") #'avy-isearch))
-
 
   (defun avy-yank-word-1 (char &optional arg beg end symbol)
     "Like `avy-goto-word-1', but yank instead."
