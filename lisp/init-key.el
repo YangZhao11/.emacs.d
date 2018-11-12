@@ -637,7 +637,6 @@ Prefixed with \\[universal-argument], show dispatch action."
              ("M-s o" . ivy-occur)
              ("C-j" . ivy-avy)
              ("C-c C-c" . ivy-toggle-calling)
-             ("C-c C-f" . ivy-toggle-calling)
              ("C-'" . ivy-alt-done)
              ("M-k" . ivy-yank-word)
              ("M-s ." . ivy-yank-symbol)
@@ -718,7 +717,7 @@ _j_↓  _l_→   set _a_ction   _RET_:go    _o_ther    _q_uit
              ("M-%" . swiper-query-replace)
              ("C-j" . swiper-avy))
   (defun isearch-swiper (regexp)
-    "Like isearch-occur, call swiper with current regexp."
+    "Like `isearch-occur', call `swiper' with current regexp."
     (interactive
      (list (cond
             ((functionp isearch-regexp-function)

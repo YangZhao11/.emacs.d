@@ -7,7 +7,7 @@
 (defvar like-this-try-things
   '(email symbol word list))
 
-(defvar like-this--thing)
+(setq like-this--thing nil)
 
 (defun like-this-bounds ()
   "Return bound of thing at point, using priority in
