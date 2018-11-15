@@ -7,7 +7,9 @@
 (defvar like-this-try-things
   '(email symbol word list))
 
-(setq like-this--thing nil)
+(defvar like-this--thing nil
+  "Symbol representing thing we are looking for. If value is
+  'sexp, regexp boundary is set specially.")
 
 (defun like-this-bounds ()
   "Return bound of thing at point, using priority in
