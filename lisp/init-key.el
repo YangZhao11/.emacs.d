@@ -228,6 +228,20 @@ root-_D_iff  log _O_utgoing   _~_:revision  i_G_nore    _g_:annotate _u_:revert
              ("x" . god-mode-self-insert)
              ("c" . god-mode-self-insert)))
 
+(use-package tabulated-list
+  :config
+  ;; By the time tabulated-list.el is loaded, simple.el is still
+  ;; loading and special-mode-map has not been modified yet.
+  ;; tabulated-list-mode-map will copy instead of inherit from
+  ;; special-mode-map, so we need to copy our changes here.
+  (bind-keys :map tabulated-list-mode-map
+             ("j" . scroll-up-command)
+             ("k" . scroll-down-command)
+             ("[" . backward-page)
+             ("]" . forward-page)
+             ("x" . god-mode-self-insert)
+             ("c" . god-mode-self-insert)))
+
 (use-package string-inflection
   :bind (("M-U" . string-inflection-upcase)
          ("M-C" . string-inflection-camelcase-cycle)

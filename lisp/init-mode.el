@@ -241,6 +241,7 @@ _j_↓^^  _n_ext^^  _{__}_: prev/next file
          ("C-x 4 j" . dired-jump-other-window))
   :config
   (require 'dired-x)
+  (setq dired-dwim-target 't)
 
   (defhydra hydra-dired (:color pink :columns 3 :hint nil)
     "
