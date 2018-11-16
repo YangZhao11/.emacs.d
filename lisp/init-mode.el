@@ -650,10 +650,6 @@ fallback."
   ;;(setq haskell-font-lock-symbols 't)
   (add-hook 'haskell-mode-hook #'z-haskell-mode-hook))
 
-(use-package julia-repl
-  :config
-  (julia-repl-set-executable "~/bin/julia"))
-
 ;; --------------------------------------------------
 ;; ess
 
@@ -963,5 +959,13 @@ _j_↓    _[_ _]_ buttons      _r_: forward
 
 (use-package shell
   :config
+  (defun z-shell-mode-hook ()
+    (setq dirtrack-list
+          '(":\\[[0-9;]*m\\([^]*\\)" 1))
+    (shell-dirtrack-mode -1)
+    (dirtrack-mode 1))
+
+  (add-hook 'shell-mode-hook #'z-shell-mode-hook)
+
   (bind-keys :map shell-mode-map
              ("C-c C-l" . counsel-shell-history)))
