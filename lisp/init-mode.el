@@ -941,9 +941,7 @@ _j_↓    _[_ _]_ buttons      _r_: forward
              ("p" . previous-line)
              ("[" . backward-button)
              ("]" . forward-button)
-             ("x" . god-mode-self-insert)
-             ("<mouse-8>" . help-go-back)
-             ("<mouse-9>" . help-go-forward)))
+             ("x" . god-mode-self-insert)))
 
 (use-package server :diminish (server-buffer-clients . " #"))
 (add-hook 'after-init-hook 'server-start)
@@ -969,3 +967,10 @@ _j_↓    _[_ _]_ buttons      _r_: forward
 
   (bind-keys :map shell-mode-map
              ("C-c C-l" . counsel-shell-history)))
+
+(use-package citc
+  :no-require
+  :config
+  (bind-keys :map citc-status-mode-map
+             ("x" . god-mode-self-insert)
+             ("<f6>" . citc-client-shell)))

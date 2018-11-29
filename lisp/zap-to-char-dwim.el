@@ -1,6 +1,7 @@
 ;;; zap-to-char-dwim -- zap to char with some default guesses -*- lexical-binding: t -*-
 ;;; Commentary:
-;;
+;;   An enhanced version of zap-up-to-char that specially handles
+;;   right parenthesis and space.
 
 ;;; Code:
 (require 'misc)                         ; for zap-up-to-char

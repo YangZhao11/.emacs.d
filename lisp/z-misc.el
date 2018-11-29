@@ -1,6 +1,6 @@
 ;;; z-misc -- Misc defuns -*- lexical-binding: t -*-
 ;;; Commentary:
-;;
+;;  Miscellaneous functions that is not always used.
 
 ;;; Code:
 

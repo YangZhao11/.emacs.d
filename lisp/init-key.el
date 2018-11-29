@@ -328,8 +328,11 @@ instead of inactivate region."
 (use-package find-file
   :bind ("C-x C-r" . ff-find-other-file))
 
-(bind-keys ("C-x 9" . delete-other-windows-vertically))
+(bind-keys ("C-x 9" . delete-other-windows-vertically)
+           ("<mouse-8>" . mode-line-previous-buffer)
+           ("<mouse-9>" . mode-line-next-buffer))
 (bind-key "C-z" nil)
+
 
 ;; F1 for help.
 ;; (bind-key "<f2>" #'eshell)

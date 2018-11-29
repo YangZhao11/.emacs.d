@@ -1,6 +1,10 @@
 ;;; easy-pair -- Edit pairs wrapping region -*- lexical-binding: t -*-
 ;;; Commentary:
-;;
+;;   Provides a few functions for easier manupulation of parenthesis,
+;;   e.g. change parenthesis to brackets (`easy-pair-delete' then wrap
+;;   new one using electric-pair-mode), or change content of list
+;;   similar to change-inner (`easy-pair-kill-inside'). Also comes
+;;   with a simple implementation of barf and slurp.
 
 ;;; Code:
 
