@@ -962,15 +962,7 @@ _j_↓    _[_ _]_ buttons      _r_: forward
           '(":\\[[0-9;]*m\\([^]*\\)" 1))
     (shell-dirtrack-mode -1)
     (dirtrack-mode 1))
-
   (add-hook 'shell-mode-hook #'z-shell-mode-hook)
 
   (bind-keys :map shell-mode-map
              ("C-c C-l" . counsel-shell-history)))
-
-(use-package citc
-  :no-require
-  :config
-  (bind-keys :map citc-status-mode-map
-             ("x" . god-mode-self-insert)
-             ("<f6>" . citc-client-shell)))

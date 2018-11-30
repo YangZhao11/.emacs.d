@@ -14,7 +14,7 @@
       ("\\rarr" ?→) ("\\larr" ?←) ("\\uarr" ?↑) ("\\darr" ?↓)
       ("\\Rarr" ?⇒) ("\\Larr" ?⇐) ("\\Uarr" ?⇑) ("\\Darr" ?⇓))))
 
-(use-package kmarcro
+(use-package kmacro
   :config
   (setcdr (assq 'defining-kbd-macro minor-mode-alist)
           '((:propertize " ●" face (:foreground "#D04020")
@@ -93,10 +93,10 @@ root-_D_iff  log _O_utgoing   _~_:revision  i_G_nore    _g_:annotate _u_:revert
            ("C-x k"           . z-kill-buffer)
            ("C-M-o"           . up-list))
 
-(use-package region-bindings-mode
+(use-package region-bindings-mode :demand
   :diminish 'region-bindings-mode
-  :commands (region-bindings-mode-enable))
-(region-bindings-mode-enable)
+  :config
+  (region-bindings-mode-enable))
 
 (use-package easy-pair
   :commands (easy-pair-delete

@@ -5,6 +5,8 @@
 
 (define-abbrev-table 'Info-edit-mode-abbrev-table '())
 
+(define-abbrev-table 'Man-mode-abbrev-table '())
+
 (define-abbrev-table 'Rd-mode-abbrev-table
   '(
     ("`ag" "\\arguments" nil 0)
@@ -105,6 +107,8 @@
 
 (define-abbrev-table 'flycheck-error-list-mode-abbrev-table '())
 
+(define-abbrev-table 'flymake-diagnostics-buffer-mode-abbrev-table '())
+
 (define-abbrev-table 'fundamental-mode-abbrev-table '())
 
 (define-abbrev-table 'g4-pending-mode-abbrev-table '())
@@ -127,11 +131,15 @@
 
 (define-abbrev-table 'gfm-mode-abbrev-table '())
 
+(define-abbrev-table 'gfm-view-mode-abbrev-table '())
+
 (define-abbrev-table 'git-commit-mode-abbrev-table '())
 
 (define-abbrev-table 'git-rebase-mode-abbrev-table '())
 
 (define-abbrev-table 'global-abbrev-table '())
+
+(define-abbrev-table 'go-guru-output-mode-abbrev-table '())
 
 (define-abbrev-table 'go-mode-abbrev-table '())
 
@@ -235,6 +243,8 @@
 
 (define-abbrev-table 'markdown-mode-abbrev-table '())
 
+(define-abbrev-table 'markdown-view-mode-abbrev-table '())
+
 (define-abbrev-table 'mendel-mode-abbrev-table '())
 
 (define-abbrev-table 'message-mode-abbrev-table '())
@@ -313,6 +323,8 @@
 
 (define-abbrev-table 'tar-mode-abbrev-table '())
 
+(define-abbrev-table 'term-mode-abbrev-table '())
+
 (define-abbrev-table 'text-mode-abbrev-table
   '(
     ("ackd" "acknowledged" nil 3)
@@ -324,7 +336,7 @@
     ("bn" "binomial" nil 16)
     ("bt" "between" nil 1)
     ("calc" "calculate" nil 13)
-    ("calcd" "calculated" nil 5)
+    ("calcd" "calculated" nil 6)
     ("calcn" "calculation" nil 13)
     ("cdd" "candidate" nil 152)
     ("coef" "coefficient" nil 0)
@@ -391,11 +403,19 @@
 
 (define-abbrev-table 'url-cookie-mode-abbrev-table '())
 
+(define-abbrev-table 'vc-bzr-log-view-mode-abbrev-table '())
+
 (define-abbrev-table 'vc-git-log-edit-mode-abbrev-table '())
 
 (define-abbrev-table 'vc-git-log-view-mode-abbrev-table '())
 
 (define-abbrev-table 'vc-git-region-history-mode-abbrev-table '())
+
+(define-abbrev-table 'vc-hg-log-view-mode-abbrev-table '())
+
+(define-abbrev-table 'vc-mtn-log-view-mode-abbrev-table '())
+
+(define-abbrev-table 'vc-svn-log-view-mode-abbrev-table '())
 
 (define-abbrev-table 'xref--xref-buffer-mode-abbrev-table '())
 
