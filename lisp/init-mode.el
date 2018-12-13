@@ -568,7 +568,7 @@ jump to unfetched from: _p_ushremote  _u_pstream"
         '(" " (:eval (z-flymake-mode-line))))
 
   (bind-keys :map flymake-mode-map
-             ("M-g `" . flymake-goto-next-error)
+             ("M-g `" . flymake-show-diagnostics-buffer)
              ("M-g f" . flymake-goto-next-error)
              ("M-g b" . flymake-goto-prev-error)))
 
@@ -602,7 +602,7 @@ fallback."
       (list " " pick)))
   (setq flycheck-mode-line '(:eval (z-flycheck-mode-line-text)))
   (bind-keys :map flycheck-mode-map
-             ("M-g `" . flycheck-next-error)
+             ("M-g `" . flycheck-list-errors)
              ("M-g f" . flycheck-next-error)
              ("M-g b" . flycheck-previous-error)))
 
