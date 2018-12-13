@@ -501,9 +501,72 @@ jump to unfetched from: _p_ushremote  _u_pstream"
       (when (re-search-backward re (point-min) t)
           (match-string count)))))
 
+
+;; faces for mode-line status
+(defface status-warning
+  '((t (:foreground "#D8B080")))
+  "Face for flycheck status: warnings" :group 'flycheck)
+(defface status-ok
+  '((t (:foreground "#98DC98")))
+  "Face for flycheck status: OK" :group 'flycheck)
+(defface status-error
+  '((t (:foreground "#D88080")))
+  "Face for flycheck status: error" :group 'flycheck)
+(defface status-info
+  '((t (:foreground "#80D8D8")))
+  "Face for flycheck status: error" :group 'flycheck)
+
+(defun z-status-count (s count)
+  "Concat S and COUNT, except when COUNT is nil or 0, return empty string."
+  (cond ((or (not count) (= 0 count)) "")
+        ((> count 0) (concat s (number-to-string count)))
+        ('t "")))
+
+(defun z-status-str (nerror nwarning ninfo)
+  "Return mode-line string for NERROR NWARNING NINFO counts."
+  (or nerror (setq nerror 0))
+  (or nwarning (setq nwarning 0))
+  (or ninfo (setq ninfo 0))
+  (if (and (= 0 nerror) (= 0 nwarning) (= 0 nwarning))
+      (propertize "✔" 'face 'status-ok)
+    (concat
+     (propertize (z-status-count "✖" nerror)
+                 'face 'status-error)
+     (when (and (> 0 nwarning) (> 0 nerror)) '(?/))
+     (propertize (z-status-count "•" nwarning)
+                 'face 'status-warning)
+     (when (and (> 0 ninfo) (or (> 0 nerror) (> 0 nwarning))) '(?/))
+     (propertize (z-status-count "•" ninfo)
+                 'face 'status-info))))
+
 (use-package flymake
   :commands (flymake-mode)
   :config
+
+  (defun z-flymake-mode-line ()
+    (let* ((known (hash-table-keys flymake--backend-state))
+           (running (flymake-running-backends))
+           (disabled (flymake-disabled-backends))
+           (reported (flymake-reporting-backends))
+           (diags-by-type (make-hash-table))
+           (all-disabled (and disabled (null running)))
+           (some-waiting (cl-set-difference running reported)))
+      (maphash (lambda (_b state)
+                 (mapc (lambda (diag)
+                         (push diag
+                               (gethash (flymake--diag-type diag)
+                                        diags-by-type)))
+                       (flymake--backend-state-diags state)))
+               flymake--backend-state)
+      (cond (all-disabled "¿")
+            (some-waiting (propertize "✔" 'face 'status-warning))
+            (t (z-status-str (length (gethash :error diags-by-type))
+                             (length (gethash :warning diags-by-type))
+                             (length (gethash :note diags-by-type)))))))
+
+  (setq flymake--mode-line-format
+        '(" " (:eval (z-flymake-mode-line))))
+
   (bind-keys :map flymake-mode-map
              ("M-g `" . flymake-goto-next-error)
              ("M-g f" . flymake-goto-next-error)
@@ -512,24 +575,6 @@ jump to unfetched from: _p_ushremote  _u_pstream"
 (use-package flycheck
   :commands (flycheck-mode)
   :config
-
-  (defface flycheck-status-warning
-    '((t (:foreground "#D8B080")))
-    "Face for flycheck status: warnings" :group 'flycheck)
-  (defface flycheck-status-ok
-    '((t (:foreground "#98DC98")))
-    "Face for flycheck status: OK" :group 'flycheck)
-  (defface flycheck-status-error
-    '((t (:foreground "#D88080")))
-    "Face for flycheck status: error" :group 'flycheck)
-  (defface flycheck-status-info
-    '((t (:foreground "#80D8D8")))
-    "Face for flycheck status: error" :group 'flycheck)
-
-  (defun z-flycheck-count (s count)
-    (cond ((not count) "")
-          ((> count 0) (concat s (number-to-string count)))
-          ('t "")))
 
   (defun z-flycheck-mode-line-text (&optional status)
     "Get a text using emoji to describe STATUS for use in the mode line.
@@ -546,18 +591,10 @@ fallback."
                   (`finished
                    (if flycheck-current-errors
                        (let-alist (flycheck-count-errors flycheck-current-errors)
-                         (concat
-                          (propertize (z-flycheck-count "✖" .error)
-                                      'face 'flycheck-status-error)
-                          (when (and .warning .error) '(?/))
-                          (propertize (z-flycheck-count "•" .warning)
-                                      'face 'flycheck-status-warning)
-                          (when (and .info (or .error .warning)) '(?/))
-                          (propertize (z-flycheck-count "•" .info)
-                                      'face 'flycheck-status-info)))
-                     (propertize "✔" 'face 'flycheck-status-ok)))
-                  (`running     (propertize "✔" 'face 'flycheck-status-warning))
-                  (`not-checked (propertize "✔" 'face 'flycheck-status-error))
+                         (z-status-str .error .warning .info))
+                     (propertize "✔" 'face 'status-ok)))
+                  (`running     (propertize "✔" 'face 'status-warning))
+                  (`not-checked (propertize "✔" 'face 'status-error))
                   (`no-checker  "¿")
                   (`errored     "‼")
                   (`interrupted "⁉")
