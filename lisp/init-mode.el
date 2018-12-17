@@ -660,10 +660,8 @@ fallback."
   :config
   (defun z-go-mode-hook ()
     (setq tab-width 4)
-    (flycheck-mode)
-    (flycheck-select-checker 'go-gofmt)
-    ;; (setq-local company-backends '(company-ycmd))
-    ;; (ycmd-mode 1)
+    ;;(flycheck-mode)
+    ;;(flycheck-select-checker 'go-gofmt)
     ;; (company-mode 1)
     ;;(go-eldoc-setup)
     )
