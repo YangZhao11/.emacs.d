@@ -1003,3 +1003,6 @@ _j_↓    _[_ _]_ buttons      _r_: forward
 
   (bind-keys :map shell-mode-map
              ("C-c C-l" . counsel-shell-history)))
+
+(provide 'init-mode)
+;;; init-mode.el ends here
