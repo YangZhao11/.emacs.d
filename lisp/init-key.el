@@ -504,8 +504,7 @@ current frame configuration to register 6."
   :bind (:map ctl-j-map
               ("SPC" . avy-goto-line)
               ("RET" . avy-show-dispatch)
-              ("TAB" . avy-yank-word-1)
-              ("C-e" . avy-goto-end-of-line))
+              ("TAB" . avy-yank-word-1))
   :bind (("M-," . avy-backward-char-in-line)
          ("M-." . avy-forward-char-in-line))
   :config

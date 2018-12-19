@@ -529,13 +529,13 @@ jump to unfetched from: _p_ushremote  _u_pstream"
   (or ninfo (setq ninfo 0))
   (if (and (= 0 nerror) (= 0 nwarning) (= 0 nwarning))
       (propertize "✔" 'face 'status-ok)
-    (concat
+    (list
      (propertize (z-status-count "✖" nerror)
                  'face 'status-error)
-     (when (and (> 0 nwarning) (> 0 nerror)) '(?/))
+     (when (and (< 0 nwarning) (< 0 nerror)) "/")
      (propertize (z-status-count "•" nwarning)
                  'face 'status-warning)
-     (when (and (> 0 ninfo) (or (> 0 nerror) (> 0 nwarning))) '(?/))
+     (when (and (< 0 ninfo) (or (< 0 nerror) (< 0 nwarning))) "/")
      (propertize (z-status-count "•" ninfo)
                  'face 'status-info))))
 
@@ -544,8 +544,7 @@ jump to unfetched from: _p_ushremote  _u_pstream"
   :config
 
   (defun z-flymake-mode-line ()
-    (let* ((known (hash-table-keys flymake--backend-state))
-           (running (flymake-running-backends))
+    (let* ((running (flymake-running-backends))
            (disabled (flymake-disabled-backends))
            (reported (flymake-reporting-backends))
            (diags-by-type (make-hash-table))
