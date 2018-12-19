@@ -609,6 +609,12 @@ Prefixed with \\[universal-argument], show dispatch action."
 (use-package imenu-anywhere
   :bind ("M-s M-i" . ivy-imenu-anywhere))
 
+(use-package helpful
+  :bind (:map help-map
+              ("v" . helpful-variable)
+              ("f" . helpful-callable)
+              ("S" . helpful-symbol)))
+
 (use-package recentf
   :config
   (setq recentf-max-saved-items 80)
@@ -692,10 +698,7 @@ _j_↓  _l_→   set _a_ction   _RET_:go    _o_ther    _q_uit
          ("M-s m" . counsel-mark-ring)
          ("M-s i" . counsel-imenu)
          ("M-g r" . counsel-jump-to-register))
-  :bind (:map help-map
-              ("v" . counsel-describe-variable)
-              ("f" . counsel-describe-function)
-              ("S" . counsel-info-lookup-symbol))
+
   :config
 
   (defun counsel-find-file-search ()
