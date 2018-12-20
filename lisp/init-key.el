@@ -613,7 +613,21 @@ Prefixed with \\[universal-argument], show dispatch action."
   :bind (:map help-map
               ("v" . helpful-variable)
               ("f" . helpful-callable)
-              ("S" . helpful-symbol)))
+              ("S" . helpful-symbol))
+  :config
+  (ivy-set-display-transformer 'helpful-callable
+                               'counsel-describe-function-transformer)
+  (ivy-set-display-transformer 'helpful-variable
+                               'counsel-describe-variable-transformer)
+(ivy-set-actions
+ 'helpful-callable
+ '(("I" counsel-info-lookup-symbol "info")
+   ("d" counsel--find-symbol "definition")))
+(ivy-set-actions
+ 'helpful-variable
+ '(("I" counsel-info-lookup-symbol "info")
+   ("d" counsel--find-symbol "definition")))
+  )
 
 (use-package recentf
   :config
