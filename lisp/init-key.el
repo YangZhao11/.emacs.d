@@ -611,6 +611,7 @@ Prefixed with \\[universal-argument], show dispatch action."
 
 (use-package helpful
   :bind (:map help-map
+              ("k" . helpful-key)
               ("v" . z-helpful-variable)
               ("f" . z-helpful-callable)
               ("o" . z-helpful-symbol))
