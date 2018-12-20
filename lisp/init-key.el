@@ -611,23 +611,57 @@ Prefixed with \\[universal-argument], show dispatch action."
 
 (use-package helpful
   :bind (:map help-map
-              ("v" . helpful-variable)
-              ("f" . helpful-callable)
-              ("S" . helpful-symbol))
+              ("v" . z-helpful-variable)
+              ("f" . z-helpful-callable)
+              ("o" . z-helpful-symbol))
   :config
-  (ivy-set-display-transformer 'helpful-callable
-                               'counsel-describe-function-transformer)
-  (ivy-set-display-transformer 'helpful-variable
-                               'counsel-describe-variable-transformer)
-(ivy-set-actions
- 'helpful-callable
- '(("I" counsel-info-lookup-symbol "info")
-   ("d" counsel--find-symbol "definition")))
-(ivy-set-actions
- 'helpful-variable
- '(("I" counsel-info-lookup-symbol "info")
-   ("d" counsel--find-symbol "definition")))
-  )
+  (defun z-helpful-variable ()
+    "Forward to `helpful-variable'."
+    (interactive)
+    (let ((enable-recursive-minibuffers t))
+      (ivy-read "Describe variable: " obarray
+                :predicate #'counsel--variable-p
+                :require-match t
+                :history 'counsel-describe-symbol-history
+                :keymap counsel-describe-map
+                :preselect (ivy-thing-at-point)
+                :sort t
+                :action (lambda (x)
+                          (helpful-variable (intern x)))
+                :caller 'counsel-describe-variable)))
+
+  (defun z-helpful-callable ()
+  "Forward to `helpful-callable'.
+
+Interactive functions (i.e., commands) are highlighted according
+to `ivy-highlight-face'."
+  (interactive)
+  (let ((enable-recursive-minibuffers t))
+    (ivy-read "Describe function: " obarray
+              :predicate (lambda (sym)
+                           (or (fboundp sym)
+                               (get sym 'function-documentation)))
+              :require-match t
+              :history 'counsel-describe-symbol-history
+              :keymap counsel-describe-map
+              :preselect (funcall counsel-describe-function-preselect)
+              :sort t
+              :action (lambda (x)
+                        (helpful-callable (intern x)))
+              :caller 'counsel-describe-function)))
+    (defun z-helpful-symbol ()
+  "Forward to `helpful-symbol'."
+  (interactive)
+  (let ((enable-recursive-minibuffers t))
+    (ivy-read "Describe symbol: " obarray
+              :require-match t
+              :history 'counsel-describe-symbol-history
+              :keymap counsel-describe-map
+              :preselect (ivy-thing-at-point)
+              :sort t
+              :action (lambda (x)
+                        (helpful-symbol (intern x)))
+              :caller 'counsel-describe-function))))
 
 (use-package recentf
   :config
@@ -712,7 +746,8 @@ _j_↓  _l_→   set _a_ction   _RET_:go    _o_ther    _q_uit
          ("M-s m" . counsel-mark-ring)
          ("M-s i" . counsel-imenu)
          ("M-g r" . counsel-jump-to-register))
-
+  :bind (:map help-map
+              ("S" . counsel-info-lookup-symbol))
   :config
 
   (defun counsel-find-file-search ()
