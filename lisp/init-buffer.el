@@ -15,10 +15,9 @@
 (defun z-project-buffer-dir (buf)
   "return effective directory of buffer"
   (or (buffer-file-name buf)
-      (with-current-buffer buf
-        (and (memq major-mode '(help-mode ibuffer-mode)) "~"))
-      (with-current-buffer buf
-        (expand-file-name default-directory))))
+      (and (memq (buffer-local-value 'major-mode buf)
+                 '(help-mode helpful-mode ibuffer-mode package-menu-mode)) "~")
+      (expand-file-name (buffer-local-value 'default-directory buf))))
 
 (defun z-project-lookup-buffer (buf)
   "lookup buf in z-project-alist"
@@ -26,9 +25,7 @@
     (if fname (z-project-lookup fname))))
 
 (defun z-project-try-g3 (buf)
-  (let ((dir (or (buffer-file-name buf)
-                  (with-current-buffer buf
-                    (expand-file-name default-directory)))))
+  (let ((dir (z-project-buffer-dir buf)))
     (when (s-contains-p "/google3/" dir)
       (let* ((root (replace-regexp-in-string "\\(.*/google3/\\).*" "\\1" dir))
              (name (replace-regexp-in-string ".*/\\([^/]*\\)/google3/.*" "\\1" root))
@@ -299,6 +296,7 @@ _<_ size _>_       _c_ontent    proc_E_ss    _↑_ _p_op^^       _P_op \\:clear
   :init
   (midnight-delay-set 'midnight-delay "4:30am")
   (add-to-list 'clean-buffer-list-kill-regexps "\\*help\\[R\\]")
+  (add-to-list 'clean-buffer-list-kill-regexps "\\*helpful ")
   (add-to-list 'clean-buffer-list-kill-regexps "\\*[Pg]4[- ]"))
 
 ;; always need a scratch buffer.
