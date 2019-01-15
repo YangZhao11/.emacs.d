@@ -7,20 +7,20 @@
 ;; --------------------------------------------------
 ;; z-project maps buffers to project names, with caching in z-projects-alist
 (defvar z-project-alist nil
-  "`z-project-alist` maps directory to project names")
+  "Maps directory to project names.")
 (defun z-project-lookup (directory)
   (cl-find-if (lambda (entry) (s-prefix-p (car entry) directory))
               z-project-alist))
 
 (defun z-project-buffer-dir (buf)
-  "return effective directory of buffer"
+  "Return effective directory of BUF."
   (or (buffer-file-name buf)
       (and (memq (buffer-local-value 'major-mode buf)
                  '(help-mode helpful-mode ibuffer-mode package-menu-mode)) "~")
       (expand-file-name (buffer-local-value 'default-directory buf))))
 
 (defun z-project-lookup-buffer (buf)
-  "lookup buf in z-project-alist"
+  "Lookup BUF in `z-project-alist'."
 (let ((fname (z-project-buffer-dir buf)))
     (if fname (z-project-lookup fname))))
 
@@ -42,7 +42,7 @@
   "List of functions to try to get a (dir . project) mapping")
 
 (defun z-project (buf)
-  "Returns project entry for buf by trying everything in
+  "Returns project entry for BUF by trying everything in
 `z-project-try-functions'. Results are cached in
 `z-project-alist'."
   (if-let* ((proj (z-project-lookup-buffer buf)))
