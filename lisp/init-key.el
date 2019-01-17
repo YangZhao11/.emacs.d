@@ -534,7 +534,7 @@ current frame configuration to register 6."
                            (concat
                             (if symbol "\\_<" "\\b")
                             str)))))
-        (avy--generic-jump regex arg avy-style beg end))))
+        (avy--generic-jump regex arg beg end))))
 
   (defun avy-forward-char-in-line (char)
     "Jump to the currently visible CHAR in the current line after point."
@@ -543,7 +543,6 @@ current frame configuration to register 6."
       (avy--generic-jump
        (regexp-quote (string char))
        nil
-       avy-style
        (1+ (point))
        (line-end-position))))
   (defun avy-backward-char-in-line (char)
@@ -553,7 +552,6 @@ current frame configuration to register 6."
       (avy--generic-jump
        (regexp-quote (string char))
        nil
-       avy-style
        (line-beginning-position)
        (point))))
 
