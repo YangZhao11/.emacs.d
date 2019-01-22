@@ -95,6 +95,7 @@ root-_D_iff  log _O_utgoing   _~_:revision  i_G_nore    _g_:annotate _u_:revert
 
 (use-package region-bindings-mode :demand
   :diminish 'region-bindings-mode
+  :functions region-bindings-mode-enable
   :config
   (region-bindings-mode-enable))
 
@@ -369,9 +370,17 @@ use arrow keys or:  _{_ _}_ horizontal   _[_ _]_ vertical
 (bind-keys ("<f10>" . hydra-resize-window/body)
           ("<f11>" . shrink-window)
           ("<f12>" . enlarge-window)
-          ("M-9" . previous-buffer)
-          ("M-0" . next-buffer)
           ("C-x 4 o" . display-buffer))
+
+(use-package iflipb
+  :bind (("M-9" . iflipb-previous-buffer)
+         ("M-0" . iflipb-next-buffer))
+  :config
+  (defun iflipb-format-buffer (current-buffer buffer)
+    (propertize (buffer-name buffer) 'face
+                (if (eq current-buffer buffer)
+                    'mode-line-buffer-id 'font-lock-constant-face)))
+  (setq iflipb-permissive-flip-back 't))
 
 (defun toggle-show-trailing-whitespace ()
    "Toggle `show-trailing-whitespace'."
