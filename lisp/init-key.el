@@ -519,42 +519,41 @@ current frame configuration to register 6."
 
   (defun avy-yank-word-1 (char &optional arg beg end symbol)
     "Like `avy-goto-word-1', but yank instead."
-    (interactive (list (read-char "char: " t)
-                       current-prefix-arg))
-    (avy-with avy-goto-word-1
-      (setq avy-action 'avy-action-yank)
-      (let* ((str (string char))
-             (regex (cond ((string= str ".")
-                           "\\.")
-                          ((and avy-word-punc-regexp
-                                (string-match avy-word-punc-regexp str))
-                           (regexp-quote str))
-                          ((<= char 26)
-                           str)
-                          (t
-                           (concat
-                            (if symbol "\\_<" "\\b")
-                            str)))))
-        (avy--generic-jump regex arg beg end))))
+  (interactive (list (read-char "char: " t)
+                     current-prefix-arg))
+  (avy-with avy-goto-word-1
+    (let* ((str (string char))
+           (regex (cond ((string= str ".")
+                         "\\.")
+                        ((and avy-word-punc-regexp
+                              (string-match avy-word-punc-regexp str))
+                         (regexp-quote str))
+                        ((<= char 26)
+                         str)
+                        (t
+                         (concat
+                          (if symbol "\\_<" "\\b")
+                          str)))))
+      (avy-jump regex
+                :window-flip arg
+                :beg beg
+                :end end
+                :action 'avy-action-yank))))
 
   (defun avy-forward-char-in-line (char)
     "Jump to the currently visible CHAR in the current line after point."
     (interactive (list (read-char "char: " t)))
     (avy-with avy-goto-char
-      (avy--generic-jump
-       (regexp-quote (string char))
-       nil
-       (1+ (point))
-       (line-end-position))))
+      (avy-jump (regexp-quote (string char))
+                :beg (1+ (point))
+                :end (line-end-position))))
   (defun avy-backward-char-in-line (char)
     "Jump to the currently visible CHAR in the current line before point."
     (interactive (list (read-char "char: " t)))
     (avy-with avy-goto-char
-      (avy--generic-jump
-       (regexp-quote (string char))
-       nil
-       (line-beginning-position)
-       (point))))
+      (avy-jump (regexp-quote (string char))
+                :beg (line-beginning-position)
+                :end (point))))
 
   (defun z-goto-char (char &optional arg)
   "Call `avy-goto-char' or `avy-goto-subword-1', but respect bindings
@@ -743,8 +742,8 @@ _j_↓  _l_→   set _a_ction   _RET_:go    _o_ther    _q_uit
          ("M-x" . counsel-M-x)
          ("M-y" . counsel-yank-pop)
          ("M-s M-s" . counsel-grep-or-swiper)
-         ("M-s m" . counsel-mark-ring)
-         ("M-s i" . counsel-imenu)
+         ("M-g m" . counsel-mark-ring)
+         ("M-g i" . counsel-imenu)
          ("M-g r" . counsel-jump-to-register))
   :bind (:map help-map
               ("S" . counsel-info-lookup-symbol))
