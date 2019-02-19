@@ -1,4 +1,4 @@
-; -*- coding: utf-8; lexical-binding: t -*-
+s; -*- coding: utf-8; lexical-binding: t -*-
 
 ;;; Code:
 (eval-when-compile
@@ -115,7 +115,9 @@ root-_D_iff  log _O_utgoing   _~_:revision  i_G_nore    _g_:annotate _u_:revert
                 ("C-t" . anchored-transpose)))
 
 (use-package shell
-  :bind ("<f6>" . shell))
+  :bind ("<f6>" . shell)
+  :config
+  (require 'pcmpl-args nil t))
 
 (use-package z-misc
   :bind
