@@ -1,4 +1,4 @@
-s; -*- coding: utf-8; lexical-binding: t -*-
+; -*- coding: utf-8; lexical-binding: t -*-
 
 ;;; Code:
 (eval-when-compile

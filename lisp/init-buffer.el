@@ -256,7 +256,7 @@ _<_ size _>_       _c_ontent    proc_E_ss    _↑_ _p_op^^       _P_op \\:clear
            (file-name (buffer-file-name buf)))
       (if file-name
           (dired-jump other-window file-name)
-        (let ((dir (with-current-buffer buf default-directory)))
+        (let ((dir (buffer-local-value 'default-directory buf)))
           (if other-window
               (dired-other-window dir)
             (dired dir))))))

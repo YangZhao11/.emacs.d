@@ -706,13 +706,12 @@ fallback."
     (interactive)
     (let ((b (or (get-buffer "*R*")
                 (cl-find-if (lambda (b)
-                              (with-current-buffer b
-                                (eq major-mode 'inferior-ess-mode)))
+                               (eq (buffer-local-value 'major-mode b) 'inferior-ess-mode))
                             (buffer-list)))))
       (if b (switch-to-buffer b)
         (let ((ess-ask-for-ess-directory nil)
               (ess-directory "~/Projects"))
-          (R)))))
+          (run-ess-r)))))
 
   (defun ess-smart-pipe (arg)
     "Similar to `ess-insert-assign', but insert %>% instead."
