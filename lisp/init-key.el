@@ -136,6 +136,7 @@ root-_D_iff  log _O_utgoing   _~_:revision  i_G_nore    _g_:annotate _u_:revert
   :bind ([remap kill-ring-save] . easy-kill)
   :config
 
+  (require 'argatpt)
   (easy-kill-defun easy-kill-transpose ()
     (interactive)
     (save-mark-and-excursion
@@ -175,15 +176,16 @@ root-_D_iff  log _O_utgoing   _~_:revision  i_G_nore    _g_:annotate _u_:revert
   (put #'easy-kill-inside 'easy-kill-exit t)
 
   (setq easy-kill-unhighlight-key (kbd "SPC"))
-  (setq easy-kill-try-things '(url email sexp line))
+  (setq easy-kill-try-things '(url email arg sexp line))
 
   (setq easy-kill-alist '((?w word       " ")
                           (?s sexp       "\n")
                           (?l list       "\n")
                           (?f filename   "\n")
+                          (?a arg        "\n")
                           (?d defun      "\n\n")
                           (?D defun-name " ")
-                          (?p paragraph "\n")
+                          (?p paragraph  "\n")
                           (?n line       "\n") ;changed from ?e
                           (?b buffer-file-name)))
   (bind-keys
