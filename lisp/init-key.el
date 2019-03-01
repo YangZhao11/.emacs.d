@@ -895,13 +895,20 @@ SPEC could be `box', 'bar', or `hbar'."
   ;; Avoid remapped self-insert-command
   (defalias 'true-self-insert-command 'self-insert-command)
 
-  ;; A low priority map that takes precedence after local maps.
-  (setq god-mode-low-priority-map (make-sparse-keymap))
+  (defvar god-mode-low-priority-exempt
+    '(c-electric-lt-gt)
+    "Commands that do not take precedence of `god-mode-low-priority-map'.")
+
+  (defvar god-mode-low-priority-map (make-sparse-keymap)
+        "A low priority map that takes precedence after local maps.")
   (defun god-mode-low-priority ()
     "Honor local binding first, then use `god-mode-low-priority-map'."
     (interactive)
     (let* ((keys (this-command-keys))
-           (binding (or (local-key-binding keys)
+           (local-binding (local-key-binding keys))
+           (binding (if (and local-binding
+                             (not (memq local-binding god-mode-low-priority-exempt)))
+                        local-binding
                         (lookup-key god-mode-low-priority-map keys))))
       (unless binding (error "God: unknown binding for `%s'"  keys))
       (cond ((commandp binding t)
