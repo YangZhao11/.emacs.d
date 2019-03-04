@@ -896,7 +896,7 @@ SPEC could be `box', 'bar', or `hbar'."
   (defalias 'true-self-insert-command 'self-insert-command)
 
   (defvar god-mode-low-priority-exempt
-    '(c-electric-lt-gt)
+    '(c-electric-lt-gt c-electric-brace)
     "Commands that do not take precedence of `god-mode-low-priority-map'.")
 
   (defvar god-mode-low-priority-map (make-sparse-keymap)
