@@ -131,12 +131,15 @@ root-_D_iff  log _O_utgoing   _~_:revision  i_G_nore    _g_:annotate _u_:revert
   ("M-n" . like-this-next)
   ("M-p" . like-this-prev))
 
+(use-package argatpt
+  ;; generate autoloads
+  :commands (forward-arg backward-arg))
+
 (use-package easy-kill :ensure
   :functions (easy-kill-mark-region easy-kill-exit)
   :bind ([remap kill-ring-save] . easy-kill)
   :config
 
-  (require 'argatpt)
   (easy-kill-defun easy-kill-transpose ()
     (interactive)
     (save-mark-and-excursion
