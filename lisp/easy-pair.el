@@ -11,7 +11,7 @@
 (require 'elec-pair)
 
 (defun easy-pair-match-p (s1 s2)
-  "Return true if S1 and S2 contain matching pairs.
+  "Return non-nil if S1 and S2 contain matching pairs.
 
 For example, `[(' and `)]' matches while `[(' and `])' does not
 match.  Rely on electric-pair logic here."
@@ -46,7 +46,8 @@ deletes."
       (setq deactivate-mark (not active)))))
 
 (defun easy-pair--kill-inside-pair (beg end)
-  (interactive "r")
+  "Kill inside the pair between BEG and END.
+Check if characters at the boundary are matching pairs, otherwise return nil."
   (let* ((s1 (buffer-substring-no-properties beg (1+ beg)))
          (s2 (buffer-substring-no-properties (1- end) end))
          (length (- (1- end) (1+ beg))))
@@ -57,7 +58,8 @@ deletes."
       length)))
 
 (defun easy-pair--kill-inside-sexp-pair (beg end)
-  (interactive "r")
+  "Kill inside the pair between BEG and END.
+The boundary is assumed to be a sexp at each end."
   (let* ((sbeg (scan-sexps beg 1))
          (send (scan-sexps end -1))
          (length (- send sbeg)))
@@ -78,7 +80,7 @@ The list boundary is kept."
 
 ;;;###autoload
 (defun easy-pair-slurp (&optional arg)
-  "Slurp ARG sexps into current list"
+  "Slurp ARG sexps into current list."
   (interactive "p")
   (if (< arg 0) (easy-pair-barf (- arg))
     (save-excursion
@@ -92,7 +94,7 @@ The list boundary is kept."
 
 ;;;###autoload
 (defun easy-pair-backward-slurp (&optional arg)
-  "Slurp ARG sexps before current list into current lisp"
+  "Slurp ARG sexps before current list into current list."
   (interactive "p")
   (if (< arg 0) (easy-pair-backward-barf (- arg))
     (save-excursion
@@ -106,7 +108,7 @@ The list boundary is kept."
 
 ;;;###autoload
 (defun easy-pair-barf (&optional arg)
-  "Barf ARG sexps out of current list"
+  "Barf ARG sexps out of current list."
   (interactive "p")
   (if (< arg 0) (easy-pair-slurp (- arg))
   (save-excursion
@@ -122,7 +124,7 @@ The list boundary is kept."
 
 ;;;###autoload
 (defun easy-pair-backward-barf (&optional arg)
-  "Barf ARG sexps out of current list"
+  "Barf ARG sexps out of current list."
   (interactive "p")
   (if (< arg 0) (easy-pair-backward-slurp (- arg))
   (save-excursion
