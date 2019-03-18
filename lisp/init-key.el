@@ -612,7 +612,7 @@ Prefixed with \\[universal-argument], show dispatch action."
   :bind ("C-x d" . find-name-dired))
 
 (use-package imenu-anywhere
-  :bind ("M-s M-i" . ivy-imenu-anywhere))
+  :bind ("M-g M-i" . ivy-imenu-anywhere))
 
 (use-package helpful
   :bind (:map help-map
