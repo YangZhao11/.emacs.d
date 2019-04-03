@@ -190,6 +190,7 @@ root-_D_iff  log _O_utgoing   _~_:revision  i_G_nore    _g_:annotate _u_:revert
                           (?D defun-name " ")
                           (?p paragraph  "\n")
                           (?n line       "\n") ;changed from ?e
+                          (?. sentence   " ")
                           (?b buffer-file-name)))
   (bind-keys
    :map easy-kill-base-map
