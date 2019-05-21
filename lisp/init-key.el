@@ -867,12 +867,17 @@ SPEC could be `box', 'bar', or `hbar'."
   (dolist (f (frame-list))
     (with-selected-frame f (set-cursor-type spec))))
 
+(defvar mortal-mode-map (make-sparse-keymap)
+  "Keymap for `mortal-mode'.")
+(defun mortal-mode-exit ()
+  "Exit mortal-mode and resume god mode." (interactive)
+                          (god-local-mode-resume)
+                          (mortal-mode 0))
+(define-key mortal-mode-map (kbd "RET") 'mortal-mode-exit)
+
 (define-minor-mode mortal-mode
   "Allow temporary departures from god-mode."
-  :keymap '(([return] . (lambda ()
-                          "Exit mortal-mode and resume god mode." (interactive)
-                          (god-local-mode-resume)
-                          (mortal-mode 0))))
+  :keymap mortal-mode-map
   (when mortal-mode
     (condition-case nil
         (progn (barf-if-buffer-read-only)
