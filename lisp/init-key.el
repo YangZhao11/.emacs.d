@@ -510,6 +510,8 @@ current frame configuration to register 6."
 
 (use-package avy :ensure :defer 5
   :bind ("C-j" . z-goto-char)
+  :bind (:map minibuffer-local-map
+              ("C-j" . z-goto-char))
   :bind (:map ctl-j-map
               ("SPC" . avy-goto-line)
               ("RET" . avy-show-dispatch)
