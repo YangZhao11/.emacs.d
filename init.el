@@ -106,7 +106,7 @@
     ("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3")))
  '(package-selected-packages
    (quote
-    (pcmpl-args yasnippet avy helpful diminish visual-regexp dired-sidebar ibuffer-sidebar rainbow-mode julia-mode julia-repl magit dired-subtree imenu-list indium indent-guide rainbow-identifiers string-inflection ace-window region-bindings-mode counsel swiper citc g4-gutter ivy imenu-anywhere wgrep ivy-hydra flx hydra color-identifiers-mode org-bullets js2-mode scala-mode2 clang-format markdown-mode use-package flycheck go-eldoc smex beacon anchored-transpose csv-mode go-mode easy-kill zenburn-theme squery register-channel rainbow-delimiters lua-mode ido-vertical-mode ido-ubiquitous haskell-mode goto-chg god-mode f ess edit-server)))
+    (transient pcmpl-args yasnippet avy helpful diminish visual-regexp dired-sidebar ibuffer-sidebar rainbow-mode julia-mode julia-repl magit dired-subtree imenu-list indium indent-guide rainbow-identifiers string-inflection ace-window region-bindings-mode counsel swiper citc g4-gutter ivy imenu-anywhere wgrep ivy-hydra flx hydra color-identifiers-mode org-bullets js2-mode scala-mode2 clang-format markdown-mode use-package flycheck go-eldoc smex beacon anchored-transpose csv-mode go-mode easy-kill zenburn-theme squery register-channel rainbow-delimiters lua-mode ido-vertical-mode ido-ubiquitous haskell-mode goto-chg god-mode f ess edit-server)))
  '(pdf-view-midnight-colors (quote ("#DCDCCC" . "#383838")))
  '(vc-annotate-background "#2B2B2B")
  '(vc-annotate-color-map
@@ -142,7 +142,7 @@
  '(company-template-field ((t (:background "#4d5d6d"))))
  '(font-lock-builtin-face ((t (:foreground "#D0DCE0" :weight normal))))
  '(font-lock-constant-face ((t (:foreground "#BFDBBF"))))
- '(font-lock-keyword-face ((t (:weight normal))))
+ '(font-lock-keyword-face ((t (:foreground "#ECE4C0" :weight normal))))
  '(font-lock-type-face ((t (:foreground "#90B8BC"))))
  '(link ((t (:foreground "#D0BF8F" :underline t :weight normal))))
  '(mode-line ((t (:background "#203B48" :foreground "#8FB28F" :box (:line-width -1 :style released-button)))))

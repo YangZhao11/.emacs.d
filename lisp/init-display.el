@@ -41,6 +41,39 @@
  (vc-mode vc-mode)
  "  " mode-line-modes mode-line-misc-info mode-line-end-spaces))
 
+(setq-default mode-line-modified
+              '(:eval (cond (buffer-read-only
+                             (propertize
+                              "♢"
+                              'help-echo 'mode-line-read-only-help-echo
+                              'local-map (purecopy (make-mode-line-mouse-map
+                                                    'mouse-1
+                                                    #'mode-line-toggle-read-only))
+                              'mouse-face 'mode-line-highlight))
+                            ((buffer-modified-p)
+                             (propertize
+                              "♦"
+                              'help-echo 'mode-line-modified-help-echo
+                              'local-map (purecopy (make-mode-line-mouse-map
+                                                    'mouse-1 #'mode-line-toggle-modified))
+                              'mouse-face 'mode-line-highlight)))))
+
+(setq-default mode-line-remote
+              '(:eval (cond ((bound-and-true-p edit-server-edit-mode)
+                             (propertize
+                              "✆"
+                              'mouse-face 'mode-line-highlight
+                              'help-echo "Editing browser content"))
+                            ((and (stringp default-directory)
+                                  (file-remote-p default-directory))
+                             (propertize
+                              "⚡"
+                              'mouse-face 'mode-line-highlight
+                              'help-echo (purecopy (lambda (window _object _point)
+                                                     (concat "Current directory is remote: "
+                                                             default-directory))))))))
+
+
 ;; remove input method from mode-line-mule-info, this is already
 ;; handled by z-lighter.
 (setq-default mode-line-mule-info
