@@ -13,8 +13,9 @@
 ;; (add-to-list 'default-frame-alist '(ns-appearance . dark))
 ;; (setq ns-use-proxy-icon nil)
 
-;; (set-fontset-font t 'unicode
-;;                   (font-spec :name "Apple Color Emoji" :size 11) nil 'prepend)
+(set-fontset-font t 'unicode
+                  (font-spec :name "Apple Color Emoji" :size 11) nil 'prepend)
+
 (add-hook 'after-init-hook
           (lambda ()
             (when window-system
