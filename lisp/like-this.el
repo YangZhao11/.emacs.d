@@ -1,36 +1,75 @@
 ;;; like-this -- Move to next thing like this -*- lexical-binding: t -*-
 ;;; Commentary:
-;;
+;;    Move to next / previous thing like the thing at point. Here
+;;    "thing" can be decided using font-lock faces or thing-at-pt library.
 
 ;;; Code:
 
+(defvar like-this-try-faces
+  '(helpful-heading)
+  "Special faces that are searched for")
+
+(defun like-this--face-matches (face)
+  "Returns true if face is active at point"
+  (let ((f (get-text-property (point) 'face)))
+    (cond ((not f) nil)
+          ((symbolp f) (and (eq face f) face))
+          ((listp f) (and (memq face f) face))
+          (t nil))))
+
+(defun like-this--next-matching-face (face)
+  "Move to next place where the face matches"
+  (while (like-this--face-matches face)
+    (goto-char (next-single-property-change (point) 'face)))
+  (while (not (like-this--face-matches face))
+    (goto-char (next-single-property-change (point) 'face))))
+
+(defun like-this--previous-matching-face (face)
+  "Move to previous place where the face matches"
+  (while (like-this--face-matches face)
+    (goto-char (previous-single-property-change (point) 'face)))
+  (while (not (like-this--face-matches face))
+    (goto-char (previous-single-property-change (point) 'face))))
+
+(defun like-this--get-face ()
+  "Return a face to search for, if any"
+  (seq-some 'like-this--face-matches like-this-try-faces))
+
+(defun like-this--next-face (face arg)
+  (while (> arg 0)
+    (like-this--next-matching-face face)
+    (setq arg (1- arg)))
+  (while (< arg 0)
+    (like-this--previous-matching-face face)
+    (setq arg (1+ arg))))
+
 (defvar like-this-try-things
-  '(email symbol word list))
+  '(email symbol word)
+  "Thing at point to try search for")
 
-(defvar like-this--thing nil
-  "Symbol representing thing we are looking for. If value is
-  'sexp, regexp boundary is set specially.")
-
-(defun like-this-bounds ()
+(defun like-this--get-thing-bounds ()
   "Return bound of thing at point, using priority in
 `like-this-try-things'."
   (let ((to-try like-this-try-things)
-        (bounds))
+        (bounds)
+        (thing))
     (while (and (not bounds)
                 to-try)
       (setq bounds (bounds-of-thing-at-point (car to-try)))
-      (setq like-this--thing (car to-try))
+      (setq thing (car to-try))
       (setq to-try (cdr to-try)))
-    bounds))
+    (cons thing bounds)))
 
-(defun like-this-in-bound (beg end arg)
+(defun like-this--next-thing-bounds (bounds arg)
   "Search for next ARG'th occurrence of thing between BEG and END."
-  (interactive "r\np")
-  (let* ((str (buffer-substring-no-properties beg end))
+  (let* ((thing (car bounds))
+         (beg (cadr bounds))
+         (end (cddr bounds))
+(str (buffer-substring-no-properties beg end))
          (regexp (concat
-                  (if (eq like-this--thing 'symbol) "\\_<" "\\b")
+                  (if (eq thing 'symbol) "\\_<" "\\b")
                   (regexp-quote str)
-                  (if (eq like-this--thing 'symbol) "\\_>" "\\b")))
+                  (if (eq thing 'symbol) "\\_>" "\\b")))
          (offset (if (and (<= beg (point))
                           (<= (point) end))
                      (if (> arg 0) (- (point) end)
@@ -44,10 +83,11 @@
 (defun like-this-next (arg)
   "Navigate to ARG'th thing like this at point."
   (interactive "p")
-  (let ((bounds (like-this-bounds)))
-    (unless bounds
-      (error "Not sure what to look for."))
-    (like-this-in-bound (car bounds) (cdr bounds) arg)))
+  (if-let ((face (like-this--get-face)))
+      (like-this--next-face face arg)
+    (if-let ((bounds (like-this--get-thing-bounds)))
+        (like-this--next-thing-bounds bounds arg)
+      (error "Not sure what to look for."))))
 
 ;;;###autoload
 (defun like-this-prev (arg)
