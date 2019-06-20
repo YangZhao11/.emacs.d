@@ -6,7 +6,7 @@
 ;;; Code:
 
 (defvar like-this-try-faces
-  '(helpful-heading)
+  '(helpful-heading button)
   "Special faces that are searched for")
 
 (defun like-this--face-matches (face)
@@ -58,7 +58,7 @@
       (setq bounds (bounds-of-thing-at-point (car to-try)))
       (setq thing (car to-try))
       (setq to-try (cdr to-try)))
-    (cons thing bounds)))
+    (if bounds (cons thing bounds))))
 
 (defun like-this--next-thing-bounds (bounds arg)
   "Search for next ARG'th occurrence of thing between BEG and END."
@@ -87,7 +87,7 @@
       (like-this--next-face face arg)
     (if-let ((bounds (like-this--get-thing-bounds)))
         (like-this--next-thing-bounds bounds arg)
-      (error "Not sure what to look for."))))
+      (user-error "Not sure what to look for."))))
 
 ;;;###autoload
 (defun like-this-prev (arg)
