@@ -923,6 +923,7 @@ SPEC could be `box', 'bar', or `hbar'."
                         (lookup-key god-mode-low-priority-map keys))))
       (unless binding (error "God: unknown binding for `%s'"  keys))
       (cond ((commandp binding t)
+             (setq binding (or (command-remapping binding) binding))
              (setq this-original-command binding)
              (setq this-command binding)
              ;; `real-this-command' is used by emacs to populate

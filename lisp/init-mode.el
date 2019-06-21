@@ -982,6 +982,8 @@ _j_↓    _[_ _]_ buttons      _r_: forward
 
 (use-package edit-server :ensure
   :diminish (edit-server-edit-mode)
+  :bind (:map edit-server-edit-mode-map
+              ([remap server-edit] . edit-server-done))
   :config
   (setq edit-server-new-frame nil
         edit-server-url-major-mode-alist
