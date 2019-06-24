@@ -82,6 +82,7 @@
 (load "init-buffer")
 (load "init-mode")
 (load "init-key")
+(load "init-god")
 (load "init-display")
 
 ;; --------------------------------------------------
