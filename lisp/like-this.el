@@ -80,7 +80,7 @@
     (forward-char offset)))
 
 ;;;###autoload
-(defun like-this-next (arg)
+(defun like-this-next (&optional arg)
   "Navigate to ARG'th thing like this at point."
   (interactive "p")
   (if-let ((face (like-this--get-face)))
@@ -90,7 +90,7 @@
       (user-error "Not sure what to look for."))))
 
 ;;;###autoload
-(defun like-this-prev (arg)
+(defun like-this-prev (&optional arg)
   "Navigate to previous ARG'th thing like this at point."
   (interactive "p")
   (like-this-next (- arg)))

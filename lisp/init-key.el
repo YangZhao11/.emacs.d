@@ -623,7 +623,20 @@ Prefixed with \\[universal-argument], show dispatch action."
               ("v" . z-helpful-variable)
               ("f" . z-helpful-callable)
               ("o" . z-helpful-symbol))
+  :bind (:map helpful-mode-map
+              ("[" . helpful-previous-heading)
+              ("]" . helpful-next-heading))
   :config
+  (defun helpful-next-heading (&optional arg)
+    "Move to next heading"
+    (interactive "^p")
+    (like-this--next-face 'helpful-heading arg))
+
+  (defun helpful-previous-heading (&optional arg)
+    "Move to previous heading"
+    (interactive "^p")
+    (like-this--next-face 'helpful-heading (- arg)))
+
   (defun z-helpful-variable ()
     "Forward to `helpful-variable'."
     (interactive)
@@ -912,6 +925,7 @@ SPEC could be `box', 'bar', or `hbar'."
 
   (defvar god-mode-low-priority-map (make-sparse-keymap)
         "A low priority map that takes precedence after local maps.")
+
   (defun god-mode-low-priority ()
     "Honor local binding first, then use `god-mode-low-priority-map'."
     (interactive)
@@ -938,8 +952,8 @@ SPEC could be `box', 'bar', or `hbar'."
 
   (bind-keys :map god-mode-low-priority-map
              ("q" . quoted-insert)
-             ("[" . backward-sexp)
-             ("]" . forward-sexp)
+             ("[" . beginning-of-defun)
+             ("]" . end-of-defun)
              ("(" . true-self-insert-command)
              (")" . true-self-insert-command)
              ("`" . next-error)
@@ -1022,6 +1036,6 @@ SPEC could be `box', 'bar', or `hbar'."
     (if z-god-saved-input-method
         (set-input-method z-god-saved-input-method))
     (if z-god-saved-view-mode
-        (view-mode 1)))
+        (view-mode 1)
   (add-hook 'god-mode-disabled-hook 'z-god-mode-disabled-hook))
 (add-hook 'after-init-hook 'god-mode-all)
