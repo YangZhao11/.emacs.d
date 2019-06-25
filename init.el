@@ -17,6 +17,8 @@
 (require 'diminish)
 (require 's)
 
+(push "~/.emacs.d/god-mode" load-path)
+
 ;; Load platform specific inits, including init-gnu-linux /
 ;; init-darwin, init-ns / init-x, init-hostname.
 (push "~/.emacs.d/lisp" load-path)

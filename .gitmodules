@@ -1,0 +1,3 @@
+[submodule "god-mode"]
+	path = god-mode
+	url = https://github.com/YangZhao11/god-mode.git
