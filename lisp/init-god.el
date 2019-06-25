@@ -110,60 +110,28 @@ SPEC could be `box', 'bar', or `hbar'."
            ("i" . mortal-mode)
            ("z" . repeat))
 
-(defun god-mode-self-insert-on-meta ()
-  "Copy of `god-mode-self-insert', except binding is M-key."
-  (interactive)
-  (let* ((initial-key (aref (this-command-keys-vector)
-                            (- (length (this-command-keys-vector)) 1)))
-         (key-string (concat "M-" (char-to-string initial-key)))
-         (binding (key-binding (kbd key-string))))
-    (unless binding (error "God: unknown key binding for `%s`" key-string))
-    (setq this-original-command binding)
-    (setq this-command binding)
-    ;; `real-this-command' is used by emacs to populate
-    ;; `last-repeatable-command', which is used by `repeat'.
-    (setq real-this-command binding)
-    (setq god-literal-sequence nil)
-    (if (commandp binding t)
-        (call-interactively binding)
-      (execute-kbd-macro binding))))
+;; Translate some second level modifier keys with C- prefix for easier
+;; god-mode access. E.g. Translate "C-x C-1" to "C-x 1", so that in
+;; god-mode I only need to press "x 1" for this key combination.
+(setq god-mode-translate-alist
+      '(("C-x C-1" "C-x 1") ("C-x C-2" "C-x 2") ("C-x C-3" "C-x 3") ("C-x C-4" "C-x 4" t)
+        ("C-x C-5" "C-x 5" t) ("C-x C-6" "C-x 6" t) ("C-x C-7" "C-x 7") ("C-x C-8" "C-x 8" t)
+        ("C-x C-9" "C-x 9") ("C-x C-0" "C-x 0") ("C-x C-[" "C-x [") ("C-x C-]" "C-x ]")
+        ("C-x C-$" "C-x $") ("C-x C-," "C-x ,") ("C-x C-." "C-x .") ("C-x C-?" "C-x ?")
+        ("M-g C-1" "M-g 1") ("M-g C-2" "M-g 2") ("M-g C-3" "M-g 3") ("M-g C-4" "M-g 4")
+        ("M-g C-5" "M-g 5") ("M-g C-6" "M-g 6") ("M-g C-7" "M-g 7") ("M-g C-8" "M-g 8")
+        ("M-g C-c" "M-g c") ("M-g C-n" "M-g n") ("M-g C-p" "M-g p")))
 
-;; bind symbols to M-? with low priority
+;; Translate C-? to M-?, bound it with low priority (honor local bindings first).
 (dolist (i '("~" "!" "@" "$" "%" "^" "&" "*" "{" "}"
              "<" ">" ":" "|" "\\" "+" "=" "?"))
   (define-key god-mode-low-priority-map (kbd i)
-    'god-mode-self-insert-on-meta))
+    'god-mode-self-insert)
+  (push (list (concat "C-" i) (concat "M-" i)) god-mode-translate-alist))
 
 (dolist (b (cdr god-mode-low-priority-map))
   (define-key god-local-mode-map (char-to-string (car b))
     'god-mode-low-priority))
-
-;; Bind some second level modifier keys with C- prefix for easier
-;; god-mode access. Directly bind these to commands, instead of making
-;; it a keyboard macro so that messages work in god-mode.
-(dolist (bindings
-         '(("C-x" "0" "1" "2" "3" "9" "[" "]" "$" "," "." "?") ; C-x C-[ does not work
-           ("M-g" "1" "2" "3" "4" "5" "6" "7" "8" "c" "n" "p")))
-  (let ((prefix (car bindings))
-        (chars (cdr bindings)))
-    (dolist (i chars)
-      (define-key global-map (kbd (concat prefix " C-" i))
-        (key-binding (kbd (concat prefix " " i)))))))
-
-;; Make it so "x 4" in god mode translates to "C-x 4" prefix.
-(defun god-mode-call-with-prefix (prefix)
-  "Call god-mode key binding, as if prefix and literal key are in effect"
-  (interactive)
-  (let ((god-literal-sequence t))
-    (call-interactively (god-mode-lookup-key-sequence nil prefix))))
-(define-key global-map (kbd "C-x C-4")
-  (lambda () (interactive) (god-mode-call-with-prefix "C-x 4")))
-(define-key global-map (kbd "C-x C-5")
-  (lambda () (interactive) (god-mode-call-with-prefix "C-x 5")))
-(define-key global-map (kbd "C-x C-6")
-  (lambda () (interactive) (god-mode-call-with-prefix "C-x 6")))
-(define-key global-map (kbd "C-x C-8")
-  (lambda () (interactive) (god-mode-call-with-prefix "C-x 8")))
 
 (defun z-god-mode-enabled-hook ()
   ;; somehow this hook can be called multiple times on a buffer,
