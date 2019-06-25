@@ -63,25 +63,19 @@ SPEC could be `box', 'bar', or `hbar'."
 (setq god-exempt-major-modes nil
       god-exempt-predicates nil)
 
-;; Avoid remapped self-insert-command
-(defalias 'true-self-insert-command 'self-insert-command)
-
 (defvar god-mode-low-priority-exempt
   '(c-electric-lt-gt c-electric-brace)
-  "Commands that do not take precedence of `god-mode-low-priority-map'.")
-
-(defvar god-mode-low-priority-map (make-sparse-keymap)
-  "A low priority map that takes precedence after local maps.")
+  "Commands that do not take precedence for `god-mode-low-priority'.")
 
 (defun god-mode-low-priority ()
-  "Honor local binding first, then use `god-mode-low-priority-map'."
+  "Honor local binding first, then call `god-mode-self-insert'."
   (interactive)
   (let* ((keys (this-command-keys))
          (local-binding (local-key-binding keys))
          (binding (if (and local-binding
                            (not (memq local-binding god-mode-low-priority-exempt)))
                       local-binding
-                    (lookup-key god-mode-low-priority-map keys))))
+                    'god-mode-self-insert)))
     (unless binding (error "God: unknown binding for `%s'"  keys))
     (cond ((commandp binding t)
            (setq binding (or (command-remapping binding) binding))
@@ -97,14 +91,17 @@ SPEC could be `box', 'bar', or `hbar'."
            (set-transient-map binding nil (lambda () (setq help-form nil))))
           (t (execute-kbd-macro binding)))))
 
-(bind-keys :map god-mode-low-priority-map
-           ("q" . quoted-insert)
-           ("(" . true-self-insert-command)
+;; Avoid remapped self-insert-command
+(defalias 'true-self-insert-command 'self-insert-command)
+
+(bind-keys ("(" . true-self-insert-command)
            (")" . true-self-insert-command))
 
 (bind-keys :map god-local-mode-map
            ("i" . mortal-mode)
-           ("z" . repeat))
+           ("z" . repeat)
+           ("q" . god-mode-low-priority)
+           ("(") (")"))
 
 ;; Translate some second level modifier keys with C- prefix for easier
 ;; god-mode access. E.g. Translate "C-x C-1" to "C-x 1", so that in
@@ -117,19 +114,13 @@ SPEC could be `box', 'bar', or `hbar'."
         ("M-g C-1" "M-g 1") ("M-g C-2" "M-g 2") ("M-g C-3" "M-g 3") ("M-g C-4" "M-g 4")
         ("M-g C-5" "M-g 5") ("M-g C-6" "M-g 6") ("M-g C-7" "M-g 7") ("M-g C-8" "M-g 8")
         ("M-g C-c" "M-g c") ("M-g C-n" "M-g n") ("M-g C-p" "M-g p")
-        ("C-[" "C-M-a") ("C-]" "C-M-e") ("C-`" "C-x `") ("C-#" "C-x #")
-))
+        ("C-[" "C-M-a") ("C-]" "C-M-e") ("C-`" "C-x `") ("C-#" "C-x #")))
 
 ;; Translate C-? to M-?, bound it with low priority (honor local bindings first).
 (dolist (i '("~" "!" "@" "$" "%" "^" "&" "*" "{" "}"
              "<" ">" ":" "|" "\\" "+" "=" "?"))
-  (define-key god-mode-low-priority-map (kbd i)
-    'god-mode-self-insert)
+  (define-key god-local-mode-map (kbd i) 'god-mode-low-priority)
   (push (list (concat "C-" i) (concat "M-" i)) god-mode-translate-alist))
-
-(dolist (b (cdr god-mode-low-priority-map))
-  (define-key god-local-mode-map (char-to-string (car b))
-    'god-mode-low-priority))
 
 (defun z-god-mode-enabled-hook ()
   ;; somehow this hook can be called multiple times on a buffer,
