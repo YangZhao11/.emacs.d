@@ -6,7 +6,7 @@
 ;;; Code:
 
 (defvar like-this-try-faces
-  '(helpful-heading button)
+  '(hi-yellow hi-pink hi-green hi-blue helpful-heading button)
   "Special faces that are searched for")
 
 (defun like-this--face-matches (face)
