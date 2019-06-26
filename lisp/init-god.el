@@ -63,34 +63,6 @@ SPEC could be `box', 'bar', or `hbar'."
 (setq god-exempt-major-modes nil
       god-exempt-predicates nil)
 
-(defvar god-mode-low-priority-exempt
-  '(c-electric-lt-gt c-electric-brace)
-  "Commands that do not take precedence for `god-mode-low-priority'.")
-
-(defun god-mode-low-priority ()
-  "Honor local binding first, then call `god-mode-self-insert'."
-  (interactive)
-  (let* ((keys (this-command-keys))
-         (local-binding (local-key-binding keys))
-         (binding (if (and local-binding
-                           (not (memq local-binding god-mode-low-priority-exempt)))
-                      local-binding
-                    'god-mode-self-insert)))
-    (unless binding (error "God: unknown binding for `%s'"  keys))
-    (cond ((commandp binding t)
-           (setq binding (or (command-remapping binding) binding))
-           (setq this-original-command binding)
-           (setq this-command binding)
-           ;; `real-this-command' is used by emacs to populate
-           ;; `last-repeatable-command', which is used by `repeat'.
-           (setq real-this-command binding)
-           (call-interactively binding))
-          ((keymapp binding)
-           ;; help-form does not work, but actual key is.
-           (setq help-form `(describe-vector ,(vector binding)))
-           (set-transient-map binding nil (lambda () (setq help-form nil))))
-          (t (execute-kbd-macro binding)))))
-
 ;; Avoid remapped self-insert-command
 (defalias 'true-self-insert-command 'self-insert-command)
 
@@ -116,7 +88,7 @@ SPEC could be `box', 'bar', or `hbar'."
         ("M-g C-c" "M-g c") ("M-g C-n" "M-g n") ("M-g C-p" "M-g p")
         ("C-[" "C-M-a") ("C-]" "C-M-e") ("C-`" "C-x `") ("C-#" "C-x #")))
 
-;; Translate C-? to M-?, bound it with low priority (honor local bindings first).
+;; Translate C-? to M-?, bound it with low priority.
 (dolist (i '("~" "!" "@" "$" "%" "^" "&" "*" "{" "}"
              "<" ">" ":" "|" "\\" "+" "=" "?"))
   (define-key god-local-mode-map (kbd i) 'god-mode-low-priority)
