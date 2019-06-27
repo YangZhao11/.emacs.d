@@ -74,6 +74,8 @@ SPEC could be `box', 'bar', or `hbar'."
            ("z" . god-mode-low-priority)
            ("#" . god-mode-low-priority)
            ("q" . god-mode-low-priority)
+           ("[" . god-mode-low-priority)
+           ("]" . god-mode-low-priority)
            ("(") (")"))
 
 ;; Translate some second level modifier keys with C- prefix for easier
