@@ -15,7 +15,7 @@
     (cond ((not f) nil)
           ((symbolp f) (and (eq face f) face))
           ((listp f) (and (memq face f) face))
-          (t nil))))
+          (:else nil))))
 
 (defun like-this--next-matching-face (face)
   "Move to next place where the face matches"

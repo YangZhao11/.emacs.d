@@ -66,7 +66,7 @@ ARG is passed to respective functions mentioned here."
     (zap-to-char-matching-pairs arg char))
    ((eq char ?\ )
     (zap-to-space arg))
-   ('t
+   (:else
     (zap-up-to-char arg char))))
 
 ;;;###autoload

@@ -17,7 +17,7 @@
                       (cond
                        ((eq (local-key-binding "c") 'god-mode-self-insert) "*")
                        ((eq (local-key-binding "x") 'god-mode-self-insert) "×")
-                       (t "•"))) " ")
+                       (:else "•"))) " ")
                 face (:background "#4D88FF" :foreground "black")))
 
 (defvar z-lighter
@@ -27,7 +27,7 @@
                 ((derived-mode-p 'special-mode 'dired-mode
                                  'Info-mode 'ess-help-mode)
                  z-lighter-special)
-                (t z-lighter-emacs)))
+                (:else z-lighter-emacs)))
   "Leftmost lighter in mode line")
 
 (setq-default mode-line-format
