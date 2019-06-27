@@ -71,7 +71,8 @@ SPEC could be `box', 'bar', or `hbar'."
 
 (bind-keys :map god-local-mode-map
            ("i" . mortal-mode)
-           ("z" . repeat)
+           ("z" . god-mode-low-priority)
+           ("#" . god-mode-low-priority)
            ("q" . god-mode-low-priority)
            ("(") (")"))
 
@@ -79,14 +80,20 @@ SPEC could be `box', 'bar', or `hbar'."
 ;; god-mode access. E.g. Translate "C-x C-1" to "C-x 1", so that in
 ;; god-mode I only need to press "x 1" for this key combination.
 (setq god-mode-translate-alist
-      '(("C-x C-1" "C-x 1") ("C-x C-2" "C-x 2") ("C-x C-3" "C-x 3") ("C-x C-4" "C-x 4" t)
-        ("C-x C-5" "C-x 5" t) ("C-x C-6" "C-x 6" t) ("C-x C-7" "C-x 7") ("C-x C-8" "C-x 8" t)
-        ("C-x C-9" "C-x 9") ("C-x C-0" "C-x 0") ("C-x C-[" "C-x [") ("C-x C-]" "C-x ]")
-        ("C-x C-$" "C-x $") ("C-x C-," "C-x ,") ("C-x C-." "C-x .") ("C-x C-?" "C-x ?")
-        ("M-g C-1" "M-g 1") ("M-g C-2" "M-g 2") ("M-g C-3" "M-g 3") ("M-g C-4" "M-g 4")
-        ("M-g C-5" "M-g 5") ("M-g C-6" "M-g 6") ("M-g C-7" "M-g 7") ("M-g C-8" "M-g 8")
+      '(("C-x C-1" "C-x 1") ("C-x C-2" "C-x 2") ("C-x C-3" "C-x 3")
+        ("C-x C-4" "C-x 4" t) ("C-x C-5" "C-x 5" t) ("C-x C-6" "C-x 6" t)
+        ("C-x C-7" "C-x 7") ("C-x C-8" "C-x 8" t) ("C-x C-9" "C-x 9")
+        ("C-x C-0" "C-x 0")
+        ("C-x C-[" "C-x [") ("C-x C-]" "C-x ]")
+        ("C-x C-;" "C-x ;") ("C-x C-$" "C-x $")
+        ("C-x C-/" "C-x /") ("C-x C-_" "C-x _")
+        ("C-x C-," "C-x ,") ("C-x C-." "C-x .") ("C-x C-?" "C-x ?")
+        ("M-g C-1" "M-g 1") ("M-g C-2" "M-g 2") ("M-g C-3" "M-g 3")
+        ("M-g C-4" "M-g 4") ("M-g C-5" "M-g 5") ("M-g C-6" "M-g 6")
+        ("M-g C-7" "M-g 7") ("M-g C-8" "M-g 8")
         ("M-g C-c" "M-g c") ("M-g C-n" "M-g n") ("M-g C-p" "M-g p")
-        ("C-[" "C-M-a") ("C-]" "C-M-e") ("C-`" "C-x `") ("C-#" "C-x #")))
+        ("C-[" "C-M-a") ("C-]" "C-M-e")
+        ("C-`" "C-x `") ("C-#" "C-x #") ("C-z" "C-x z")))
 
 ;; Translate C-? to M-?, bound it with low priority.
 (dolist (i '("~" "!" "@" "$" "%" "^" "&" "*" "{" "}"
