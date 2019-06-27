@@ -69,13 +69,11 @@ SPEC could be `box', 'bar', or `hbar'."
 (bind-keys ("(" . true-self-insert-command)
            (")" . true-self-insert-command))
 
+(setq god-mode-low-priority-keys
+      '("z" "#" "q" "[" "]"))
+
 (bind-keys :map god-local-mode-map
            ("i" . mortal-mode)
-           ("z" . god-mode-low-priority)
-           ("#" . god-mode-low-priority)
-           ("q" . god-mode-low-priority)
-           ("[" . god-mode-low-priority)
-           ("]" . god-mode-low-priority)
            ("(") (")"))
 
 ;; Translate some second level modifier keys with C- prefix for easier
@@ -100,7 +98,7 @@ SPEC could be `box', 'bar', or `hbar'."
 ;; Translate C-? to M-?, bound it with low priority.
 (dolist (i '("~" "!" "@" "$" "%" "^" "&" "*" "{" "}"
              "<" ">" ":" "|" "\\" "+" "=" "?"))
-  (define-key god-local-mode-map (kbd i) 'god-mode-low-priority)
+  (push i god-mode-low-priority-keys)
   (push (list (concat "C-" i) (concat "M-" i)) god-mode-translate-alist))
 
 (defun z-god-mode-enabled-hook ()
