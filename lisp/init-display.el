@@ -62,13 +62,13 @@
 (setq-default mode-line-remote
               '(:eval (cond ((bound-and-true-p edit-server-edit-mode)
                              (propertize
-                              "☢"
+                              " ☢"
                               'mouse-face 'mode-line-highlight
                               'help-echo "Editing browser content"))
                             ((and (stringp default-directory)
                                   (file-remote-p default-directory))
                              (propertize
-                              "☯"
+                              " ®"
                               'mouse-face 'mode-line-highlight
                               'help-echo (purecopy (lambda (window _object _point)
                                                      (concat "Current directory is remote: "
