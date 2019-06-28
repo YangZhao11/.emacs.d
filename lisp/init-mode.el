@@ -520,7 +520,7 @@ jump to unfetched from: _p_ushremote  _u_pstream"
   "Concat S and COUNT, except when COUNT is nil or 0, return empty string."
   (cond ((or (not count) (= 0 count)) "")
         ((> count 0) (concat s (number-to-string count)))
-        ('t "")))
+        (:else "")))
 
 (defun z-status-str (nerror nwarning ninfo)
   "Return mode-line string for NERROR NWARNING NINFO counts."
@@ -560,7 +560,7 @@ jump to unfetched from: _p_ushremote  _u_pstream"
                flymake--backend-state)
       (cond (all-disabled "¿")
             (some-waiting (propertize "✔" 'face 'status-warning))
-            (t (z-status-str (length (gethash :error diags-by-type))
+            (:else (z-status-str (length (gethash :error diags-by-type))
                              (length (gethash :warning diags-by-type))
                              (length (gethash :note diags-by-type)))))))
 

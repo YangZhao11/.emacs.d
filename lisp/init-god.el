@@ -19,7 +19,7 @@ SPEC could be `box', 'bar', or `hbar'."
     (let* ((shape (or (car-safe spec) spec))
            (param (cond ((eq shape 'bar) "6")
                         ((eq shape 'hbar) "4")
-                        (t "2"))))
+                        (:else "2"))))
       (send-string-to-terminal
        (concat "\e[" param " q"))))))
 

@@ -129,7 +129,8 @@ root-_D_iff  log _O_utgoing   _~_:revision  i_G_nore    _g_:annotate _u_:revert
 (use-package like-this
   :bind
   ("M-n" . like-this-next)
-  ("M-p" . like-this-prev))
+  ("M-p" . like-this-prev)
+  :commands (like-this--next-face))
 
 (use-package argatpt
   ;; generate autoloads
@@ -268,7 +269,7 @@ root-_D_iff  log _O_utgoing   _~_:revision  i_G_nore    _g_:annotate _u_:revert
   (cond
    ((string-inflection-upper-camelcase-p str)
     (string-inflection-lower-camelcase-function str))
-   (t
+   (:else
     (string-inflection-upper-camelcase-function str))))
 
   (defun string-inflection-underscore-cycle ()
@@ -283,7 +284,7 @@ root-_D_iff  log _O_utgoing   _~_:revision  i_G_nore    _g_:annotate _u_:revert
   (cond
    ((string-inflection-underscore-p str)
     (string-inflection-kebab-case-function str))
-   (t
+   (:else
     (string-inflection-underscore-function str)))))
 
 (use-package grep
@@ -479,7 +480,7 @@ Toggle:
           ((eq '- arg) (hs-hide-all))
           ((and (listp arg) (numberp (car arg)))
            (hs-show-all) (hs-minor-mode -1))
-          ('t (hs-toggle-hiding)))))
+          (:else (hs-toggle-hiding)))))
 
 (use-package register-channel :ensure
   :config
@@ -540,7 +541,7 @@ current frame configuration to register 6."
                          (regexp-quote str))
                         ((<= char 26)
                          str)
-                        (t
+                        (:else
                          (concat
                           (if symbol "\\_<" "\\b")
                           str)))))
@@ -574,7 +575,7 @@ in `ctl-j-map' first."
     (cond (act (call-interactively act))
           ((string-match-p "[[:alpha:]]" (char-to-string char))
            (avy-goto-subword-1 char arg))
-          ('t (avy-goto-char char arg)))))
+          (:else (avy-goto-char char arg)))))
 
   (defun avy-show-dispatch ()
     "Show help for using `avy-dispatch-alist'"
@@ -835,7 +836,7 @@ _j_↓  _l_→   set _a_ction   _RET_:go    _o_ther    _q_uit
              (funcall isearch-regexp-function isearch-string))
             (isearch-regexp-function (word-search-regexp isearch-string))
             (isearch-regexp isearch-string)
-            (t (regexp-quote isearch-string)))))
+            (:else (regexp-quote isearch-string)))))
     (let ((case-fold-search isearch-case-fold-search)
           ;; Set `search-upper-case' to nil to not call
           ;; `isearch-no-upper-case-p' in `occur-1'.
