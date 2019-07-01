@@ -11,7 +11,7 @@
                 face (:background "#88E0C0" :foreground "black")))
 (setq z-lighter-view
   '(:propertize " ν "
-                face (:background "#E8BB74" :foreground "black")))
+                face (:background "#D8E874" :foreground "black")))
 (setq z-lighter-special
   '(:propertize (" " (:eval
                       (cond

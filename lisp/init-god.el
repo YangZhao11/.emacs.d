@@ -70,7 +70,7 @@ SPEC could be `box', 'bar', or `hbar'."
            (")" . true-self-insert-command))
 
 (setq god-mode-low-priority-keys
-      '("z" "#" "q" "[" "]"))
+      '("z" "#" "q" "[" "]" "U"))
 
 (bind-keys :map god-local-mode-map
            ("i" . mortal-mode)
