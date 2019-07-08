@@ -2,7 +2,8 @@
 
 (eval-when-compile
   (require 'use-package)
-  (require 'hydra))
+  (require 'hydra)
+  (require 'subr-x))
 
 ;; --------------------------------------------------
 ;; z-project maps buffers to project names, with caching in z-projects-alist

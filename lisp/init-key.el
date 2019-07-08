@@ -3,7 +3,8 @@
 ;;; Code:
 (eval-when-compile
   (require 'use-package)
-  (require 'hydra))
+  (require 'hydra)
+  (require 'subr-x))
 
 (eval-after-load "quail/Latin-ltx"
   '(let ((quail-current-package (assoc "TeX" quail-package-alist)))

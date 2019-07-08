@@ -880,6 +880,48 @@ section: _a_rguments  _d_escription  _D_e_t_ails  _e_xamples  _n_ote  _r_eferenc
   (add-hook 'gdb-mode-hook #'z-gdb-mode-hook))
 
 ;; TODO: hydra for table commands. Ref. "Text Based Tables" in emacs manual.
+(use-package table
+  :bind ("M-m" . hydra-table/body)
+  :config
+  (defhydra hydra-table (:color blue :hint nil)
+    "
+→ TAB    ca_p_ture  _u_n/reco_g_nize   _h_eighten  _w_iden    jus_t_ify   _i_nsert _r_ow/_c_ol   _0_: span
+← S-TAB  re_l_ease  _U_n/reco_G_ cell  _s_horten   _n_arrow   se_q_uence  ^^delete _R_ow/_C_ol   _2__3_:split
+"
+    ("SPC" nil :exit t)
+    ("p" table-capture)
+    ("l" table-release)
+    ("u" table-unrecognize-dwim)
+    ("g" table-recognize-dwim)
+    ("U" table-unrecognize-cell)
+    ("G" table-recognize-cell)
+    ("h" table-heighten-cell :exit nil)
+    ("s" table-shorten-cell :exit nil)
+    ("w" table-widen-cell :exit nil)
+    ("n" table-narrow-cell :exit nil)
+    ("t" table-justify)
+    ("i" table-insert)
+    ("q" table-insert-sequence)
+    ("r" table-insert-row)
+    ("c" table-insert-column)
+    ("R" table-delete-row)
+    ("C" table-delete-column)
+    ("0" table-span-cell)
+    ("2" table-split-cell-vertically)
+    ("3" table-split-cell-horizontally))
+
+  (defun table-recognize-dwim ()
+    (interactive)
+    (call-interactively
+     (if (use-region-p) 'table-recognize-region
+       'table-recognize-table)))
+  (defun table-unrecognize-dwim ()
+    (interactive)
+    (call-interactively
+     (if (use-region-p) 'table-unrecognize-region
+       'table-unrecognize-table)))
+
+)
 
 (use-package man
   :config

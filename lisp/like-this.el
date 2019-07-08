@@ -5,6 +5,9 @@
 
 ;;; Code:
 
+(eval-when-compile
+  (require 'subr-x))
+
 (defvar like-this-try-faces
   '(hi-yellow hi-pink hi-green hi-blue helpful-heading button)
   "Special faces that are searched for")
