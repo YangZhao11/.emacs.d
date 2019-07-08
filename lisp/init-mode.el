@@ -879,6 +879,8 @@ section: _a_rguments  _d_escription  _D_e_t_ails  _e_xamples  _n_ote  _r_eferenc
   (defun z-gdb-mode-hook () (setq gdb-many-windows t))
   (add-hook 'gdb-mode-hook #'z-gdb-mode-hook))
 
+;; TODO: hydra for table commands. Ref. "Text Based Tables" in emacs manual.
+
 (use-package man
   :config
   (defhydra hydra-man (:color pink :hint nil)

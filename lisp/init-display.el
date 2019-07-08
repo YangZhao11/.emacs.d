@@ -41,6 +41,17 @@
  (vc-mode vc-mode)
  "  " mode-line-modes mode-line-misc-info mode-line-end-spaces))
 
+;; remove input method from mode-line-mule-info, this is already
+;; handled by z-lighter.
+(setq-default mode-line-mule-info
+  `(""
+    ,(propertize
+      "%z"
+      'help-echo 'mode-line-mule-info-help-echo
+      'mouse-face 'mode-line-highlight
+      'local-map mode-line-coding-system-map)
+    (:eval (mode-line-eol-desc))))
+
 (setq-default mode-line-modified
               '(:eval (cond (buffer-read-only
                              (propertize
@@ -62,7 +73,7 @@
 (setq-default mode-line-remote
               '(:eval (cond ((bound-and-true-p edit-server-edit-mode)
                              (propertize
-                              " ☢"
+                              " ✲"
                               'mouse-face 'mode-line-highlight
                               'help-echo "Editing browser content"))
                             ((and (stringp default-directory)
@@ -74,14 +85,6 @@
                                                      (concat "Current directory is remote: "
                                                              default-directory))))))))
 
-
-;; remove input method from mode-line-mule-info, this is already
-;; handled by z-lighter.
-(setq-default mode-line-mule-info
-              (mapcar (lambda (x)
-                        (if (and (listp x) (eq (car x) 'current-input-method))
-                            "" x))
-                      (default-value 'mode-line-mule-info)))
 
 (setq overlay-arrow-string "►")
 

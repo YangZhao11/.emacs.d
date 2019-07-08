@@ -165,6 +165,13 @@ root-_D_iff  log _O_utgoing   _~_:revision  i_G_nore    _g_:annotate _u_:revert
      (easy-kill-mark-region)
      (call-interactively #'comment-dwim)))
 
+  (easy-kill-defun easy-kill-raise ()
+    "Call `raise-sexp' on current selection."
+    (interactive)
+    (save-mark-and-excursion
+      (easy-kill-mark-region)
+      (call-interactively #'raise-sexp)))
+
   (defun easy-kill-delete-pairs ()
     (interactive)
     (easy-pair-delete (prefix-numeric-value current-prefix-arg)
@@ -177,7 +184,6 @@ root-_D_iff  log _O_utgoing   _~_:revision  i_G_nore    _g_:annotate _u_:revert
   (easy-kill-defun easy-kill-inside ()
     (interactive)
     (easy-pair-kill-inside (easy-kill-get start) (easy-kill-get end)))
-  (put #'easy-kill-inside 'easy-kill-exit t)
 
   (setq easy-kill-unhighlight-key (kbd "SPC"))
   (setq easy-kill-try-things '(url email arg sexp line))
@@ -202,6 +208,7 @@ root-_D_iff  log _O_utgoing   _~_:revision  i_G_nore    _g_:annotate _u_:revert
    ("m"   . easy-kill-mark-region)
    ("i"   . easy-kill-inside)
    ("t"   . easy-kill-transpose)
+   ("r"   . easy-kill-raise)
    (";"   . easy-kill-comment-dwim)
    ("("   . easy-kill-wrap-region)
    (")"   . easy-kill-wrap-region)
@@ -625,7 +632,13 @@ Prefixed with \\[universal-argument], show dispatch action."
               ("o" . z-helpful-symbol))
   :bind (:map helpful-mode-map
               ("[" . helpful-previous-heading)
-              ("]" . helpful-next-heading))
+              ("]" . helpful-next-heading)
+              ("n" . next-line)
+              ("p" . previous-line)
+              ("{" . backward-paragraph)
+              ("}" . forward-paragraph)
+              ("f" . forward-char)
+              ("b" . backward-char))
   :config
   (defun helpful-next-heading (&optional arg)
     "Move to next heading"
