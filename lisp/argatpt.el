@@ -4,8 +4,11 @@
 
 ;;; Code:
 
+(eval-when-compile (require 'subr-x))             ; For when-let
+
 (defvar arg-separator-alist
-  '((emacs-lisp-mode . "[ \n\t]"))
+  '((emacs-lisp-mode . "[ \n\t]")
+    (lisp-interaction-mode . "[ \n\t]"))
   "Mode-specific setting for arg separator.
 See doc for `arg-separator-default' for details.")
 
