@@ -927,8 +927,8 @@ section: _a_rguments  _d_escription  _D_e_t_ails  _e_xamples  _n_ote  _r_eferenc
   :config
   (defhydra hydra-man (:color pink :hint nil)
     "
-_k_↑ _<__>_ top/bottom  _p_rev sec   _g_oto sec  _m_an        _K_ill
-_j_↓ _[__]_ button      _n_ext sec   _s_ee also  _r_eference  _q_uit
+_k_↑ _<__>_ top/bottom  S/tab:button   _g_oto sec  _m_an        _K_ill
+_j_↓ _[__]_ section                    _s_ee also  _r_eference  _q_uit
 "
     ("SPC" nil :exit t)
     ("j" scroll-up-command)
@@ -937,10 +937,8 @@ _j_↓ _[__]_ button      _n_ext sec   _s_ee also  _r_eference  _q_uit
     ("q" quit-window :exit t)
     ("<" beginning-of-buffer)
     (">" end-of-buffer)
-    ("[" backward-button)
-    ("]" forward-button)
-    ("n" Man-next-section)
-    ("p" Man-previous-section)
+    ("[" Man-previous-section)
+    ("]" Man-next-section)
     ("g" Man-goto-section)
     ("s" Man-goto-see-also-section)
     ("m" man)
@@ -950,8 +948,10 @@ _j_↓ _[__]_ button      _n_ext sec   _s_ee also  _r_eference  _q_uit
              ("j" . scroll-up-command)
              ("k" . scroll-down-command)
              ("K" . Man-kill)
-             ("[" . backward-button)
-             ("]" . forward-button)
+             ("[" . Man-previous-section)
+             ("]" . Man-next-section)
+             ("{" . backward-paragraph)
+             ("}" . forward-paragraph)
              ("x" . god-mode-self-insert)))
 
 (use-package info
@@ -959,7 +959,7 @@ _j_↓ _[__]_ button      _n_ext sec   _s_ee also  _r_eference  _q_uit
   (defhydra hydra-info (:color pink :hint nil)
     "
 ^ ^      ^^^^Reference   ^^History       ^^Tree
-_k_↑     _{__}_ move     _l_: back       _n_ext   _d_irectory _T_OC
+_k_↑     ^^^^S/TAB:↔     _l_: back       _n_ext   _d_irectory _T_OC
 _j_↓     ^^_f_ollow      _r_: forward    _p_rev   _<__>_ first/last
 ^ ^      ^^_m_enu        _L_: history    _u_p     _[__]_ back/forward
 "
@@ -974,8 +974,6 @@ _j_↓     ^^_f_ollow      _r_: forward    _p_rev   _<__>_ first/last
     (">" Info-final-node)
     ("[" Info-backward-node)
     ("]" Info-forward-node)
-    ("{" Info-prev-reference)
-    ("}" Info-next-reference)
     ("f" Info-follow-reference)
     ("l" Info-history-back)
     ("r" Info-history-forward)
@@ -985,10 +983,11 @@ _j_↓     ^^_f_ollow      _r_: forward    _p_rev   _<__>_ first/last
     ("k" Info-scroll-down))
   (bind-keys :map Info-mode-map
              ("SPC" . hydra-info/body)
-             ("{" . Info-prev-reference)
-             ("}" . Info-next-reference)
              ("j" . Info-scroll-up)
              ("k" . Info-scroll-down)
+             ("M-n")                    ; this was clone-buffer
+             ("{" . backward-paragraph)
+             ("}" . forward-paragraph)
              ("x" . god-mode-self-insert)))
 
 (use-package help-mode
@@ -996,7 +995,7 @@ _j_↓     ^^_f_ollow      _r_: forward    _p_rev   _<__>_ first/last
   (defhydra hydra-help (:color pink :hint nil)
     "
 _k_↑    _<_ _>_ top/bottom   _l_: back
-_j_↓    _[_ _]_ buttons      _r_: forward
+_j_↓    ____S/tab: buttons   _r_: forward
 "
     ("SPC" nil :exit t)
     ("<" beginning-of-buffer)
@@ -1007,9 +1006,7 @@ _j_↓    _[_ _]_ buttons      _r_: forward
     ("q" quit-window :exit t)
     ("r" help-go-forward)
     ("k" scroll-down-command)
-    ("j" scroll-up-command)
-    ("[" backward-button)
-    ("]" forward-button))
+    ("j" scroll-up-command))
 
   (bind-keys :map help-mode-map
              ("SPC" . hydra-help/body)
@@ -1017,9 +1014,83 @@ _j_↓    _[_ _]_ buttons      _r_: forward
              ("j" . scroll-up-command)
              ("n" . next-line)
              ("p" . previous-line)
-             ("[" . backward-button)
-             ("]" . forward-button)
+             ("{" . backward-paragraph)
+             ("}" . forward-paragraph)
              ("x" . god-mode-self-insert)))
+
+(use-package helpful
+  :bind (:map help-map
+              ("k" . helpful-key)
+              ("v" . z-helpful-variable)
+              ("f" . z-helpful-callable)
+              ("o" . z-helpful-symbol))
+  :bind (:map helpful-mode-map
+              ("[" . helpful-previous-heading)
+              ("]" . helpful-next-heading)
+              ("n" . next-line)
+              ("p" . previous-line)
+              ("{" . backward-paragraph)
+              ("}" . forward-paragraph)
+              ("f" . forward-char)
+              ("b" . backward-char))
+  :config
+  (defun helpful-next-heading (&optional arg)
+    "Move to next heading"
+    (interactive "^p")
+    (like-this--next-face 'helpful-heading arg))
+
+  (defun helpful-previous-heading (&optional arg)
+    "Move to previous heading"
+    (interactive "^p")
+    (like-this--next-face 'helpful-heading (- arg)))
+
+  (defun z-helpful-variable ()
+    "Forward to `helpful-variable'."
+    (interactive)
+    (let ((enable-recursive-minibuffers t))
+      (ivy-read "Describe variable: " obarray
+                :predicate #'counsel--variable-p
+                :require-match t
+                :history 'counsel-describe-symbol-history
+                :keymap counsel-describe-map
+                :preselect (ivy-thing-at-point)
+                :sort t
+                :action (lambda (x)
+                          (helpful-variable (intern x)))
+                :caller 'counsel-describe-variable)))
+
+  (defun z-helpful-callable ()
+  "Forward to `helpful-callable'.
+
+Interactive functions (i.e., commands) are highlighted according
+to `ivy-highlight-face'."
+  (interactive)
+  (let ((enable-recursive-minibuffers t))
+    (ivy-read "Describe function: " obarray
+              :predicate (lambda (sym)
+                           (or (fboundp sym)
+                               (get sym 'function-documentation)))
+              :require-match t
+              :history 'counsel-describe-symbol-history
+              :keymap counsel-describe-map
+              :preselect (funcall counsel-describe-function-preselect)
+              :sort t
+              :action (lambda (x)
+                        (helpful-callable (intern x)))
+              :caller 'counsel-describe-function)))
+    (defun z-helpful-symbol ()
+  "Forward to `helpful-symbol'."
+  (interactive)
+  (let ((enable-recursive-minibuffers t))
+    (ivy-read "Describe symbol: " obarray
+              :require-match t
+              :history 'counsel-describe-symbol-history
+              :keymap counsel-describe-map
+              :preselect (ivy-thing-at-point)
+              :sort t
+              :action (lambda (x)
+                        (helpful-symbol (intern x)))
+              :caller 'counsel-describe-function))))
 
 (use-package server :diminish (server-buffer-clients . " #"))
 (add-hook 'after-init-hook 'server-start)

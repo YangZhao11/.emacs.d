@@ -9,7 +9,7 @@
   (require 'subr-x))
 
 (defvar like-this-try-faces
-  '(hi-yellow hi-pink hi-green hi-blue helpful-heading button)
+  '(hi-yellow hi-pink hi-green hi-blue helpful-heading info-menu-header button)
   "Special faces that are searched for")
 
 (defun like-this--face-matches (face)
