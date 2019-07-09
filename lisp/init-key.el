@@ -142,36 +142,20 @@ root-_D_iff  log _O_utgoing   _~_:revision  i_G_nore    _g_:annotate _u_:revert
   :bind ([remap kill-ring-save] . easy-kill)
   :config
 
-  (easy-kill-defun easy-kill-transpose ()
+  (defmacro easy-kill-defun-on-selection (name func)
+    `(easy-kill-defun ,name ()
+       ,(concat "Call `" (symbol-name func) "' on easy-kill selection.")
     (interactive)
     (save-mark-and-excursion
      (easy-kill-mark-region)
-     (call-interactively #'anchored-transpose)))
+     (call-interactively (function ,func)))))
 
-  (easy-kill-defun easy-kill-wrap-region ()
-    (interactive)
-    (save-mark-and-excursion
-     (easy-kill-mark-region)
-     (call-interactively #'self-insert-command)))
-
-  (easy-kill-defun easy-kill-indent-region ()
-    (interactive)
-    (save-mark-and-excursion
-     (easy-kill-mark-region)
-     (call-interactively #'indent-region)))
-
-  (easy-kill-defun easy-kill-comment-dwim ()
-    (interactive)
-    (save-mark-and-excursion
-     (easy-kill-mark-region)
-     (call-interactively #'comment-dwim)))
-
-  (easy-kill-defun easy-kill-raise ()
-    "Call `raise-sexp' on current selection."
-    (interactive)
-    (save-mark-and-excursion
-      (easy-kill-mark-region)
-      (call-interactively #'raise-sexp)))
+  (easy-kill-defun-on-selection easy-kill-transpose anchored-transpose)
+  (easy-kill-defun-on-selection easy-kill-wrap-region self-insert-command)
+  (easy-kill-defun-on-selection easy-kill-indent-region indent-region)
+  (easy-kill-defun-on-selection easy-kill-comment-dwim comment-dwim)
+  (easy-kill-defun-on-selection easy-kill-raise raise-sexp)
+  (easy-kill-defun-on-selection easy-kill-inside easy-pair-kill-inside)
 
   (defun easy-kill-delete-pairs ()
     (interactive)
@@ -181,10 +165,6 @@ root-_D_iff  log _O_utgoing   _~_:revision  i_G_nore    _g_:annotate _u_:revert
     (when (eq (easy-kill-get start) (easy-kill-get end))
       (message "No selection, exit easy-kill")
       (easy-kill-exit)))
-
-  (easy-kill-defun easy-kill-inside ()
-    (interactive)
-    (easy-pair-kill-inside (easy-kill-get start) (easy-kill-get end)))
 
   (setq easy-kill-unhighlight-key (kbd "SPC"))
   (setq easy-kill-try-things '(url email arg sexp line))
