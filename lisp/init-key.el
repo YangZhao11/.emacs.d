@@ -140,22 +140,23 @@ root-_D_iff  log _O_utgoing   _~_:revision  i_G_nore    _g_:annotate _u_:revert
 (use-package easy-kill :ensure
   :functions (easy-kill-mark-region easy-kill-exit)
   :bind ([remap kill-ring-save] . easy-kill)
-  :config
-
-  (defmacro easy-kill-defun-on-selection (name func)
+  :init
+  (eval-when-compile
+    (defmacro easy-kill-defun-on-selection (name func)
     `(easy-kill-defun ,name ()
-       ,(concat "Call `" (symbol-name func) "' on easy-kill selection.")
+       ,(concat "Call `" (symbol-name (cadr func)) "' on easy-kill selection.")
     (interactive)
     (save-mark-and-excursion
      (easy-kill-mark-region)
-     (call-interactively (function ,func)))))
+     (call-interactively ,func)))))
+  :config
 
-  (easy-kill-defun-on-selection easy-kill-transpose anchored-transpose)
-  (easy-kill-defun-on-selection easy-kill-wrap-region self-insert-command)
-  (easy-kill-defun-on-selection easy-kill-indent-region indent-region)
-  (easy-kill-defun-on-selection easy-kill-comment-dwim comment-dwim)
-  (easy-kill-defun-on-selection easy-kill-raise raise-sexp)
-  (easy-kill-defun-on-selection easy-kill-inside easy-pair-kill-inside)
+  (easy-kill-defun-on-selection easy-kill-transpose #'anchored-transpose)
+  (easy-kill-defun-on-selection easy-kill-wrap-region #'self-insert-command)
+  (easy-kill-defun-on-selection easy-kill-indent-region #'indent-region)
+  (easy-kill-defun-on-selection easy-kill-comment-dwim #'comment-dwim)
+  (easy-kill-defun-on-selection easy-kill-raise #'raise-sexp)
+  (easy-kill-defun-on-selection easy-kill-inside #'easy-pair-kill-inside)
 
   (defun easy-kill-delete-pairs ()
     (interactive)
