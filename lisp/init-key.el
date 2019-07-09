@@ -389,6 +389,7 @@ use arrow keys or:  _{_ _}_ horizontal   _[_ _]_ vertical
           ("<f12>" . enlarge-window)
           ("M-9" . previous-buffer)
           ("M-0" . next-buffer)
+          ("C-x 1" . toggle-one-window)
           ("C-x 4 o" . display-buffer))
 
 (defun toggle-show-trailing-whitespace ()
