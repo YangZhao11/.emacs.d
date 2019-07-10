@@ -156,7 +156,10 @@ root-_D_iff  log _O_utgoing   _~_:revision  i_G_nore    _g_:annotate _u_:revert
   (easy-kill-defun-on-selection easy-kill-indent-region #'indent-region)
   (easy-kill-defun-on-selection easy-kill-comment-dwim #'comment-dwim)
   (easy-kill-defun-on-selection easy-kill-raise #'raise-sexp)
-  (easy-kill-defun-on-selection easy-kill-inside #'easy-pair-kill-inside)
+
+  (easy-kill-defun easy-kill-inside ()
+    (interactive)
+    (easy-pair-kill-inside (easy-kill-get start) (easy-kill-get end)))
 
   (defun easy-kill-delete-pairs ()
     (interactive)

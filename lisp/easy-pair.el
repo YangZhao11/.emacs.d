@@ -45,6 +45,23 @@ deletes."
         (delete-char arg))
       (setq deactivate-mark (not active)))))
 
+(defun easy-pair--kill-symbol-no-prefix (beg end)
+  "Kill symbol but without the prefix"
+  (let (p symbol-bounds length)
+    (save-excursion
+      (goto-char beg)
+      (skip-syntax-forward "'" end)
+      (setq p (point))
+      (setq symbol-bounds (bounds-of-thing-at-point 'symbol))
+      (when (and (< beg p)
+                 symbol-bounds
+                 (eq end (cdr symbol-bounds)))
+        (setq length (- end p))))
+    (when length
+      (goto-char p)
+      (delete-char length t)
+      length)))
+
 (defun easy-pair--kill-inside-pair (beg end)
   "Kill inside the pair between BEG and END.
 Check if characters at the boundary are matching pairs, otherwise return nil."
@@ -74,7 +91,8 @@ The boundary is assumed to be a sexp at each end."
 
 The list boundary is kept."
   (interactive "r")
-  (or (easy-pair--kill-inside-pair beg end)
+  (or (easy-pair--kill-symbol-no-prefix beg end)
+      (easy-pair--kill-inside-pair beg end)
       (easy-pair--kill-inside-sexp-pair beg end)
       (kill-region beg end)))
 
