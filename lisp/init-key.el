@@ -697,8 +697,12 @@ _j_↓  _l_→   set _a_ction   _RET_:go    _o_ther    _q_uit
          ("M-g i" . counsel-imenu)
          ("M-g r" . counsel-jump-to-register))
   :bind (:map help-map
-              ("S" . counsel-info-lookup-symbol))
+              ("S" . counsel-info-lookup-symbol)
+              ("v" . counsel-describe-variable)
+              ("f" . counsel-describe-function))
   :config
+  (setq counsel-describe-variable-function #'helpful-variable
+        counsel-describe-function-function #'helpful-callable)
 
   (defun counsel-find-file-search ()
     "Switch to `counsel-file-jump', use current directory as base."

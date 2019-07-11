@@ -1018,8 +1018,6 @@ _j_↓    ____S/tab: buttons   _r_: forward
 (use-package helpful
   :bind (:map help-map
               ("k" . helpful-key)
-              ("v" . z-helpful-variable)
-              ("f" . z-helpful-callable)
               ("o" . z-helpful-symbol))
   :bind (:map helpful-mode-map
               ("[" . helpful-previous-heading)
@@ -1041,40 +1039,6 @@ _j_↓    ____S/tab: buttons   _r_: forward
     (interactive "^p")
     (like-this--next-face 'helpful-heading (- arg)))
 
-  (defun z-helpful-variable ()
-    "Forward to `helpful-variable'."
-    (interactive)
-    (let ((enable-recursive-minibuffers t))
-      (ivy-read "Describe variable: " obarray
-                :predicate #'counsel--variable-p
-                :require-match t
-                :history 'counsel-describe-symbol-history
-                :keymap counsel-describe-map
-                :preselect (ivy-thing-at-point)
-                :sort t
-                :action (lambda (x)
-                          (helpful-variable (intern x)))
-                :caller 'counsel-describe-variable)))
-
-  (defun z-helpful-callable ()
-  "Forward to `helpful-callable'.
-
-Interactive functions (i.e., commands) are highlighted according
-to `ivy-highlight-face'."
-  (interactive)
-  (let ((enable-recursive-minibuffers t))
-    (ivy-read "Describe function: " obarray
-              :predicate (lambda (sym)
-                           (or (fboundp sym)
-                               (get sym 'function-documentation)))
-              :require-match t
-              :history 'counsel-describe-symbol-history
-              :keymap counsel-describe-map
-              :preselect (funcall counsel-describe-function-preselect)
-              :sort t
-              :action (lambda (x)
-                        (helpful-callable (intern x)))
-              :caller 'counsel-describe-function)))
     (defun z-helpful-symbol ()
   "Forward to `helpful-symbol'."
   (interactive)
