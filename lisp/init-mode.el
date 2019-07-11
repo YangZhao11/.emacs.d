@@ -4,11 +4,6 @@
   (require 'use-package)
   (require 'hydra))
 
-(add-hook 'before-save-hook #'delete-trailing-whitespace)
-(add-hook 'text-mode-hook #'abbrev-mode)
-(add-hook 'text-mode-hook #'turn-on-auto-fill)
-(add-hook 'text-mode-hook #'turn-on-flyspell)
-
 (use-package bookmark
   :config
   (defhydra hydra-bookmark-bmenu (:color pink :hint nil)
@@ -110,6 +105,7 @@ _j_↓ _z_   _J_    _d_own _>_^^    _(__)_ list  _'_: goto   p_@_p    again: _n_
                     (god-local-mode-resume)))))
 
 (use-package replace
+  :bind ("M-s M-o" . multi-occur-in-matching-buffers)
   :config
   (defhydra hydra-occur (:color pink :hint nil)
     "
@@ -140,8 +136,9 @@ _j_↓   _n_ext^^   _d_isplay^^   _o_ther window   %s(if next-error-follow-minor
              ("SPC" . hydra-occur/body)))
 
 (use-package grep
+  :bind (("M-s g"   . grep)
+         ("M-s M-g" . rgrep))
   :config
-  ;;(require 'wgrep)
   (defhydra hydra-grep (:color pink :hint nil)
   "
 _k_↑^^  _p_rev^^  _<__>_  beg/end of buffer _RET_: goto  _e_dit

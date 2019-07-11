@@ -90,9 +90,13 @@ root-_D_iff  log _O_utgoing   _~_:revision  i_G_nore    _g_:annotate _u_:revert
   (interactive "P")
   (if arg (call-interactively 'kill-buffer)
     (kill-buffer)))
+(bind-key "C-x k" 'z-kill-buffer)
+
+;; lisp is not a package
+;; (use-package lisp)
 (bind-keys ("<C-M-backspace>" . backward-kill-sexp)
-           ("C-x k"           . z-kill-buffer)
-           ("C-M-o"           . up-list))
+           ("C-M-o"           . up-list)
+           ("M-r"             . raise-sexp)) ; was move-to-window-line-top-bottom
 
 (use-package region-bindings-mode :demand
   :diminish 'region-bindings-mode
@@ -209,19 +213,45 @@ root-_D_iff  log _O_utgoing   _~_:revision  i_G_nore    _g_:annotate _u_:revert
   :bind ("M-?" . completion-at-point))
 
 (use-package simple
+  :diminish (auto-fill-function . " ¶")
+  :diminish (visual-line-mode . " ↵")
+  :diminish (next-error-follow-minor-mode . " ⇅")
+  :hook ((before-save . delete-trailing-whitespace)
+         (text-mode . turn-on-auto-fill))
   :commands (cycle-spacing-0)
   :bind (("M-SPC"       . cycle-spacing)
          ("M-\\"        . cycle-spacing-0)
          ("M-c"         . capitalize-dwim)
          ("M-l"         . downcase-dwim)
          ("M-u"         . upcase-dwim)
-         ("<XF86Eject>" . keyboard-escape-quit))
+         ("M-="         . z-toggle-activate-mark)
+         ("<XF86Eject>" . keyboard-escape-quit)
+         ([remap exchange-point-and-mark] . z-exchange-point-and-mark))
   :config
   (defun cycle-spacing-0 ()
     "Remove adjacent spaces, but undo if the command is issued a second time."
     (interactive)
     (cycle-spacing 0))
-  (diminish 'next-error-follow-minor-mode " ⇅")
+
+  ;; Decouple exchange-point-and-mark and activating region.
+  (defun z-exchange-point-and-mark (&optional arg)
+    "Like `exchange-point-and-mark', but ARG means toggle active region,
+instead of inactivate region."
+    (interactive "P")
+    (let ((active (or (and arg (not (use-region-p)))
+                      (and (not arg) (use-region-p)))))
+      (if (and (bound-and-true-p rectangle-mark-mode)
+               (fboundp 'rectangle-exchange-point-and-mark))
+          (rectangle-exchange-point-and-mark (not active))
+        (exchange-point-and-mark (not active)))))
+
+  (defun z-toggle-activate-mark ()
+    "Toggle active region, without moving the mark."
+    (interactive)
+    (if (region-active-p)
+        (deactivate-mark)
+      (activate-mark)))
+
   (bind-keys :map special-mode-map
              ("j" . scroll-up-command)
              ("k" . scroll-down-command)
@@ -279,13 +309,6 @@ root-_D_iff  log _O_utgoing   _~_:revision  i_G_nore    _g_:annotate _u_:revert
    (:else
     (string-inflection-underscore-function str)))))
 
-(use-package grep
-  :bind (("M-s g"   . grep)
-         ("M-s M-g" . rgrep)))
-
-(use-package replace
-  :bind ("M-s M-o" . multi-occur-in-matching-buffers))
-
 (use-package visual-regexp
   :bind ("C-M-%" . vr/query-replace))
 
@@ -304,28 +327,6 @@ useful when followed by an immediate kill."
 
   (setcdr (assq 'isearch-mode minor-mode-alist)
           '((:eval (if isearch-forward " »" " «")))))
-
-
-;; Decouple exchange-point-and-mark and activating region.
-(defun z-exchange-point-and-mark (&optional arg)
-  "Like `exchange-point-and-mark', but ARG means toggle active region,
-instead of inactivate region."
-  (interactive "P")
-  (let ((active (or (and arg (not (use-region-p)))
-                    (and (not arg) (use-region-p)))))
-    (if (and (bound-and-true-p rectangle-mark-mode)
-             (fboundp 'rectangle-exchange-point-and-mark))
-        (rectangle-exchange-point-and-mark (not active))
-      (exchange-point-and-mark (not active)))))
-(bind-key [remap exchange-point-and-mark] #'z-exchange-point-and-mark)
-
-(defun z-toggle-activate-mark ()
-  "Toggle active region, without moving the mark."
-  (interactive)
-  (if (region-active-p)
-      (deactivate-mark)
-    (activate-mark)))
-(bind-key "M-=" #'z-toggle-activate-mark)
 
 (use-package find-file
   :bind ("C-x C-r" . ff-find-other-file))
@@ -423,13 +424,9 @@ Toggle:
   ("SPC"  nil)
 )
 (bind-key "C-x t" 'hydra-toggle/body)
-(diminish 'abbrev-mode " ∂")
-(diminish 'auto-fill-function " ¶")
-(diminish 'visual-line-mode " ↵")
 (setq display-line-numbers-type 'relative)
 
 (use-package rainbow-mode :diminish rainbow-mode)
-
 
 (use-package beacon :ensure :diminish beacon-mode
   :commands (beacon-mode)
@@ -443,11 +440,12 @@ Toggle:
           gnus-summary-mode gnus-group-mode)))
 
 (use-package flyspell :diminish " ⍹"
-  :commands (flyspell-mode flyspell-prog-mode))
+  :commands (flyspell-mode flyspell-prog-mode)
+  :hook (text-mode . turn-on-flyspell))
 
 (use-package rainbow-delimiters :ensure
   :commands (rainbow-delimiters-mode)
-  :init  (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
+  :hook (prog-mode . rainbow-delimiters-mode))
 
 (use-package autorevert
   :diminish (auto-revert-mode . " ↻")
@@ -455,6 +453,10 @@ Toggle:
 
 (use-package whitespace :diminish " ␣"
   :commands (whitespace-mode))
+
+(use-package abbrev
+  :diminish (abbrev-mode . " ∂")
+  :hook (text-mode . abbrev-mode))
 
 (use-package hideshow :diminish (hs-minor-mode . " ◌")
   :bind ("M-$" . hs-dwim)
@@ -494,12 +496,13 @@ current frame configuration to register 6."
              ("M-g 6" . z-all-frames-to-messages-buffer)
              ("M-g 7") ("M-g 8") ("M-7") ("M-8")))
 
-(defvar ctl-j-map (make-sparse-keymap)
-  "Keymap behind C-j. Called by `z-goto-char'.")
-
 (use-package goto-chg :ensure
   :bind (("M-i" . goto-last-change)
          ("M-I" . goto-last-change-reverse)))
+
+;; For use with avy
+(defvar ctl-j-map (make-sparse-keymap)
+  "Keymap behind C-j. Called by `z-goto-char'.")
 
 (use-package avy :ensure :defer 5
   :bind ("C-j" . z-goto-char)
