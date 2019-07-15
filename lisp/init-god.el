@@ -74,6 +74,7 @@ SPEC could be `box', 'bar', or `hbar'."
 
 (bind-keys :map god-local-mode-map
            ("i" . mortal-mode)
+           ("z" . repeat)
            ("(") (")"))
 
 ;; Translate some second level modifier keys with C- prefix for easier
@@ -87,13 +88,16 @@ SPEC could be `box', 'bar', or `hbar'."
         ("C-x C-[" "C-x [") ("C-x C-]" "C-x ]")
         ("C-x C-;" "C-x ;") ("C-x C-$" "C-x $")
         ("C-x C-/" "C-x /") ("C-x C-_" "C-x _")
+        ("C-x C-*" "C-x *") ("C-x C-'" "C-x '")
+        ("C-x C-<" "C-x <")
+        ("C-x C->" "C-x >") ("C-x C-^" "C-x ^")
         ("C-x C-," "C-x ,") ("C-x C-." "C-x .") ("C-x C-?" "C-x ?")
         ("M-g C-1" "M-g 1") ("M-g C-2" "M-g 2") ("M-g C-3" "M-g 3")
         ("M-g C-4" "M-g 4") ("M-g C-5" "M-g 5") ("M-g C-6" "M-g 6")
         ("M-g C-7" "M-g 7") ("M-g C-8" "M-g 8")
         ("M-g C-c" "M-g c") ("M-g C-n" "M-g n") ("M-g C-p" "M-g p")
         ("C-[" "C-M-a") ("C-]" "C-M-e")
-        ("C-`" "C-x `") ("C-#" "C-x #") ("C-z" "C-x z")))
+        ("C-`" "C-x `") ("C-#" "C-x #")))
 
 ;; Translate C-? to M-?, bound it with low priority.
 (dolist (i '("~" "!" "@" "$" "%" "^" "&" "*" "{" "}"
