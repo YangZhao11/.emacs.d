@@ -174,8 +174,8 @@ _j_↓^^  _n_ext^^  _{__}_: prev/next file    _d_isplay
   :config
   (defhydra hydra-compilation (:color pink :hint nil)
     "
-_k_↑^^  _p_rev^^  _<__>_  beg/end of buffer _RET_: goto
-_j_↓^^  _n_ext^^  _{__}_: prev/next file
+_k_↑  _p_rev  _<__>_  beg/end of buffer _RET_: goto
+_j_↓  _n_ext  _{__}_: prev/next file
 "
     ("<" beginning-of-buffer)
     (">" end-of-buffer)
@@ -1071,6 +1071,81 @@ _j_↓    ____S/tab: buttons   _r_: forward
 (use-package calc-ext
   :config
 
+  (defhydra hydra-calc (:color pink :hint nil)
+    "
+Notations:  3.14e6    _23=-23    3:4=¾  5:2:3=5⅔      16#12C=0x12C
+            (2, 4)=2+4i  (2; 4)=2exp(i4)  [1, 2, 3]=vec  [1 .. 4)=interval
+----------------  scroll: _{_↑  _<_ _>_  ↓_}_ ---------------
+_U_n/_D_o        x_!_    _Q_:√    _F_loor    _H_yper  _S_in    _h_elp     _y_ank-to-buf
+_`_edit^^        _&_⅟.   _B_:log  _R_ound    _I_nv    _C_os    _i_nfo     _M_ore recursion  _t_rail/time
+_=_eval-_N_um    _%_mod  _L_n     ar_G_      con_J_   _T_an    _O_ption   _o_:realign
+_~_num-prefix^^  _A_bs   _E_xp    _K_eep                      _p_recision     _w_hy
+_|_concat^^      _n_±    _P_i:π   _a_lgebra
+"
+    ("SPC" nil)
+    ("!"  calc-factorial)
+    ("%"  calc-mod)
+    ("&"  calc-inv)
+    ("<"  calc-scroll-left)
+    ("="  calc-evaluate)
+    (">"  calc-scroll-right)
+    ("A"  calc-abs)
+    ("B"  calc-log)
+    ("C"  calc-cos)
+    ("D"  calc-redo)
+    ("E"  calc-exp)
+    ("F"  calc-floor)
+    ("G"  calc-argument)
+    ("H"  calc-hyperbolic)
+    ("I"  calc-inverse)
+    ("J"  calc-conj)
+    ("K"  calc-keep-args)
+    ("L"  calc-ln)
+    ("M"  calc-more-recursion-depth)
+    ("N"  calc-eval-num)
+    ("O"  calc-option)
+    ("P"  calc-pi)
+    ("Q"  calc-sqrt)
+    ("R"  calc-round)
+    ("S"  calc-sin)
+    ("T"  calc-tan)
+    ("U"  calc-undo)
+    ;; ("V"               Prefix Command)
+    ("X"               calc-call-last-kbd-macro)
+    ;; ("Y"               Prefix Command)
+    ;; ("Z"               Prefix Command)
+    ("`"               calc-edit)
+    ("a"               hydra-calc-a/body :exit t)
+    ;; ("b"               Prefix Command)
+    ;; ("c"               Prefix Command)
+    ;; ("d"               Prefix Command)
+    ;; ("f"               Prefix Command)
+    ;; ("g"               Prefix Command)
+    ("h"               calc-help-prefix)
+    ("i"               calc-info)
+    ;; ("j"               Prefix Command)
+    ;; ("k"               Prefix Command)
+    ;; ("l"               Prefix Command)
+    ;; ("m"               Prefix Command)
+    ("n"               calc-change-sign)
+    ("o"               calc-realign)
+    ("p"               calc-precision)
+    ("q"               calc-quit :exit t)
+    ;; ("r"               Prefix Command)
+    ;; ("s"               Prefix Command)
+    ("t"               hydra-calc-t/body :exit t)
+    ;; ("u"               Prefix Command)
+    ;; ("v"               Prefix Command)
+    ("w"               calc-why)
+    ("x"               calc-execute-extended-command)
+    ("y"               calc-copy-to-buffer)
+    ;; ("z"               Prefix Command)
+    ("{"               calc-scroll-down)
+    ("|"               calc-concat)
+    ("}"               calc-scroll-up)
+    ("~"               calc-num-prefix)
+    )
+
   (defhydra hydra-calc-a (:color pink :hint nil)
     "
 ^^^‗‗‗‗Logical‗‗‗‗^^^   ‗‗^^Poly‗‗     ^^             ^^          ^^         ‗‗‗‗^^Numerical‗‗‗‗
@@ -1157,6 +1232,7 @@ _{_ _}_ _b_ack/_f_orward  _o_ut      _r_/_s_earch ^^            _I_nc month^^   
   (bind-keys :map calc-mode-map
              ("a SPC" . hydra-calc-a/body)
              ("t SPC" . hydra-calc-t/body)
+             ("SPC" . hydra-calc/body)
              ("M-n" . calc-trail-next)
              ("M-p" . calc-trail-previous)))
 
