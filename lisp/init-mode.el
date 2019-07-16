@@ -1066,7 +1066,9 @@ _j_↓    ____S/tab: buttons   _r_: forward
 (add-hook 'after-init-hook 'edit-server-start)
 
 (use-package calc
-  :bind ("M-*" . calc-dispatch)
+  :bind ("M-*" . calc-dispatch))
+
+(use-package calc-ext
   :config
 
   (defhydra hydra-calc-a (:color pink :hint nil)
@@ -1075,7 +1077,7 @@ _j_↓    ____S/tab: buttons   _r_: forward
 _!_:¬   _._:remove=^^   ^_%_:rem       _f_actor      _s_implify/_e_xtended   _*_:∏      ^_R_oot              _M_ap eqn^^   _a_part
 _&_:∧   _:_if _#_:≠     _\\_:div       _i_ntegral    _m_atch^^               _+_:∑      ^_F_it curve         mi_N_/ma_X_   su_b_stitute
 _|_:∨   _{_:∈      ^^   ^_P_oly-roots  _d_erivative  _n_ormalize^^           _-_:a∑     ^_S_olve             _c_ollect^^   _A_bs
-_[_:≤   _]_:≥      ^^   ^_g_cd          ̲:subscript^^ _r_ewrite   ^^          _I_ntegral _\"_:expand formula  _T_abulate^^
+_[_:≤   _]_:≥      ^^   ^_g_cd          ̲:subscript^^ _r_ewrite   ^^         _I_ntegral _\"_:expand formula  _T_abulate^^
 _<_ _=_ _>_             ^^^            _t_aylor      _p_oly-interp ^^        alg-e_v_aluate  e_x_pand
 "
     ("SPC" nil)
