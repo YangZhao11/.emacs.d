@@ -1065,6 +1065,99 @@ _j_↓    ____S/tab: buttons   _r_: forward
           ("snippets\\.googleplex\\.com" . markdown-mode))))
 (add-hook 'after-init-hook 'edit-server-start)
 
+(use-package calc
+  :bind ("M-*" . calc-dispatch)
+  :config
+
+  (defhydra hydra-calc-a (:color pink :hint nil)
+    "
+^^^‗‗‗‗Logical‗‗‗‗^^^   ‗‗^^Poly‗‗     ^^             ^^          ^^         ‗‗‗‗^^Numerical‗‗‗‗
+_!_:¬   _._:remove=^^   ^_%_:rem       _f_actor      _s_implify/_e_xtended   _*_:∏      ^_R_oot              _M_ap eqn^^   _a_part
+_&_:∧   _:_if _#_:≠     _\\_:div       _i_ntegral    _m_atch^^               _+_:∑      ^_F_it curve         mi_N_/ma_X_   su_b_stitute
+_|_:∨   _{_:∈      ^^   ^_P_oly-roots  _d_erivative  _n_ormalize^^           _-_:a∑     ^_S_olve             _c_ollect^^   _A_bs
+_[_:≤   _]_:≥      ^^   ^_g_cd          ̲:subscript^^ _r_ewrite   ^^          _I_ntegral _\"_:expand formula  _T_abulate^^
+_<_ _=_ _>_             ^^^            _t_aylor      _p_oly-interp ^^        alg-e_v_aluate  e_x_pand
+"
+    ("SPC" nil)
+    ("!"  calc-logical-not) ("\"" calc-expand-formula) ("#"  calc-not-equal-to)
+    ("%"  calc-poly-rem) ("&"  calc-logical-and) ("*"  calc-product) ("+"  calc-summation)
+    ("-"  calc-alt-summation) ("."  calc-remove-equal) ("/"  calc-poly-div-rem) (":"  calc-logical-if)
+    ("<"  calc-less-than) ("="  calc-equal-to) (">"  calc-greater-than) ("?"  calc-a-prefix-help)
+    ("A"  calc-abs) ("F"  calc-curve-fit) ("I"  calc-num-integral) ("M"  calc-map-equation)
+    ("N"  calc-find-minimum) ("P"  calc-poly-roots) ("R"  calc-find-root) ("S"  calc-solve-for)
+    ("T"  calc-tabulate) ("X"  calc-find-maximum) ("["  calc-less-equal) ("\\" calc-poly-div)
+    ("]"  calc-greater-equal) ("_"  calc-subscript)
+    ("a"  calc-apart)
+    ("b"  calc-substitute)
+    ("c"  calc-collect)
+    ("d"  calc-derivative)
+    ("e"  calc-simplify-extended)
+    ("f"  calc-factor)
+    ("g"  calc-poly-gcd)
+    ("i"  calc-integral)
+    ("m"  calc-match)
+    ("n"  calc-normalize-rat)
+    ("p"  calc-poly-interp)
+    ("r"  calc-rewrite)
+    ("s"  calc-simplify)
+    ("t"  calc-taylor)
+    ("v"  calc-alg-evaluate)
+    ("x"  calc-expand)
+    ("{"  calc-in-set)
+    ("|"  calc-logical-or))
+
+  (defhydra hydra-calc-t (:color pink :hint nil)
+    "
+‗‗‗‗^^^^Trail^^^^‗‗‗‗‗‗‗  ^^         ^^^^         ^^            ‗‗‗‗^^Time^^‗‗‗‗
+_[_ _]_ first/last^^^^    _d_isplay  _m_arker^^   0-9:store^^   _-_/_+_ buzn day  _Y_ear    _T_an
+_p_rev/_n_ext ^^^^        _h_ere     _k_ill^^     _._:vector    _C_onvert T_Z_    _M_onth   _U_nix
+_<_ _>_ scroll ^^^^       _i_n       _y_ank^^     ^^            _N_ow^^           _W_eek    _P_art
+_{_ _}_ _b_ack/_f_orward  _o_ut      _r_/_s_earch ^^            _I_nc month^^     _D_ate    _J_ulian
+"
+    ("SPC" nil)
+    ("+"             calc-business-days-plus)
+    ("-"             calc-business-days-minus)
+    ("."             calc-full-trail-vectors)
+    ("<"             calc-trail-scroll-left)
+    (">"             calc-trail-scroll-right)
+    ("?"             calc-t-prefix-help)
+    ("C"             calc-convert-time-zones)
+    ("D"             calc-date)
+    ("I"             calc-inc-month)
+    ("J"             calc-julian)
+    ("M"             calc-new-month)
+    ("N"             calc-now)
+    ("P"             calc-date-part)
+    ("T"             calc-tan)
+    ("U"             calc-unix-time)
+    ("W"             calc-new-week)
+    ("Y"             calc-new-year)
+    ("Z"             calc-time-zone)
+    ("["             calc-trail-first)
+    ("]"             calc-trail-last)
+    ("b"             calc-trail-backward)
+    ("d"             calc-trail-display)
+    ("f"             calc-trail-forward)
+    ("h"             calc-trail-here)
+    ("i"             calc-trail-in)
+    ("k"             calc-trail-kill)
+    ("m"             calc-trail-marker)
+    ("n"             calc-trail-next)
+    ("o"             calc-trail-out)
+    ("p"             calc-trail-previous)
+    ("r"             calc-trail-isearch-backward)
+    ("s"             calc-trail-isearch-forward)
+    ("y"             calc-trail-yank)
+    ("{"             calc-trail-backward)
+    ("}"             calc-trail-forward)
+    )
+
+  (bind-keys :map calc-mode-map
+             ("a SPC" . hydra-calc-a/body)
+             ("t SPC" . hydra-calc-t/body)
+             ("M-n" . calc-trail-next)
+             ("M-p" . calc-trail-previous)))
+
 (use-package shell
   :config
   (defun z-shell-mode-hook ()
