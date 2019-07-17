@@ -1075,12 +1075,12 @@ _j_↓    ____S/tab: buttons   _r_: forward
   (defhydra hydra-calc (:color pink :hint nil)
     "
 Notations: 3.14e6  _23=-23  3:4=¾  5:2:3=5⅔  16#12C=0x12C  [1..4)=interval
-----------------  scroll: _{_↑  _<_ _>_  ↓_}_ ---------------
-_U_n/_D_o        x_!_    _Q_:√    _H_yper    _S_in   ^^(2,4)=2+4i  ^^Vector    _h_elp     _y_ank-to-buf
-_`_edit^^        _&_:x⁻¹ _B_:log  _I_nv      _C_os   ^^(2;4)=2e⁴ⁱ  ^^[1,2,3]   _i_nfo     _M_ore recursion
-_K_eep arg^^     _%_mod  _L_n     _F_loor    _T_an   con_J_ z̄      _|_concat   _O_ption   _o_:realign
-_~_num-prefix^^  _A_bs   _E_xp    _R_ound    _f_unc  ar_G_:∠z      ^^          _p_recision     _w_hy
-_=_eval-_N_um    _n_±    _P_i:π   _a_lgebra  ^^        ^^          ^^          _t_rail/time
+----------------  scr_o_ll: _{_↑  _<_ _>_  ↓_}_ ---------------
+_U_n/_D_o        x_!_    _Q_:√    _H_yper    _S_in   ^^(2,4)=2+4i  ^^Vector    _w_hy      _y_ank-to-buf
+_`_edit^^        _&_:x⁻¹ _B_:log  _I_nv      _C_os   ^^(2;4)=2e⁴ⁱ  ^^[1,2,3]   _M_:+recur
+_K_eep arg^^     _%_mod  _L_n     _F_loor    _T_an   con_J_ z̄      _|_concat   _O_ption
+_~_num-prefix^^  _A_bs   _E_xp    _R_ound    _f_unc  ar_G_:∠z      ^^          _p_recision  _h_elp
+_=_eval-_N_um    _n_±    _P_i:π   _a_lgebra  ^^      ^^           _t_rail/time _m_ode       _i_nfo
 "
     ("SPC" nil)
     ("!"  calc-factorial)
@@ -1128,7 +1128,8 @@ _=_eval-_N_um    _n_±    _P_i:π   _a_lgebra  ^^        ^^          ^^         
     ;; ("j"               Prefix Command)
     ;; ("k"               Prefix Command)
     ;; ("l"               Prefix Command)
-    ;; ("m"               Prefix Command)
+    ("m"               (progn (setq hydra-calc-paused t)
+                              (hydra-calc-m/body)))
     ("n"               calc-change-sign)
     ("o"               calc-realign)
     ("p"               calc-precision)
@@ -1154,12 +1155,12 @@ _=_eval-_N_um    _n_±    _P_i:π   _a_lgebra  ^^        ^^          ^^         
                                                (setq hydra-calc-paused nil)
                                                (hydra-calc/body)))
     "
-^^^‗‗‗‗Logical‗‗‗‗^^^   ‗‗^^Poly‗‗     ^^             ^^          ^^         ‗‗‗‗^^Numerical‗‗‗‗
-_!_:¬   _._:remove=^^   ^_%_:rem       _f_actor      _s_implify/_e_xtended   _*_:∏      ^_R_oot              _M_ap eqn^^   _a_part
-_&_:∧   _:_if _#_:≠     _\\_:div       _i_ntegral    _m_atch^^               _+_:∑      ^_F_it curve         mi_N_/ma_X_   su_b_stitute
-_|_:∨   _{_:∈      ^^   ^_P_oly-roots  _d_erivative  _n_ormalize^^           _-_:a∑     ^_S_olve             _c_ollect^^   _A_bs
-_[_:≤   _]_:≥      ^^   ^_g_cd          ̲:subscript^^ _r_ewrite   ^^         _I_ntegral _\"_:expand formula  _T_abulate^^
-_<_ _=_ _>_             ^^^            _t_aylor      _p_oly-interp ^^        alg-e_v_aluate  e_x_pand
+^^^‗‗‗‗Logical‗‗‗‗^^^   ‗‗^^Poly‗‗     ^^            ^^          ^^     ‗‗‗‗^^Numerical‗‗‗‗
+_!_:¬   _._:remove=^^   ^_%_:rem       _f_actor     _s_implify/_e_xtd   _*_:∏      ^_R_oot              _M_ap eqn^^   _a_part
+_&_:∧   _:_if _#_:≠     _\\_:div       _i_:∫        _c_ollect^^         _+_:∑      ^_F_it curve         mi_N_/ma_X_   su_b_stitute
+_|_:∨   _{_:∈      ^^   ^_P_oly-roots  _d_/dx       _n_ormalize^^       _-_:alt∑   ^_S_olve             _m_atch^^   _A_bs
+_[_:≤   _]_:≥      ^^   ^_g_cd         ̲:subᵢ^^     _r_ewrite   ^^      _I_:∫dx    _\"_:expand formula  _T_abulate^^
+_<_ _=_ _>_             ^^^            _t_aylor     e_x_pand ^^         alg-e_v_aluate  _p_oly-interp
 "
     ("SPC" nil)
     ("!"  calc-logical-not) ("\"" calc-expand-formula) ("#"  calc-not-equal-to)
@@ -1276,10 +1277,53 @@ _L_n+1      mi_n_/ma_x_   _r_e         inc-_G_amma  ^^^^             _S_cale
     ("y"             calc-bessel-Y)
     )
 
+  (defhydra hydra-calc-m (:color blue :hint nil
+                                 :after-exit (when hydra-calc-paused
+                                               (setq hydra-calc-paused nil)
+                                               (hydra-calc/body)))
+    "
+‗‗Simplify^^^^‗‗    _a_lgebra    _d_eg°   auto-re_C_ompute    _g_et modes
+_A_lg      _E_xt    _t_otal↵     _r_adπ   settings _F_ile     save _m_odes
+_B_in      _N_um    _s_mbolic    _h_ms    _M_ore recur-dep    _X_:load all
+_D_efault  N_O_     _p_olar      _i_nf∞   _S_hift prefix      always e_x_tensions
+bas_I_c    _U_nits  _v_:matrix   _f_rac   _w_orking           mode _R_ecord
+                                                             _e_mbedded-preserve modes
+"
+("A"             calc-alg-simplify-mode)
+("B"             calc-bin-simplify-mode)
+("C"             calc-auto-recompute)
+("D"             calc-default-simplify-mode)
+("E"             calc-ext-simplify-mode)
+("F"             calc-settings-file-name)
+("I"             calc-basic-simplify-mode)
+("M"             calc-more-recursion-depth)
+("N"             calc-num-simplify-mode)
+("O"             calc-no-simplify-mode)
+("R"             calc-mode-record-mode)
+("S"             calc-shift-prefix)
+("U"             calc-units-simplify-mode)
+("X"             calc-load-everything)
+("a"             calc-algebraic-mode)
+("d"             calc-degrees-mode)
+("e"             calc-embedded-preserve-modes)
+("f"             calc-frac-mode)
+("g"             calc-get-modes)
+("h"             calc-hms-mode)
+("i"             calc-infinite-mode)
+("m"             calc-save-modes)
+("p"             calc-polar-mode)
+("r"             calc-radians-mode)
+("s"             calc-symbolic-mode)
+("t"             calc-total-algebraic-mode)
+("v"             calc-matrix-mode)
+("w"             calc-working)
+("x"             calc-always-load-extensions))
+
   (bind-keys :map calc-mode-map
              ("a SPC" . hydra-calc-a/body)
              ("t SPC" . hydra-calc-t/body)
              ("f SPC" . hydra-calc-f/body)
+             ("m SPC" . hydra-calc-m/body)
              ("SPC" . hydra-calc/body)
              ("M-n" . calc-trail-next)
              ("M-p" . calc-trail-previous)))
