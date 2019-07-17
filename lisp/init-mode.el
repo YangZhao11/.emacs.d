@@ -1074,14 +1074,13 @@ _j_↓    ____S/tab: buttons   _r_: forward
 
   (defhydra hydra-calc (:color pink :hint nil)
     "
-Notations:  3.14e6    _23=-23    3:4=¾  5:2:3=5⅔      16#12C=0x12C
-            (2, 4)=2+4i  (2; 4)=2exp(i4)  [1, 2, 3]=vec  [1 .. 4)=interval
+Notations: 3.14e6  _23=-23  3:4=¾  5:2:3=5⅔  16#12C=0x12C  [1..4)=interval
 ----------------  scroll: _{_↑  _<_ _>_  ↓_}_ ---------------
-_U_n/_D_o        x_!_    _Q_:√    _F_loor    _H_yper  _S_in    _h_elp     _y_ank-to-buf
-_`_edit^^        _&_⅟.   _B_:log  _R_ound    _I_nv    _C_os    _i_nfo     _M_ore recursion  _t_rail/time
-_=_eval-_N_um    _%_mod  _L_n     ar_G_      con_J_   _T_an    _O_ption   _o_:realign
-_~_num-prefix^^  _A_bs   _E_xp    _K_eep                      _p_recision     _w_hy
-_|_concat^^      _n_±    _P_i:π   _a_lgebra
+_U_n/_D_o        x_!_    _Q_:√    _H_yper    _S_in   ^^(2,4)=2+4i  ^^Vector    _h_elp     _y_ank-to-buf
+_`_edit^^        _&_:x⁻¹ _B_:log  _I_nv      _C_os   ^^(2;4)=2e⁴ⁱ  ^^[1,2,3]   _i_nfo     _M_ore recursion
+_K_eep arg^^     _%_mod  _L_n     _F_loor    _T_an   con_J_ z̄      _|_concat   _O_ption   _o_:realign
+_~_num-prefix^^  _A_bs   _E_xp    _R_ound    _f_unc  ar_G_:∠z      ^^          _p_recision     _w_hy
+_=_eval-_N_um    _n_±    _P_i:π   _a_lgebra  ^^        ^^          ^^          _t_rail/time
 "
     ("SPC" nil)
     ("!"  calc-factorial)
@@ -1116,11 +1115,13 @@ _|_concat^^      _n_±    _P_i:π   _a_lgebra
     ;; ("Y"               Prefix Command)
     ;; ("Z"               Prefix Command)
     ("`"               calc-edit)
-    ("a"               hydra-calc-a/body :exit t)
+    ("a"               (progn (setq hydra-calc-paused t)
+                              (hydra-calc-a/body)) :exit t)
     ;; ("b"               Prefix Command)
     ;; ("c"               Prefix Command)
     ;; ("d"               Prefix Command)
-    ;; ("f"               Prefix Command)
+    ("f"               (progn (setq hydra-calc-paused t)
+                              (hydra-calc-f/body)) :exit t)
     ;; ("g"               Prefix Command)
     ("h"               calc-help-prefix)
     ("i"               calc-info)
@@ -1134,7 +1135,8 @@ _|_concat^^      _n_±    _P_i:π   _a_lgebra
     ("q"               calc-quit :exit t)
     ;; ("r"               Prefix Command)
     ;; ("s"               Prefix Command)
-    ("t"               hydra-calc-t/body :exit t)
+    ("t"               (progn (setq hydra-calc-paused t)
+                              (hydra-calc-t/body)) :exit t)
     ;; ("u"               Prefix Command)
     ;; ("v"               Prefix Command)
     ("w"               calc-why)
@@ -1147,7 +1149,10 @@ _|_concat^^      _n_±    _P_i:π   _a_lgebra
     ("~"               calc-num-prefix)
     )
 
-  (defhydra hydra-calc-a (:color pink :hint nil)
+  (defhydra hydra-calc-a (:color blue :hint nil
+                                 :after-exit (when hydra-calc-paused
+                                               (setq hydra-calc-paused nil)
+                                               (hydra-calc/body)))
     "
 ^^^‗‗‗‗Logical‗‗‗‗^^^   ‗‗^^Poly‗‗     ^^             ^^          ^^         ‗‗‗‗^^Numerical‗‗‗‗
 _!_:¬   _._:remove=^^   ^_%_:rem       _f_actor      _s_implify/_e_xtended   _*_:∏      ^_R_oot              _M_ap eqn^^   _a_part
@@ -1184,7 +1189,10 @@ _<_ _=_ _>_             ^^^            _t_aylor      _p_oly-interp ^^        alg
     ("{"  calc-in-set)
     ("|"  calc-logical-or))
 
-  (defhydra hydra-calc-t (:color pink :hint nil)
+  (defhydra hydra-calc-t (:color blue :hint nil
+                                 :after-exit (when hydra-calc-paused
+                                               (setq hydra-calc-paused nil)
+                                               (hydra-calc/body)))
     "
 ‗‗‗‗^^^^Trail^^^^‗‗‗‗‗‗‗  ^^         ^^^^         ^^            ‗‗‗‗^^Time^^‗‗‗‗
 _[_ _]_ first/last^^^^    _d_isplay  _m_arker^^   0-9:store^^   _-_/_+_ buzn day  _Y_ear    _T_an
@@ -1230,9 +1238,48 @@ _{_ _}_ _b_ack/_f_orward  _o_ut      _r_/_s_earch ^^            _I_nc month^^   
     ("}"             calc-trail-forward)
     )
 
+  (defhydra hydra-calc-f (:color blue :hint nil
+                                 :after-exit (when hydra-calc-paused
+                                               (setq hydra-calc-paused nil)
+                                               (hydra-calc/body)))
+    "
+_A_bs²      _F_loor^^     _h_=√x²+y²   _b_eta       _s_ign^^         fp=m*10ᵉ
+_e_rf       _I_nt-log^^   arc_T_an2    _g_amma      bessel-_j_/_y_   _M_antissa
+_E_xp-1     int-s_Q_rt^^  _i_m         inc-_B_eta   _[_-1 _]_+1      e_X_ponent
+_L_n+1      mi_n_/ma_x_   _r_e         inc-_G_amma  ^^^^             _S_cale
+"
+    ("SPC" nil :exit t)
+    ("A"             calc-abssqr)
+    ("B"             calc-inc-beta)
+    ("E"             calc-expm1)
+    ("F"             calc-floor)
+    ("G"             calc-inc-gamma)
+    ("I"             calc-ilog)
+    ("L"             calc-lnp1)
+    ("M"             calc-mant-part)
+    ("Q"             calc-isqrt)
+    ("S"             calc-scale-float)
+    ("T"             calc-arctan2)
+    ("X"             calc-xpon-part)
+    ("["             calc-decrement)
+    ("]"             calc-increment)
+    ("b"             calc-beta)
+    ("e"             calc-erf)
+    ("g"             calc-gamma)
+    ("h"             calc-hypot)
+    ("i"             calc-im)
+    ("j"             calc-bessel-J)
+    ("n"             calc-min)
+    ("r"             calc-re)
+    ("s"             calc-sign)
+    ("x"             calc-max)
+    ("y"             calc-bessel-Y)
+    )
+
   (bind-keys :map calc-mode-map
              ("a SPC" . hydra-calc-a/body)
              ("t SPC" . hydra-calc-t/body)
+             ("f SPC" . hydra-calc-f/body)
              ("SPC" . hydra-calc/body)
              ("M-n" . calc-trail-next)
              ("M-p" . calc-trail-previous)))
