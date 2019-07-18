@@ -1283,10 +1283,10 @@ _L_n+1      mi_n_/ma_x_   _r_e         inc-_G_amma  ^^^^             _S_cale
                                                (hydra-calc/body)))
     "
 ‗‗Simplify^^^^‗‗    _a_lgebra    _d_eg°   auto-re_C_ompute    _g_et modes
-_A_lg      _E_xt    _t_otal↵     _r_adπ   settings _F_ile     save _m_odes
-_B_in      _N_um    _s_mbolic    _h_ms    _M_ore recur-dep    _X_:load all
-_D_efault  N_O_     _p_olar      _i_nf∞   _S_hift prefix      always e_x_tensions
-bas_I_c    _U_nits  _v_:matrix   _f_rac   _w_orking           mode _R_ecord
+N_O_      _A_lg     _t_otal↵     _r_adπ   settings _F_ile     save _m_odes
+_N_um     _E_xt     _s_mbolic    _h_ms    _M_ore recur-dep    _X_:load all
+bas_I_c   _U_nits   _p_olar      _i_nf∞   _S_hift prefix      always e_x_tensions
+_B_in     _D_efault _v_:matrix   _f_rac   _w_orking           mode _R_ecord
                                                              _e_mbedded-preserve modes
 "
 ("A"             calc-alg-simplify-mode)
