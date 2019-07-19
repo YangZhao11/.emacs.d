@@ -1059,20 +1059,23 @@ _j_↓    ____S/tab: buttons   _r_: forward
 
 (use-package edit-server :ensure
   :diminish (edit-server-edit-mode)
+  :init
+  (add-hook 'after-init-hook 'edit-server-start)
   :config
   (setq edit-server-new-frame nil
         edit-server-url-major-mode-alist
         '(("mail\\.google\\.com" . html-mode)
           ("snippets\\.googleplex\\.com" . markdown-mode))))
-(add-hook 'after-init-hook 'edit-server-start)
 
 (use-package calc
-  :bind ("M-*" . calc-dispatch))
+  :bind (("<f2>" . calc)
+         ("M-*" . calc-dispatch)))
 
 (use-package calc-ext
   :config
 
-  (defvar hydra-calc-paused nil)
+  (defvar hydra-calc-paused nil
+    "Record if hydra-calc has been paused")
 
   (defhydra hydra-calc (:color pink :hint nil)
     "
@@ -1138,7 +1141,8 @@ _=_eval-_N_um    _n_±    _P_i:π   _a_lgebra  ^^      _t_rail/time  _c_onvert  
     ("p"               calc-precision)
     ("q"               calc-quit :exit t)
     ;; ("r"               Prefix Command)
-    ;; ("s"               Prefix Command)
+    ("s"               (progn (setq hydra-calc-paused t)
+                              (hydra-calc-s/body)) :exit t)
     ("t"               (progn (setq hydra-calc-paused t)
                               (hydra-calc-t/body)) :exit t)
     ;; ("u"               Prefix Command)
@@ -1289,35 +1293,35 @@ bas_I_c   _U_nits   _p_olar      _i_nf∞   _S_hift prefix      always e_x_tensi
 _B_in     _D_efault _v_:matrix   _f_rac   _w_orking           mode _R_ecord
                                                              _e_mbedded-preserve modes
 "
-("A"             calc-alg-simplify-mode)
-("B"             calc-bin-simplify-mode)
-("C"             calc-auto-recompute)
-("D"             calc-default-simplify-mode)
-("E"             calc-ext-simplify-mode)
-("F"             calc-settings-file-name)
-("I"             calc-basic-simplify-mode)
-("M"             calc-more-recursion-depth)
-("N"             calc-num-simplify-mode)
-("O"             calc-no-simplify-mode)
-("R"             calc-mode-record-mode)
-("S"             calc-shift-prefix)
-("U"             calc-units-simplify-mode)
-("X"             calc-load-everything)
-("a"             calc-algebraic-mode)
-("d"             calc-degrees-mode)
-("e"             calc-embedded-preserve-modes)
-("f"             calc-frac-mode)
-("g"             calc-get-modes)
-("h"             calc-hms-mode)
-("i"             calc-infinite-mode)
-("m"             calc-save-modes)
-("p"             calc-polar-mode)
-("r"             calc-radians-mode)
-("s"             calc-symbolic-mode)
-("t"             calc-total-algebraic-mode)
-("v"             calc-matrix-mode)
-("w"             calc-working)
-("x"             calc-always-load-extensions))
+    ("A"             calc-alg-simplify-mode)
+    ("B"             calc-bin-simplify-mode)
+    ("C"             calc-auto-recompute)
+    ("D"             calc-default-simplify-mode)
+    ("E"             calc-ext-simplify-mode)
+    ("F"             calc-settings-file-name)
+    ("I"             calc-basic-simplify-mode)
+    ("M"             calc-more-recursion-depth)
+    ("N"             calc-num-simplify-mode)
+    ("O"             calc-no-simplify-mode)
+    ("R"             calc-mode-record-mode)
+    ("S"             calc-shift-prefix)
+    ("U"             calc-units-simplify-mode)
+    ("X"             calc-load-everything)
+    ("a"             calc-algebraic-mode)
+    ("d"             calc-degrees-mode)
+    ("e"             calc-embedded-preserve-modes)
+    ("f"             calc-frac-mode)
+    ("g"             calc-get-modes)
+    ("h"             calc-hms-mode)
+    ("i"             calc-infinite-mode)
+    ("m"             calc-save-modes)
+    ("p"             calc-polar-mode)
+    ("r"             calc-radians-mode)
+    ("s"             calc-symbolic-mode)
+    ("t"             calc-total-algebraic-mode)
+    ("v"             calc-matrix-mode)
+    ("w"             calc-working)
+    ("x"             calc-always-load-extensions))
 
 
   (defhydra hydra-calc-c (:color blue :hint nil
@@ -1329,15 +1333,69 @@ _d_egree  _%_:percent  _p_oloar
 _r_adian  _F_raction   _c_lean
 _h_ms     _f_loat      _C_os
 "
-    ("%"             calc-convert-percent)
-    ("C"             calc-cos)
-    ("F"             calc-fraction)
-    ("c"             calc-clean)
-    ("d"             calc-to-degrees)
-    ("f"             calc-float)
-    ("h"             calc-to-hms)
-    ("p"             calc-polar)
-    ("r"             calc-to-radians))
+    ("%" calc-convert-percent)
+    ("C" calc-cos)
+    ("F" calc-fraction)
+    ("c" calc-clean)
+    ("d" calc-to-degrees)
+    ("f" calc-float)
+    ("h" calc-to-hms)
+    ("p" calc-polar)
+    ("r" calc-to-radians))
+
+  (defhydra hydra-calc-s (:color blue :hint nil
+                                 :after-exit (when hydra-calc-paused
+                                               (setq hydra-calc-paused nil)
+                                               (hydra-calc/body)))
+    "
+‗‗_s_tore‗‗   in_t_o        ‗v←_m_ap(v)‗^^^^^^  ‗‗Special Variables‗‗
+0..9 quick^^  _i_nsert      _&_:1/v ^^ ^^ ^^    _A_lgSimpRules  _H_olidays    _L_ineStyles
+_:_assign     _k_onstant    _+__-__*__/_        e_X_tSimpRules  _I_ntegLimit  _P_ointStyles
+_=_evalto     _l_et         _[_+1 _]_-1 ^^ ^^   _E_valRules     _U_nits       Plot_R_ejects
+_r_ecall      _p_ermanent   _|_concat ^^ ^^ ^^  _F_itRules      _D_ecls
+_c_opy        e_x_change    _n_eg^^ ^^ ^^       _G_enCount      _T_imeZone
+_d_eclare     _u_nstore     _e_dit^^ ^^ ^^
+"
+    ("&"             calc-store-inv)
+    ("*"             calc-store-times)
+    ("+"             calc-store-plus)
+    ("-"             calc-store-minus)
+    ("/"             calc-store-div)
+    (":"             calc-assign)
+    ("="             calc-evalto)
+    ("A"             calc-edit-AlgSimpRules)
+    ("D"             calc-edit-Decls)
+    ("E"             calc-edit-EvalRules)
+    ("F"             calc-edit-FitRules)
+    ("G"             calc-edit-GenCount)
+    ("H"             calc-edit-Holidays)
+    ("I"             calc-edit-IntegLimit)
+    ("L"             calc-edit-LineStyles)
+    ("P"             calc-edit-PointStyles)
+    ("R"             calc-edit-PlotRejects)
+    ("S"             calc-sin)
+    ("T"             calc-edit-TimeZone)
+    ("U"             calc-edit-Units)
+    ("X"             calc-edit-ExtSimpRules)
+    ("["             calc-store-decr)
+    ("]"             calc-store-incr)
+    ("^"             calc-store-power)
+    ("c"             calc-copy-variable)
+    ("d"             calc-declare-variable)
+    ("e"             calc-edit-variable)
+    ("i"             calc-insert-variables)
+    ("k"             calc-copy-special-constant)
+    ("l"             calc-let)
+    ("m"             calc-store-map)
+    ("n"             calc-store-neg)
+    ("p"             calc-permanent-variable)
+    ("r"             calc-recall)
+    ("s"             calc-store)
+    ("t"             calc-store-into)
+    ("u"             calc-unstore)
+    ("x"             calc-store-exchange)
+    ("|"             calc-store-concat))
+
 
   (bind-keys :map calc-mode-map
              ("a SPC" . hydra-calc-a/body)
@@ -1345,6 +1403,7 @@ _h_ms     _f_loat      _C_os
              ("f SPC" . hydra-calc-f/body)
              ("m SPC" . hydra-calc-m/body)
              ("c SPC" . hydra-calc-c/body)
+             ("s SPC" . hydra-calc-s/body)
              ("SPC" . hydra-calc/body)
              ("M-n" . calc-trail-next)
              ("M-p" . calc-trail-previous)))
