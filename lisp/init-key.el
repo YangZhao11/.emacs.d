@@ -688,6 +688,7 @@ _j_↓  _l_→   set _a_ction   _RET_:go    _o_ther    _q_uit
 
 (use-package counsel :defer 4
   :bind (([remap find-file] . counsel-find-file)
+         ("C-x C-d" . counsel-dired)
          ("C-x 8 8" . counsel-unicode-char)
          ("C-x b" . counsel-bookmark)
          ("M-x" . counsel-M-x)
@@ -754,31 +755,12 @@ _j_↓  _l_→   set _a_ction   _RET_:go    _o_ther    _q_uit
 (use-package swiper
   :bind (("M-s s" . swiper-all))
   :bind  (:map isearch-mode-map
-               ("M-s M-s" . isearch-swiper))
+               ("M-s M-s" . swiper-isearch-toggle))
   :config
   (bind-keys :map swiper-map
              ("M-%" . swiper-query-replace)
-             ("C-j" . swiper-avy))
-  (defun isearch-swiper (regexp)
-    "Like `isearch-occur', call `swiper' with current regexp."
-    (interactive
-     (list (cond
-            ((functionp isearch-regexp-function)
-             (funcall isearch-regexp-function isearch-string))
-            (isearch-regexp-function (word-search-regexp isearch-string))
-            (isearch-regexp isearch-string)
-            (:else (regexp-quote isearch-string)))))
-    (let ((case-fold-search isearch-case-fold-search)
-          ;; Set `search-upper-case' to nil to not call
-          ;; `isearch-no-upper-case-p' in `occur-1'.
-          (search-upper-case nil)
-          (search-spaces-regexp
-           (if (if isearch-regexp
-                   isearch-regexp-lax-whitespace
-                 isearch-lax-whitespace)
-               search-whitespace-regexp)))
-      (isearch-exit)
-      (swiper regexp))))
+             ("C-s" . swiper-isearch-toggle)
+             ("C-j" . swiper-avy)))
 
 (use-package xref
   :if (not (featurep 'google))
