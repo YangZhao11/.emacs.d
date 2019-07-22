@@ -696,7 +696,7 @@ _j_↓  _l_→   set _a_ction   _RET_:go    _o_ther    _q_uit
          ("M-s M-s" . counsel-grep-or-swiper)
          ("M-g m" . counsel-mark-ring)
          ("M-g i" . counsel-imenu)
-         ("M-g r" . counsel-jump-to-register))
+         ("M-g r" . counsel-register))
   :bind (:map help-map
               ("S" . counsel-info-lookup-symbol)
               ("v" . counsel-describe-variable)
@@ -726,31 +726,7 @@ _j_↓  _l_→   set _a_ction   _RET_:go    _o_ther    _q_uit
              ("C-x C-d" . counsel-find-file-dired))
 
   (setq counsel-find-file-ignore-regexp
-        "\\(?:\\`[#.]\\)\\|\\(?:[#~]\\'\\)\\|\\(\\`\\.\\)")
-
-  (defun counsel-jump-to-register ()
-    "Jump to register with markers"
-    (interactive)
-    (ivy-read
-     "Register: "
-     (mapcar (lambda (register-alist-entry)
-               (if (markerp (cdr register-alist-entry))
-                   (let* ((mk (cdr register-alist-entry))
-                          (buf (marker-buffer mk)))
-                     (concat (char-to-string (car register-alist-entry))
-                             "    "
-                             (if (null buf)
-                                 "in no buffer"
-                               (concat (buffer-name buf) ":"
-                                       (number-to-string (marker-position mk))))))))
-             register-alist)
-     :require-match t
-     :initial-input "^"
-     :history 'counsel-jump-toregister
-     :caller 'counsel-jump-toregister
-     :action (lambda (register-line)
-               (jump-to-register (elt register-line 0)))
-     )))
+        "\\(?:\\`[#.]\\)\\|\\(?:[#~]\\'\\)\\|\\(\\`\\.\\)"))
 
 (use-package swiper
   :bind (("M-s s" . swiper-all))
