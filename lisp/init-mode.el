@@ -683,12 +683,15 @@ fallback."
   ;;(setq haskell-font-lock-symbols 't)
   (add-hook 'haskell-mode-hook #'z-haskell-mode-hook))
 
+(use-package julia-repl
+  :hook (julia-mode . julia-repl-mode))
+
 ;; --------------------------------------------------
 ;; ess
 
-(use-package ess-julia
-  :config
-  (setq inferior-julia-program "~/bin/julia"))
+;; (use-package ess-julia
+;;   :config
+;;   (setq inferior-julia-program "~/bin/julia"))
 
 (use-package ess
   :commands (R R-mode)
@@ -918,7 +921,6 @@ section: _a_rguments  _d_escription  _D_e_t_ails  _e_xamples  _n_ote  _r_eferenc
     (call-interactively
      (if (use-region-p) 'table-unrecognize-region
        'table-unrecognize-table)))
-
 )
 
 (use-package man

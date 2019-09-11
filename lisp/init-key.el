@@ -336,7 +336,6 @@ useful when followed by an immediate kill."
            ("<mouse-9>" . mode-line-next-buffer))
 (bind-key "C-z" nil)
 
-
 ;; F1 for help.
 ;; (bind-key "<f2>" #'eshell)
 ;; F3 and F4 for macros
@@ -425,6 +424,12 @@ Toggle:
 )
 (bind-key "C-x t" 'hydra-toggle/body)
 (setq display-line-numbers-type 'relative)
+
+(use-package subword
+  :bind (("M-F" . subword-forward)
+         ("M-B" . subword-backward)
+         ("M-D" . subword-kill)
+         ("M-T" . subword-transpose)))
 
 (use-package rainbow-mode :diminish rainbow-mode)
 
