@@ -7,7 +7,8 @@
 (add-to-list 'exec-path "/usr/local/git/current/bin")
 (add-to-list 'exec-path "/usr/local/brew/sbin")
 (add-to-list 'exec-path "/usr/local/brew/bin")
-(setenv "PATH" (concat "/usr/local/brew/bin:/usr/local/brew/sbin:/usr/local/git/current/bin:/usr/local/bin:"
+(add-to-list 'exec-path "~/bin")
+(setenv "PATH" (concat "~/bin:/usr/local/brew/bin:/usr/local/brew/sbin:/usr/local/git/current/bin:/usr/local/bin:"
                        (getenv "PATH")))
 (setenv "LANG" "en_US.UTF-8")
 

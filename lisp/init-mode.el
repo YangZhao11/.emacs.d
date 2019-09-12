@@ -683,6 +683,11 @@ fallback."
   ;;(setq haskell-font-lock-symbols 't)
   (add-hook 'haskell-mode-hook #'z-haskell-mode-hook))
 
+(use-package julia-repl
+  :config
+  (setq julia-repl-captures
+        (list (kbd "M-x") (kbd "<home>"))))
+
 ;; --------------------------------------------------
 ;; ess
 
