@@ -70,7 +70,9 @@ SPEC could be `box', 'bar', or `hbar'."
            (")" . true-self-insert-command))
 
 (setq god-mode-low-priority-keys
-      '("z" "#" "q" "[" "]" "U"))
+      '("z" "#" "q" "[" "]" "U"
+        "~" "!" "@" "$" "%" "^" "&" "*" "{" "}"
+        "<" ">" ":" "|" "\\" "+" "=" "?"))
 
 (bind-keys :map god-local-mode-map
            ("i" . mortal-mode)
@@ -78,13 +80,14 @@ SPEC could be `box', 'bar', or `hbar'."
            ("(") (")"))
 
 ;; Translate some second level modifier keys with C- prefix for easier
-;; god-mode access. E.g. Translate "C-x C-1" to "C-x 1", so that in
-;; god-mode I only need to press "x 1" for this key combination.
+;; god-mode access.
 (setq god-mode-translate-alist
+      ;; "x 1" will trigger "C-x 1"
       '(("C-x C-1" "C-x 1") ("C-x C-2" "C-x 2") ("C-x C-3" "C-x 3")
         ("C-x C-4" "C-x 4" t) ("C-x C-5" "C-x 5" t) ("C-x C-6" "C-x 6" t)
         ("C-x C-7" "C-x 7") ("C-x C-8" "C-x 8" t) ("C-x C-9" "C-x 9")
         ("C-x C-0" "C-x 0")
+        ;; some more "x ?" for symbols
         ("C-x C-[" "C-x [") ("C-x C-]" "C-x ]")
         ("C-x C-;" "C-x ;") ("C-x C-$" "C-x $")
         ("C-x C-/" "C-x /") ("C-x C-_" "C-x _")
@@ -92,18 +95,20 @@ SPEC could be `box', 'bar', or `hbar'."
         ("C-x C-<" "C-x <")
         ("C-x C->" "C-x >") ("C-x C-^" "C-x ^")
         ("C-x C-," "C-x ,") ("C-x C-." "C-x .") ("C-x C-?" "C-x ?")
+        ;; "g g ?" -> "M-g ?"
         ("M-g C-1" "M-g 1") ("M-g C-2" "M-g 2") ("M-g C-3" "M-g 3")
         ("M-g C-4" "M-g 4") ("M-g C-5" "M-g 5") ("M-g C-6" "M-g 6")
         ("M-g C-7" "M-g 7") ("M-g C-8" "M-g 8")
         ("M-g C-c" "M-g c") ("M-g C-n" "M-g n") ("M-g C-p" "M-g p")
+        ;; use bracket for navigation
         ("C-[" "C-M-a") ("C-]" "C-M-e")
-        ("C-`" "C-x `") ("C-#" "C-x #")))
-
-;; Translate C-? to M-?, bound it with low priority.
-(dolist (i '("~" "!" "@" "$" "%" "^" "&" "*" "{" "}"
-             "<" ">" ":" "|" "\\" "+" "=" "?"))
-  (push i god-mode-low-priority-keys)
-  (push (list (concat "C-" i) (concat "M-" i)) god-mode-translate-alist))
+        ;; one-key command that makes most sense
+        ("C-`" "C-x `") ("C-#" "C-x #")
+        ;; one-key command that maps to M-?
+        ("C-~" "M-~") ("C-!" "M-!") ("C-@" "M-@") ("C-$" "M-$") ("C-%" "M-%")
+        ("C-^" "M-^") ("C-&" "M-&") ("C-*" "M-*") ("C-{" "M-{") ("C-}" "M-}")
+        ("C-<" "M-<") ("C->" "M->") ("C-:" "M-:") ("C-|" "M-|") ("C-\\" "M-\\")
+        ("C-+" "M-+") ("C-=" "M-=") ("C-?" "M-?")))
 
 (defun z-god-mode-enabled-hook ()
   ;; somehow this hook can be called multiple times on a buffer,

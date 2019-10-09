@@ -41,6 +41,18 @@
     ("`va" "\\value" nil 0)
    ))
 
+(define-abbrev-table 'Rd-mode-skeleton-abbrev-table
+  '(
+   ))
+
+(define-abbrev-table 'S+-transcript-mode-abbrev-table '())
+
+(define-abbrev-table 'SAS-listing-mode-abbrev-table '())
+
+(define-abbrev-table 'SAS-log-mode-abbrev-table '())
+
+(define-abbrev-table 'SAS-mode-abbrev-table '())
+
 (define-abbrev-table 'apropos-mode-abbrev-table '())
 
 (define-abbrev-table 'awk-mode-abbrev-table
@@ -65,9 +77,21 @@
   '(
    ))
 
+(define-abbrev-table 'calc-trail-mode-abbrev-table '())
+
 (define-abbrev-table 'calendar-mode-abbrev-table '())
 
 (define-abbrev-table 'change-log-mode-abbrev-table '())
+
+(define-abbrev-table 'citc-clients-mode-abbrev-table '())
+
+(define-abbrev-table 'citc-common-mode-abbrev-table '())
+
+(define-abbrev-table 'citc-filelog-mode-abbrev-table '())
+
+(define-abbrev-table 'citc-status-mode-abbrev-table '())
+
+(define-abbrev-table 'code-review-gerrit-comment-mode-abbrev-table '())
 
 (define-abbrev-table 'comint-mode-abbrev-table '())
 
@@ -103,7 +127,35 @@
 
 (define-abbrev-table 'eshell-mode-abbrev-table '())
 
+(define-abbrev-table 'ess-bugs-mode-abbrev-table '())
+
+(define-abbrev-table 'ess-help-mode-abbrev-table '())
+
+(define-abbrev-table 'ess-jags-mode-abbrev-table '())
+
+(define-abbrev-table 'ess-julia-help-mode-abbrev-table '())
+
 (define-abbrev-table 'ess-julia-mode-abbrev-table '())
+
+(define-abbrev-table 'ess-mode-abbrev-table '())
+
+(define-abbrev-table 'ess-r-help-mode-abbrev-table '())
+
+(define-abbrev-table 'ess-r-mode-abbrev-table '())
+
+(define-abbrev-table 'ess-r-package-menu-mode-abbrev-table '())
+
+(define-abbrev-table 'ess-r-transcript-mode-abbrev-table '())
+
+(define-abbrev-table 'ess-stata-help-mode-abbrev-table '())
+
+(define-abbrev-table 'ess-stata-mode-abbrev-table '())
+
+(define-abbrev-table 'ess-stata-transcript-mode-abbrev-table '())
+
+(define-abbrev-table 'ess-transcript-mode-abbrev-table '())
+
+(define-abbrev-table 'ess-watch-mode-abbrev-table '())
 
 (define-abbrev-table 'flycheck-error-list-mode-abbrev-table '())
 
@@ -145,6 +197,8 @@
 
 (define-abbrev-table 'godoc-mode-abbrev-table '())
 
+(define-abbrev-table 'google-lint-mode-abbrev-table '())
+
 (define-abbrev-table 'google3-build-mode-abbrev-table '())
 
 (define-abbrev-table 'grep-mode-abbrev-table '())
@@ -176,6 +230,14 @@
 (define-abbrev-table 'ibuffer-mode-abbrev-table '())
 
 (define-abbrev-table 'idl-mode-abbrev-table '())
+
+(define-abbrev-table 'inferior-ess-julia-mode-abbrev-table '())
+
+(define-abbrev-table 'inferior-ess-mode-abbrev-table '())
+
+(define-abbrev-table 'inferior-ess-r-mode-abbrev-table '())
+
+(define-abbrev-table 'inferior-ess-stata-mode-abbrev-table '())
 
 (define-abbrev-table 'inferior-haskell-mode-abbrev-table '())
 
@@ -303,6 +365,8 @@
   '(
    ))
 
+(define-abbrev-table 'sas-dir-mode-abbrev-table '())
+
 (define-abbrev-table 'select-tags-table-mode-abbrev-table '())
 
 (define-abbrev-table 'sgml-mode-abbrev-table '())
@@ -384,7 +448,6 @@
     ("sigt" "significant" nil 0)
     ("sp" "sample" nil 12)
     ("spg" "sampling" nil 23)
-    ("srp" "Server reliability problem" nil 12)
     ("statl" "statistical" nil 4)
     ("statn" "statistician" nil 0)
     ("stats" "statistics" nil 6)
@@ -403,6 +466,8 @@
 
 (define-abbrev-table 'url-cookie-mode-abbrev-table '())
 
+(define-abbrev-table 'use-package-statistics-mode-abbrev-table '())
+
 (define-abbrev-table 'vc-bzr-log-view-mode-abbrev-table '())
 
 (define-abbrev-table 'vc-git-log-edit-mode-abbrev-table '())
@@ -410,6 +475,8 @@
 (define-abbrev-table 'vc-git-log-view-mode-abbrev-table '())
 
 (define-abbrev-table 'vc-git-region-history-mode-abbrev-table '())
+
+(define-abbrev-table 'vc-hg-log-edit-mode-abbrev-table '())
 
 (define-abbrev-table 'vc-hg-log-view-mode-abbrev-table '())
 
