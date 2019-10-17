@@ -745,39 +745,35 @@ fallback."
      (concat "render(\"" buffer-file-name
              "\", output_dir = getwd())") nil 'eob))
 
-  (defun z-ess-mode-symbols ()
-    ;; ESS has some hacks on the arrow symbols, but it breaks
-    ;; terminal display. Use all our customization instead.
-    (setq prettify-symbols-alist
-          '(("%>%" . ?↦)
-            ("%T>%" . ?↧) ;↴
-            ("%<>%" . ?⇄) ;⇋⇌⇆
-            ("<-" . ?←)
-            ("->" . ?→)
-            ("<=" . ?≤)
-            (">=" . ?≥)
-            ("!=" . ?≠)
-            ("%in%" . ?∈)
-            ("%*%" . ?×)
-            ("function" . ?ƒ)))
-          ;; (append . prettify-symbols-alist)
-    (prettify-symbols-mode))
-
   (defun z-ess-mode-hook ()
     (when (string-match "\\.Rmd\\'" buffer-file-name)
       (setq-local page-delimiter "^```\\({.*}\\)?$"))
     (rainbow-delimiters-mode 1)
-    (z-ess-mode-symbols))
+    (prettify-symbols-mode 1))
 
   (defun z-inferior-ess-mode-hook ()
-    (z-ess-mode-symbols)
+    (prettify-symbols-mode 1)
     (setq-local scroll-margin 0)
     (setq-local comint-move-point-for-output t))
 
+  (setq ess-r-prettify-symbols
+        '(("%>%" . ?↦)
+          ("%T>%" . ?↧) ;↴
+          ("%<>%" . ?⇄) ;⇋⇌⇆
+          ("%<-%" ?↢)
+          ("<-" . ?←)
+          ("->" . ?→)
+          ("<=" . ?≤)
+          (">=" . ?≥)
+          ("!=" . ?≠)
+          ("%in%" . ?∈)
+          ("%*%" . ?×)
+          ("function" . ?ƒ)))
   (setq ess-use-flymake nil
         ess-use-ido nil
         ess-tab-complete-in-script 't
-        ess-busy-strings '("  " " ◴" " ◷" " ◶" " ◵"))
+        ess-busy-strings '("  " " ◴" " ◷" " ◶" " ◵")
+        ess-assign-list '(" <- " " %<-% "))
 
   ;; Make imenu recognize Rmd sections and functions. The default did not
   ;; make much sense.
@@ -799,7 +795,7 @@ fallback."
              ("_")                 ; unbind ess-smart-S-assign
              ("{") ("}")           ; unbind skeleton-pair-insert-maybe
              ("\\" . ess-smart-pipe)
-             (";" . ess-insert-assign))
+             (";" . ess-cycle-assign))
 
   (bind-keys :map inferior-ess-mode-map
              ("\C-cw" . ess-execute-screen-options)
@@ -807,7 +803,7 @@ fallback."
              ("C-x <f8>" . ess-tracebug)
              ("_")
              ("\\" . ess-smart-pipe)
-             (";" .  ess-insert-assign))
+             (";" .  ess-cycle-assign))
 
   (defhydra hydra-ess-help (:color pink :hint nil)
     "
@@ -998,7 +994,7 @@ _j_↓     ^^_f_ollow      _r_: forward    _p_rev   _<__>_ first/last
   (defhydra hydra-help (:color pink :hint nil)
     "
 _k_↑    _<_ _>_ top/bottom   _l_: back
-_j_↓    ____S/tab: buttons   _r_: forward
+_j_↓    ^^^^S/tab: buttons   _r_: forward
 "
     ("SPC" nil :exit t)
     ("<" beginning-of-buffer)
