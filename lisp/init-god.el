@@ -87,6 +87,8 @@ SPEC could be `box', 'bar', or `hbar'."
         ("C-x C-4" "C-x 4" t) ("C-x C-5" "C-x 5" t) ("C-x C-6" "C-x 6" t)
         ("C-x C-7" "C-x 7") ("C-x C-8" "C-x 8" t) ("C-x C-9" "C-x 9")
         ("C-x C-0" "C-x 0")
+        ;; g g i generates M-g i. Manually bind shift-key to M-key.
+        ("M-g" "M-g" t) ("M-g I" "M-g M-i") ("M-g V" "M-g M-v")
         ;; some more "x ?" for symbols
         ("C-x C-[" "C-x [") ("C-x C-]" "C-x ]")
         ("C-x C-;" "C-x ;") ("C-x C-$" "C-x $")
