@@ -696,14 +696,11 @@ fallback."
 ;;   :config
 ;;   (setq inferior-julia-program "~/bin/julia"))
 
-(use-package ess
-  :commands (R R-mode)
+(use-package ess-mode
   :bind ("<f5>" . z-switch-to-R)
-  :mode (("\\.Rmd\\'" . R-mode))
-  :defines ess-company-backends ess-current-process-name
+  :defines ess-local-process-name
   :functions ess-debug-command-next
-    ess-eval-line-and-step ess-eval-linewise ess-toggle-S-assign
-    ess-toggle-underscore
+    ess-eval-line-and-step ess-eval-linewise
   :config
   (defun z-switch-to-R ()
     "Go to R session or create one if none exists"
@@ -720,19 +717,19 @@ fallback."
   (defun ess-smart-pipe (arg)
     "Similar to `ess-insert-assign', but insert %>% instead."
     (interactive "p")
-    (let ((ess-assign-list `(" %>% " . ,ess-assign-list)))
+    (let ((ess-assign-list '(" %>% ")))
       (ess-insert-assign arg)))
 
   (defun ess-smart-tpipe (arg)
     "Similar to ess-insert-assign, but insert %T>% instead."
     (interactive "p")
-    (let ((ess-assign-list `(" %T>% " . ,ess-assign-list)))
+    (let ((ess-assign-list '(" %T>% ")))
       (ess-insert-assign arg)))
 
   (defun ess-debug-next-or-eval-line ()
     (interactive)
-    (let ((proc (and ess-current-process-name
-                     (get-process ess-current-process-name))))
+    (let ((proc (and ess-local-process-name
+                     (get-process ess-local-process-name))))
       (if (and proc
                (or (process-get proc 'dbg-active)
                    (process-get proc 'is-recover)))
@@ -748,13 +745,9 @@ fallback."
   (defun z-ess-mode-hook ()
     (when (string-match "\\.Rmd\\'" buffer-file-name)
       (setq-local page-delimiter "^```\\({.*}\\)?$"))
+    (setq-local tab-always-indent 'complete)
     (rainbow-delimiters-mode 1)
     (prettify-symbols-mode 1))
-
-  (defun z-inferior-ess-mode-hook ()
-    (prettify-symbols-mode 1)
-    (setq-local scroll-margin 0)
-    (setq-local comint-move-point-for-output t))
 
   (setq ess-r-prettify-symbols
         '(("%>%" . ?↦)
@@ -771,7 +764,6 @@ fallback."
           ("function" . ?ƒ)))
   (setq ess-use-flymake nil
         ess-use-ido nil
-        ess-tab-complete-in-script 't
         ess-busy-strings '("  " " ◴" " ◷" " ◶" " ◵")
         ess-assign-list '(" <- " " %<-% "))
 
@@ -780,10 +772,6 @@ fallback."
   (setq ess-imenu-S-generic-expression
         '(("Section" "^\\s-*```{r \\(\\sw[a-zA-Z0-9_.]+\\)" 1)
           ("Functions" "^\\(.+\\)[      \n]*<-[         \n]*function[ ]*(" 1)))
-
-  ;; For Rmd editing, do not treat ` as quote.
-  (modify-syntax-entry ?` "." ess-r-mode-syntax-table)
-  (modify-syntax-entry ?% "." ess-r-mode-syntax-table)
 
   (bind-keys :map ess-mode-map
              ("<f7>" . ess-show-traceback)
@@ -796,14 +784,6 @@ fallback."
              ("{") ("}")           ; unbind skeleton-pair-insert-maybe
              ("\\" . ess-smart-pipe)
              (";" . ess-cycle-assign))
-
-  (bind-keys :map inferior-ess-mode-map
-             ("\C-cw" . ess-execute-screen-options)
-             ("<f7>" . ess-show-R-traceback)
-             ("C-x <f8>" . ess-tracebug)
-             ("_")
-             ("\\" . ess-smart-pipe)
-             (";" .  ess-cycle-assign))
 
   (defhydra hydra-ess-help (:color pink :hint nil)
     "
@@ -861,8 +841,34 @@ section: _a_rguments  _d_escription  _D_e_t_ails  _e_xamples  _n_ote  _r_eferenc
              ("c" . god-mode-self-insert))
 
   (add-hook 'ess-mode-hook #'z-ess-mode-hook)
-  (add-hook 'ess-help-mode-hook #'z-ess-mode-symbols)
+  (add-hook 'ess-help-mode-hook #'prettify-symbols-mode))
+
+(use-package ess-r-mode
+  :mode (("\\.Rmd\\'" . ess-r-mode))
+  :config
+  ;; For Rmd editing, do not treat ` as quote.
+  (modify-syntax-entry ?` "." ess-r-mode-syntax-table)
+  (modify-syntax-entry ?% "." ess-r-mode-syntax-table))
+
+
+(use-package ess-inf
+  :config
+  (defun z-inferior-ess-mode-hook ()
+    (setq prettify-symbols-alist ess-r-prettify-symbols)
+    (prettify-symbols-mode 1)
+    (setq-local scroll-margin 0)
+    (setq-local comint-move-point-for-output t))
+
+  (bind-keys :map inferior-ess-mode-map
+             ("\C-cw" . ess-execute-screen-options)
+             ("<f7>" . ess-show-R-traceback)
+             ("C-x <f8>" . ess-tracebug)
+             ("_")
+             ("\\" . ess-smart-pipe)
+             (";" .  ess-cycle-assign))
+
   (add-hook 'inferior-ess-mode-hook #'z-inferior-ess-mode-hook))
+
 
 (use-package markdown-mode
   :mode ("\\.md\\'" . markdown-mode)
@@ -872,8 +878,9 @@ section: _a_rguments  _d_escription  _D_e_t_ails  _e_xamples  _n_ote  _r_eferenc
         '(1.86 1.39 1.24 1 1 0.93))
   :config
   (bind-keys :map markdown-mode-map
-             ("C-c C-m" . r-mode)))
+             ("C-c C-m" . ess-r-mode)))
 
+;; ----------------------------------------------------------
 (use-package gdb-mi
   :config
   (defun z-gdb-mode-hook () (setq gdb-many-windows t))

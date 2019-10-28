@@ -87,21 +87,17 @@ SPEC could be `box', 'bar', or `hbar'."
         ("C-x C-4" "C-x 4" t) ("C-x C-5" "C-x 5" t) ("C-x C-6" "C-x 6" t)
         ("C-x C-7" "C-x 7") ("C-x C-8" "C-x 8" t) ("C-x C-9" "C-x 9")
         ("C-x C-0" "C-x 0")
-        ;; g g i generates M-g i. Manually bind shift-key to M-key.
-        ("M-g" "M-g" t) ("M-g I" "M-g M-i") ("M-g V" "M-g M-v")
         ;; some more "x ?" for symbols
         ("C-x C-[" "C-x [") ("C-x C-]" "C-x ]")
         ("C-x C-;" "C-x ;") ("C-x C-$" "C-x $")
         ("C-x C-/" "C-x /") ("C-x C-_" "C-x _")
         ("C-x C-*" "C-x *") ("C-x C-'" "C-x '")
-        ("C-x C-<" "C-x <")
-        ("C-x C->" "C-x >") ("C-x C-^" "C-x ^")
-        ("C-x C-," "C-x ,") ("C-x C-." "C-x .") ("C-x C-?" "C-x ?")
-        ;; "g g ?" -> "M-g ?"
-        ("M-g C-1" "M-g 1") ("M-g C-2" "M-g 2") ("M-g C-3" "M-g 3")
-        ("M-g C-4" "M-g 4") ("M-g C-5" "M-g 5") ("M-g C-6" "M-g 6")
-        ("M-g C-7" "M-g 7") ("M-g C-8" "M-g 8")
-        ("M-g C-c" "M-g c") ("M-g C-n" "M-g n") ("M-g C-p" "M-g p")
+        ("C-x C-<" "C-x <") ("C-x C->" "C-x >")
+        ("C-x C-^" "C-x ^") ("C-x C-?" "C-x ?")
+        ("C-x C-," "C-x ,") ("C-x C-." "C-x .")
+        ;; "g g ?" -> "M-g ?". Manually bind shift-key to M-key for
+        ;; several cases.
+        ("M-g" "M-g" t) ("M-g I" "M-g M-i") ("M-g V" "M-g M-v")
         ;; use bracket for navigation
         ("C-[" "C-M-a") ("C-]" "C-M-e")
         ;; one-key command that makes most sense
