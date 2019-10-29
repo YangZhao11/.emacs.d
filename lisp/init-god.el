@@ -61,7 +61,8 @@ SPEC could be `box', 'bar', or `hbar'."
 
 (setq god-mod-alist '((nil . "C-") ("g" . "M-") ("h" . "C-M-")))
 (setq god-exempt-major-modes nil
-      god-exempt-predicates nil)
+      god-exempt-predicates nil
+      god-mode-can-omit-literal-key 't)
 
 ;; Avoid remapped self-insert-command
 (defalias 'true-self-insert-command 'self-insert-command)
@@ -82,22 +83,8 @@ SPEC could be `box', 'bar', or `hbar'."
 ;; Translate some second level modifier keys with C- prefix for easier
 ;; god-mode access.
 (setq god-mode-translate-alist
-      ;; "x 1" will trigger "C-x 1"
-      '(("C-x C-1" "C-x 1") ("C-x C-2" "C-x 2") ("C-x C-3" "C-x 3")
-        ("C-x C-4" "C-x 4" t) ("C-x C-5" "C-x 5" t) ("C-x C-6" "C-x 6" t)
-        ("C-x C-7" "C-x 7") ("C-x C-8" "C-x 8" t) ("C-x C-9" "C-x 9")
-        ("C-x C-0" "C-x 0")
-        ;; some more "x ?" for symbols
-        ("C-x C-[" "C-x [") ("C-x C-]" "C-x ]")
-        ("C-x C-;" "C-x ;") ("C-x C-$" "C-x $")
-        ("C-x C-/" "C-x /") ("C-x C-_" "C-x _")
-        ("C-x C-*" "C-x *") ("C-x C-'" "C-x '")
-        ("C-x C-<" "C-x <") ("C-x C->" "C-x >")
-        ("C-x C-^" "C-x ^") ("C-x C-?" "C-x ?")
-        ("C-x C-," "C-x ,") ("C-x C-." "C-x .")
-        ;; "g g ?" -> "M-g ?". Manually bind shift-key to M-key for
-        ;; several cases.
-        ("M-g" "M-g" t) ("M-g I" "M-g M-i") ("M-g V" "M-g M-v")
+      '(;; C-[ is a prefix key (ESC), remap here.
+        ("C-x C-[" "C-x [") ;;("C-x C-]" "C-x ]")
         ;; use bracket for navigation
         ("C-[" "C-M-a") ("C-]" "C-M-e")
         ;; one-key command that makes most sense
