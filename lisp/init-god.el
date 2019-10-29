@@ -89,6 +89,8 @@ SPEC could be `box', 'bar', or `hbar'."
         ("C-[" "C-M-a") ("C-]" "C-M-e")
         ;; one-key command that makes most sense
         ("C-`" "C-x `") ("C-#" "C-x #")
+        ;; C-i is interpreted as TAB, remap here.
+        ("M-g C-i" "M-g i")
         ;; one-key command that maps to M-?
         ("C-~" "M-~") ("C-!" "M-!") ("C-@" "M-@") ("C-$" "M-$") ("C-%" "M-%")
         ("C-^" "M-^") ("C-&" "M-&") ("C-*" "M-*") ("C-{" "M-{") ("C-}" "M-}")
