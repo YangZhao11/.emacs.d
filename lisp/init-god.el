@@ -28,13 +28,16 @@ SPEC could be `box', 'bar', or `hbar'."
   (dolist (f (frame-list))
     (with-selected-frame f (set-cursor-type spec))))
 
-(defvar mortal-mode-map (make-sparse-keymap)
-  "Keymap for `mortal-mode'.")
 (defun mortal-mode-exit ()
-  "Exit mortal-mode and resume god mode." (interactive)
-                          (god-local-mode-resume)
-                          (mortal-mode 0))
-(define-key mortal-mode-map (kbd "RET") 'mortal-mode-exit)
+  "Exit mortal-mode and resume god mode."
+  (interactive)
+  (god-local-mode-resume)
+  (mortal-mode 0))
+(defvar mortal-mode-map
+  (let ((m (make-sparse-keymap)))
+    (define-key m (kbd "RET") 'mortal-mode-exit)
+    m)
+  "Keymap for `mortal-mode'.")
 
 (define-minor-mode mortal-mode
   "Allow temporary departures from god-mode."
@@ -77,7 +80,6 @@ SPEC could be `box', 'bar', or `hbar'."
 
 (bind-keys :map god-local-mode-map
            ("i" . mortal-mode)
-           ("z" . repeat)
            ("(") (")"))
 
 ;; Translate some second level modifier keys with C- prefix for easier
@@ -88,7 +90,7 @@ SPEC could be `box', 'bar', or `hbar'."
         ;; use bracket for navigation
         ("C-[" "C-M-a") ("C-]" "C-M-e")
         ;; one-key command that makes most sense
-        ("C-`" "C-x `") ("C-#" "C-x #")
+        ("C-`" "C-x `") ("C-#" "C-x #") ("C-z" "C-x z")
         ;; C-i is interpreted as TAB, remap here.
         ("M-g C-i" "M-g i")
         ;; one-key command that maps to M-?
