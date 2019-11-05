@@ -1,3 +1,12 @@
+
+(defun toggle-one-window ()
+    "Change to one window (C-x 1) if applicable, otherwise show other
+buffer in other window."
+    (interactive)
+    (if (window-parent)
+        (delete-other-windows)
+      (display-buffer (other-buffer) t)))
+
 (use-package lsp-mode :diminish (lsp-mode . " £")
   :config
   (require 'lsp-ui-flycheck))

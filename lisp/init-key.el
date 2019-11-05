@@ -346,14 +346,6 @@ useful when followed by an immediate kill."
          ("S-<f8>" . gud-step)
          ("<f9>"   . gud-finish)))
 
-(defun toggle-one-window ()
-    "Change to one window (C-x 1) if applicable, otherwise show other
-buffer in other window."
-    (interactive)
-    (if (window-parent)
-        (delete-other-windows)
-      (display-buffer (other-buffer) t)))
-
 (defhydra hydra-resize-window (:color pink :hint nil)
     "
 use arrow keys or:  _{_ _}_ horizontal   _[_ _]_ vertical
@@ -373,7 +365,6 @@ use arrow keys or:  _{_ _}_ horizontal   _[_ _]_ vertical
           ("<f12>" . enlarge-window)
           ("M-9" . previous-buffer)
           ("M-0" . next-buffer)
-          ("C-x 1" . toggle-one-window)
           ("C-x 4 o" . display-buffer))
 
 (defun toggle-show-trailing-whitespace ()
