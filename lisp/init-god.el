@@ -60,7 +60,8 @@ SPEC could be `box', 'bar', or `hbar'."
 (bind-keys :map isearch-mode-map
            ("<home>" . god-mode-isearch-activate))
 (bind-keys :map god-mode-isearch-map
-           ("<home>" . god-mode-isearch-disable))
+           ("<home>" . god-mode-isearch-disable)
+           ("%" . isearch-query-replace))
 
 (setq god-mod-alist '((nil . "C-") ("g" . "M-") ("h" . "C-M-")))
 (setq god-exempt-major-modes nil
@@ -82,8 +83,6 @@ SPEC could be `box', 'bar', or `hbar'."
            ("i" . mortal-mode)
            ("(") (")"))
 
-;; Translate some second level modifier keys with C- prefix for easier
-;; god-mode access.
 (setq god-mode-translate-alist
       '(;; C-[ is a prefix key (ESC), remap here.
         ("C-x C-[" "C-x [") ;;("C-x C-]" "C-x ]")
