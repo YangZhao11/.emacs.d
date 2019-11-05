@@ -749,6 +749,8 @@ fallback."
     (rainbow-delimiters-mode 1)
     (prettify-symbols-mode 1))
 
+  (add-hook 'ess-mode-hook #'z-ess-mode-hook)
+
   (setq ess-r-prettify-symbols
         '(("%>%" . ?↦)
           ("%T>%" . ?↧) ;↴
@@ -783,8 +785,10 @@ fallback."
              ("_")                 ; unbind ess-smart-S-assign
              ("{") ("}")           ; unbind skeleton-pair-insert-maybe
              ("\\" . ess-smart-pipe)
-             (";" . ess-cycle-assign))
+             (";" . ess-cycle-assign)))
 
+(use-package ess-help
+  :config
   (defhydra hydra-ess-help (:color pink :hint nil)
     "
 _k_↑  _p_rev   _[_ _]_: _s_ection _h_elp-on-obj  _v_ignettes _/_isearch
@@ -838,10 +842,8 @@ section: _a_rguments  _d_escription  _D_e_t_ails  _e_xamples  _n_ote  _r_eferenc
              ("n" . next-line)
              ("p" . previous-line)
              ("x" . god-mode-self-insert)
-             ("c" . god-mode-self-insert))
+             ("c" . god-mode-self-insert)))
 
-  (add-hook 'ess-mode-hook #'z-ess-mode-hook)
-  (add-hook 'ess-help-mode-hook #'prettify-symbols-mode))
 
 (use-package ess-r-mode
   :mode (("\\.Rmd\\'" . ess-r-mode))
@@ -1073,7 +1075,8 @@ _j_↓    ^^^^S/tab: buttons   _r_: forward
   (setq edit-server-new-frame nil
         edit-server-url-major-mode-alist
         '(("mail\\.google\\.com" . html-mode)
-          ("snippets\\.googleplex\\.com" . markdown-mode))))
+          ("snippets\\.googleplex\\.com" . markdown-mode)
+          ("b\\.corp\\.google\\.com" . gfm-mode))))
 
 (use-package calc
   :bind (("<f2>" . calc)
@@ -1426,6 +1429,8 @@ _d_eclare     _u_nstore     _e_dit^^ ^^ ^^
   (add-hook 'shell-mode-hook #'z-shell-mode-hook)
 
   (bind-keys :map shell-mode-map
+             ("C-M-a" . comint-previous-prompt)
+             ("C-M-e" . comint-next-prompt)
              ("C-c C-l" . counsel-shell-history)))
 
 (provide 'init-mode)
