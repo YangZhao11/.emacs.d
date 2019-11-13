@@ -63,7 +63,7 @@ SPEC could be `box', 'bar', or `hbar'."
            ("<home>" . god-mode-isearch-disable)
            ("%" . isearch-query-replace))
 
-(setq god-mod-alist '((nil . "C-") ("g" . "M-") ("h" . "C-M-")))
+(setq god-mod-alist '((nil . "C-") (?g . "M-") (?h . "C-M-")))
 (setq god-exempt-major-modes nil
       god-exempt-predicates nil
       god-mode-can-omit-literal-key 't)
