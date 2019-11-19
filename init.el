@@ -148,7 +148,7 @@
  '(font-lock-keyword-face ((t (:foreground "#ECE4C0" :weight normal))))
  '(font-lock-type-face ((t (:foreground "#90B8BC"))))
  '(link ((t (:foreground "#D0BF8F" :underline t :weight normal))))
- '(mode-line ((t (:background "#203B48" :foreground "#8FB28F" :box (:line-width -1 :style released-button)))))
+ '(mode-line ((t (:background "#284460" :foreground "#8FB28F" :box (:line-width -1 :style released-button)))))
  '(org-todo ((t (:foreground "#CC9393" :underline t :weight bold))))
  '(vc-conflict-state ((t (:inherit vc-state-base :foreground "#E06050"))))
  '(vc-edited-state ((t (:inherit vc-state-base :foreground "#60CC80"))))

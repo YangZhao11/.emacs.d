@@ -880,6 +880,8 @@ section: _a_rguments  _d_escription  _D_e_t_ails  _e_xamples  _n_ote  _r_eferenc
         '(1.86 1.39 1.24 1 1 0.93))
   :config
   (bind-keys :map markdown-mode-map
+             ("C-M-a" . markdown-previous-visible-heading)
+             ("C-M-e" . markdown-next-visible-heading)
              ("C-c C-m" . ess-r-mode)))
 
 ;; ----------------------------------------------------------

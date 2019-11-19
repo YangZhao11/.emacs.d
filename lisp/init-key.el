@@ -209,9 +209,6 @@ root-_D_iff  log _O_utgoing   _~_:revision  i_G_nore    _g_:annotate _u_:revert
    ("'"   . easy-kill-wrap-region)
    ("\\"  . easy-kill-indent-region)))
 
-(use-package minibuffer
-  :bind ("M-?" . completion-at-point))
-
 (use-package simple
   :diminish (auto-fill-function . " ¶")
   :diminish (visual-line-mode . " ↵")
@@ -360,12 +357,12 @@ use arrow keys or:  _{_ _}_ horizontal   _[_ _]_ vertical
     ("<down>" enlarge-window)
     ("SPC" nil)
     ("<f10>" nil))
-(bind-keys ("<f10>" . hydra-resize-window/body)
-          ("<f11>" . shrink-window)
-          ("<f12>" . enlarge-window)
-          ("M-9" . previous-buffer)
-          ("M-0" . next-buffer)
-          ("C-x 4 o" . display-buffer))
+(bind-keys ("<f10>"   . hydra-resize-window/body)
+           ("<f11>"   . shrink-window)
+           ("<f12>"   . enlarge-window)
+           ("M-9"     . previous-buffer)
+           ("M-0"     . next-buffer)
+           ("C-x 4 o" . display-buffer))
 
 (defun toggle-show-trailing-whitespace ()
    "Toggle `show-trailing-whitespace'."
