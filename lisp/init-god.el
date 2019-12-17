@@ -63,7 +63,8 @@ SPEC could be `box', 'bar', or `hbar'."
            ("<home>" . god-mode-isearch-disable)
            ("%" . isearch-query-replace))
 
-(setq god-mod-alist '((nil . "C-") (?g . "M-") (?h . "C-M-")))
+(setq god-mod-alist-default '((nil . "C-") (?g . "M-") (?h . "C-M-")))
+(setq god-mod-alist god-mod-alist-default)
 (setq god-exempt-major-modes nil
       god-exempt-predicates nil
       god-mode-can-omit-literal-key 't)
@@ -79,8 +80,28 @@ SPEC could be `box', 'bar', or `hbar'."
         ?~ ?! ?@ ?$ ?% ?^ ?& ?* ?{ ?}
         ?< ?> ?: ?| ?\\ ?+ ?= ??))
 
+(defun god-mode-toggle-sticky-meta (arg)
+  (interactive (list (string= "M-" (cdr (assoc nil god-mod-alist)))))
+  (if arg
+      (progn (setq god-mod-alist god-mod-alist-default)
+             (define-key god-local-mode-map "g" #'god-mode-self-insert))
+    (setq god-mod-alist '((nil . "M-") (?h . "C-M-")))
+    (define-key god-local-mode-map "g" #'god-mode-toggle-sticky-meta)
+    (force-mode-line-update)))
+
+(defun god-mode-toggle-sticky-cm (arg)
+  (interactive (list (string= "C-M-" (cdr (assoc nil god-mod-alist)))))
+  (if arg
+      (progn (setq god-mod-alist god-mod-alist-default)
+             (define-key god-local-mode-map "h" #'god-mode-self-insert))
+    (setq god-mod-alist '((nil . "C-M-") (?g . "M-")))
+    (define-key god-local-mode-map "h" #'god-mode-toggle-sticky-cm)
+    (force-mode-line-update)))
+
 (bind-keys :map god-local-mode-map
            ("i" . mortal-mode)
+           ("G" . god-mode-toggle-sticky-meta)
+           ("H" . god-mode-toggle-sticky-cm)
            ("(") (")"))
 
 (setq god-mode-translate-alist

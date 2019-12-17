@@ -4,7 +4,11 @@
   '(:propertize (" " (:eval (or current-input-method-title "ε")) " ")
                 face (:background "#90E090" :foreground "black")))
 (setq z-lighter-god
-  '(:propertize " ⌘ "
+      '(:propertize ("" (:eval (let ((m (cdr (assoc nil god-mod-alist))))
+                                 (cond ((string= m "C-") " ⌘")
+                                       ((string= m "C-M-") "⌥⌘")
+                                       ('t " ⌥"))))
+                     " ")
                 face (:background "#4DB0FF" :foreground "black")))
 (setq z-lighter-mortal
   '(:propertize (" " (:eval (or current-input-method-title "ɪ")) " ")
@@ -15,8 +19,8 @@
 (setq z-lighter-special
   '(:propertize (" " (:eval
                       (cond
-                       ((eq (local-key-binding "c") 'god-mode-self-insert) "*")
-                       ((eq (local-key-binding "x") 'god-mode-self-insert) "×")
+                       ((eq (local-key-binding "x") 'god-mode-self-insert)
+                        (if (eq (local-key-binding "c") 'god-mode-self-insert) "*" "×"))
                        (:else "•"))) " ")
                 face (:background "#4D88FF" :foreground "black")))
 

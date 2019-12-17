@@ -656,6 +656,9 @@ fallback."
 
 (use-package go-mode
   :config
+  ;; treat _ as symbol but not word, so that forward-word stops at it.
+  (modify-syntax-entry ?_ "." go-mode-syntax-table)
+
   (defun z-go-mode-hook ()
     (setq tab-width 4)
     ;;(flycheck-mode)
