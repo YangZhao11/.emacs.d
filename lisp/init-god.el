@@ -86,8 +86,8 @@ SPEC could be `box', 'bar', or `hbar'."
       (progn (setq god-mod-alist god-mod-alist-default)
              (define-key god-local-mode-map "g" #'god-mode-self-insert))
     (setq god-mod-alist '((nil . "M-") (?h . "C-M-")))
-    (define-key god-local-mode-map "g" #'god-mode-toggle-sticky-meta)
-    (force-mode-line-update)))
+    (define-key god-local-mode-map "g" #'god-mode-toggle-sticky-meta))
+  (force-mode-line-update))
 
 (defun god-mode-toggle-sticky-cm (arg)
   (interactive (list (string= "C-M-" (cdr (assoc nil god-mod-alist)))))
@@ -95,8 +95,8 @@ SPEC could be `box', 'bar', or `hbar'."
       (progn (setq god-mod-alist god-mod-alist-default)
              (define-key god-local-mode-map "h" #'god-mode-self-insert))
     (setq god-mod-alist '((nil . "C-M-") (?g . "M-")))
-    (define-key god-local-mode-map "h" #'god-mode-toggle-sticky-cm)
-    (force-mode-line-update)))
+    (define-key god-local-mode-map "h" #'god-mode-toggle-sticky-cm))
+    (force-mode-line-update))
 
 (bind-keys :map god-local-mode-map
            ("i" . mortal-mode)
