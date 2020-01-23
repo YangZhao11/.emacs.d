@@ -775,7 +775,7 @@ fallback."
   ;; Make imenu recognize Rmd sections and functions. The default did not
   ;; make much sense.
   (setq ess-imenu-S-generic-expression
-        '(("Section" "^\\s-*```{r \\(\\sw[a-zA-Z0-9_.]+\\)" 1)
+        '(("Sections" "^\\s-*```{r \\(\\sw[a-zA-Z0-9_.]+\\)" 1)
           ("Functions" "^\\(.+\\)[      \n]*<-[         \n]*function[ ]*(" 1)))
 
   (bind-keys :map ess-mode-map
@@ -787,6 +787,7 @@ fallback."
              ("C-c C-m" . markdown-mode)
              ("_")                 ; unbind ess-smart-S-assign
              ("{") ("}")           ; unbind skeleton-pair-insert-maybe
+             ("M-j")
              ("\\" . ess-smart-pipe)
              (";" . ess-cycle-assign)))
 
@@ -1084,8 +1085,7 @@ _j_↓    ^^^^S/tab: buttons   _r_: forward
           ("b\\.corp\\.google\\.com" . gfm-mode))))
 
 (use-package calc
-  :bind (("<f2>" . calc)
-         ("M-*" . calc-dispatch)))
+  :bind (("M-*" . calc-dispatch)))
 
 (use-package calc-ext
   :config
