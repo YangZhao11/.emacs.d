@@ -23,7 +23,7 @@
 
 (defhydra hydra-ctl-x-r (:color blue :hint nil)
   "
-^^Rectangle^^‗‗‗‗‗‗‗‗‗‗‗‗‗^^   ^^Register^^‗‗save‗‗‗‗‗‗‗‗‗^^  ^^Bookmark‗‗‗‗‗‗
+┌─────^^Rectangle^^──────┐^^   ^^Register^^‗‗save‗‗‗‗‗‗‗‗‗^^  ^^Bookmark‗‗‗‗‗‗
 _c_lear     _N_umber-lines^^   _+_: inc^^    _SPC_: point     _m_: set
 _d_elete    _o_pen  s_t_ring   _i_nsert^^    _f_rameset       _b_: jump
 _k_ill      _y_ank^^           _j_ump^^      _w_indow-config  _l_ist
@@ -329,12 +329,12 @@ useful when followed by an immediate kill."
   :bind ("C-x C-r" . ff-find-other-file))
 
 (bind-keys ("C-x 9" . delete-other-windows-vertically)
+           ("C-x C-0")                  ; unbind text-scale-adjust
            ("<mouse-8>" . mode-line-previous-buffer)
            ("<mouse-9>" . mode-line-next-buffer))
 (bind-key "C-z" nil)
 
 ;; F1 for help.
-;; (bind-key "<f2>" #'eshell)
 ;; F3 and F4 for macros
 (use-package gud
   :bind (("<f7>"   . gud-up)
@@ -409,8 +409,9 @@ Toggle:
   ("W"    superword-mode)
   ("y"    flyspell-mode)
   ("SPC"  nil)
+  ("<f2>" nil)
 )
-(bind-key "C-x t" 'hydra-toggle/body)
+(bind-key "<f2>" 'hydra-toggle/body)
 (setq display-line-numbers-type 'relative)
 
 (use-package subword
@@ -578,13 +579,13 @@ in `ctl-j-map' first."
         "  "))))
 
 (use-package ace-window :ensure :defer 6
-  :bind* (("M-j" . z-ace-window)
-          ("M-J" . ace-swap-window))
+  :bind (("M-j" . z-ace-window)
+         ("M-J" . ace-swap-window))
   :config
   (setq aw-scope 'frame
         aw-background nil
         aw-keys '(?j ?d ?k ?f ?g ?h ?s ?l ?a ?\;))
-
+  (push "*Placeholder*" aw-ignored-buffers)
   (defun z-ace-window (arg)
   "Select a window.
 Perform an action based on ARG described below.
@@ -604,7 +605,16 @@ Prefixed with \\[universal-argument], show dispatch action."
   :bind ("C-x d" . find-name-dired))
 
 (use-package imenu-anywhere
-  :bind ("M-g M-i" . ivy-imenu-anywhere))
+  :bind ("M-g M-i" . ivy-imenu-anywhere)
+  :config
+  (defun imenu-anywhere-transformer (i)
+    (save-match-data
+      (string-match "^\\([^:]+\\): \\(\\w+/\\)?\\(.*\\)" i)
+      (let* ((m (match-string 2 i))
+             (c (if m (substring m 0 (1- (length m))) "Functions"))
+             (rep (assoc c counsel-imenu-category-alist)))
+        (if rep (concat (match-string 1 i) ": " (cdr rep) " " (match-string 3 i)) i))))
+  (ivy-set-display-transformer 'ivy-imenu-anywhere 'imenu-anywhere-transformer))
 
 (use-package recentf
   :config
@@ -719,7 +729,20 @@ _j_↓  _l_→   set _a_ction   _RET_:go    _o_ther    _q_uit
              ("C-x C-d" . counsel-find-file-dired))
 
   (setq counsel-find-file-ignore-regexp
-        "\\(?:\\`[#.]\\)\\|\\(?:[#~]\\'\\)\\|\\(\\`\\.\\)"))
+        "\\(?:\\`[#.]\\)\\|\\(?:[#~]\\'\\)\\|\\(\\`\\.\\)")
+
+  (setq counsel-imenu-category-alist
+        `(("Functions" . ,(propertize "ƒ" 'face 'font-lock-function-name-face))
+          ("Packages"  . ,(propertize "℗" 'face 'font-lock-keyword-face))
+          ("Sections"  . ,(propertize "§" 'face 'font-lock-constant-face))
+          ("Types"     . ,(propertize "ᴛ" 'face 'font-lock-type-face))
+          ("Variables" . ,(propertize "=" 'face 'font-lock-variable-name-face))))
+  (defun counsel-imenu-transformer (i)
+    (save-match-data
+      (string-match "^\\(\\w+\\): \\(.*\\)" i)
+      (let ((rep (assoc (match-string 1 i) counsel-imenu-category-alist)))
+        (if rep (concat (cdr rep) " " (match-string 2 i)) i))))
+  (ivy-set-display-transformer 'counsel-imenu 'counsel-imenu-transformer))
 
 (use-package swiper
   :bind (("M-s s" . swiper-all))

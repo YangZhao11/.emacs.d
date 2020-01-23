@@ -59,7 +59,7 @@
 (setq-default mode-line-modified
               '(:eval (cond (buffer-read-only
                              (propertize
-                              "♢"
+                              "∅"
                               'help-echo 'mode-line-read-only-help-echo
                               'local-map (purecopy (make-mode-line-mouse-map
                                                     'mouse-1
@@ -72,7 +72,7 @@
                               'local-map (purecopy (make-mode-line-mouse-map
                                                     'mouse-1 #'mode-line-toggle-modified))
                               'mouse-face 'mode-line-highlight))
-                            (:else " "))))
+                            (:else "♢"))))
 
 (setq-default mode-line-remote
               '(:eval (cond ((bound-and-true-p edit-server-edit-mode)

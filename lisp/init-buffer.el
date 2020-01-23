@@ -123,7 +123,7 @@
 
   (defhydra hydra-ibuffer (:color pink :hint nil)
     "
-_s_ort     _D_elete  _v_iew     ^^  _Q_uery      ‗Toggle^^‗  _F_:shell
+_s_ort     _D_elete  _v_iew     ^^  _Q_uery      ┌Toggle^^┐  _F_:shell
 _/_ filter _S_ave    _H_:other f^^  _r_eplace    _T_:RdOnly  _X_:pipe
 _%_ regex  re_V_ert  _o_ther win^^  _I_:qr-regex _M_odified  _N_:replace
 _*_ mark   _R_ename  vie_W_-_E_val  _O_ccur      _t_:mark    copy _B_name
@@ -269,7 +269,8 @@ _<_ size _>_       _c_ontent    proc_E_ss    _↑_ _p_op^^       _P_op \\:clear
              ("C-x C-j" . ibuffer-dired-jump)
              ("C-x 4 j" . ibuffer-dired-jump-other-window)
 
-             ("M-o" . nil)             ; ibuffer-visit-buffer-1-window
+             ("M-o")             ; ibuffer-visit-buffer-1-window
+             ("M-j")
              ("[" . ibuffer-backward-filter-group)
              ("]" . ibuffer-forward-filter-group)
              ("z" . ibuffer-do-kill-on-deletion-marks)
