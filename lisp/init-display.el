@@ -65,6 +65,10 @@
                                                     'mouse-1
                                                     #'mode-line-toggle-read-only))
                               'mouse-face 'mode-line-highlight))
+                            ((derived-mode-p 'comint-mode)
+                             (propertize
+                              "∞"
+                              'help-echo "Interactive shell"))
                             ((buffer-modified-p)
                              (propertize
                               "♦"
@@ -87,7 +91,12 @@
                               'mouse-face 'mode-line-highlight
                               'help-echo (purecopy (lambda (window _object _point)
                                                      (concat "Current directory is remote: "
-                                                             default-directory))))))))
+                                                             default-directory)))))
+                            ((bound-and-true-p server-buffer-clients)
+                             (propertize
+                              "#"
+                              'mouse-face 'mode-line-highlight
+                              'help-echo "Client waiting for edit")))))
 
 
 (setq overlay-arrow-string "►")
