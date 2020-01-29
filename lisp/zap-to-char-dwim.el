@@ -45,11 +45,19 @@
       (backward-char direction))
     (kill-region start (point))))
 
+(defun zap-to-end-of-list (arg)
+  "Zap to end of the list where the point is in."
+  (let ((direction (if (>= arg 0) 1 -1))
+        (start (point)))
+    (up-list direction t t)
+    (backward-char direction)
+    (kill-region start (point))))
+
 ;;;###autoload
 (defun zap-to-char-dwim (arg char)
   "Delete text up to ARG'th CHAR similar to `zap-up-to-char', except:
 - Repeat last key (press \\[zap-to-char-dwim] a second time)
-  again for `zap-to-char'
+  to `zap-to-end-of-list'.
 - zap to space handles consequtive spaces
 - zap to right parenthses goes to the end of enclosing list
 
@@ -58,10 +66,7 @@ ARG is passed to respective functions mentioned here."
                      (read-char "Zap to: " 't)))
   (cond
    ((eq char last-command-event)
-    (setq this-original-command 'zap-to-char
-          this-command 'zap-to-char
-          real-this-command 'zap-to-char)
-    (call-interactively #'zap-to-char))
+    (zap-to-end-of-list arg))
    ((eq (char-syntax char) (if (< arg 0) ?\( ?\)))
     (zap-to-char-matching-pairs arg char))
    ((eq char ?\ )

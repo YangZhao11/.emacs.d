@@ -579,7 +579,7 @@ in `ctl-j-map' first."
         "  "))))
 
 (use-package ace-window :ensure :defer 6
-  :bind (("M-j" . z-ace-window)
+  :bind* (("M-j" . z-ace-window)
          ("M-J" . ace-swap-window))
   :config
   (setq aw-scope 'frame
