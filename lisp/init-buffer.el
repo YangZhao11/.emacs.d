@@ -106,15 +106,22 @@
           (replace-regexp-in-string ".*/\\([^/]*\\)/google3/" "//\\1/"
                                     ad-return-value)))
 
+  (define-ibuffer-column modified-read-only
+    (:name "*" :inline t)
+    (cond (buffer-read-only "∅")
+          ((derived-mode-p 'comint-mode) "∞")
+          ((buffer-modified-p) "♦")
+          (:else "♢")))
+
   (setq ibuffer-formats
-        '((mark modified read-only " "
+        '((mark modified-read-only " "
                 (name 18 18 :left :elide)
                 " "
                 (size 9 -1 :right)
                 " "
                 (mode 16 16 :left :elide)
                 " " filename-and-process)
-          (mark modified read-only " "
+          (mark modified-read-only " "
                 (name 45 45 :left :elide)
                 " "
                 (size 9 -1 :right)
