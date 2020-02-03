@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: cast
+# key: cast
+# --
+CAST($1 as ${2:string}) as $1,
