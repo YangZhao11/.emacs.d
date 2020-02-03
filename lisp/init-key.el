@@ -15,6 +15,13 @@
       ("\\rarr" ?→) ("\\larr" ?←) ("\\uarr" ?↑) ("\\darr" ?↓)
       ("\\Rarr" ?⇒) ("\\Larr" ?⇐) ("\\Uarr" ?⇑) ("\\Darr" ?⇓))))
 
+(defun z-setup-terminal ()
+  ;; this is not on by default, but needed to detect double tap of M-z
+  ;; on terminal.
+  (define-key input-decode-map (kbd "ESC z") (kbd "M-z"))
+  (define-key input-decode-map (kbd "ESC Z") (kbd "M-Z")))
+(add-hook 'tty-setup-hook #'z-setup-terminal)
+
 (use-package kmacro
   :config
   (setcdr (assq 'defining-kbd-macro minor-mode-alist)

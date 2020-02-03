@@ -63,7 +63,7 @@
 
 ARG is passed to respective functions mentioned here."
   (interactive (list (prefix-numeric-value current-prefix-arg)
-                     (read-char "Zap to: " 't)))
+                     (read-key "Zap to: ")))
   (cond
    ((eq char last-command-event)
     (zap-to-end-of-list arg))
@@ -78,7 +78,7 @@ ARG is passed to respective functions mentioned here."
 (defun zap-back-to-char-dwim (arg char)
   "Call `zap-to-char-dwim' with negated ARG and CHAR."
   (interactive (list (prefix-numeric-value current-prefix-arg)
-                     (read-char "Zap back to: " 't)))
+                     (read-key "Zap back to: ")))
   (zap-to-char-dwim (- arg) char))
 
 (provide 'zap-to-char-dwim)
