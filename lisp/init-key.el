@@ -30,7 +30,7 @@
 
 (defhydra hydra-ctl-x-r (:color blue :hint nil)
   "
-┌─────^^Rectangle^^──────┐^^   ^^Register^^‗‗save‗‗‗‗‗‗‗‗‗^^  ^^Bookmark‗‗‗‗‗‗
+┌─────^^Rectangle^^^^──────┐   ┌^^Register^^─save^^────────┐  ┌─^^Bookmark────┐
 _c_lear     _N_umber-lines^^   _+_: inc^^    _SPC_: point     _m_: set
 _d_elete    _o_pen  s_t_ring   _i_nsert^^    _f_rameset       _b_: jump
 _k_ill      _y_ank^^           _j_ump^^      _w_indow-config  _l_ist
@@ -125,6 +125,22 @@ root-_D_iff  log _O_utgoing   _~_:revision  i_G_nore    _g_:annotate _u_:revert
 (use-package anchored-transpose :ensure
     :bind (:map region-bindings-mode-map
                 ("C-t" . anchored-transpose)))
+
+(use-package indent
+  :bind ("C-M-\\" . indent-list-or-sexp)
+  :bind (:map region-bindings-mode-map
+              ("C-M-\\" . indent-region))
+  :config
+  (defun indent-list-or-sexp ()
+    "Indent list at point, or the next sexp."
+    (interactive)
+    (let ((b (bounds-of-thing-at-point 'list))
+          (p (point)))
+      (if b (indent-region (car b) (cdr b))
+        :else
+        (save-excursion
+          (forward-sexp)
+          (indent-region p (point)))))))
 
 (use-package shell
   :bind ("<f6>" . shell)
