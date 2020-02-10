@@ -1,6 +1,5 @@
 # -*- mode: snippet; require-final-newline: nil -*-
 # name: point
 # key: point
-# condition: (string= ess-dialect "R")
 # --
 geom_point(${1:aes($2)}$0)

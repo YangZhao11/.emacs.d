@@ -1,7 +1,6 @@
 # -*- mode: snippet; require-final-newline: nil -*-
 # name: func
 # key: func
-# condition: (string= ess-dialect "R")
 # --
 function($1) {
          $0

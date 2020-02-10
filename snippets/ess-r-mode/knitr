@@ -1,7 +1,6 @@
 # -*- mode: snippet; require-final-newline: nil -*-
 # name: knitr
 # key: knitr
-# condition: (string= ess-dialect "R")
 # --
 opts_chunk$set(fig.width=8, fig.height=4, fig.scap=NA,
                dev="svg", comment=NA,
