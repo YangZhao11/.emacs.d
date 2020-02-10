@@ -126,21 +126,19 @@ root-_D_iff  log _O_utgoing   _~_:revision  i_G_nore    _g_:annotate _u_:revert
     :bind (:map region-bindings-mode-map
                 ("C-t" . anchored-transpose)))
 
-(use-package indent
-  :bind ("C-M-\\" . indent-list-or-sexp)
-  :bind (:map region-bindings-mode-map
-              ("C-M-\\" . indent-region))
-  :config
-  (defun indent-list-or-sexp ()
-    "Indent list at point, or the next sexp."
-    (interactive)
-    (let ((b (bounds-of-thing-at-point 'list))
-          (p (point)))
-      (if b (indent-region (car b) (cdr b))
-        :else
-        (save-excursion
-          (forward-sexp)
-          (indent-region p (point)))))))
+(defun indent-list-or-sexp ()
+  "Indent list at point, or the next sexp."
+  (interactive)
+  (let ((b (bounds-of-thing-at-point 'list))
+        (p (point)))
+    (if b (indent-region (car b) (cdr b))
+      :else
+      (save-excursion
+        (forward-sexp)
+        (indent-region p (point))))))
+(bind-keys  ("C-M-\\" . indent-list-or-sexp))
+(bind-keys :map region-bindings-mode-map
+           ("C-M-\\" . indent-region))
 
 (use-package shell
   :bind ("<f6>" . shell)
