@@ -150,6 +150,7 @@
  '(link ((t (:foreground "#D0BF8F" :underline t :weight normal))))
  '(mode-line ((t (:background "#284460" :foreground "#8FB28F" :box (:line-width -1 :style released-button)))))
  '(org-todo ((t (:foreground "#CC9393" :underline t :weight bold))))
+ '(rainbow-delimiters-base-error-face ((t (:inherit rainbow-delimiters-base-face :foreground "#FF98A0" :weight bold))))
  '(vc-conflict-state ((t (:inherit vc-state-base :foreground "#E06050"))))
  '(vc-edited-state ((t (:inherit vc-state-base :foreground "#60CC80"))))
  '(vc-locally-added-state ((t (:inherit vc-state-base :foreground "#90FF50"))))
