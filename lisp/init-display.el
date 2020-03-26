@@ -57,46 +57,52 @@
     (:eval (mode-line-eol-desc))))
 
 (setq-default mode-line-modified
-              '(:eval (cond (buffer-read-only
-                             (propertize
-                              "∅"
-                              'help-echo 'mode-line-read-only-help-echo
-                              'local-map (purecopy (make-mode-line-mouse-map
-                                                    'mouse-1
-                                                    #'mode-line-toggle-read-only))
-                              'mouse-face 'mode-line-highlight))
-                            ((derived-mode-p 'comint-mode)
-                             (propertize
-                              "∞"
-                              'help-echo "Interactive shell"))
-                            ((buffer-modified-p)
-                             (propertize
-                              "♦"
-                              'help-echo 'mode-line-modified-help-echo
-                              'local-map (purecopy (make-mode-line-mouse-map
-                                                    'mouse-1 #'mode-line-toggle-modified))
-                              'mouse-face 'mode-line-highlight))
-                            (:else "♢"))))
+  '(:eval (cond
+    (buffer-read-only
+     (propertize
+      "∅"
+      'help-echo 'mode-line-read-only-help-echo
+      'local-map (purecopy (make-mode-line-mouse-map
+                            'mouse-1
+                            #'mode-line-toggle-read-only))
+      'mouse-face 'mode-line-highlight))
+
+    ((derived-mode-p 'comint-mode)
+     (propertize
+      "∞"
+      'help-echo "Interactive shell"))
+
+    ((buffer-modified-p)
+     (propertize
+      "♦"
+      'help-echo 'mode-line-modified-help-echo
+      'local-map (purecopy (make-mode-line-mouse-map
+                            'mouse-1 #'mode-line-toggle-modified))
+      'mouse-face 'mode-line-highlight))
+    (:else "♢"))))
 
 (setq-default mode-line-remote
-              '(:eval (cond ((bound-and-true-p edit-server-edit-mode)
-                             (propertize
-                              "&"
-                              'mouse-face 'mode-line-highlight
-                              'help-echo "Editing browser content"))
-                            ((and (stringp default-directory)
-                                  (file-remote-p default-directory))
-                             (propertize
-                              "@"
-                              'mouse-face 'mode-line-highlight
-                              'help-echo (purecopy (lambda (window _object _point)
-                                                     (concat "Current directory is remote: "
-                                                             default-directory)))))
-                            ((bound-and-true-p server-buffer-clients)
-                             (propertize
-                              "#"
-                              'mouse-face 'mode-line-highlight
-                              'help-echo "Client waiting for edit")))))
+  '(:eval (cond
+    ((bound-and-true-p edit-server-edit-mode)
+     (propertize
+      "&"
+      'mouse-face 'mode-line-highlight
+      'help-echo "Editing browser content"))
+
+    ((and (stringp default-directory)
+          (file-remote-p default-directory))
+     (propertize
+      "@"
+      'mouse-face 'mode-line-highlight
+      'help-echo (purecopy (lambda (window _object _point)
+                             (concat "Current directory is remote: "
+                                     default-directory)))))
+
+    ((bound-and-true-p server-buffer-clients)
+     (propertize
+      "#"
+      'mouse-face 'mode-line-highlight
+      'help-echo "Client waiting for edit")))))
 
 
 (setq overlay-arrow-string "►")
