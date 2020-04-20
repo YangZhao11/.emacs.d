@@ -531,7 +531,7 @@ jump to unfetched from: _p_ushremote  _u_pstream"
      (propertize (z-status-count "✖" nerror)
                  'face 'status-error)
      (if (and (< 0 nwarning) (< 0 nerror)) "/" "")
-     (propertize (z-status-count "⁍" nwarning)
+     (propertize (z-status-count "▴" nwarning)
                  'face 'status-warning)
      (if (and (or (< 0 nwarning) (< 0 nerror)) (< 0 ninfo)) "/" "")
      (propertize (z-status-count "•" ninfo)

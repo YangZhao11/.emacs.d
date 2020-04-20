@@ -284,6 +284,7 @@ instead of inactivate region."
   ;; loading and special-mode-map has not been modified yet.
   ;; tabulated-list-mode-map will copy instead of inherit from
   ;; special-mode-map, so we need to copy our changes here.
+  ;; TODO: this is now fixed in emacs 27.
   (bind-keys :map tabulated-list-mode-map
              ("j" . scroll-up-command)
              ("k" . scroll-down-command)
