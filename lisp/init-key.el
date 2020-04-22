@@ -101,8 +101,14 @@ root-_D_iff  log _O_utgoing   _~_:revision  i_G_nore    _g_:annotate _u_:revert
 
 ;; lisp is not a package
 ;; (use-package lisp)
+(defun backward-down-list (arg)
+  "Go down backwards"
+  (interactive "^p")
+  (down-list (- (or arg 1))))
+
 (bind-keys ("<C-M-backspace>" . backward-kill-sexp)
            ("C-M-o"           . up-list)
+           ("C-M-j"           . backward-down-list)
            ("M-r"             . raise-sexp)) ; was move-to-window-line-top-bottom
 
 (use-package region-bindings-mode :demand
