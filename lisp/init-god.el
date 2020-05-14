@@ -117,7 +117,7 @@ SPEC could be `box', 'bar', or `hbar'."
         ("C-~" "M-~") ("C-!" "M-!") ("C-@" "M-@") ("C-$" "M-$") ("C-%" "M-%")
         ("C-^" "M-^") ("C-&" "M-&") ("C-*" "M-*") ("C-{" "M-{") ("C-}" "M-}")
         ("C-<" "M-<") ("C->" "M->") ("C-:" "M-:") ("C-|" "M-|") ("C-\\" "M-\\")
-        ("C-+" "M-+") ("C-=" "M-=") ("C-?" "M-?")))
+        ("C-+" "M-+") ("C-=" "M-=") ("C-?" "M-?") ("C-," "M-,") ("C-." "M-.")))
 
 (defun z-god-mode-enabled-hook ()
   ;; somehow this hook can be called multiple times on a buffer,
