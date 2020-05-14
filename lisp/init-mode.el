@@ -787,6 +787,7 @@ fallback."
              ("C-c C-m" . markdown-mode)
              ("_")                 ; unbind ess-smart-S-assign
              ("{") ("}")           ; unbind skeleton-pair-insert-maybe
+             ("C-M-j")
              ("M-j")
              ("\\" . ess-smart-pipe)
              (";" . ess-cycle-assign)))
