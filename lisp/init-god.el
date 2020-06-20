@@ -1,7 +1,6 @@
 ; -*- coding: utf-8; lexical-binding: t -*-
 
 ;;; Code:
-(defvar z-god-mode-lighter "")
 (defvar-local z-god-saved-input-method nil
   "Saved input method before god-mode")
 (defvar-local z-god-saved-view-mode nil
