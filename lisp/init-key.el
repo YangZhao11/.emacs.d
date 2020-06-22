@@ -16,14 +16,19 @@
       ("\\Rarr" ?⇒) ("\\Larr" ?⇐) ("\\Uarr" ?⇑) ("\\Darr" ?⇓))))
 
 (defun z-setup-terminal ()
-  ;; this is not on by default, but needed to detect double tap of M-z
-  ;; on terminal.
-  (dolist (c '(?m ?z ?M ?Z))
+  ;; This is not on by default, but needed for `read-key' to read M-z
+  ;; as one keypress on terminal.
+  (cl-loop for c from ?! to ?~ do
+           (when (not (memq c '(?\[ ?O)))
     (define-key input-decode-map
       (kbd (concat "ESC " (char-to-string c)))
-      (kbd (concat "M-" (char-to-string c)))))
+      (kbd (concat "M-" (char-to-string c))))))
+  (cl-loop for c from ?a to ?z do
+    (define-key input-decode-map
+      (kbd (concat "ESC C-" (char-to-string c)))
+      (kbd (concat "C-M-" (char-to-string c)))))
 
-  ;; several CSI u style coding for C-. keys
+  ;; CSI u style coding for C-. and C-M-. keys
   (cl-loop for c from ?! to ?~ do
            (let* ((s (format "%d" c))
                   (spaced (replace-regexp-in-string "\\([0-9]\\)" "\\1 " s)))
