@@ -176,13 +176,26 @@ root-_D_iff  log _O_utgoing   _~_:revision  i_G_nore    _g_:annotate _u_:revert
   ("M-p" . like-this-prev)
   :commands (like-this--next-face))
 
+(defun z-kill-ring-save (arg)
+  (interactive "P")
+  "Forward to `kill-ring-save' or `clipetty-kill-ring-save' if ARG is non-nil
+and we are on terminal."
+  (if (and arg (frame-terminal))
+      (call-interactively 'clipetty-kill-ring-save)
+    (call-interactively 'kill-ring-save)))
+(bind-keys :map region-bindings-mode-map
+           ("M-w" . z-kill-ring-save))
+
+(use-package clipetty
+  :commands clipetty-kill-ring-save)
+
 (use-package argatpt
   ;; generate autoloads
   :commands (forward-arg backward-arg))
 
 (use-package easy-kill :ensure
   :functions (easy-kill-mark-region easy-kill-exit)
-  :bind ([remap kill-ring-save] . easy-kill)
+  :bind ("M-w" . easy-kill)
   :init
   (eval-when-compile
     (defmacro easy-kill-defun-on-selection (name func)
