@@ -489,11 +489,7 @@ Toggle:
 
 (use-package flyspell :diminish " ⍹"
   :commands (flyspell-mode flyspell-prog-mode)
-  :hook (text-mode . turn-on-flyspell)
-  :config
-  (bind-keys :map flyspell-mode-map
-             ("M-g ," . 'flyspell-goto-next-error) ("C-,")
-             ("M-g ." . 'flyspell-auto-correct-word) ("C-.")))
+  :hook (text-mode . turn-on-flyspell))
 
 (use-package rainbow-delimiters :ensure
   :commands (rainbow-delimiters-mode)
