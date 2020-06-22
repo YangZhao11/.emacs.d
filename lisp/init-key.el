@@ -24,12 +24,14 @@
       (kbd (concat "M-" (char-to-string c)))))
 
   ;; several CSI u style coding for C-. keys
-  (dolist (c '(?\; ?< ?> ?, ?.))
-    (let* ((s (format "%d" c))
-           (spaced (replace-regexp-in-string "\\([0-9]\\)" "\\1 " s)))
-    (define-key input-decode-map
-      (kbd (concat "M-[ " spaced "; 5 u"))
-      (kbd (concat "C-" (char-to-string c)))))))
+  (cl-loop for c from ?! to ?~ do
+           (let* ((s (format "%d" c))
+                  (spaced (replace-regexp-in-string "\\([0-9]\\)" "\\1 " s)))
+             (cl-loop for b in
+                      '(("5" . "C-") ("7" . "C-M-")) do
+                      (define-key input-decode-map
+                        (kbd (concat "M-[ " spaced "; " (car b) " u"))
+                        (kbd (concat (cdr b) (char-to-string c))))))))
 (add-hook 'tty-setup-hook #'z-setup-terminal)
 
 (use-package kmacro
