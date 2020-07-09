@@ -1,8 +1,8 @@
-(set-frame-font "Menlo-14" nil 't)
+(set-frame-font "Menlo-17" nil 't)
 (setq mac-option-modifier 'none
       mac-command-modifier 'meta
       mac-right-option-modifier 'meta
-      mac-right-command-modifier 'super)
+      mac-right-command-modifier 'control)
 (add-to-list 'exec-path "/usr/local/bin")
 (add-to-list 'exec-path "/usr/local/git/current/bin")
 (add-to-list 'exec-path "/usr/local/brew/sbin")
