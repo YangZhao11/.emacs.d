@@ -1,3 +1,40 @@
+(use-package helpful
+  :bind (:map help-map
+              ("k" . helpful-key)
+              ("o" . z-helpful-symbol))
+  :bind (:map helpful-mode-map
+              ("[" . helpful-previous-heading)
+              ("]" . helpful-next-heading)
+              ("n" . next-line)
+              ("p" . previous-line)
+              ("{" . backward-paragraph)
+              ("}" . forward-paragraph)
+              ("f" . forward-char)
+              ("b" . backward-char))
+  :config
+  (defun helpful-next-heading (&optional arg)
+    "Move to next heading"
+    (interactive "^p")
+    (like-this--next-face 'helpful-heading arg))
+
+  (defun helpful-previous-heading (&optional arg)
+    "Move to previous heading"
+    (interactive "^p")
+    (like-this--next-face 'helpful-heading (- arg)))
+
+    (defun z-helpful-symbol ()
+  "Forward to `helpful-symbol'."
+  (interactive)
+  (let ((enable-recursive-minibuffers t))
+    (ivy-read "Describe symbol: " obarray
+              :require-match t
+              :history 'counsel-describe-symbol-history
+              :keymap counsel-describe-map
+              :preselect (ivy-thing-at-point)
+              :sort t
+              :action (lambda (x)
+                        (helpful-symbol (intern x)))
+              :caller 'counsel-describe-function))))
 
 (defun toggle-one-window ()
     "Change to one window (C-x 1) if applicable, otherwise show other
