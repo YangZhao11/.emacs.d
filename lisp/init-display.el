@@ -79,7 +79,10 @@
       'local-map (purecopy (make-mode-line-mouse-map
                             'mouse-1 #'mode-line-toggle-modified))
       'mouse-face 'mode-line-highlight))
-    (:else "♢"))))
+    (:else
+     (propertize
+      "♢"
+      'help-echo "Buffer is not modified")))))
 
 (setq-default mode-line-remote
   '(:eval (cond
