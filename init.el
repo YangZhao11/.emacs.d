@@ -1,10 +1,6 @@
 ; -*- coding: utf-8 -*-
 
 ;; Make elpa packages available
-(when (< emacs-major-version 27)
-    (setq package-enable-at-startup nil)
-    (require 'package)
-    (package-initialize))
 (add-to-list 'package-archives
              '("melpa" . "http://melpa.org/packages/") t)
 (add-to-list 'package-archives
@@ -109,7 +105,7 @@
     ("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3")))
  '(package-selected-packages
    (quote
-    (swiper counsel transient pcmpl-args yasnippet avy helpful diminish visual-regexp dired-sidebar ibuffer-sidebar rainbow-mode julia-mode julia-repl magit dired-subtree imenu-list indium indent-guide rainbow-identifiers string-inflection ace-window region-bindings-mode citc g4-gutter imenu-anywhere wgrep ivy-hydra flx hydra color-identifiers-mode org-bullets js2-mode scala-mode2 clang-format markdown-mode use-package flycheck go-eldoc smex beacon anchored-transpose csv-mode go-mode easy-kill zenburn-theme squery register-channel rainbow-delimiters lua-mode ido-vertical-mode ido-ubiquitous haskell-mode goto-chg god-mode f ess edit-server)))
+    (sr-speedbar clipetty swiper counsel transient pcmpl-args yasnippet avy diminish visual-regexp dired-sidebar ibuffer-sidebar rainbow-mode julia-mode julia-repl magit dired-subtree imenu-list indium indent-guide rainbow-identifiers string-inflection ace-window region-bindings-mode citc g4-gutter imenu-anywhere wgrep ivy-hydra flx hydra color-identifiers-mode org-bullets js2-mode scala-mode2 clang-format markdown-mode use-package flycheck go-eldoc smex beacon anchored-transpose csv-mode go-mode easy-kill zenburn-theme squery register-channel rainbow-delimiters lua-mode ido-vertical-mode ido-ubiquitous haskell-mode goto-chg god-mode f ess edit-server)))
  '(pdf-view-midnight-colors (quote ("#DCDCCC" . "#383838")))
  '(vc-annotate-background "#2B2B2B")
  '(vc-annotate-color-map

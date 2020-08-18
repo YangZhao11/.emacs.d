@@ -314,21 +314,6 @@ instead of inactivate region."
              ("x" . god-mode-self-insert)
              ("c" . god-mode-self-insert)))
 
-(use-package tabulated-list
-  :config
-  ;; By the time tabulated-list.el is loaded, simple.el is still
-  ;; loading and special-mode-map has not been modified yet.
-  ;; tabulated-list-mode-map will copy instead of inherit from
-  ;; special-mode-map, so we need to copy our changes here.
-  ;; TODO: this is now fixed in emacs 27.
-  (bind-keys :map tabulated-list-mode-map
-             ("j" . scroll-up-command)
-             ("k" . scroll-down-command)
-             ("[" . backward-page)
-             ("]" . forward-page)
-             ("x" . god-mode-self-insert)
-             ("c" . god-mode-self-insert)))
-
 (use-package string-inflection
   :bind (("M-U" . string-inflection-upcase)
          ("M-C" . string-inflection-camelcase-cycle)
@@ -378,6 +363,9 @@ useful when followed by an immediate kill."
   (bind-keys :map isearch-mode-map
              ("M-RET" . isearch-exit-other-end)
              ("M-k"   . isearch-yank-word-or-char)
+             ("M-z"   . isearch-yank-until-char)
+             ("M-<"   . isearch-beginning-of-buffer)
+             ("M->"   . isearch-end-of-buffer)
              ("C-j"   . avy-isearch))
 
   (setcdr (assq 'isearch-mode minor-mode-alist)
