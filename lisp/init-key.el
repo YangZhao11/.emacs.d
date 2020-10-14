@@ -128,6 +128,8 @@ root-_D_iff  log _O_utgoing   _~_:revision  i_G_nore    _g_:annotate _u_:revert
            ("C-M-j"           . backward-down-list)
            ("M-r"             . raise-sexp)) ; was move-to-window-line-top-bottom
 
+(setq recenter-positions '(top middle bottom))
+
 (use-package region-bindings-mode :demand
   :diminish 'region-bindings-mode
   :functions region-bindings-mode-enable
