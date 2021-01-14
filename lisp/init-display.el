@@ -108,7 +108,7 @@
       'help-echo "Client waiting for edit")))))
 
 
-(setq overlay-arrow-string "►")
+(setq overlay-arrow-string "‣")
 
 ;; `Narrow' in mode line changed to §
 (setq mode-line-modes
@@ -125,7 +125,7 @@
 
 ;; line wrap symbol under terminal
 (or standard-display-table (setq standard-display-table (make-display-table)))
-(set-display-table-slot standard-display-table 'truncation ?↔)
+(set-display-table-slot standard-display-table 'truncation ?›)
 (set-display-table-slot standard-display-table 'wrap ?↵)
 (set-display-table-slot standard-display-table 'selective-display [?…])
 (set-display-table-slot standard-display-table 'vertical-border ?│)

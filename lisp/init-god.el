@@ -16,9 +16,9 @@ SPEC could be `box', 'bar', or `hbar'."
     (modify-frame-parameters nil `((cursor-type . ,spec))))
    ((frame-terminal)
     (let* ((shape (or (car-safe spec) spec))
-           (param (cond ((eq shape 'bar) "6")
-                        ((eq shape 'hbar) "4")
-                        (:else "2"))))
+           (param (cond ((eq shape 'bar) "5")
+                        ((eq shape 'hbar) "3")
+                        (:else "1"))))
       (send-string-to-terminal
        (concat "\e[" param " q"))))))
 
