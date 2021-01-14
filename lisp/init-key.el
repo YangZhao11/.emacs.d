@@ -159,7 +159,7 @@ root-_D_iff  log _O_utgoing   _~_:revision  i_G_nore    _g_:annotate _u_:revert
       (save-excursion
         (forward-sexp)
         (indent-region p (point))))))
-(bind-keys  ("C-M-\\" . indent-list-or-sexp))
+(bind-keys ("C-M-\\" . indent-list-or-sexp))
 (bind-keys :map region-bindings-mode-map
            ("C-M-\\" . indent-region))
 
@@ -651,158 +651,53 @@ Prefixed with \\[universal-argument], show dispatch action."
 (use-package find-dired
   :bind ("C-x d" . find-name-dired))
 
-(use-package imenu-anywhere
-  :bind ("M-g M-i" . ivy-imenu-anywhere)
-  :config
-  (defun imenu-anywhere-transformer (i)
-    (save-match-data
-      (string-match "^\\([^:]+\\): \\(\\w+/\\)?\\(.*\\)" i)
-      (let* ((m (match-string 2 i))
-             (c (if m (substring m 0 (1- (length m))) "Functions"))
-             (rep (assoc c counsel-imenu-category-alist)))
-        (if rep (concat (match-string 1 i) ": " (cdr rep) " " (match-string 3 i)) i))))
-  (ivy-set-display-transformer 'ivy-imenu-anywhere 'imenu-anywhere-transformer))
-
 (use-package recentf
   :config
   (setq recentf-max-saved-items 80)
   (setq recentf-exclude '("/elpa/")))
-
-(use-package ivy :diminish ""
-  :bind (("M-o" . ivy-switch-buffer)
-         ("M-s M-d" . ivy-resume)
-         ("M-g v" . ivy-pop-view)
-         ("M-g M-v" . ivy-push-view))
-  :config
-  (ivy-mode 1)
-  (setq ivy-count-format "")
-  (setq ivy-display-style 'fancy)
-  (setq ivy-use-virtual-buffers 't)
-  (setq ivy-use-selectable-prompt 't)
-  (setq ivy-switch-buffer-faces-alist '((dired-mode . dired-directory)
-                                        (org-mode . org-level-4)))
-  (setq ivy-ignore-buffers
-        '("\\` " "^\\*ESS\\*" "^\\*Messages\\*" "^\\*Help\\*" "^\\*Buffer"
-          "^\\*LV\\*" "^\\*Ilist\\*" "^\\*:Buffers:\\*"
-          "^:"        ; see `dired-sidebar-buffer-name'
-           "^\\*.*Completions\\*$" "^\\*Ediff" "^\\*tramp" "^\\*cvs-"
-           "\\[r\\]\\(<[0-9]+>\\)?$" "\\[fundamental\\]\\(<[0-9]+>\\)?$"
-           "_region_" " output\\*$" "^TAGS$" "^\*Ido"))
-
-  (defun z-ivy-repo (bufname)
-    (let* ((buf (get-buffer bufname)))
-      (and buf (cdr (z-project buf)))))
-
-  (defvar z-ivy-switch-buffer-padding 50
-    "padding for g3 client name column")
-  (defun z-ivy-switch-buffer-transformer (bufname)
-    "Add project name as a separate column"
-    (if-let* ((repo (z-ivy-repo bufname)))
-        (s-concat (s-pad-right z-ivy-switch-buffer-padding " " bufname) " "
-                  (propertize repo 'face 'ivy-virtual))
-      bufname))
-  (ivy-set-display-transformer 'ivy-switch-buffer 'z-ivy-switch-buffer-transformer)
-
-  (bind-keys :map ivy-minibuffer-map
-             ("M-s o" . ivy-occur)
-             ("C-j" . ivy-avy)
-             ("C-c C-c" . ivy-toggle-calling)
-             ("C-'" . ivy-alt-done)
-             ("M-k" . ivy-yank-word)
-             ("M-s ." . ivy-yank-symbol)
-             ("M-m" . ivy-restrict-to-matches)
-             ("<home>" . hydra-ivy/body))
-
-  (defhydra hydra-ivy-occur (:color pink :hint nil)
-    "
-_k_↑  _h_←   tg _c_alling   _f_:press   _g_:revert
-_j_↓  _l_→   set _a_ction   _RET_:go    _o_ther    _q_uit
-"
-    ("SPC" nil)
-    ("RET" ivy-occur-press-and-switch :exit t)
-    ("a" ivy-occur-read-action)
-    ("c" ivy-occur-toggle-calling)
-    ("f" ivy-occur-press)
-    ("g" ivy-occur-revert-buffer)
-    ("h" backward-char)
-    ("j" ivy-occur-next-line)
-    ("k" ivy-occur-previous-line)
-    ("l" forward-char)
-    ("o" ivy-occur-dispatch :exit t)
-    ("q" quit-window :exit t))
-  (bind-keys :map ivy-occur-mode-map
-             ("n" . ivy-occur-next-line)
-             ("p" . ivy-occur-previous-line)
-             ("x" . god-mode-self-insert)
-             ("SPC" . hydra-ivy-occur/body)))
-
-(use-package counsel :defer 4
-  :bind (([remap find-file] . counsel-find-file)
-         ("C-x C-d" . counsel-dired)
-         ("C-x 8 8" . counsel-unicode-char)
-         ("C-x b" . counsel-bookmark)
-         ("M-x" . counsel-M-x)
-         ("M-y" . counsel-yank-pop)
-         ("M-s M-s" . counsel-grep-or-swiper)
-         ("M-g m" . counsel-mark-ring)
-         ("M-g i" . counsel-imenu)
-         ("M-g r" . counsel-register))
-  :bind (:map help-map
-              ("S" . counsel-info-lookup-symbol)
-              ("v" . counsel-describe-variable)
-              ("f" . counsel-describe-function))
-  :config
-  ;; (setq counsel-describe-variable-function #'helpful-variable
-  ;;       counsel-describe-function-function #'helpful-callable)
-
-  (defun counsel-find-file-search ()
-    "Switch to `counsel-file-jump', use current directory as base."
-    (interactive)
-    (let* ((input (ivy--input))
-           (dir ivy--directory))
-       (ivy-quit-and-run
-         (counsel-file-jump input dir))))
-
-  (defun counsel-find-file-dired ()
-    "Switch to `counsel-dired-jump', use current directory as base."
-    (interactive)
-    (let* ((input (ivy--input))
-           (dir ivy--directory))
-       (ivy-quit-and-run
-         (counsel-dired-jump input dir))))
-
-  (bind-keys :map counsel-find-file-map
-             ("M-s r" . counsel-find-file-search)
-             ("C-x C-d" . counsel-find-file-dired))
-
-  (setq counsel-find-file-ignore-regexp
-        "\\(?:\\`[#.]\\)\\|\\(?:[#~]\\'\\)\\|\\(\\`\\.\\)")
-
-  (setq counsel-imenu-category-alist
-        `(("Functions" . ,(propertize "ƒ" 'face 'font-lock-function-name-face))
-          ("Packages"  . ,(propertize "℗" 'face 'font-lock-keyword-face))
-          ("Sections"  . ,(propertize "§" 'face 'font-lock-constant-face))
-          ("Types"     . ,(propertize "ᴛ" 'face 'font-lock-type-face))
-          ("Variables" . ,(propertize "=" 'face 'font-lock-variable-name-face))))
-  (defun counsel-imenu-transformer (i)
-    (save-match-data
-      (string-match "^\\(\\w+\\): \\(.*\\)" i)
-      (let ((rep (assoc (match-string 1 i) counsel-imenu-category-alist)))
-        (if rep (concat (cdr rep) " " (match-string 2 i)) i))))
-  (ivy-set-display-transformer 'counsel-imenu 'counsel-imenu-transformer))
-
-(use-package swiper
-  :bind (("M-s s" . swiper-all))
-  :bind  (:map isearch-mode-map
-               ("M-s M-s" . swiper-isearch-toggle))
-  :config
-  (bind-keys :map swiper-map
-             ("M-%" . swiper-query-replace)
-             ("C-s" . swiper-isearch-toggle)
-             ("C-j" . swiper-avy)))
 
 (use-package xref
   :if (not (featurep 'google))
   :bind (("C-x ." . xref-find-definitions)
          ("C-x ?" . xref-find-references)
          ("C-x ," . xref-pop-marker-stack)))
+
+(use-package selectrum
+  :bind (("M-s M-d" . selectrum-repeat))
+  :config
+  (selectrum-mode 1))
+
+(use-package selectrum-prescient
+  :config
+  (selectrum-prescient-mode 1)
+  (prescient-persist-mode 1))
+
+(use-package marginalia
+  :after selectrum
+  :init
+  ;; TODO: something about marginalia-cycle and selectrum-exhibit
+  (marginalia-mode 1))
+
+(use-package consult
+  :bind (("M-o" . consult-buffer)
+         ("M-s M-s" . consult-line)
+         ("M-s p" . consult-grep)
+         ("M-y" . consult-yank-pop)
+         ("M-g i" . consult-imenu)
+         ("M-g M-i" . consult-project-imenu)
+         ("M-g m" . consult-mark)
+         ("M-g M-m" . consult-global-mark)
+         ("M-g r" . consult-register)
+         ("M-g g" . consult-goto-line)
+         ("M-g M-g" . consult-goto-line)
+         ("C-x C-z" . consult-complex-command)))
+
+(use-package embark
+  :after selectrum
+  :bind (:map selectrum-minibuffer-map
+              ("M-o" . embark-act)
+              ("M-s o" . embark-export)))
+
+(use-package embark-consult
+  :after (embark consult)
+  :hook (embark-collect-mode . embark-consult-preview-minor-mode))
