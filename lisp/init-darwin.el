@@ -11,6 +11,7 @@
 (setenv "PATH" (concat "~/bin:/usr/local/brew/bin:/usr/local/brew/sbin:/usr/local/git/current/bin:/usr/local/bin:"
                        (getenv "PATH")))
 (setenv "LANG" "en_US.UTF-8")
+(cd "~")
 
 ;; (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
 ;; (add-to-list 'default-frame-alist '(ns-appearance . dark))
