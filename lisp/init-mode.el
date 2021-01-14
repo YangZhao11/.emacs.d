@@ -80,11 +80,11 @@ _j_↓ _z_   _J_    _d_own _>_^^    _(__)_ list  _'_: goto   p_@_p    again: _n_
     ("q" View-leave :color blue)
     ("Q" View-quit :color blue)
     ("C" View-kill-and-leave :color blue)
-    ("i" counsel-imenu))
+    ("i" consult-imenu))
   (bind-keys :map view-mode-map
              ("SPC" . hydra-view/body)
              ("C-j" . nil)
-             ("i" . counsel-imenu)
+             ("i" . consult-imenu)
              ("x" . god-mode-self-insert)
              ("c" . god-mode-self-insert)
              ("l" . god-mode-self-insert)
@@ -419,7 +419,6 @@ _q_uit      _RET_: current
   :bind ("C-x g" . magit-status)
   :config
   (setq with-editor-mode-lighter "")
-  (setq magit-completing-read-function 'ivy-completing-read)
   (defhydra hydra-magit-j (:color blue :hint nil)
 "
 _u_n/_s_taged   u_n_/_t_racked   un_p_ushed   un_f_etched   _z_: stashes"
