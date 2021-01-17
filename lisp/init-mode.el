@@ -352,13 +352,13 @@ _<_  _>_       _z_: execute   _?_: info  _u_nmark _q_uit
   ("S" tabulated-list-sort)
   ("U" package-menu-mark-upgrades)
   ("d" package-menu-mark-delete)
-  ("f" package-menu-filter)
+  ("f" package-menu-filter-by-keyword)
   ("g" revert-buffer)
   ("i" package-menu-mark-install)
   ("n" next-line)
   ("p" previous-line)
   ("q" quit-window :color blue)
-  ("r" package-menu-refresh)
+  ("r" revert-buffer)
   ("u" package-menu-mark-unmark)
   ("z" package-menu-execute)
   ("~" package-menu-mark-obsolete-for-deletion)
@@ -529,8 +529,7 @@ jump to unfetched from: _p_ushremote  _u_pstream"
   :config
 
   (defun z-flymake-mode-line ()
-    (let* ((known (hash-table-keys flymake--backend-state))
-           (running (flymake-running-backends))
+    (let* ((running (flymake-running-backends))
            (disabled (flymake-disabled-backends))
            (reported (flymake-reporting-backends))
            (diags-by-type (make-hash-table))
@@ -965,7 +964,7 @@ _k_↑     ^^^^S/TAB:↔     _l_: back       _n_ext   _d_irectory _T_OC
 _j_↓     ^^_f_ollow      _r_: forward    _p_rev   _<__>_ first/last
 ^ ^      ^^_m_enu        _L_: history    _u_p     _[__]_ back/forward
 "
-    ("q" Info-exit :exit t)
+    ("q" quit-window :exit t)
     ("SPC" nil :exit t)
     ("n" Info-next)
     ("p" Info-prev)
