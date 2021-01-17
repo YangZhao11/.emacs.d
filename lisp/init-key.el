@@ -686,6 +686,7 @@ Prefixed with \\[universal-argument], show dispatch action."
          ([remap switch-to-buffer-other-window] . consult-buffer-other-window)
          ([remap switch-to-buffer-other-frame] . consult-buffer-other-frame)
          ("M-X" . consult-mode-command)
+         ("<help> a" . consult-apropos)
          ("M-s M-s" . consult-line)
          ("M-s s" . consult-focus-lines)
          ("M-s f" . consult-grep)
