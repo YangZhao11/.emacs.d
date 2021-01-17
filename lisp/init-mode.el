@@ -201,18 +201,6 @@ _j_↓  _n_ext  _{__}_: prev/next file
              ("{" . compilation-previous-file)
              ("}" . compilation-next-file)))
 
-(use-package imenu-list
-  :bind ("M-s l" . z-imenu-list)
-  :config
-  (setq imenu-list-position 'left
-        imenu-list-size 30)
-  (defun z-imenu-list ()
-    "toggle imenu-list, but switch off ibuffer-sidebar and dired-sidebar first."
-    (interactive)
-    (dired-sidebar-hide-sidebar)
-    (ibuffer-sidebar-hide-sidebar)
-    (imenu-list-smart-toggle)))
-
 (use-package ibuffer-sidebar
   :bind ("M-s b" . z-ibuffer-sidebar)
   :config
@@ -382,7 +370,7 @@ _<_  _>_       _z_: execute   _?_: info  _u_nmark _q_uit
            ("x" . god-mode-self-insert)
            ("a" . god-mode-self-insert)
            ("e" . god-mode-self-insert)
-           ("s" . swiper)
+           ("s" . consult-line)
            ("j" . scroll-up-command)
            ("k" . scroll-down-command))
 

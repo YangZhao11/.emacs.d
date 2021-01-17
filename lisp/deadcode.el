@@ -630,3 +630,16 @@ _j_↓  _l_→   set _a_ction   _RET_:go    _o_ther    _q_uit
 
 (use-package imenu-anywhere
   :bind ("M-g M-i" . ivy-imenu-anywhere))
+
+
+(use-package imenu-list
+  :bind ("M-s l" . z-imenu-list)
+  :config
+  (setq imenu-list-position 'left
+        imenu-list-size 30)
+  (defun z-imenu-list ()
+    "toggle imenu-list, but switch off ibuffer-sidebar and dired-sidebar first."
+    (interactive)
+    (dired-sidebar-hide-sidebar)
+    (ibuffer-sidebar-hide-sidebar)
+    (imenu-list-smart-toggle)))

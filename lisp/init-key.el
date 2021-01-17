@@ -682,16 +682,24 @@ Prefixed with \\[universal-argument], show dispatch action."
 
 (use-package consult
   :bind (("M-o" . consult-buffer)
+         ([remap switch-to-buffer] . consult-buffer)
+         ([remap switch-to-buffer-other-window] . consult-buffer-other-window)
+         ([remap switch-to-buffer-other-frame] . consult-buffer-other-frame)
+         ("M-X" . consult-mode-command)
          ("M-s M-s" . consult-line)
-         ("M-s p" . consult-grep)
+         ("M-s s" . consult-focus-lines)
+         ("M-s f" . consult-grep)
+         ("M-s l" . consult-outline)
          ("M-y" . consult-yank-pop)
          ("M-g i" . consult-imenu)
          ("M-g M-i" . consult-project-imenu)
          ("M-g m" . consult-mark)
          ("M-g M-m" . consult-global-mark)
+         ("M-g b" . consult-bookmark)
          ("M-g r" . consult-register)
          ("M-g g" . consult-goto-line)
          ("M-g M-g" . consult-goto-line)
+         ("M-g e" . consult-error)
          ("C-x C-z" . consult-complex-command)))
 
 (use-package embark
