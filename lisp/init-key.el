@@ -147,7 +147,7 @@ root-_D_iff  log _O_utgoing   _~_:revision  i_G_nore    _g_:annotate _u_:revert
          ("M-(" . easy-pair-barf)
          ("M-)" . easy-pair-slurp)))
 
-(use-package anchored-transpose :ensure
+(use-package anchored-transpose
     :bind (:map region-bindings-mode-map
                 ("C-t" . anchored-transpose)))
 
@@ -685,13 +685,14 @@ Prefixed with \\[universal-argument], show dispatch action."
          ([remap switch-to-buffer] . consult-buffer)
          ([remap switch-to-buffer-other-window] . consult-buffer-other-window)
          ([remap switch-to-buffer-other-frame] . consult-buffer-other-frame)
+         ([remap comint-dynamic-list-input-ring] . consult-history)
          ("M-X" . consult-mode-command)
          ("<help> a" . consult-apropos)
          ("M-s M-s" . consult-line)
          ("M-s s" . consult-focus-lines)
          ("M-s f" . consult-grep)
-         ("M-s l" . consult-outline)
          ("M-y" . consult-yank-pop)
+         ("M-g o" . consult-outline)
          ("M-g i" . consult-imenu)
          ("M-g M-i" . consult-project-imenu)
          ("M-g m" . consult-mark)
