@@ -857,6 +857,7 @@ section: _a_rguments  _d_escription  _D_e_t_ails  _e_xamples  _n_ote  _r_eferenc
              ("<f7>" . ess-show-R-traceback)
              ("C-x <f8>" . ess-tracebug)
              ("_")
+             ("C-c C-l" . consult-history)
              ("\\" . ess-smart-pipe)
              (";" .  ess-cycle-assign))
 
@@ -1385,7 +1386,7 @@ _d_eclare     _u_nstore     _e_dit^^ ^^ ^^
   (bind-keys :map shell-mode-map
              ("C-M-a" . comint-previous-prompt)
              ("C-M-e" . comint-next-prompt)
-             ("C-c C-l" . counsel-shell-history)))
+             ("C-c C-l" . consult-history)))
 
 (provide 'init-mode)
 ;;; init-mode.el ends here
