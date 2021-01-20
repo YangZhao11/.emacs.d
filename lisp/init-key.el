@@ -16,13 +16,13 @@
       ("\\Rarr" ?⇒) ("\\Larr" ?⇐) ("\\Uarr" ?⇑) ("\\Darr" ?⇓))))
 
 (defun z-setup-terminal ()
-  ;; This is not on by default, but needed for `read-key' to read M-z
-  ;; as one keypress on terminal.
+  ;; Translate ESC-* to M-*. This is needed for `read-key' to
+  ;; recognize M-z in one step (otherwise it'll ready the ESC only).
   (cl-loop for c from ?! to ?~ do
            (when (not (memq c '(?\[ ?O)))
-    (define-key input-decode-map
-      (kbd (concat "ESC " (char-to-string c)))
-      (kbd (concat "M-" (char-to-string c))))))
+             (define-key input-decode-map
+               (kbd (concat "ESC " (char-to-string c)))
+               (kbd (concat "M-" (char-to-string c))))))
   (cl-loop for c from ?a to ?z do
     (define-key input-decode-map
       (kbd (concat "ESC C-" (char-to-string c)))
@@ -685,6 +685,7 @@ Prefixed with \\[universal-argument], show dispatch action."
          ([remap switch-to-buffer] . consult-buffer)
          ([remap switch-to-buffer-other-window] . consult-buffer-other-window)
          ([remap switch-to-buffer-other-frame] . consult-buffer-other-frame)
+         ;; C-c C-l in `comint-mode-map'
          ([remap comint-dynamic-list-input-ring] . consult-history)
          ("M-X" . consult-mode-command)
          ("<help> a" . consult-apropos)
@@ -704,6 +705,9 @@ Prefixed with \\[universal-argument], show dispatch action."
          ("M-g e" . consult-error)
          ("C-x C-z" . consult-complex-command)))
 
+(use-package consult-flycheck
+  :bind (("M-g k" . consult-flycheck)))
+
 (use-package embark
   :after selectrum
   :bind (:map selectrum-minibuffer-map
@@ -713,3 +717,6 @@ Prefixed with \\[universal-argument], show dispatch action."
 (use-package embark-consult
   :after (embark consult)
   :hook (embark-collect-mode . embark-consult-preview-minor-mode))
+
+(provide 'init-key)
+;;; init-key.el ends here

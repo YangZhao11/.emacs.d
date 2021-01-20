@@ -337,42 +337,53 @@ _[_ _]_:page   _<_ _>_:dirline _o_ther win     redisp_l_ay     ^^_T_ouch   ch_G_
              ("e" . dired-toggle-read-only)
              ("SPC" . hydra-dired/body)))
 
-(defhydra hydra-package-menu (:color pink :hint nil)
-  "
-_k_↑ _p_rev    _U_pgrade      _d_elete   _f_ilter _H_ide       _r_efresh
-_j_↓ _n_ext    _~_: obsolete  _i_nstall  _S_ort   _(_: toggle  _g_: revert
-_<_  _>_       _z_: execute   _?_: info  _u_nmark _q_uit
+(use-package package
+  :config
+  (defhydra hydra-package-menu (:color pink :hint nil)
+    "
+_k_↑ _p_rev    _U_pgrade      _d_elete   _/_ :filter  _H_ide       _r_evert
+_j_↓ _n_ext    _~_: obsolete  _i_nstall  _S_ort       _(_: toggle
+_<_  _>_       _z_: execute   _u_nmark   _?_: info    _q_uit
 "
-  ("SPC" nil)
-  ("(" package-menu-toggle-hiding)
-  ("<" beginning-of-buffer)
-  (">" end-of-buffer)
-  ("?" package-menu-describe-package)
-  ("H" package-menu-hide-package)
-  ("S" tabulated-list-sort)
-  ("U" package-menu-mark-upgrades)
-  ("d" package-menu-mark-delete)
-  ("f" package-menu-filter-by-keyword)
-  ("g" revert-buffer)
-  ("i" package-menu-mark-install)
-  ("n" next-line)
-  ("p" previous-line)
-  ("q" quit-window :color blue)
-  ("r" revert-buffer)
-  ("u" package-menu-mark-unmark)
-  ("z" package-menu-execute)
-  ("~" package-menu-mark-obsolete-for-deletion)
-  ("j" scroll-up-command)
-  ("k" scroll-down-command))
-(bind-keys :map package-menu-mode-map
-           ("SPC" . hydra-package-menu/body)
-           ("z" . package-menu-execute)
-           ("x" . god-mode-self-insert)
-           ("a" . god-mode-self-insert)
-           ("e" . god-mode-self-insert)
-           ("s" . consult-line)
-           ("j" . scroll-up-command)
-           ("k" . scroll-down-command))
+    ("SPC" nil)
+    ("(" package-menu-toggle-hiding)
+    ("<" beginning-of-buffer)
+    (">" end-of-buffer)
+    ("?" package-menu-describe-package)
+    ("H" package-menu-hide-package)
+    ("S" tabulated-list-sort)
+    ("U" package-menu-mark-upgrades)
+    ("d" package-menu-mark-delete)
+    ("/" hydra-package-menu-filter/body)
+    ("g" revert-buffer)
+    ("i" package-menu-mark-install)
+    ("n" next-line)
+    ("p" previous-line)
+    ("q" quit-window :color blue)
+    ("r" revert-buffer)
+    ("u" package-menu-mark-unmark)
+    ("z" package-menu-execute)
+    ("~" package-menu-mark-obsolete-for-deletion)
+    ("j" scroll-up-command)
+    ("k" scroll-down-command))
+  (defhydra hydra-package-menu-filter (:color pink :hint nil)
+    "
+Filter by: _k_eyword    _n_ame    _/_:clear
+"
+    ("SPC" nil)
+    ("k" package-menu-filter-by-keyword)
+    ("n" package-menu-filter-by-name)
+    ("/" package-menu-clear-filter))
+
+  (bind-keys :map package-menu-mode-map
+             ("SPC" . hydra-package-menu/body)
+             ("z" . package-menu-execute)
+             ("x" . god-mode-self-insert)
+             ("a" . god-mode-self-insert)
+             ("e" . god-mode-self-insert)
+             ("s" . consult-line)
+             ("j" . scroll-up-command)
+             ("k" . scroll-down-command)))
 
 (use-package smerge-mode
   :bind ("C-x m" . hydra-smerge/body)
@@ -659,11 +670,6 @@ fallback."
   (bind-keys :map js-mode-map
              ("M-." . nil)
              ("C-x ." . js-find-symbol)))
-
-(use-package js2-mode
-  :mode "\\.js\\'"
-  :config
-  (setq js2-strict-missing-semi-warning nil))
 
 (use-package haskell-mode
   :config

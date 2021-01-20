@@ -77,7 +77,7 @@ SPEC could be `box', 'bar', or `hbar'."
 (setq god-mode-low-priority-keys
       '(?z ?# ?q ?\[ ?\] ?U
         ?~ ?! ?@ ?$ ?% ?^ ?& ?* ?{ ?}
-        ?< ?> ?: ?| ?\\ ?+ ?= ??))
+        ?< ?> ?: ?| ?\\ ?+ ?= ?? ?/))
 
 (defun god-mode-toggle-sticky-meta (arg)
   (interactive (list (string= "M-" (cdr (assoc nil god-mod-alist)))))
@@ -141,4 +141,4 @@ SPEC could be `box', 'bar', or `hbar'."
 (add-hook 'god-mode-disabled-hook 'z-god-mode-disabled-hook)
 
 ;; Enter god-mode after all the other stuff has been loaded.
-(add-hook 'after-init-hook 'god-mode-all)
+(add-hook 'after-init-hook #'god-mode-all)
