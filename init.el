@@ -1,17 +1,12 @@
-; -*- coding: utf-8 -*-
+; -*- lexical-binding: t; coding: utf-8 -*-
 
 ;; Make elpa packages available
 (add-to-list 'package-archives
-             '("melpa" . "https://melpa.org/packages/") t)
+             '("melpa" . "http://melpa.org/packages/") t)
 (add-to-list 'package-archives
-             '("melpa-stable" . "https://stable.melpa.org/packages/") t)
+             '("melpa-stable" . "http://stable.melpa.org/packages/") t)
 (setq package-archive-priorities
       '(("melpa-stable" . 20) ("gnu" . 10) ("melpa" . 0)))
-
-(eval-when-compile (require 'use-package))
-(require 'hydra)
-(require 'diminish)
-(require 's)
 
 (push "~/.emacs.d/god-mode" load-path)
 
@@ -24,59 +19,11 @@
               (replace-regexp-in-string "\\..*" "" system-name)))
   (load (concat "init-" sub) t))
 
-;; --------------------------------------------------
-;; Defaults
-(setq-default indent-tabs-mode nil
-              indicate-empty-lines 't
-              frame-title-format "%b @Emacs"
-              ispell-program-name "aspell"
-              page-delimiter "\\(^\f\\|-\\{20,\\}$\\)")
-(setq inhibit-startup-screen t
-      visible-bell 't
-      set-mark-command-repeat-pop 't
-      sentence-end-double-space nil
-      require-final-newline 't
-      tramp-default-method "ssh"
-      text-scale-mode-step 1.1
-      scroll-margin 2
-      shift-select-mode nil
-      mouse-yank-at-point 't
-      delete-by-moving-to-trash 't
-      default-input-method 'TeX)
-
-(defun set-frame-menubar (&optional frame)
-  "Enable / disable the menubar in FRAME (default: selected
-    frame). Enable only on a graphical display on mac."
-  (interactive)
-  (set-frame-parameter frame 'menu-bar-lines
-                       (if (and (display-graphic-p frame)
-                                (eq system-type 'darwin))
-                           1 0)))
-(add-hook 'after-make-frame-functions 'set-frame-menubar)
-
-(menu-bar-mode (if (eq system-type 'darwin) 1 -1))
-(tool-bar-mode -1)
-(set-scroll-bar-mode nil)
-(mouse-wheel-mode 1)
-(blink-cursor-mode 1)
-(transient-mark-mode 1)
-(global-font-lock-mode 't)
-(ansi-color-for-comint-mode-on)
-(setq comint-scroll-to-bottom-on-output 't
-      comint-scroll-show-maximum-output nil)
-(temp-buffer-resize-mode 1)
-(fset 'yes-or-no-p 'y-or-n-p)
-(show-paren-mode 1)
-(setq show-paren-when-point-in-periphery 't)
-(electric-pair-mode 1)
-(recentf-mode 1)
-
-;; --------------------------------------------------
-(load-theme 'zenburn 't)   ; load this first for many defaults.
 
 ;; --------------------------------------------------
 ;; Load subfiles
-
+(require 'use-package)
+(load "init-default")
 (load "init-buffer")
 (load "init-mode")
 (load "init-key")
@@ -101,7 +48,7 @@
  '(nrepl-message-colors
    '("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3"))
  '(package-selected-packages
-   '(embark-consult prescient selectrum selectrum-prescient consult consult-selectrum embark marginalia sr-speedbar clipetty transient pcmpl-args yasnippet avy diminish visual-regexp dired-sidebar ibuffer-sidebar rainbow-mode julia-mode julia-repl magit dired-subtree imenu-list indium indent-guide rainbow-identifiers string-inflection ace-window region-bindings-mode citc g4-gutter imenu-anywhere wgrep flx hydra color-identifiers-mode org-bullets js2-mode scala-mode2 clang-format markdown-mode use-package go-eldoc beacon anchored-transpose go-mode easy-kill zenburn-theme squery register-channel rainbow-delimiters lua-mode ido-vertical-mode ido-ubiquitous haskell-mode goto-chg god-mode f ess edit-server))
+   '(csv-mode consult-flycheck selectrum-prescient embark-consult prescient consult consult-selectrum embark marginalia sr-speedbar clipetty transient pcmpl-args yasnippet avy diminish visual-regexp dired-sidebar ibuffer-sidebar rainbow-mode julia-mode julia-repl magit dired-subtree imenu-list indium indent-guide rainbow-identifiers string-inflection ace-window region-bindings-mode citc g4-gutter imenu-anywhere wgrep flx hydra color-identifiers-mode org-bullets js2-mode scala-mode2 clang-format markdown-mode use-package go-eldoc beacon anchored-transpose go-mode easy-kill zenburn-theme squery register-channel rainbow-delimiters lua-mode ido-vertical-mode ido-ubiquitous haskell-mode goto-chg god-mode f ess edit-server))
  '(pdf-view-midnight-colors '("#DCDCCC" . "#383838"))
  '(vc-annotate-background "#2B2B2B")
  '(vc-annotate-color-map

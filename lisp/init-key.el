@@ -364,6 +364,7 @@ useful when followed by an immediate kill."
     (goto-char isearch-other-end))
   (bind-keys :map isearch-mode-map
              ("M-RET" . isearch-exit-other-end)
+             ("M-e"   . consult-isearch) ;isearch-edit-string
              ("M-k"   . isearch-yank-word-or-char)
              ("M-z"   . isearch-yank-until-char)
              ("M-<"   . isearch-beginning-of-buffer)
@@ -654,6 +655,8 @@ Prefixed with \\[universal-argument], show dispatch action."
   :bind ("C-x d" . find-name-dired))
 
 (use-package recentf
+  :init
+  (recentf-mode 1)
   :config
   (setq recentf-max-saved-items 80)
   (setq recentf-exclude '("/elpa/")))
@@ -685,6 +688,7 @@ Prefixed with \\[universal-argument], show dispatch action."
          ([remap switch-to-buffer] . consult-buffer)
          ([remap switch-to-buffer-other-window] . consult-buffer-other-window)
          ([remap switch-to-buffer-other-frame] . consult-buffer-other-frame)
+         ([remap multi-occur] . consult-multi-occur)
          ;; C-c C-l in `comint-mode-map'
          ([remap comint-dynamic-list-input-ring] . consult-history)
          ("M-X" . consult-mode-command)
@@ -692,6 +696,7 @@ Prefixed with \\[universal-argument], show dispatch action."
          ("M-s M-s" . consult-line)
          ("M-s s" . consult-focus-lines)
          ("M-s f" . consult-grep)
+         ("M-s e" . consult-isearch)
          ("M-y" . consult-yank-pop)
          ("M-g o" . consult-outline)
          ("M-g i" . consult-imenu)
@@ -704,9 +709,6 @@ Prefixed with \\[universal-argument], show dispatch action."
          ("M-g M-g" . consult-goto-line)
          ("M-g e" . consult-error)
          ("C-x C-z" . consult-complex-command)))
-
-(use-package consult-flycheck
-  :bind (("M-g k" . consult-flycheck)))
 
 (use-package embark
   :after selectrum
