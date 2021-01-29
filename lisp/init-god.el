@@ -142,3 +142,5 @@ SPEC could be `box', 'bar', or `hbar'."
 
 ;; Enter god-mode after all the other stuff has been loaded.
 (add-hook 'after-init-hook #'god-mode-all)
+
+(provide 'init-god)

@@ -311,3 +311,5 @@ _<_ size _>_       _c_ontent    proc_E_ss    _↑_ _p_op^^       _P_op \\:clear
 ;; always need a scratch buffer.
 (defun z-idle-timer () (get-buffer-create "*scratch*"))
 (run-with-idle-timer 1 t 'z-idle-timer)
+
+(provide 'init-buffer)
