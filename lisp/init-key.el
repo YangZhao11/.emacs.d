@@ -283,6 +283,9 @@ and we are on terminal."
          ("M-="         . z-toggle-activate-mark)
          ("<XF86Eject>" . keyboard-escape-quit)
          ([remap exchange-point-and-mark] . z-exchange-point-and-mark))
+  :init
+  (when (fboundp 'undo-redo)
+    (bind-keys ("C-?" . undo-redo)))
   :config
   (defun cycle-spacing-0 ()
     "Remove adjacent spaces, but undo if the command is issued a second time."
@@ -712,8 +715,8 @@ Prefixed with \\[universal-argument], show dispatch action."
 
 (use-package embark
   :after selectrum
+  :bind ("M-m" . embark-act)
   :bind (:map selectrum-minibuffer-map
-              ("M-o" . embark-act)
               ("M-s o" . embark-export)))
 
 (use-package embark-consult
