@@ -74,6 +74,12 @@ SPEC could be `box', 'bar', or `hbar'."
 (bind-keys ("(" . true-self-insert-command)
            (")" . true-self-insert-command))
 
+(setq god-mode-low-priority-exempt
+      '(self-insert-command
+        c-electric-lt-gt c-electric-brace
+        sgml-slash
+        ess-smart-pipe ess-insert-assign))
+
 (setq god-mode-low-priority-keys
       '(?z ?# ?q ?\[ ?\] ?U
         ?~ ?! ?@ ?$ ?% ?^ ?& ?* ?{ ?}
