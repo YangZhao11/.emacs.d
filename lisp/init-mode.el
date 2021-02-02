@@ -849,27 +849,22 @@ section: _a_rguments  _d_escription  _D_e_t_ails  _e_xamples  _n_ote  _r_eferenc
   :config
   ;; For Rmd editing, do not treat ` as quote.
   (modify-syntax-entry ?` "." ess-r-mode-syntax-table)
-  (modify-syntax-entry ?% "." ess-r-mode-syntax-table))
+  (modify-syntax-entry ?% "." ess-r-mode-syntax-table)
 
-
-(use-package ess-inf
-  :config
   (defun z-inferior-ess-mode-hook ()
     (setq prettify-symbols-alist ess-r-prettify-symbols)
     (prettify-symbols-mode 1)
     (setq-local scroll-margin 0)
     (setq-local comint-move-point-for-output t))
+  (add-hook 'inferior-ess-r-mode-hook #'z-inferior-ess-mode-hook)
 
-  (bind-keys :map inferior-ess-mode-map
+  (bind-keys :map inferior-ess-r-mode-map
              ("\C-cw" . ess-execute-screen-options)
              ("<f7>" . ess-show-R-traceback)
              ("C-x <f8>" . ess-tracebug)
              ("_")
              ("\\" . ess-smart-pipe)
-             (";" .  ess-cycle-assign))
-
-  (add-hook 'inferior-ess-mode-hook #'z-inferior-ess-mode-hook))
-
+             (";" .  ess-cycle-assign)))
 
 (use-package markdown-mode
   :mode ("\\.md\\'" . markdown-mode)
