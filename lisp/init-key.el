@@ -384,6 +384,7 @@ useful when followed by an immediate kill."
            ("C-x C-0")                  ; unbind text-scale-adjust
            ("<mouse-8>" . mode-line-previous-buffer)
            ("<mouse-9>" . mode-line-next-buffer)
+           ("C-x f" . project-find-file) ; set-fill-column
            ("C-z"))
 
 ;; F1 for help.

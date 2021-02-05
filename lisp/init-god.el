@@ -78,7 +78,7 @@ SPEC could be `box', 'bar', or `hbar'."
       '(self-insert-command
         c-electric-lt-gt c-electric-brace
         sgml-slash
-        ess-smart-pipe ess-insert-assign))
+        ess-smart-pipe ess-insert-assign ess-cycle-assign))
 
 (setq god-mode-low-priority-keys
       '(?z ?# ?q ?\[ ?\] ?U
