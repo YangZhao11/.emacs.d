@@ -5,95 +5,50 @@
   (require 'hydra)
   (require 'subr-x))
 
-;; --------------------------------------------------
-;; z-project maps buffers to project names, with caching in z-projects-alist
-(defvar z-project-alist nil
-  "Maps directory to project names.")
-(defun z-project-lookup (directory)
-  (cl-find-if (lambda (entry) (s-prefix-p (car entry) directory))
-              z-project-alist))
+;; manually configured project type that matches given patterns
+(require 'project)
+(setq project-manual-root-pattern
+      '("~/Projects/[^/]*/"
+        "/usr/local/Cellar/[^/]*/"))
 
-(defun z-project-buffer-dir (buf)
-  "Return effective directory of BUF."
-  (or (buffer-file-name buf)
-      (and (memq (buffer-local-value 'major-mode buf)
-                 '(help-mode helpful-mode ibuffer-mode package-menu-mode)) "~")
-      (expand-file-name (buffer-local-value 'default-directory buf))))
+(defun project-try-manual (dir)
+  (let* ((dir-normalized (abbreviate-file-name dir))
+         (root (save-match-data
+                (seq-find 'identity
+                          (seq-map
+                           (lambda (root-pattern)
+                             (if (string-match root-pattern dir-normalized)
+                                 (match-string 0 dir-normalized)))
+                           project-manual-root-pattern)))))
+    (if root (cons 'manual root))))
 
-(defun z-project-lookup-buffer (buf)
-  "Lookup BUF in `z-project-alist'."
-(let ((fname (z-project-buffer-dir buf)))
-    (if fname (z-project-lookup fname))))
+(cl-defmethod project-roots ((project (head manual)))
+  (list (cdr project)))
 
-(defun z-project-try-g3 (buf)
-  (let ((dir (z-project-buffer-dir buf)))
-    (when (s-contains-p "/google3/" dir)
-      (let* ((root (replace-regexp-in-string "\\(.*/google3/\\).*" "\\1" dir))
-             (name (replace-regexp-in-string ".*/\\([^/]*\\)/google3/.*" "\\1" root))
-             (proj (concat "G3:" name)))
-        (cons root proj)))))
+(setq project-find-functions '(project-try-vc project-try-manual))
+(if (fboundp 'project-try-g3)
+    (add-to-list 'project-find-functions 'project-try-g3))
 
-(defun z-project-try-vc (buf)
-  (with-current-buffer buf
-    (if-let* ((d (vc-root-dir))
-              (proj (file-name-nondirectory (s-chop-suffix "/" d))))
-        (cons (expand-file-name d) proj))))
+(use-package ibuffer-project
+  :config
+  (setq ibuffer-project-use-cache 't)
 
-(defvar z-project-try-functions (list #'z-project-try-g3 #'z-project-try-vc)
-  "List of functions to try to get a (dir . project) mapping")
+  (defun z-project-root (dir)
+    (let ((p (project-current nil dir)))
+      (and p (car (project-roots p)))))
 
-(defun z-project (buf)
-  "Returns project entry for BUF by trying everything in
-`z-project-try-functions'. Results are cached in
-`z-project-alist'."
-  (if-let* ((proj (z-project-lookup-buffer buf)))
-      proj
-    (when-let* ((entry (run-hook-with-args-until-success
-                        'z-project-try-functions buf)))
-      (add-to-list 'z-project-alist entry)
-      entry)))
+  (setq ibuffer-project-root-functions
+        '((z-project-root . "Project")
+          (identity . "Directory"))))
 
-;; --------------------------------------------------
-;; ibuffer
 (use-package ibuffer
   :bind ("C-x C-b" . ibuffer)
   :functions ibuffer-switch-to-saved-filter-groups
   :config
-  (defun z-project-group (entry)
-    "Function to map `z-project-alist' entries to ibuffer filters"
-    `(,(cdr entry)
-      (predicate . (string= (cdr (z-project (current-buffer))) ,(cdr entry)))))
-
-  (defun z-ibuffer-groups (name)
-    "Generate ibuffer filter group definition. Each G3 client has its own group."
-    (let ((proj (mapcar 'z-project-group z-project-alist)))
-      (append (list name)
-              proj
-              '(("G3" (filename . "/google3/")))
-              `((,(format "%s Home" (getenv "USER"))
-                 ,(cons 'filename (format "^%s/" (getenv "HOME"))))
-                ("Misc" (or (mode . Custom-mode)
-                            (mode . help-mode)
-                            (mode . ess-help-mode)
-                            (mode . apropos-mode)
-                            (mode . completion-list-mode)
-                            (mode . magit-diff-mode)
-                            (mode . magit-log-mode)
-                            (mode . magit-process-mode)
-                            (name . "\\[r\\]$")
-                            (name . "\\[fundamental\\]$")
-                            (name . "^\\*Messages\\*$")
-                            (name . "^\\*Warnings\\*$")
-                            (name . "^\\*Backtrace\\*$")
-                            (name . "^\\*Quail Completions\\*$")
-                            (name . "^\\*.*Help.*\\*$")
-                            (name . "^\\*[gP]4[- ]")
-                            (name . "^\\*TeX ")
-                            (name . "^\\*ESS\\*$")
-                            (name . "^\\*ESS-")))))))
 
   (setq ibuffer-show-empty-filter-groups nil
         ibuffer-eliding-string "…")
+
   (defadvice ibuffer-make-column-filename (after strip-google3-filename activate)
     "Strip experimental to ~user, .../a/google3 to //a/"
     (setq ad-return-value
@@ -275,23 +230,20 @@ _<_ size _>_       _c_ontent    proc_E_ss    _↑_ _p_op^^       _P_op \\:clear
   (bind-keys :map ibuffer-mode-map
              ("C-x C-j" . ibuffer-dired-jump)
              ("C-x 4 j" . ibuffer-dired-jump-other-window)
-
              ("M-o")             ; ibuffer-visit-buffer-1-window
              ("M-j")
              ("[" . ibuffer-backward-filter-group)
              ("]" . ibuffer-forward-filter-group)
              ("z" . ibuffer-do-kill-on-deletion-marks)
              ("x" . god-mode-self-insert)
-             ("/ /" . ibuffer-filter-by-directory) ;somehow not default
-             ("/ DEL" . ibuffer-filter-disable)    ;somehow not default
              ("SPC" . hydra-ibuffer/body))
 
   (defun z-ibuffer-mode-hook ()
-    (ibuffer-switch-to-saved-filter-groups "Default")
+    ;;(ibuffer-switch-to-saved-filter-groups "Default")
     (setq-local page-delimiter "^\\[ \\(.*\\)? \\]$"))
   (add-hook 'ibuffer-mode-hook 'z-ibuffer-mode-hook)
   (defun z-ibuffer-hook ()
-    (setq ibuffer-saved-filter-groups (list (z-ibuffer-groups "Default"))))
+    (setq ibuffer-filter-groups (ibuffer-project-generate-filter-groups)))
   (z-ibuffer-hook)             ; ensure groups are set on the first run.
   (add-hook 'ibuffer-hook 'z-ibuffer-hook))
 
@@ -305,7 +257,6 @@ _<_ size _>_       _c_ontent    proc_E_ss    _↑_ _p_op^^       _P_op \\:clear
   :init
   (midnight-delay-set 'midnight-delay "4:30am")
   (add-to-list 'clean-buffer-list-kill-regexps "\\*help\\[R\\]")
-  (add-to-list 'clean-buffer-list-kill-regexps "\\*helpful ")
   (add-to-list 'clean-buffer-list-kill-regexps "\\*[Pg]4[- ]"))
 
 ;; always need a scratch buffer.
