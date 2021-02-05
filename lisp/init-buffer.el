@@ -31,15 +31,7 @@
 
 (use-package ibuffer-project
   :config
-  (setq ibuffer-project-use-cache 't)
-
-  (defun z-project-root (dir)
-    (let ((p (project-current nil dir)))
-      (and p (car (project-roots p)))))
-
-  (setq ibuffer-project-root-functions
-        '((z-project-root . "Project")
-          (identity . "Directory"))))
+  (setq ibuffer-project-use-cache 't))
 
 (use-package ibuffer
   :bind ("C-x C-b" . ibuffer)
