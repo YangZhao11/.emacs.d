@@ -26,7 +26,7 @@
   (list (cdr project)))
 
 (setq project-find-functions '(project-try-vc project-try-manual))
-(if (fboundp 'project-try-g3)
+(if (require 'project-g3 nil t)
     (add-to-list 'project-find-functions 'project-try-g3))
 
 (use-package ibuffer-project
