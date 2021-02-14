@@ -700,7 +700,7 @@ Prefixed with \\[universal-argument], show dispatch action."
          ("M-s M-s" . consult-line)
          ("M-s s" . consult-focus-lines)
          ("M-s f" . consult-grep)
-         ("M-s e" . consult-isearch)
+         ("M-s e" . consult-isearch)  ; similar to isearch-edit-string
          ("M-y" . consult-yank-pop)
          ("M-g o" . consult-outline)
          ("M-g i" . consult-imenu)
@@ -711,7 +711,7 @@ Prefixed with \\[universal-argument], show dispatch action."
          ("M-g r" . consult-register)
          ("M-g g" . consult-goto-line)
          ("M-g M-g" . consult-goto-line)
-         ("M-g e" . consult-error)
+         ("M-g `" . consult-compile-error)
          ("C-x C-z" . consult-complex-command)))
 
 (use-package embark
