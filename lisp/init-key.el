@@ -685,7 +685,10 @@ Prefixed with \\[universal-argument], show dispatch action."
   :after selectrum
   :init
   ;; TODO: something about marginalia-cycle and selectrum-exhibit
-  (marginalia-mode 1))
+  (marginalia-mode 1)
+  :config
+  (add-to-list 'marginalia-command-categories
+               '(consult-find . file)))
 
 (use-package consult
   :bind (("M-o" . consult-buffer)
@@ -695,6 +698,7 @@ Prefixed with \\[universal-argument], show dispatch action."
          ([remap multi-occur] . consult-multi-occur)
          ;; C-c C-l in `comint-mode-map'
          ([remap comint-dynamic-list-input-ring] . consult-history)
+         ("C-x F" . consult-find)
          ("M-X" . consult-mode-command)
          ("<help> a" . consult-apropos)
          ("M-s M-s" . consult-line)
