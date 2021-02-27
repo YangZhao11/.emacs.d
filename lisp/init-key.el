@@ -119,7 +119,7 @@ root-_D_iff  log _O_utgoing   _~_:revision  i_G_nore    _g_:annotate _u_:revert
 ;; lisp is not a package
 ;; (use-package lisp)
 (defun backward-down-list (arg)
-  "Go down backwards"
+  "Go down list backwards ARG times."
   (interactive "^p")
   (down-list (- (or arg 1))))
 
@@ -184,9 +184,11 @@ root-_D_iff  log _O_utgoing   _~_:revision  i_G_nore    _g_:annotate _u_:revert
   :commands (like-this--next-face))
 
 (defun z-kill-ring-save (arg)
+  "Wrapper around `kill-ring-save'.
+
+If ARG is non-nil and we are on terminal, then call
+`clipetty-kill-ring-save'."
   (interactive "P")
-  "Forward to `kill-ring-save' or `clipetty-kill-ring-save' if ARG is non-nil
-and we are on terminal."
   (if (and arg (frame-terminal))
       (call-interactively 'clipetty-kill-ring-save)
     (call-interactively 'kill-ring-save)))
@@ -674,7 +676,10 @@ Prefixed with \\[universal-argument], show dispatch action."
 (use-package selectrum
   :bind (("M-s M-d" . selectrum-repeat))
   :config
-  (selectrum-mode 1))
+  (selectrum-mode 1)
+  (when (<= 28 emacs-major-version)
+    ;; work-around for bug
+    (setq selectrum-fix-vertical-window-height t)))
 
 (use-package selectrum-prescient
   :config

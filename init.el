@@ -11,11 +11,10 @@
 (push "~/.emacs.d/god-mode" load-path)
 
 ;; Load platform specific inits, including init-gnu-linux /
-;; init-darwin, init-ns / init-x, init-hostname.
+;; init-darwin, init-hostname.
 (push "~/.emacs.d/lisp" load-path)
 (dolist (sub (list
               (replace-regexp-in-string "/" "-" (symbol-name system-type))
-              (symbol-name window-system)
               (replace-regexp-in-string "\\..*" "" system-name)))
   (load (concat "init-" sub) t))
 
@@ -48,7 +47,7 @@
  '(nrepl-message-colors
    '("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3"))
  '(package-selected-packages
-   '(csv-mode consult-flycheck selectrum-prescient embark-consult prescient consult consult-selectrum embark marginalia sr-speedbar clipetty transient pcmpl-args yasnippet avy diminish visual-regexp dired-sidebar ibuffer-sidebar rainbow-mode julia-mode julia-repl magit dired-subtree imenu-list indium indent-guide rainbow-identifiers string-inflection ace-window region-bindings-mode citc g4-gutter imenu-anywhere wgrep flx hydra color-identifiers-mode org-bullets js2-mode scala-mode2 clang-format markdown-mode use-package go-eldoc beacon anchored-transpose go-mode easy-kill zenburn-theme squery register-channel rainbow-delimiters lua-mode ido-vertical-mode ido-ubiquitous haskell-mode goto-chg god-mode f ess edit-server))
+   '(magit web-mode ibuffer-project selectrum consult-flycheck flycheck csv-mode selectrum-prescient embark-consult prescient consult consult-selectrum embark marginalia sr-speedbar clipetty transient pcmpl-args yasnippet avy diminish visual-regexp dired-sidebar ibuffer-sidebar rainbow-mode julia-mode julia-repl dired-subtree imenu-list indium indent-guide rainbow-identifiers string-inflection ace-window region-bindings-mode citc g4-gutter imenu-anywhere wgrep flx hydra color-identifiers-mode org-bullets js2-mode scala-mode2 clang-format markdown-mode use-package go-eldoc beacon anchored-transpose go-mode easy-kill zenburn-theme squery register-channel rainbow-delimiters lua-mode ido-vertical-mode ido-ubiquitous haskell-mode goto-chg god-mode f ess edit-server))
  '(pdf-view-midnight-colors '("#DCDCCC" . "#383838"))
  '(vc-annotate-background "#2B2B2B")
  '(vc-annotate-color-map
@@ -89,6 +88,8 @@
  '(mode-line ((t (:background "#284460" :foreground "#8FB28F" :box (:line-width -1 :style released-button)))))
  '(org-todo ((t (:foreground "#CC9393" :underline t :weight bold))))
  '(rainbow-delimiters-base-error-face ((t (:inherit rainbow-delimiters-base-face :foreground "#FF98A0" :weight bold))))
+ '(selectrum-group-separator ((t (:inherit shadow :foreground "gray40" :strike-through t :height 0.7))))
+ '(selectrum-group-title ((t (:inherit shadow :height 0.7))))
  '(vc-conflict-state ((t (:inherit vc-state-base :foreground "#E06050"))))
  '(vc-edited-state ((t (:inherit vc-state-base :foreground "#60CC80"))))
  '(vc-locally-added-state ((t (:inherit vc-state-base :foreground "#90FF50"))))
