@@ -716,7 +716,9 @@ Prefixed with \\[universal-argument], show dispatch action."
          ("M-g g" . consult-goto-line)
          ("M-g M-g" . consult-goto-line)
          ("M-g `" . consult-compile-error)
-         ("C-x C-z" . consult-complex-command)))
+         ("C-x C-z" . consult-complex-command))
+  :config
+  (setq consult-goto-line-numbers nil))
 
 (use-package embark
   :after selectrum
