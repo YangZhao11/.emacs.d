@@ -204,7 +204,7 @@ If ARG is non-nil and we are on terminal, then call
 
 (use-package easy-kill :ensure
   :functions (easy-kill-mark-region easy-kill-exit)
-  :bind ("M-w" . easy-kill)
+  :bind ([remap kill-ring-save] . easy-kill)
   :init
   (eval-when-compile
     (defmacro easy-kill-defun-on-selection (name func)
@@ -676,11 +676,11 @@ Prefixed with \\[universal-argument], show dispatch action."
 (use-package selectrum
   :bind (("M-s M-d" . selectrum-repeat))
   :config
-  (selectrum-mode 1)
   (bind-keys :map selectrum-minibuffer-map
              ("M-m")                    ; leave to embark-act
              ("C-j" . selectrum-quick-select)
-             ("C-M-j" . selectrum-quick-insert)))
+             ("C-M-j" . selectrum-quick-insert))
+  (selectrum-mode 1))
 
 (use-package selectrum-prescient
   :config
