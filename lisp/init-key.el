@@ -252,23 +252,23 @@ If ARG is non-nil and we are on terminal, then call
   (bind-keys
    :map easy-kill-base-map
    ("<f1>" . easy-kill-help)
-   ("C-h" . easy-kill-help)
-   ("DEL" . easy-kill-delete-pairs)
-   ("k"   . easy-kill-region)
-   ("m"   . easy-kill-mark-region)
-   ("i"   . easy-kill-inside)
-   ("t"   . easy-kill-transpose)
-   ("r"   . easy-kill-raise)
-   (";"   . easy-kill-comment-dwim)
-   ("("   . easy-kill-wrap-region)
-   (")"   . easy-kill-wrap-region)
-   ("["   . easy-kill-wrap-region)
-   ("]"   . easy-kill-wrap-region)
-   ("{"   . easy-kill-wrap-region)
-   ("}"   . easy-kill-wrap-region)
-   ("\""  . easy-kill-wrap-region)
-   ("'"   . easy-kill-wrap-region)
-   ("\\"  . easy-kill-indent-region)))
+   ("C-h"  . easy-kill-help)
+   ("DEL"  . easy-kill-delete-pairs)
+   ("k"    . easy-kill-region)
+   ("m"    . easy-kill-mark-region)
+   ("i"    . easy-kill-inside)
+   ("t"    . easy-kill-transpose)
+   ("r"    . easy-kill-raise)
+   (";"    . easy-kill-comment-dwim)
+   ("("    . easy-kill-wrap-region)
+   (")"    . easy-kill-wrap-region)
+   ("["    . easy-kill-wrap-region)
+   ("]"    . easy-kill-wrap-region)
+   ("{"    . easy-kill-wrap-region)
+   ("}"    . easy-kill-wrap-region)
+   ("\""   . easy-kill-wrap-region)
+   ("'"    . easy-kill-wrap-region)
+   ("\\"   . easy-kill-indent-region)))
 
 (use-package simple
   :diminish (auto-fill-function . " ¶")
@@ -677,9 +677,10 @@ Prefixed with \\[universal-argument], show dispatch action."
   :bind (("M-s M-d" . selectrum-repeat))
   :config
   (selectrum-mode 1)
-  (when (<= 28 emacs-major-version)
-    ;; work-around for bug
-    (setq selectrum-fix-vertical-window-height t)))
+  (bind-keys :map selectrum-minibuffer-map
+             ("M-m")                    ; leave to embark-act
+             ("C-j" . selectrum-quick-select)
+             ("C-M-j" . selectrum-quick-insert)))
 
 (use-package selectrum-prescient
   :config
@@ -704,7 +705,6 @@ Prefixed with \\[universal-argument], show dispatch action."
          ;; C-c C-l in `comint-mode-map'
          ([remap comint-dynamic-list-input-ring] . consult-history)
          ("C-x F" . consult-find)
-         ("M-X" . consult-mode-command)
          ("<help> a" . consult-apropos)
          ("M-s M-s" . consult-line)
          ("M-s s" . consult-focus-lines)
@@ -722,8 +722,14 @@ Prefixed with \\[universal-argument], show dispatch action."
          ("M-g M-g" . consult-goto-line)
          ("M-g `" . consult-compile-error)
          ("C-x C-z" . consult-complex-command))
+  :init
+  (unless (>= 28 emacs-major-version)
+    ;; emacs 28 has `execute-extended-command-for-buffer', which seems
+    ;; more useful
+    (bind-key "M-X" #'consult-mode-command))
   :config
   (setq consult-goto-line-numbers nil))
+
 
 (use-package embark
   :after selectrum

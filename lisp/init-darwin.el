@@ -17,6 +17,9 @@
 ;; (add-to-list 'default-frame-alist '(ns-appearance . dark))
 ;; (setq ns-use-proxy-icon nil)
 
+;; disable native-comp warnings
+(setq comp-async-report-warnings-errors nil)
+
 (set-fontset-font t 'unicode
                   (font-spec :name "Apple Color Emoji" :size 11) nil 'prepend)
 
