@@ -763,8 +763,8 @@ fallback."
           ("function" . ?ƒ)))
   (setq ess-use-flymake nil
         ess-use-ido nil
-        ess-busy-strings '("  " " ◴" " ◷" " ◶" " ◵")
-        ess-assign-list '(" <- " " %<-% "))
+        ess-busy-strings '("  " " ◐" " ◓" " ◑" " ◒")
+        ess-assign-list '(" <- "))
 
   ;; Make imenu recognize Rmd sections and functions. The default did not
   ;; make much sense.
