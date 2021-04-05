@@ -356,9 +356,6 @@ instead of inactivate region."
    (:else
     (string-inflection-underscore-function str)))))
 
-(use-package visual-regexp
-  :bind ("C-M-%" . vr/query-replace))
-
 (use-package isearch
   :config
   (defun isearch-exit-other-end ()

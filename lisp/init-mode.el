@@ -717,12 +717,6 @@ fallback."
     (let ((ess-assign-list '(" %>% ")))
       (ess-insert-assign arg)))
 
-  (defun ess-smart-tpipe (arg)
-    "Similar to ess-insert-assign, but insert %T>% instead."
-    (interactive "p")
-    (let ((ess-assign-list '(" %T>% ")))
-      (ess-insert-assign arg)))
-
   (defun ess-debug-next-or-eval-line ()
     (interactive)
     (let ((proc (and ess-local-process-name
