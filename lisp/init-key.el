@@ -318,8 +318,10 @@ instead of inactivate region."
              ("k" . scroll-down-command)
              ("[" . backward-page)
              ("]" . forward-page)
-             ("x" . god-mode-self-insert)
-             ("c" . god-mode-self-insert)))
+             ("c" . god-mode-self-insert)
+             ("l" . god-mode-self-insert)
+             ("v" . god-mode-self-insert)
+             ("x" . god-mode-self-insert)))
 
 (use-package string-inflection
   :bind (("M-U" . string-inflection-upcase)
@@ -681,6 +683,7 @@ Prefixed with \\[universal-argument], show dispatch action."
 
 (use-package selectrum-prescient
   :config
+  (setq prescient-use-case-folding nil) ; workaround
   (selectrum-prescient-mode 1)
   (prescient-persist-mode 1))
 
