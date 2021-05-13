@@ -47,7 +47,7 @@
  '(nrepl-message-colors
    '("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3"))
  '(package-selected-packages
-   '(magit web-mode ibuffer-project selectrum consult-flycheck flycheck csv-mode selectrum-prescient embark-consult prescient consult consult-selectrum embark marginalia sr-speedbar clipetty transient pcmpl-args yasnippet avy diminish visual-regexp dired-sidebar ibuffer-sidebar rainbow-mode julia-mode julia-repl dired-subtree imenu-list indium indent-guide rainbow-identifiers string-inflection ace-window region-bindings-mode citc g4-gutter imenu-anywhere wgrep flx hydra color-identifiers-mode org-bullets js2-mode scala-mode2 clang-format markdown-mode use-package go-eldoc beacon anchored-transpose go-mode easy-kill zenburn-theme squery register-channel rainbow-delimiters lua-mode ido-vertical-mode ido-ubiquitous haskell-mode goto-chg god-mode f ess edit-server))
+   '(magit web-mode ibuffer-project selectrum consult-flycheck flycheck csv-mode selectrum-prescient embark-consult prescient consult consult-selectrum embark marginalia sr-speedbar clipetty transient pcmpl-args yasnippet avy diminish dired-sidebar ibuffer-sidebar rainbow-mode julia-mode julia-repl dired-subtree imenu-list indent-guide rainbow-identifiers string-inflection ace-window region-bindings-mode citc g4-gutter imenu-anywhere wgrep flx hydra color-identifiers-mode org-bullets js2-mode scala-mode2 clang-format markdown-mode use-package go-eldoc beacon anchored-transpose go-mode easy-kill zenburn-theme squery register-channel rainbow-delimiters lua-mode ido-vertical-mode ido-ubiquitous haskell-mode goto-chg god-mode f ess edit-server))
  '(pdf-view-midnight-colors '("#DCDCCC" . "#383838"))
  '(vc-annotate-background "#2B2B2B")
  '(vc-annotate-color-map
@@ -85,8 +85,9 @@
  '(font-lock-keyword-face ((t (:foreground "#ECE4C0" :weight normal))))
  '(font-lock-type-face ((t (:foreground "#90B8BC"))))
  '(link ((t (:foreground "#D0BF8F" :underline t :weight normal))))
+ '(marginalia-key ((t (:inherit font-lock-comment-face))))
+ '(marginalia-modified ((t (:inherit font-lock-comment-face))))
  '(mode-line ((t (:background "#284460" :foreground "#8FB28F" :box (:line-width (1 . -1) :style released-button)))))
- '(mode-line-inactive ((t (:background "#284038" :foreground "#5F7F5F" :box (:line-width (1 . -1) :style released-button)))))
  '(org-todo ((t (:foreground "#CC9393" :underline t :weight bold))))
  '(rainbow-delimiters-base-error-face ((t (:inherit rainbow-delimiters-base-face :foreground "#FF98A0" :weight bold))))
  '(selectrum-group-separator ((t (:inherit shadow :foreground "gray40" :strike-through t :height 0.7))))
