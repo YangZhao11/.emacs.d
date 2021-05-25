@@ -777,7 +777,8 @@ These annotations are skipped for remote paths."
     ;; more useful
     (bind-key "M-X" #'consult-mode-command))
   :config
-  (setq consult-goto-line-numbers nil))
+  (setq consult-goto-line-numbers nil)
+  (bind-key "C-h" #'consult-narrow-help consult-narrow-map))
 
 
 (use-package embark
@@ -788,7 +789,7 @@ These annotations are skipped for remote paths."
 
 (use-package embark-consult
   :after (embark consult)
-  :hook (embark-collect-mode . embark-consult-preview-minor-mode))
+  :hook (embark-collect-mode . consult-preview-at-point-mode))
 
 (provide 'init-key)
 ;;; init-key.el ends here
