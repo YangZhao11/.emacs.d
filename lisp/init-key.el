@@ -727,20 +727,17 @@ Prefixed with \\[universal-argument], show dispatch action."
         :truncate (/ marginalia-truncate-width 2)
         :face 'marginalia-file-name))))
 
-  (defun marginalia-annotate-file (cand)
-    "Annotate file CAND with its size, modification time and other attributes.
-These annotations are skipped for remote paths."
-    (if (or (marginalia--remote-p cand)
-            (when-let (win (active-minibuffer-window))
-              (with-current-buffer (window-buffer win)
-                (marginalia--remote-p (minibuffer-contents-no-properties)))))
-        (marginalia--fields ("*Remote*" :face 'marginalia-documentation))
-      (when-let (attributes (file-attributes (substitute-in-file-name (marginalia--full-candidate cand)) 'string))
-        (marginalia--fields
-         ((file-size-human-readable (file-attribute-size attributes)) :width 7 :face 'marginalia-size)
-         ((format-time-string
-           "%b %d %H:%M"
-           (file-attribute-modification-time attributes)) :face 'marginalia-date)))))
+  ;; remove some less interesting info
+  (defun marginalia--annotate-local-file (cand)
+  "Annotate local file CAND."
+  (when-let (attrs (file-attributes (substitute-in-file-name
+                                     (marginalia--full-candidate cand))
+                                    'integer))
+    (marginalia--fields
+     ((file-size-human-readable (file-attribute-size attrs))
+      :face 'marginalia-size :width -7)
+     ((marginalia--time (file-attribute-modification-time attrs))
+      :face 'marginalia-date :width -12))))
 
   (add-to-list 'marginalia-command-categories
                '(consult-find . file)))
