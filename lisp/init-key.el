@@ -693,51 +693,32 @@ Prefixed with \\[universal-argument], show dispatch action."
   ;; TODO: something about marginalia-cycle and selectrum-exhibit
   (marginalia-mode 1)
   :config
-  (defun marginalia-annotate-buffer (cand)
-    "Annotate buffer CAND with modification status, file name and major mode."
-    (when-let (buffer (get-buffer cand))
-      (marginalia--fields
-       ((format-mode-line '((:propertize
-                             (:eval (cond (buffer-read-only "∅")
-                                          ((derived-mode-p 'comint-mode) "∞")
-                                          ((buffer-modified-p) "♦")
-                                          (:else "♢")))
-                             face marginalia-modified)
-                            marginalia--separator
-                            ;; InactiveMinibuffer has 18 letters, but there are longer names.
-                            ;; For example Org-Agenda produces very long mode names.
-                            ;; Therefore we have to truncate.
-                            (20 (-20 (:propertize mode-name face marginalia-mode))))
-                          nil nil buffer))
-       ((if-let (proc (get-buffer-process buffer))
-            (format "(%s %s) %s"
-                    proc (process-status proc)
-                    (abbreviate-file-name (buffer-local-value 'default-directory buffer)))
-          (abbreviate-file-name
-           (or (cond
-                ;; see ibuffer-buffer-file-name
-                ((buffer-file-name buffer))
-                ((when-let (dir (and (local-variable-p 'dired-directory buffer)
-                                     (buffer-local-value 'dired-directory buffer)))
-                   (expand-file-name (if (stringp dir) dir (car dir))
-                                     (buffer-local-value 'default-directory buffer))))
-                ((local-variable-p 'list-buffers-directory buffer)
-                 (buffer-local-value 'list-buffers-directory buffer)))
-               "")))
-        :truncate (/ marginalia-truncate-width 2)
-        :face 'marginalia-file-name))))
+  (defun marginalia--buffer-status (buffer)
+    "Return the status of BUFFER as a string."
+    (format-mode-line '((:propertize
+                         (:eval (cond (buffer-read-only "∅")
+                                      ((derived-mode-p 'comint-mode) "∞")
+                                      ((buffer-modified-p) "♦")
+                                      (:else "♢")))
+                         face marginalia-modified)
+                        marginalia--separator
+                        ;; InactiveMinibuffer has 18 letters, but there are longer names.
+                        ;; For example Org-Agenda produces very long mode names.
+                        ;; Therefore we have to truncate.
+                        (20 (-20 (:propertize mode-name face marginalia-mode))))
+                      nil nil buffer))
 
   ;; remove some less interesting info
   (defun marginalia--annotate-local-file (cand)
-  "Annotate local file CAND."
-  (when-let (attrs (file-attributes (substitute-in-file-name
-                                     (marginalia--full-candidate cand))
-                                    'integer))
-    (marginalia--fields
-     ((file-size-human-readable (file-attribute-size attrs))
-      :face 'marginalia-size :width -7)
-     ((marginalia--time (file-attribute-modification-time attrs))
-      :face 'marginalia-date :width -12))))
+    "Annotate local file CAND."
+    (when-let (attrs (file-attributes (substitute-in-file-name
+                                       (marginalia--full-candidate cand))
+                                      'integer))
+      (marginalia--fields
+       ((file-size-human-readable (file-attribute-size attrs))
+        :face 'marginalia-size :width -7)
+       ((marginalia--time (file-attribute-modification-time attrs))
+        :face 'marginalia-date :width -12))))
 
   (add-to-list 'marginalia-command-categories
                '(consult-find . file)))
@@ -759,7 +740,7 @@ Prefixed with \\[universal-argument], show dispatch action."
          ("M-y" . consult-yank-pop)
          ("M-g o" . consult-outline)
          ("M-g i" . consult-imenu)
-         ("M-g M-i" . consult-project-imenu)
+         ("M-g M-i" . consult-imenu-multi)
          ("M-g m" . consult-mark)
          ("M-g M-m" . consult-global-mark)
          ("M-g b" . consult-bookmark)
