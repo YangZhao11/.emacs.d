@@ -425,31 +425,7 @@ _q_uit      _RET_: current
   :bind ("C-x g" . magit-status)
   :config
   (setq with-editor-mode-lighter "")
-  (defhydra hydra-magit-j (:color blue :hint nil)
-"
-_u_n/_s_taged   u_n_/_t_racked   un_p_ushed   un_f_etched   _z_: stashes"
-    ("SPC" nil)
-    ("n" magit-jump-to-untracked)
-    ("t" magit-jump-to-tracked)
-    ("s" magit-jump-to-staged)
-    ("u" magit-jump-to-unstaged)
-    ("p" hydra-magit-j-p/body)
-    ("f" hydra-magit-j-f/body)
-    ("z" magit-jump-to-stashes))
-  (defhydra hydra-magit-j-p (:color blue :hint nil)
-    "
-jump to unpushed to: _p_ushremote  _u_pstream"
-    ("SPC" nil)
-    ("p" magit-jump-to-unpushed-to-pushremote)
-    ("u" magit-jump-to-unpushed-to-upstream))
-  (defhydra hydra-magit-j-f (:color blue :hint nil)
-    "
-jump to unfetched from: _p_ushremote  _u_pstream"
-    ("SPC" nil nil)
-    ("p" magit-jump-to-unpulled-from-pushremote)
-    ("u" magit-jump-to-unpulled-from-upstream))
   (bind-keys :map magit-mode-map
-             ("j SPC" . hydra-magit-j/body)
              ("[" . magit-section-backward-sibling)
              ("]" . magit-section-forward-sibling)
              ("*" . god-mode-self-insert)
