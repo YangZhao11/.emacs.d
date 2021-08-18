@@ -750,7 +750,7 @@ Prefixed with \\[universal-argument], show dispatch action."
          ("M-g `" . consult-compile-error)
          ("C-x C-z" . consult-complex-command))
   :init
-  (unless (>= 28 emacs-major-version)
+  (unless (>= emacs-major-version 28)
     ;; emacs 28 has `execute-extended-command-for-buffer', which seems
     ;; more useful
     (bind-key "M-X" #'consult-mode-command))
