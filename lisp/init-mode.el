@@ -687,7 +687,7 @@ fallback."
     (interactive)
     (let ((b (or (get-buffer "*R*")
                 (cl-find-if (lambda (b)
-                               (eq (buffer-local-value 'major-mode b) 'inferior-ess-mode))
+                               (eq (buffer-local-value 'major-mode b) 'inferior-ess-r-mode))
                             (buffer-list)))))
       (if b (switch-to-buffer b)
         (let ((ess-ask-for-ess-directory nil)
