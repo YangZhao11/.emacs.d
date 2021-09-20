@@ -237,7 +237,7 @@ _j_↓  _n_ext  _{__}_: prev/next file
 
   (defhydra hydra-dired (:color pink :columns 3 :hint nil)
     "
-^Mark^‗‗‗‗‗‗‗^Flag^‗‗‗‗‗‗‗‗^Emacs Op^‗‗‗‗‗‗^‗^‗‗‗‗‗‗‗‗‗‗‗‗‗^^File Op^^‗‗(_e_dit)
+^Mark^‗‗‗‗‗‗ ^Flag^‗‗‗‗‗‗‗ ^Emacs Op^‗‗‗‗‗‗^‗^‗‗‗‗‗‗‗‗‗‗‗‗ ^^File Op^^‗‗(_e_dit)
 _*_: marks^^   _#_: temp^^     _Q_uery/rep     _F_ind marked   _!_shell_&_ _S_ymlink
 _%_: regexp^^  _~_: backup^^   _A_: grep       _L_oad          ^^_C_opy    _H_ardlink
 _u_n/_m_ark    _d_: this^^     _B_yte compile  _k_ill line     ^^_D_elete  ch_M_od
@@ -685,14 +685,19 @@ fallback."
   (defun z-switch-to-R ()
     "Go to R session or create one if none exists"
     (interactive)
-    (let ((b (or (get-buffer "*R*")
-                (cl-find-if (lambda (b)
-                               (eq (buffer-local-value 'major-mode b) 'inferior-ess-r-mode))
-                            (buffer-list)))))
+    (let ((b (cl-find-if
+              ;; is there another buffer to switch to?
+              (lambda (b)
+                (and (provided-mode-derived-p
+                      (buffer-local-value 'major-mode b)
+                      'inferior-ess-mode 'inferior-julia-mode)
+                     (not (eq b (current-buffer)))))
+              (buffer-list))))
       (if b (switch-to-buffer b)
-        (let ((ess-ask-for-ess-directory nil)
-              (ess-directory "~/Projects"))
-          (run-ess-r)))))
+        (unless (provided-mode-derived-p major-mode 'inferior-ess-mode)
+          (let ((ess-ask-for-ess-directory nil)
+                (ess-directory "~/Projects"))
+            (run-ess-r))))))
 
   (defun ess-smart-pipe (arg)
     "Similar to `ess-insert-assign', but insert %>% instead."
@@ -725,19 +730,6 @@ fallback."
 
   (add-hook 'ess-mode-hook #'z-ess-mode-hook)
 
-  (setq ess-r-prettify-symbols
-        '(("%>%" . ?↦)
-          ("%T>%" . ?↧) ;↴
-          ("%<>%" . ?⇄) ;⇋⇌⇆
-          ("%<-%" ?↢)   ;destructuring assignment in zeallot
-          ("<-" . ?←)
-          ("->" . ?→)
-          ("<=" . ?≤)
-          (">=" . ?≥)
-          ("!=" . ?≠)
-          ("%in%" . ?∈)
-          ("%*%" . ?×)
-          ("function" . ?ƒ)))
   (setq ess-use-flymake nil
         ess-use-ido nil
         ess-busy-strings '("  " " ◐" " ◓" " ◑" " ◒")
@@ -827,6 +819,22 @@ section: _a_rguments  _d_escription  _D_e_t_ails  _e_xamples  _n_ote  _r_eferenc
   ;; For Rmd editing, do not treat ` as quote.
   (modify-syntax-entry ?` "." ess-r-mode-syntax-table)
   (modify-syntax-entry ?% "." ess-r-mode-syntax-table)
+
+  (setq ess-r-prettify-symbols
+        '(("%>%" . ?↦)
+          ("|>" . ?▸)
+          ("\\" . ?λ)
+          ("%T>%" . ?↧) ;↴
+          ("%<>%" . ?⇄) ;⇋⇌⇆
+          ("%<-%" ?↢)   ;destructuring assignment in zeallot
+          ("<-" . ?←)
+          ("->" . ?→)
+          ("<=" . ?≤)
+          (">=" . ?≥)
+          ("!=" . ?≠)
+          ("%in%" . ?∈)
+          ("%*%" . ?×)
+          ("function" . ?ƒ)))
 
   (defun z-inferior-ess-mode-hook ()
     (setq prettify-symbols-alist ess-r-prettify-symbols)
