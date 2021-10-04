@@ -425,6 +425,11 @@ _q_uit      _RET_: current
   :bind ("C-x g" . magit-status)
   :config
   (setq with-editor-mode-lighter "")
+
+  ;; missing variables from emacs 28
+  (unless (boundp 'project-switch-commands)
+    (setq project-switch-commands nil))
+
   (bind-keys :map magit-mode-map
              ("[" . magit-section-backward-sibling)
              ("]" . magit-section-forward-sibling)
