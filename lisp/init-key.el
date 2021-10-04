@@ -39,6 +39,9 @@
                         (kbd (concat (cdr b) (char-to-string c))))))))
 (add-hook 'tty-setup-hook #'z-setup-terminal)
 
+(when (fboundp 'repeat-mode)
+  (repeat-mode 1))
+
 (use-package kmacro
   :config
   (setcdr (assq 'defining-kbd-macro minor-mode-alist)
@@ -375,6 +378,7 @@ useful when followed by an immediate kill."
              ("M->"   . isearch-end-of-buffer)
              ("C-j"   . avy-isearch))
 
+  (setq isearch-allow-motion 't)
   (setcdr (assq 'isearch-mode minor-mode-alist)
           '((:eval (if isearch-forward " »" " «")))))
 

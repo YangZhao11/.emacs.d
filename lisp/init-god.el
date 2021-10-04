@@ -59,8 +59,10 @@ SPEC could be `box', 'bar', or `hbar'."
 (bind-keys :map isearch-mode-map
            ("<home>" . god-mode-isearch-activate))
 (bind-keys :map god-mode-isearch-map
-           ("<home>" . god-mode-isearch-disable)
-           ("%" . isearch-query-replace))
+           ("<home>" . god-mode-isearch-disable))
+(dolist (i '(?s ?r ?w ?v ?% ?< ?>))
+  (define-key god-mode-isearch-map
+    (char-to-string i) 'god-mode-self-insert))
 
 (setq god-mod-alist-default '((nil . "C-") (?g . "M-") (?h . "C-M-")))
 (setq god-mod-alist god-mod-alist-default)
