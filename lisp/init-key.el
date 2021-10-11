@@ -39,6 +39,7 @@
                         (kbd (concat (cdr b) (char-to-string c))))))))
 (add-hook 'tty-setup-hook #'z-setup-terminal)
 
+;; TODO: remove condition for emacs28
 (when (fboundp 'repeat-mode)
   (repeat-mode 1))
 
