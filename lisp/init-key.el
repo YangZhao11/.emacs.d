@@ -372,7 +372,7 @@ useful when followed by an immediate kill."
     (goto-char isearch-other-end))
   (bind-keys :map isearch-mode-map
              ("M-RET" . isearch-exit-other-end)
-             ("M-e"   . consult-isearch) ;isearch-edit-string
+             ("M-e"   . consult-isearch-history) ;isearch-edit-string
              ("M-k"   . isearch-yank-word-or-char)
              ("M-z"   . isearch-yank-until-char)
              ("M-<"   . isearch-beginning-of-buffer)
@@ -564,6 +564,7 @@ current frame configuration to register 6."
               ("C-j" . z-goto-char))
   :bind (:map ctl-j-map
               ("SPC" . avy-goto-line)
+              ("C-k" . avy-kill-whole-line)
               ("RET" . avy-show-dispatch)
               ("TAB" . avy-yank-word-1))
   :bind (("M-," . avy-backward-char-in-line)
@@ -579,26 +580,26 @@ current frame configuration to register 6."
 
   (defun avy-yank-word-1 (char &optional arg beg end symbol)
     "Like `avy-goto-word-1', but yank instead."
-  (interactive (list (read-char "char: " t)
-                     current-prefix-arg))
-  (avy-with avy-goto-word-1
-    (let* ((str (string char))
-           (regex (cond ((string= str ".")
-                         "\\.")
-                        ((and avy-word-punc-regexp
-                              (string-match avy-word-punc-regexp str))
-                         (regexp-quote str))
-                        ((<= char 26)
-                         str)
-                        (:else
-                         (concat
-                          (if symbol "\\_<" "\\b")
-                          str)))))
-      (avy-jump regex
-                :window-flip arg
-                :beg beg
-                :end end
-                :action 'avy-action-yank))))
+    (interactive (list (read-char "char: " t)
+                       current-prefix-arg))
+    (avy-with avy-goto-word-1
+      (let* ((str (string char))
+             (regex (cond ((string= str ".")
+                           "\\.")
+                          ((and avy-word-punc-regexp
+                                (string-match avy-word-punc-regexp str))
+                           (regexp-quote str))
+                          ((<= char 26)
+                           str)
+                          (:else
+                           (concat
+                            (if symbol "\\_<" "\\b")
+                            str)))))
+        (avy-jump regex
+                  :window-flip arg
+                  :beg beg
+                  :end end
+                  :action 'avy-action-yank))))
 
   (defun avy-forward-char-in-line (char)
     "Jump to the currently visible CHAR in the current line after point."

@@ -11,7 +11,7 @@
                      " ")
                 face (:background "#4DB0FF" :foreground "black")))
 (setq z-lighter-mortal
-  '(:propertize (" " (:eval (or current-input-method-title "ɪ")) " ")
+  '(:propertize (" " (:eval (or current-input-method-title "i")) " ")
                 face (:background "#88E0C0" :foreground "black")))
 (setq z-lighter-view
   '(:propertize " ν "

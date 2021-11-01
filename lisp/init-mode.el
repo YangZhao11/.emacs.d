@@ -592,7 +592,7 @@ fallback."
              ("M-g b"   . flycheck-previous-error)))
 
 ;; --------------------------------------------------
-;; modes
+;;; modes
 
 (use-package elisp-mode
   :config
