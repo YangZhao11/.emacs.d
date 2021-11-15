@@ -252,6 +252,7 @@ If ARG is non-nil and we are on terminal, then call
                           (?p paragraph  "\n")
                           (?n line       "\n") ;changed from ?e
                           (?. sentence   " ")
+                          (?' string)
                           (?b buffer-file-name)))
   (bind-keys
    :map easy-kill-base-map
@@ -363,6 +364,7 @@ instead of inactivate region."
     (string-inflection-underscore-function str)))))
 
 (use-package isearch
+  :bind ("M-s r" . isearch-forward-regexp)
   :config
   (defun isearch-exit-other-end ()
     "Exit isearch, but at the other end of the search string. This is
@@ -742,7 +744,7 @@ Prefixed with \\[universal-argument], show dispatch action."
          ("M-s M-s" . consult-line)
          ("M-s s" . consult-focus-lines)
          ("M-s f" . consult-grep)
-         ("M-s e" . consult-isearch)  ; similar to isearch-edit-string
+         ("M-s e" . consult-isearch-history)  ; similar to isearch-edit-string
          ("M-y" . consult-yank-pop)
          ("M-g o" . consult-outline)
          ("M-g i" . consult-imenu)

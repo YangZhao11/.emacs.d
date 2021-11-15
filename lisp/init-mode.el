@@ -461,6 +461,12 @@ _q_uit      _RET_: current
         rainbow-identifiers-cie-l*a*b*-lightness 85
         rainbow-identifiers-cie-l*a*b*-saturation 8))
 
+(use-package outline
+  :config
+  (bind-keys :map outline-mode-map
+             ("C-M-a" . outline-previous-visible-heading)
+             ("C-M-e" . outline-next-visible-heading)))
+
 ;; --------------------------------------------------
 (use-package yasnippet :demand ;; :ensure
   :diminish yas-global-mode yas-minor-mode

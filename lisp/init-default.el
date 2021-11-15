@@ -36,7 +36,8 @@
 (transient-mark-mode 1)
 (global-font-lock-mode 't)
 (temp-buffer-resize-mode 1)
-(fset 'yes-or-no-p 'y-or-n-p)
+(fset 'yes-or-no-p 'y-or-n-p)           ; TODO: remove after 28
+(setq use-short-answers t)
 (show-paren-mode 1)
 (setq show-paren-when-point-in-periphery 't)
 (electric-pair-mode 1)
