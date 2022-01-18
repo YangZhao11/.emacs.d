@@ -709,7 +709,7 @@ Prefixed with \\[universal-argument], show dispatch action."
                                       ((buffer-modified-p) "♦")
                                       (:else "♢")))
                          face marginalia-modified)
-                        marginalia--separator
+                        marginalia-separator
                         ;; InactiveMinibuffer has 18 letters, but there are longer names.
                         ;; For example Org-Agenda produces very long mode names.
                         ;; Therefore we have to truncate.
