@@ -680,23 +680,31 @@ Prefixed with \\[universal-argument], show dispatch action."
          ("C-x ?" . xref-find-references)
          ("C-x ," . xref-pop-marker-stack)))
 
-(use-package selectrum
-  :bind (("M-s M-d" . selectrum-repeat))
+(use-package vertico
+  :bind ("M-s M-d" . vertico-repeat)
+  :init
+  (vertico-mode)
+  (add-hook 'minibuffer-setup-hook #'vertico-repeat-save)
   :config
-  (bind-keys :map selectrum-minibuffer-map
-             ("M-m")                    ; leave to embark-act
-             ("C-j" . selectrum-quick-select)
-             ("C-M-j" . selectrum-quick-insert))
-  (selectrum-mode 1))
+  (setq vertico-resize t)
+  (setq vertico-cycle t)
+  (setq vertico-count-format nil))
 
-(use-package selectrum-prescient
-  :config
-  (setq prescient-use-case-folding nil) ; workaround
-  (selectrum-prescient-mode 1)
-  (prescient-persist-mode 1))
+(use-package savehist
+  :init
+  (savehist-mode 1))
+
+(use-package orderless
+  :init
+  ;; Configure a custom style dispatcher (see the Consult wiki)
+  ;; (setq orderless-style-dispatchers '(+orderless-dispatch)
+  ;;       orderless-component-separator #'orderless-escapable-split-on-space)
+  (setq completion-styles '(orderless)
+        completion-category-defaults nil
+        completion-category-overrides '((file (styles partial-completion)))))
 
 (use-package marginalia
-  :after selectrum
+  :after vertico
   :init
   ;; TODO: something about marginalia-cycle and selectrum-exhibit
   (marginalia-mode 1)
@@ -768,9 +776,9 @@ Prefixed with \\[universal-argument], show dispatch action."
 
 
 (use-package embark
-  :after selectrum
+  :after vertico
   :bind ("M-m" . embark-act)
-  :bind (:map selectrum-minibuffer-map
+  :bind (:map vertico-map
               ("M-s o" . embark-export)))
 
 (use-package embark-consult
