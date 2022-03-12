@@ -1,4 +1,5 @@
 ;; -*- lexical-binding: t -*-
+
 ;; Defaults
 (setq-default indent-tabs-mode nil
               indicate-empty-lines 't
@@ -36,11 +37,16 @@
 (transient-mark-mode 1)
 (global-font-lock-mode 't)
 (temp-buffer-resize-mode 1)
-(fset 'yes-or-no-p 'y-or-n-p)           ; TODO: remove after 28
+
+;; TODO: remove after 28. `use-short-answers' option supercedes it.
+(fset 'yes-or-no-p 'y-or-n-p)
 (setq use-short-answers t)
+
 (show-paren-mode 1)
 (setq show-paren-when-point-in-periphery 't)
 (electric-pair-mode 1)
+
+(savehist-mode 1)
 
   ;; Add prompt indicator to `completing-read-multiple'.
   ;; Alternatively try `consult-completing-read-multiple'.
@@ -53,10 +59,10 @@
         '(read-only t cursor-intangible t face minibuffer-prompt))
   (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
 
-  ;; Emacs 28: Hide commands in M-x which do not work in the current mode.
-  ;; Vertico commands are hidden in normal buffers.
-  ;; (setq read-extended-command-predicate
-  ;;       #'command-completion-default-include-p)
+;; Emacs 28: Hide commands in M-x which do not work in the current mode.
+;; Vertico commands are hidden in normal buffers.
+(setq read-extended-command-predicate
+      #'command-completion-default-include-p)
 
 ;; --------------------------------------------------
 (load-theme 'zenburn 't)   ; load this first for many defaults.

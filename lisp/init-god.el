@@ -1,6 +1,8 @@
 ; -*- coding: utf-8; lexical-binding: t -*-
 
 ;;; Code:
+(push "~/.emacs.d/god-mode" load-path)
+
 (defvar-local z-god-saved-input-method nil
   "Saved input method before god-mode")
 (defvar-local z-god-saved-view-mode nil

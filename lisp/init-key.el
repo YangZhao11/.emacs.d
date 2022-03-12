@@ -6,6 +6,7 @@
   (require 'hydra)
   (require 'subr-x))
 
+;; Add several custom shortcuts in the TeX input method.
 (eval-after-load "quail/Latin-ltx"
   '(let ((quail-current-package (assoc "TeX" quail-package-alist)))
      (quail-define-rules
@@ -689,10 +690,6 @@ Prefixed with \\[universal-argument], show dispatch action."
   (setq vertico-resize t)
   (setq vertico-cycle t)
   (setq vertico-count-format nil))
-
-(use-package savehist
-  :init
-  (savehist-mode 1))
 
 (use-package orderless
   :init

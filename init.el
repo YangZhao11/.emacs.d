@@ -1,15 +1,5 @@
 ; -*- lexical-binding: t; coding: utf-8 -*-
 
-;; Make elpa packages available
-(add-to-list 'package-archives
-             '("melpa" . "https://melpa.org/packages/") t)
-(add-to-list 'package-archives
-             '("melpa-stable" . "https://stable.melpa.org/packages/") t)
-(setq package-archive-priorities
-      '(("melpa-stable" . 20) ("gnu" . 10) ("melpa" . 0)))
-
-(push "~/.emacs.d/god-mode" load-path)
-
 ;; Load platform specific inits, including init-gnu-linux /
 ;; init-darwin, init-hostname.
 (push "~/.emacs.d/lisp" load-path)
@@ -18,8 +8,6 @@
               (replace-regexp-in-string "\\..*" "" system-name)))
   (load (concat "init-" sub) t))
 
-
-;; --------------------------------------------------
 ;; Load subfiles
 (require 'use-package)
 (load "init-default")

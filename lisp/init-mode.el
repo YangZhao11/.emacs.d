@@ -345,6 +345,15 @@ _[_ _]_:page   _<_ _>_:dirline _o_ther win     redisp_l_ay     ^^_T_ouch   ch_G_
              ("SPC" . hydra-dired/body)))
 
 (use-package package
+  :init
+  ;; Make elpa packages available
+  (add-to-list 'package-archives
+               '("melpa" . "https://melpa.org/packages/") t)
+  (add-to-list 'package-archives
+               '("melpa-stable" . "https://stable.melpa.org/packages/") t)
+  (setq package-archive-priorities
+        '(("melpa-stable" . 20) ("gnu" . 10) ("melpa" . 0)))
+
   :config
   (defhydra hydra-package-menu (:color pink :hint nil)
     "
