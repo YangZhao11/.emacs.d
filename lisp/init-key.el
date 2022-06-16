@@ -40,9 +40,7 @@
                         (kbd (concat (cdr b) (char-to-string c))))))))
 (add-hook 'tty-setup-hook #'z-setup-terminal)
 
-;; TODO: remove condition for emacs28
-(when (fboundp 'repeat-mode)
-  (repeat-mode 1))
+(repeat-mode 1)
 
 (use-package kmacro
   :config
@@ -619,16 +617,40 @@ current frame configuration to register 6."
                 :beg (line-beginning-position)
                 :end (point))))
 
+  (defun avy-goto-nth-char (char &optional n)
+    "Jump to the currently visible N-th character in a sequence of CHAR."
+    (interactive (list (read-char "char: " t)
+                       current-prefix-arg))
+    (let* ((regexp-char
+            (if (= 13 char)
+                "\n"
+              (regexp-quote (string char))))
+           (regex
+            (if (not (numberp n))
+                regexp-char
+              :else
+              (concat "\\(?:^\\|[^"
+                      (string char)
+                      "]\\)" regexp-char "\\{" (number-to-string (1- n))
+                      "\\}\\(" regexp-char "\\)")
+              ))
+           (capture-group
+            (if (not (numberp n)) 0 1)))
+      (avy-with avy-goto-char
+        ;;(setq avy-action (or action avy-action))
+        (avy-process
+         (avy--regex-candidates regex nil nil nil capture-group)))))
+
   (defun z-goto-char (char &optional arg)
-  "Call `avy-goto-char' or `avy-goto-subword-1', but respect bindings
+    "Call `avy-goto-nth-char' or `avy-goto-subword-1', but respect bindings
 in `ctl-j-map' first."
-  (interactive (list (read-char "C-j ")
-                     current-prefix-arg))
-  (let ((act (lookup-key ctl-j-map (char-to-string char))))
-    (cond (act (call-interactively act))
-          ((string-match-p "[[:alpha:]]" (char-to-string char))
-           (avy-goto-subword-1 char arg))
-          (:else (avy-goto-char char arg)))))
+    (interactive (list (read-char "C-j ")
+                       current-prefix-arg))
+    (let ((act (lookup-key ctl-j-map (char-to-string char))))
+      (cond (act (call-interactively act))
+            ((string-match-p "[[:alpha:]]" (char-to-string char))
+             (avy-goto-subword-1 char arg))
+            (:else (avy-goto-nth-char char arg)))))
 
   (defun avy-show-dispatch ()
     "Show help for using `avy-dispatch-alist'"
@@ -703,7 +725,6 @@ Prefixed with \\[universal-argument], show dispatch action."
 (use-package marginalia
   :after vertico
   :init
-  ;; TODO: something about marginalia-cycle and selectrum-exhibit
   (marginalia-mode 1)
   :config
   (defun marginalia--buffer-status (buffer)
@@ -762,11 +783,6 @@ Prefixed with \\[universal-argument], show dispatch action."
          ("M-g M-g" . consult-goto-line)
          ("M-g `" . consult-compile-error)
          ("C-x C-z" . consult-complex-command))
-  :init
-  (unless (>= emacs-major-version 28)
-    ;; emacs 28 has `execute-extended-command-for-buffer', which seems
-    ;; more useful
-    (bind-key "M-X" #'consult-mode-command))
   :config
   (setq consult-goto-line-numbers nil)
   (bind-key "C-h" #'consult-narrow-help consult-narrow-map))
