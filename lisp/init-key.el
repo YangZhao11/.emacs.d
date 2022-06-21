@@ -618,28 +618,42 @@ current frame configuration to register 6."
                 :end (point))))
 
   (defun avy-goto-nth-char (char &optional n)
-    "Jump to the currently visible N-th character in a sequence of CHAR."
+    "Jump to the currently visible N-th character in a sequence of CHAR.
+N=9 is interpreted as the last one in sequence. N=0 is interpreted as passing the
+last CHAR in a sequence."
     (interactive (list (read-char "char: " t)
                        current-prefix-arg))
     (let* ((regexp-char
             (if (= 13 char)
                 "\n"
               (regexp-quote (string char))))
-           (regex
-            (if (not (numberp n))
-                regexp-char
-              :else
+           regexp
+           capture-group)
+      (cond
+       ((eq n 0)
+        (setq regexp
+              (concat regexp-char
+                      "\\($\\|[^" (string char) "]\\)")
+              capture-group 1))
+       ((eq n 9)
+        (setq regexp
+              (concat regexp-char
+                      "\\(?:$\\|[^" (string char) "]\\)")
+              capture-group 0))
+       ((numberp n)
+        (setq regexp
               (concat "\\(?:^\\|[^"
                       (string char)
                       "]\\)" regexp-char "\\{" (number-to-string (1- n))
                       "\\}\\(" regexp-char "\\)")
-              ))
-           (capture-group
-            (if (not (numberp n)) 0 1)))
+              capture-group 1))
+       (:else
+        (setq regexp regexp-char
+              capture-group 0)))
       (avy-with avy-goto-char
         ;;(setq avy-action (or action avy-action))
         (avy-process
-         (avy--regex-candidates regex nil nil nil capture-group)))))
+         (avy--regex-candidates regexp nil nil nil capture-group)))))
 
   (defun z-goto-char (char &optional arg)
     "Call `avy-goto-nth-char' or `avy-goto-subword-1', but respect bindings
