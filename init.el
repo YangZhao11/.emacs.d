@@ -3,13 +3,14 @@
 ;; Load platform specific inits, including init-gnu-linux /
 ;; init-darwin, init-hostname.
 (push "~/.emacs.d/lisp" load-path)
+(require 'use-package)
+
 (dolist (sub (list
               (replace-regexp-in-string "/" "-" (symbol-name system-type))
               (replace-regexp-in-string "\\..*" "" system-name)))
   (load (concat "init-" sub) t))
 
 ;; Load subfiles
-(require 'use-package)
 (load "init-default")
 (load "init-buffer")
 (load "init-mode")
@@ -76,7 +77,7 @@
  '(link ((t (:foreground "#D0BF8F" :underline t :weight normal))))
  '(marginalia-key ((t (:inherit font-lock-comment-face))))
  '(marginalia-modified ((t (:inherit font-lock-comment-face))))
- '(mode-line ((t (:background "#284460" :foreground "#8FB28F" :box (:line-width (1 . -1) :style released-button)))))
+ '(mode-line ((t (:background "#284460" :foreground "#8FB28F"))))
  '(org-todo ((t (:foreground "#CC9393" :underline t :weight bold))))
  '(rainbow-delimiters-base-error-face ((t (:inherit rainbow-delimiters-base-face :foreground "#FF98A0" :weight bold))))
  '(vc-conflict-state ((t (:inherit vc-state-base :foreground "#E06050"))))

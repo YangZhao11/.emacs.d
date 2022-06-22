@@ -232,7 +232,7 @@ _j_↓  _n_ext  _{__}_: prev/next file
          ("C-x C-j" . dired-jump)
          ("C-x 4 j" . dired-jump-other-window))
   :config
-  (require 'dired-x)                    ; TODO: remove for emacs28?
+  ;;(require 'dired-x)                    ; TODO: remove for emacs28?
   (setq dired-dwim-target 't)
 
   (defhydra hydra-dired (:color pink :columns 3 :hint nil)
@@ -436,10 +436,6 @@ _q_uit      _RET_: current
   :config
   (setq with-editor-mode-lighter "")
 
-  ;; missing variables from emacs 28
-  (unless (boundp 'project-switch-commands)
-    (setq project-switch-commands nil))
-
   (bind-keys :map magit-mode-map
              ("[" . magit-section-backward-sibling)
              ("]" . magit-section-forward-sibling)
@@ -461,7 +457,7 @@ _q_uit      _RET_: current
   (put 'z-bug-to-link 'bug-reference-url-format 't)
   (setq bug-reference-url-format 'z-bug-to-link
         bug-reference-bug-regexp
-        "\\(\\b\\)\\(b/[0-9]+\\|c[rl]/[0-9]+\\|t/[0-9]+\\|\\(g\\|go\\|goto\\)/[-a-zA-z0-9_]+\\|[a-z]+@\\)"))
+        "\\(?:\\b\\)\\(b/[0-9]+\\|c[rl]/[0-9]+\\|t/[0-9]+\\|\\(?:g\\|go\\|goto\\)/[-a-zA-z0-9_]+\\|[a-z]+@\\)"))
 
 (use-package rainbow-identifiers
   :commands (rainbow-identifiers-mode)
@@ -568,7 +564,7 @@ _q_uit      _RET_: current
 
   (bind-keys :map flymake-mode-map
              ("M-g k"   . consult-flymake)
-             ("M-g M-k" . flymake-show-diagnostics-buffer)
+             ("M-g M-k" . flymake-show-buffer-diagnostics)
              ("M-g f"   . flymake-goto-next-error)
              ("M-g b"   . flymake-goto-prev-error)))
 

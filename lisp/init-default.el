@@ -38,8 +38,6 @@
 (global-font-lock-mode 't)
 (temp-buffer-resize-mode 1)
 
-;; TODO: remove after 28. `use-short-answers' option supercedes it.
-(fset 'yes-or-no-p 'y-or-n-p)
 (setq use-short-answers t)
 
 (show-paren-mode 1)
@@ -62,7 +60,7 @@
 ;; Emacs 28: Hide commands in M-x which do not work in the current mode.
 ;; Vertico commands are hidden in normal buffers.
 (setq read-extended-command-predicate
-      #'command-completion-default-include-p)
+       #'command-completion-default-include-p)
 
 ;; --------------------------------------------------
 (load-theme 'zenburn 't)   ; load this first for many defaults.
