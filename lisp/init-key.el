@@ -295,6 +295,8 @@ If ARG is non-nil and we are on terminal, then call
   (when (fboundp 'undo-redo)
     (bind-keys ("C-?" . undo-redo)))
   :config
+  (setq next-error-message-highlight 't)
+
   (defun cycle-spacing-0 ()
     "Remove adjacent spaces, but undo if the command is issued a second time."
     (interactive)

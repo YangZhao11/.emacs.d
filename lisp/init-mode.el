@@ -382,6 +382,7 @@ _<_  _>_       _z_: execute   _u_nmark   _?_: info    _q_uit
     ("~" package-menu-mark-obsolete-for-deletion)
     ("j" scroll-up-command)
     ("k" scroll-down-command))
+  ;; TODO: more content in emacs 28
   (defhydra hydra-package-menu-filter (:color pink :hint nil)
     "
 Filter by: _k_eyword    _n_ame    _/_:clear
@@ -958,6 +959,7 @@ _j_↓     ^^_f_ollow      _r_: forward    _p_rev   _<__>_ first/last
 
 (use-package help-mode
   :config
+  ;; TODO: more content in emacs 28
   (defhydra hydra-help (:color pink :hint nil)
     "
 _k_↑    _<_ _>_ top/bottom   _l_: back

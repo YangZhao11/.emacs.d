@@ -9,7 +9,7 @@
   (require 'subr-x))
 
 (defvar like-this-try-faces
-  '(hi-yellow hi-pink hi-green hi-blue helpful-heading info-menu-header button)
+  '(hi-yellow hi-pink hi-green hi-blue info-menu-header button)
   "Special faces that are searched for")
 
 (defun like-this--face-matches (face)
@@ -46,6 +46,7 @@
     (like-this--previous-matching-face face)
     (setq arg (1+ arg))))
 
+;; TODO: use isearch-forward-thing-at-point setting
 (defvar like-this-try-things
   '(email symbol word)
   "Thing at point to try search for")
@@ -68,7 +69,7 @@
   (let* ((thing (car bounds))
          (beg (cadr bounds))
          (end (cddr bounds))
-(str (buffer-substring-no-properties beg end))
+         (str (buffer-substring-no-properties beg end))
          (regexp (concat
                   (if (eq thing 'symbol) "\\_<" "\\b")
                   (regexp-quote str)
