@@ -55,6 +55,8 @@ With prefix arg (NO-SPACE), do not leave space before CHAR."
 
 (defvar z-search-char nil
   "Last char used in `z-search-forward-char'")
+(defvar z-search-bound-lines 5
+  "Limit number of lines to search")
 (defun z-search-forward-char (arg char)
   "Search for next CHAR."
   (interactive (list (prefix-numeric-value current-prefix-arg)
@@ -63,15 +65,22 @@ With prefix arg (NO-SPACE), do not leave space before CHAR."
   (let ((direction (if (>= arg 0) 1 -1)))
     (forward-char direction)
     (unwind-protect
-	(search-forward (char-to-string char) nil nil arg)
-      (backward-char direction))
-))
+	(search-forward
+         (char-to-string char)
+         (and z-search-bound-lines
+              (line-end-position z-search-bound-lines))
+         nil arg)
+      (backward-char direction))))
 
 (defun z-search-backward-char (arg char)
   "Search for previous CHAR."
   (interactive (list (prefix-numeric-value current-prefix-arg)
                      (read-char "char: " t)))
-  (search-backward (char-to-string char) nil nil arg))
+  (search-backward
+   (char-to-string char)
+   (and z-search-bound-lines
+        (line-beginning-position z-search-bound-lines))
+   nil arg))
 
 (defun z-search-forward-repeat (arg)
   (interactive (list (prefix-numeric-value current-prefix-arg)))
