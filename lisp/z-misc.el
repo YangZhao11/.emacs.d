@@ -53,5 +53,40 @@ With prefix arg (NO-SPACE), do not leave space before CHAR."
   (interactive)
   (switch-to-next-buffer (next-window)))
 
+(defvar z-search-char nil
+  "Last char used in `z-search-forward-char'")
+(defun z-search-forward-char (arg char)
+  "Search for next CHAR."
+  (interactive (list (prefix-numeric-value current-prefix-arg)
+                     (read-char "char: " t)))
+  (setq z-search-char char)
+  (let ((direction (if (>= arg 0) 1 -1)))
+    (forward-char direction)
+    (unwind-protect
+	(search-forward (char-to-string char) nil nil arg)
+      (backward-char direction))
+))
+
+(defun z-search-backward-char (arg char)
+  "Search for previous CHAR."
+  (interactive (list (prefix-numeric-value current-prefix-arg)
+                     (read-char "char: " t)))
+  (search-backward (char-to-string char) nil nil arg))
+
+(defun z-search-forward-repeat (arg)
+  (interactive (list (prefix-numeric-value current-prefix-arg)))
+  (z-search-forward-char arg z-search-char))
+
+(defun z-search-backward-repeat (arg)
+  (interactive (list (prefix-numeric-value current-prefix-arg)))
+  (z-search-backward-char arg z-search-char))
+
+(defvar-keymap z-search-repeat-map
+  :repeat t
+  "M-." #'z-search-forward-repeat
+  "M-," #'z-search-backward-repeat)
+(put 'z-search-forward-char 'repeat-map 'z-search-repeat-map)
+(put 'z-search-backward-char 'repeat-map 'z-search-repeat-map)
+
 (provide 'z-misc)
 ;;; z-misc.el ends here

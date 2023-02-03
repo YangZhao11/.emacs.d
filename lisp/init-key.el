@@ -130,8 +130,6 @@ root-_D_iff  log _O_utgoing   _~_:revision  i_G_nore    _g_:annotate _u_:revert
            ("C-M-j"           . backward-down-list)
            ("M-r"             . raise-sexp)) ; was move-to-window-line-top-bottom
 
-(setq recenter-positions '(top middle bottom))
-
 (use-package region-bindings-mode :demand
   :diminish 'region-bindings-mode
   :functions region-bindings-mode-enable
@@ -174,6 +172,8 @@ root-_D_iff  log _O_utgoing   _~_:revision  i_G_nore    _g_:annotate _u_:revert
 
 (use-package z-misc
   :bind
+  ("M-." . z-search-forward-char)
+  ("M-," . z-search-backward-char)
   ("C-x ;" . z-align-char)
   ("C-x $" . z-toggle-selective-display)
   ("C-x /" . z-ediff-this-buffer)
@@ -569,8 +569,6 @@ current frame configuration to register 6."
               ("C-k" . avy-kill-whole-line)
               ("RET" . avy-show-dispatch)
               ("TAB" . avy-yank-word-1))
-  :bind (("M-," . avy-backward-char-in-line)
-         ("M-." . avy-forward-char-in-line))
   :config
   (require 'subword)
   (setq avy-styles-alist '((avy-goto-char . de-bruijn))
@@ -602,21 +600,6 @@ current frame configuration to register 6."
                   :beg beg
                   :end end
                   :action 'avy-action-yank))))
-
-  (defun avy-forward-char-in-line (char)
-    "Jump to the currently visible CHAR in the current line after point."
-    (interactive (list (read-char "char: " t)))
-    (avy-with avy-goto-char
-      (avy-jump (regexp-quote (string char))
-                :beg (1+ (point))
-                :end (line-end-position))))
-  (defun avy-backward-char-in-line (char)
-    "Jump to the currently visible CHAR in the current line before point."
-    (interactive (list (read-char "char: " t)))
-    (avy-with avy-goto-char
-      (avy-jump (regexp-quote (string char))
-                :beg (line-beginning-position)
-                :end (point))))
 
   (defun avy-goto-nth-char (char &optional n)
     "Jump to the currently visible N-th character in a sequence of CHAR.
@@ -682,7 +665,9 @@ in `ctl-j-map' first."
 
 (use-package window
   :bind* (("M-j" . other-window)
-          ("M-J" . window-swap-states)))
+          ("M-J" . window-swap-states))
+  :config
+  (setq recenter-positions '(top middle bottom)))
 
 (use-package zap-to-char-dwim
   :bind (("M-z" . zap-to-char-dwim)

@@ -706,3 +706,18 @@ Prefixed with \\[universal-argument], show dispatch action."
       (let ((aw-dispatch-always 't))
         (aw-show-dispatch-help))
     (ace-select-window))))
+
+  (defun avy-forward-char-in-line (char)
+    "Jump to the currently visible CHAR in the current line after point."
+    (interactive (list (read-char "char: " t)))
+    (avy-with avy-goto-char
+      (avy-jump (regexp-quote (string char))
+                :beg (1+ (point))
+                :end (line-end-position))))
+  (defun avy-backward-char-in-line (char)
+    "Jump to the currently visible CHAR in the current line before point."
+    (interactive (list (read-char "char: " t)))
+    (avy-with avy-goto-char
+      (avy-jump (regexp-quote (string char))
+                :beg (line-beginning-position)
+                :end (point))))
