@@ -687,3 +687,22 @@ _j_↓  _l_→   set _a_ction   _RET_:go    _o_ther    _q_uit
     (dired-sidebar-hide-sidebar)
     (ibuffer-sidebar-hide-sidebar)
     (imenu-list-smart-toggle)))
+
+(use-package ace-window :ensure :defer 6
+  :bind* (("M-j" . z-ace-window)
+         ("M-J" . ace-swap-window))
+  :config
+  (setq aw-scope 'frame
+        aw-background nil
+        aw-keys '(?j ?d ?k ?f ?g ?h ?s ?l ?a ?\;))
+  (push "*Placeholder*" aw-ignored-buffers)
+  (defun z-ace-window (arg)
+  "Select a window.
+Perform an action based on ARG described below.
+
+Prefixed with \\[universal-argument], show dispatch action."
+  (interactive "P")
+  (if arg
+      (let ((aw-dispatch-always 't))
+        (aw-show-dispatch-help))
+    (ace-select-window))))

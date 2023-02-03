@@ -83,8 +83,8 @@ M-w:copy^^  _r_egister^^       _x_/_s_:copy  _n_umber         _M_: no-overwrite
 
 (defhydra hydra-ctl-x-v (:color blue :hint nil)
   "
-_+_:update   ch_a_nge log     print _l_og   _b_ackend   _h_istory    _m_erge
-_=_:diff     log _I_ncoming   root _L_og    _P_ush      _d_ir        reg_i_ster   _r_etrieve tag
+_+_:update   ch_a_nge log     print _l_og   _d_ir       _h_istory    _m_erge
+_=_:diff     log _I_ncoming   root _L_og    _P_ush      reg_i_ster   _r_etrieve tag
 root-_D_iff  log _O_utgoing   _~_:revision  i_G_nore    _g_:annotate _u_:revert
 "
   ("+" vc-update)
@@ -96,7 +96,6 @@ root-_D_iff  log _O_utgoing   _~_:revision  i_G_nore    _g_:annotate _u_:revert
   ("O" vc-log-outgoing)
   ("P" vc-push)
   ("a" vc-update-change-log)
-  ("b" vc-switch-backend)
   ("d" vc-dir)
   ("g" vc-annotate)
   ("h" vc-region-history)
@@ -680,24 +679,10 @@ in `ctl-j-map' first."
         avy-dispatch-alist
         "  "))))
 
-(use-package ace-window :ensure :defer 6
-  :bind* (("M-j" . z-ace-window)
-         ("M-J" . ace-swap-window))
-  :config
-  (setq aw-scope 'frame
-        aw-background nil
-        aw-keys '(?j ?d ?k ?f ?g ?h ?s ?l ?a ?\;))
-  (push "*Placeholder*" aw-ignored-buffers)
-  (defun z-ace-window (arg)
-  "Select a window.
-Perform an action based on ARG described below.
 
-Prefixed with \\[universal-argument], show dispatch action."
-  (interactive "P")
-  (if arg
-      (let ((aw-dispatch-always 't))
-        (aw-show-dispatch-help))
-    (ace-select-window))))
+(use-package window
+  :bind* (("M-j" . other-window)
+          ("M-J" . window-swap-states)))
 
 (use-package zap-to-char-dwim
   :bind (("M-z" . zap-to-char-dwim)
