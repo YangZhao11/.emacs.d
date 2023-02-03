@@ -76,10 +76,11 @@ With prefix arg (NO-SPACE), do not leave space before CHAR."
   "Search for previous CHAR."
   (interactive (list (prefix-numeric-value current-prefix-arg)
                      (read-char "char: " t)))
+  (setq z-search-char char)
   (search-backward
    (char-to-string char)
    (and z-search-bound-lines
-        (line-beginning-position z-search-bound-lines))
+        (line-beginning-position (- z-search-bound-lines)))
    nil arg))
 
 (defun z-search-forward-repeat (arg)
