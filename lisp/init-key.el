@@ -186,8 +186,7 @@ root-_D_iff  log _O_utgoing   _~_:revision  i_G_nore    _g_:annotate _u_:revert
 (use-package like-this
   :bind
   ("M-n" . like-this-next)
-  ("M-p" . like-this-prev)
-  :commands (like-this--next-face))
+  ("M-p" . like-this-prev))
 
 (defun z-kill-ring-save (arg)
   "Wrapper around `kill-ring-save'.
