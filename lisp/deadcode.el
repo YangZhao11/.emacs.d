@@ -721,3 +721,23 @@ Prefixed with \\[universal-argument], show dispatch action."
       (avy-jump (regexp-quote (string char))
                 :beg (line-beginning-position)
                 :end (point))))
+
+(use-package register-channel :ensure
+  :config
+  (register-channel-mode)
+  (defun z-all-frames-to-messages-buffer ()
+    "Make all frames display the *Messages* buffer, only after storing
+current frame configuration to register 6."
+    (interactive)
+    (frameset-to-register ?6)
+    (dolist (f (frame-list))
+      (let ((w (frame-first-window f)))
+        (delete-other-windows w)
+        (set-window-buffer w "*Messages*")))
+    (message "All frames to *Messages*. Originals stored in register 6."))
+
+  (bind-keys :map register-channel-mode-map
+             ("M-g 4" . register-channel-save-window-configuration)
+             ("M-g 5" . register-channel-save-window-configuration)
+             ("M-g 6" . z-all-frames-to-messages-buffer)
+             ("M-g 7") ("M-g 8") ("M-7") ("M-8")))

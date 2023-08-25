@@ -13,6 +13,10 @@
       ((append . t))
       ("^\\alpha" ?ᵅ)
       ("\\sqrt" ?√)
+      ("\\mathbb{P}" ?ℙ)
+      ("\\mathbb{N}" ?ℕ) ("\\mathbb{Z}" ?ℤ)
+      ("\\mathbb{Q}" ?ℚ) ("\\mathbb{R}" ?ℝ)
+      ("\\mathbb{C}" ?ℂ) ("\\mathbb{H}" ?ℍ)
       ("\\rarr" ?→) ("\\larr" ?←) ("\\uarr" ?↑) ("\\darr" ?↓)
       ("\\Rarr" ?⇒) ("\\Larr" ?⇐) ("\\Uarr" ?⇑) ("\\Darr" ?⇓))))
 
@@ -532,26 +536,6 @@ Toggle:
            (hs-show-all) (hs-minor-mode -1))
           (:else (hs-toggle-hiding)))))
 
-(use-package register-channel :ensure
-  :config
-  (register-channel-mode)
-  (defun z-all-frames-to-messages-buffer ()
-    "Make all frames display the *Messages* buffer, only after storing
-current frame configuration to register 6."
-    (interactive)
-    (frameset-to-register ?6)
-    (dolist (f (frame-list))
-      (let ((w (frame-first-window f)))
-        (delete-other-windows w)
-        (set-window-buffer w "*Messages*")))
-    (message "All frames to *Messages*. Originals stored in register 6."))
-
-  (bind-keys :map register-channel-mode-map
-             ("M-g 4" . register-channel-save-window-configuration)
-             ("M-g 5" . register-channel-save-window-configuration)
-             ("M-g 6" . z-all-frames-to-messages-buffer)
-             ("M-g 7") ("M-g 8") ("M-7") ("M-8")))
-
 (use-package goto-chg :ensure
   :bind (("M-i" . goto-last-change)
          ("M-I" . goto-last-change-reverse)))
@@ -560,16 +544,30 @@ current frame configuration to register 6."
 (defvar ctl-j-map (make-sparse-keymap)
   "Keymap behind C-j. Called by `z-goto-char'.")
 
+(use-package binky
+  :bind (:map ctl-j-map
+              ("C-j" . binky-binky)))
+
 (use-package avy :ensure :defer 5
   :bind ("C-j" . z-goto-char)
   :bind (:map minibuffer-local-map
               ("C-j" . z-goto-char))
   :bind (:map ctl-j-map
               ("SPC" . avy-goto-line)
-              ("C-k" . avy-kill-whole-line)
-              ("RET" . avy-show-dispatch)
+              ("C-k" . avy-kill-region)
+              ("C-h" . ctl-j-help)
               ("TAB" . avy-yank-word-1))
   :config
+  (defun ctl-j-help ()
+    "Show help for ctl-j-map."
+    (interactive)
+    (describe-keymap ctl-j-map)
+    ;; ideally we want to put the dispatch help in the help buffer too.
+    (avy-show-dispatch-help))
+
+  ;; Used in avy, but defined in ace-window
+  (put 'aw-key-face 'face-alias 'help-key-binding)
+
   (require 'subword)
   (setq avy-styles-alist '((avy-goto-char . de-bruijn))
         avy-keys
@@ -650,17 +648,7 @@ in `ctl-j-map' first."
              (avy-goto-subword-1 char arg))
             (:else (avy-goto-nth-char char arg)))))
 
-  (defun avy-show-dispatch ()
-    "Show help for using `avy-dispatch-alist'"
-    (interactive)
-    (message "%s"
-       (mapconcat
-        (lambda (x)
-          (concat (propertize (char-to-string (car x)) 'face 'hydra-face-red)
-                  ":" (replace-regexp-in-string "avy-action-" ""
-                                                (symbol-name (cdr x)))))
-        avy-dispatch-alist
-        "  "))))
+)
 
 
 (use-package window
@@ -687,7 +675,7 @@ in `ctl-j-map' first."
   :if (not (featurep 'google))
   :bind (("C-x ." . xref-find-definitions)
          ("C-x ?" . xref-find-references)
-         ("C-x ," . xref-pop-marker-stack)))
+         ("C-x ," . xref-go-back)))
 
 (use-package vertico
   :bind ("M-s M-d" . vertico-repeat)
@@ -772,7 +760,7 @@ in `ctl-j-map' first."
   :config
   (setq consult-goto-line-numbers nil)
   ;; This might conflict with LSP stuff, see consult doc
-  ;;(setq completion-in-region-function #'consult-completion-in-region)
+  (setq completion-in-region-function #'consult-completion-in-region)
   (bind-key "C-h" #'consult-narrow-help consult-narrow-map))
 
 

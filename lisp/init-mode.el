@@ -880,6 +880,11 @@ section: _a_rguments  _d_escription  _D_e_t_ails  _e_xamples  _n_ote  _r_eferenc
              ("C-M-e" . markdown-next-visible-heading)
              ("C-c C-m" . ess-r-mode)))
 
+(use-package tex-mode
+  :config
+  (bind-keys :map tex-mode-map
+             ("C-j")))
+
 ;; ----------------------------------------------------------
 (use-package gdb-mi
   :config
