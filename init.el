@@ -17,6 +17,7 @@
 (load "init-key")
 (load "init-god")
 (load "init-display")
+(load "init-something" t)
 
 ;; --------------------------------------------------
 ;; customs
