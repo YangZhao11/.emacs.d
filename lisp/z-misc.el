@@ -93,8 +93,8 @@ With prefix arg (NO-SPACE), do not leave space before CHAR."
 
 (defvar-keymap z-search-repeat-map
   :repeat t
-  "M-." #'z-search-forward-repeat
-  "M-," #'z-search-backward-repeat)
+  "." #'z-search-forward-repeat
+  "," #'z-search-backward-repeat)
 (put 'z-search-forward-char 'repeat-map 'z-search-repeat-map)
 (put 'z-search-backward-char 'repeat-map 'z-search-repeat-map)
 
