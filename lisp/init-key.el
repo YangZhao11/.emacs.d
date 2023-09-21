@@ -170,7 +170,7 @@ root-_D_iff  log _O_utgoing   _~_:revision  i_G_nore    _g_:annotate _u_:revert
            ("C-M-\\" . indent-region))
 
 (use-package shell
-  :bind ("<f6>" . shell)
+  ;:bind ("<f6>" . shell)
   :config
   (require 'pcmpl-args nil t))
 
@@ -283,13 +283,14 @@ If ARG is non-nil and we are on terminal, then call
   :hook ((before-save . delete-trailing-whitespace)
          (text-mode . turn-on-auto-fill))
   :commands (cycle-spacing-0)
-  :bind (("M-SPC"       . cycle-spacing)
+  :bind (("M-SPC"       . cycle-spacing) ; default in 29.1
          ("M-\\"        . cycle-spacing-0)
          ("M-c"         . capitalize-dwim)
          ("M-l"         . downcase-dwim)
          ("M-u"         . upcase-dwim)
          ("M-="         . z-toggle-activate-mark)
          ("<XF86Eject>" . keyboard-escape-quit)
+         ("<f6>"        . scratch-buffer)
          ([remap exchange-point-and-mark] . z-exchange-point-and-mark))
   :init
   (when (fboundp 'undo-redo)
@@ -366,8 +367,11 @@ instead of inactivate region."
    (:else
     (string-inflection-underscore-function str)))))
 
+(use-package rg
+  :bind (("M-s r" . rg)
+         ("M-s M-r" . rg-menu)))
+
 (use-package isearch
-  :bind ("M-s r" . isearch-forward-regexp)
   :config
   (defun isearch-exit-other-end ()
     "Exit isearch, but at the other end of the search string. This is
