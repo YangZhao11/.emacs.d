@@ -155,6 +155,17 @@ root-_D_iff  log _O_utgoing   _~_:revision  i_G_nore    _g_:annotate _u_:revert
     :bind (:map region-bindings-mode-map
                 ("C-t" . anchored-transpose)))
 
+(defun transpose-dwim (arg)
+  "Transpose args, sexps, or sentences"
+  (interactive "*p")
+  (if (derived-mode-p 'prog-mode)
+      (cond ((bounds-of-thing-at-point 'arg)
+             (call-interactively #'transpose-args))
+            ('t (call-interactively #'transpose-sexps)))
+    :else ; text mode
+    (call-interactively #'transpose-sentences)))
+(bind-keys ("C-M-t" . transpose-dwim))
+
 (defun indent-list-or-sexp ()
   "Indent list at point, or the next sexp."
   (interactive)
@@ -205,7 +216,7 @@ If ARG is non-nil and we are on terminal, then call
 
 (use-package argatpt
   ;; generate autoloads
-  :commands (forward-arg backward-arg))
+  :commands (forward-arg backward-arg transpose-args))
 
 (use-package easy-kill :ensure
   :functions (easy-kill-mark-region easy-kill-exit)
@@ -283,8 +294,7 @@ If ARG is non-nil and we are on terminal, then call
   :hook ((before-save . delete-trailing-whitespace)
          (text-mode . turn-on-auto-fill))
   :commands (cycle-spacing-0)
-  :bind (("M-SPC"       . cycle-spacing) ; default in 29.1
-         ("M-\\"        . cycle-spacing-0)
+  :bind (("M-\\"        . cycle-spacing-0)
          ("M-c"         . capitalize-dwim)
          ("M-l"         . downcase-dwim)
          ("M-u"         . upcase-dwim)

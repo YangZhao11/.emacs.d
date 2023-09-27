@@ -7,8 +7,9 @@
 (eval-when-compile (require 'subr-x))             ; For when-let
 
 (defvar arg-separator-alist
-  '((emacs-lisp-mode . "[ \n\t]")
-    (lisp-interaction-mode . "[ \n\t]"))
+  ;; todo: this does not work for looking-back to skip a separator.
+  '((emacs-lisp-mode . "\\(?: +\\.\\)?[ \n\t]+")
+    (lisp-interaction-mode . "\\(?: +\\.\\)?[ \n\t]+"))
   "Mode-specific setting for arg separator.
 See doc for `arg-separator-default' for details.")
 
@@ -17,8 +18,8 @@ See doc for `arg-separator-default' for details.")
   empty string, and should include any spaces allowed.")
 
 (defun arg-separator (mode)
-  (or (alist-get mode arg-separator-alist)
-      arg-separator-default))
+  (alist-get mode arg-separator-alist
+             arg-separator-default))
 
 ;;;###autoload
 (defun forward-arg (&optional n)
@@ -32,6 +33,8 @@ See doc for `arg-separator-default' for details.")
                (sep (arg-separator major-mode)))
       (while (and (> n 0)
                   (< (1+ (point)) (cdr b)))
+        (if (looking-at sep)
+            (goto-char (match-end 0)))
         (forward-sexp 1)
         (if (or (looking-at-p sep)
                 (and (looking-at "[ \n\t]*")
@@ -50,14 +53,17 @@ See doc for `arg-separator-default' for details.")
                (sep (arg-separator major-mode)))
       (while (and (> n 0)
                   (>= (1- (point)) (car b)))
+        (when (looking-back sep (car b) 'greedy)
+            (message "skipping sep to %d" (match-beginning 0))
+            (goto-char (match-beginning 0)))
         (backward-sexp 1)
-        (if (or (looking-back sep (car b))
+        (if (or (looking-back sep (car b) 'greedy)
                 (and (looking-back "[ \n\t]*" (car b))
                      (= (1- (match-beginning 0)) (car b))))
             (setq n (1- n)))))
     ))
 
-(defun transpose-arg (&optional n)
+(defun transpose-args (&optional n)
   (interactive "^p")
   (transpose-subr #'forward-arg n))
 
