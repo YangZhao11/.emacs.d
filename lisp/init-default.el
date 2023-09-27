@@ -29,9 +29,6 @@
                            1 0)))
 (add-hook 'after-make-frame-functions 'set-frame-menubar)
 
-(menu-bar-mode (if (eq system-type 'darwin) 1 -1))
-(tool-bar-mode -1)
-(set-scroll-bar-mode nil)
 (mouse-wheel-mode 1)
 (blink-cursor-mode 1)
 (transient-mark-mode 1)
