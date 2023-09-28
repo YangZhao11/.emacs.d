@@ -144,7 +144,7 @@ _j_↓   _n_ext^^   _d_isplay^^   _o_ther window   %s(if next-error-follow-minor
 
 (use-package grep
   :bind (("M-s g"   . grep)
-         ("M-s M-g" . rgrep))
+         ("M-s G" . rgrep))
   :config
   (defhydra hydra-grep (:color pink :hint nil)
   "

@@ -379,7 +379,7 @@ instead of inactivate region."
 
 (use-package rg
   :bind (("M-s r" . rg)
-         ("M-s M-r" . rg-menu)))
+         ("M-s R" . rg-menu)))
 
 (use-package isearch
   :config
@@ -756,7 +756,8 @@ in `ctl-j-map' first."
          ("<help> a" . consult-apropos)
          ("M-s M-s" . consult-line)
          ("M-s s" . consult-focus-lines)
-         ("M-s f" . consult-grep)
+         ("M-s M-g" . consult-grep)
+         ("M-s M-r" . consult-ripgrep)
          ("M-s e" . consult-isearch-history)  ; similar to isearch-edit-string
          ("M-y" . consult-yank-pop)
          ("M-g o" . consult-outline)
