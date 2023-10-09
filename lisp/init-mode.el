@@ -838,12 +838,9 @@ section: _a_rguments  _d_escription  _D_e_t_ails  _e_xamples  _n_ote  _r_eferenc
   (modify-syntax-entry ?% "." ess-r-mode-syntax-table)
 
   (setq ess-r-prettify-symbols
-        '(("%>%" . ?↦)
-          ("|>" . ?▸)
+        '(("%>%" . ?↦)                  ; magrittr pipe
+          ("|>" . ?▸)                   ; R pipe
           ("\\" . ?λ)
-          ("%T>%" . ?↧) ;↴
-          ("%<>%" . ?⇄) ;⇋⇌⇆
-          ("%<-%" ?↢)   ;destructuring assignment in zeallot
           ("<-" . ?←)
           ("->" . ?→)
           ("<=" . ?≤)
@@ -851,7 +848,8 @@ section: _a_rguments  _d_escription  _D_e_t_ails  _e_xamples  _n_ote  _r_eferenc
           ("!=" . ?≠)
           ("%in%" . ?∈)
           ("%*%" . ?×)
-          ("function" . ?ƒ)))
+          ;;("function" . ?ƒ)
+          ))
 
   (defun z-inferior-ess-mode-hook ()
     (setq prettify-symbols-alist ess-r-prettify-symbols)
