@@ -155,16 +155,8 @@ root-_D_iff  log _O_utgoing   _~_:revision  i_G_nore    _g_:annotate _u_:revert
     :bind (:map region-bindings-mode-map
                 ("C-t" . anchored-transpose)))
 
-(defun transpose-dwim (arg)
-  "Transpose args, sexps, or sentences"
-  (interactive "*p")
-  (if (derived-mode-p 'prog-mode)
-      (cond ((bounds-of-thing-at-point 'arg)
-             (call-interactively #'transpose-args))
-            ('t (call-interactively #'transpose-sexps)))
-    :else ; text mode
-    (call-interactively #'transpose-sentences)))
-(bind-keys ("C-M-t" . transpose-dwim))
+
+
 
 (defun indent-list-or-sexp ()
   "Indent list at point, or the next sexp."
@@ -216,7 +208,7 @@ If ARG is non-nil and we are on terminal, then call
 
 (use-package argatpt
   ;; generate autoloads
-  :commands (forward-arg backward-arg transpose-args))
+  :bind (("C-M-t" . transpose-dwim)))
 
 (use-package easy-kill :ensure
   :functions (easy-kill-mark-region easy-kill-exit)
