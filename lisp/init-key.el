@@ -207,8 +207,26 @@ If ARG is non-nil and we are on terminal, then call
   :commands clipetty-kill-ring-save)
 
 (use-package argatpt
-  ;; generate autoloads
-  :bind (("C-M-t" . transpose-dwim)))
+  :commands (transpose-args forward-arg backward-arg))
+
+(defvar transpose-args-exclude-modes
+  '(emacs-lisp-mode lisp-interaction-mode)
+  "Modes for which we do not attempt transpose-args")
+
+(defun transpose-dwim (arg)
+  "Transpose args, sexps, or sentences. "
+  (interactive "*p")
+  (cond ((derived-mode-p 'text-mode)
+         (call-interactively #'transpose-sentences))
+        ((and ;; We wouldn't need this for smie enabled modes.
+          (not (memq major-mode transpose-args-exclude-modes))
+          (not (eq forward-sexp-function #'smie-forward-sexp-command))
+          (bounds-of-thing-at-point 'arg))
+         (call-interactively #'transpose-args))
+        ('t
+         (call-interactively #'transpose-sexps))))
+(bind-keys ("C-M-t" . transpose-dwim))
+
 
 (use-package easy-kill :ensure
   :functions (easy-kill-mark-region easy-kill-exit)

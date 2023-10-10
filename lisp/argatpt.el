@@ -5,10 +5,9 @@
 ;;; Code:
 
 (defvar arg-separator-alist
-  ;; todo: this does not work for looking-back to skip a separator.
-  ;; '((emacs-lisp-mode . " +\\. +")
-  ;;   (lisp-interaction-mode . " +\\. +"))
-  nil
+  ;; todo: we don't handle alist here.
+   '((emacs-lisp-mode . " +")
+     (lisp-interaction-mode . " +"))
   "Mode-specific setting for arg separator.
 See doc for `arg-separator-default' for details.")
 
@@ -53,38 +52,17 @@ See doc for `arg-separator-default' for details.")
       (while (and (> n 0)
                   (>= (1- (point)) (car b)))
         (when (looking-back sep (car b) 'greedy)
-            (message "skipping sep to %d" (match-beginning 0))
-            (goto-char (match-beginning 0)))
+          (goto-char (match-beginning 0)))
         (backward-sexp 1)
         (if (or (looking-back sep (car b) 'greedy)
                 (and (looking-back "[ \n\t]*" (car b))
                      (= (1- (match-beginning 0)) (car b))))
-            (setq n (1- n)))))
-    ))
+            (setq n (1- n)))))))
 
 ;;;###autoload
 (defun transpose-args (&optional n)
   (interactive "^p")
   (transpose-subr #'forward-arg n))
-
-(defvar transpose-args-exclude-modes
-  '(emacs-lisp-mode lisp-interaction-mode)
-  "Modes for which we do not attempt transpose-args")
-
-
-;;;###autoload
-(defun transpose-dwim (arg)
-  "Transpose args, sexps, or sentences. "
-  (interactive "*p")
-  (if (derived-mode-p 'prog-mode)
-      (cond ((and ;; We wouldn't need this for smie enabled modes.
-              (not (memq major-mode transpose-args-exclude-modes))
-              (not (eq forward-sexp-function #'smie-forward-sexp-command))
-              (bounds-of-thing-at-point 'arg))
-             (call-interactively #'transpose-args))
-            ('t (call-interactively #'transpose-sexps)))
-    :else ; text mode
-    (call-interactively #'transpose-sentences)))
 
 (provide 'argatpt)
 ;;; argatpt.el ends here
