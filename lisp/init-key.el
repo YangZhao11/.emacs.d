@@ -151,10 +151,6 @@ root-_D_iff  log _O_utgoing   _~_:revision  i_G_nore    _g_:annotate _u_:revert
          ("M-(" . easy-pair-barf)
          ("M-)" . easy-pair-slurp)))
 
-(use-package anchored-transpose
-    :bind (:map region-bindings-mode-map
-                ("C-t" . anchored-transpose)))
-
 
 
 
@@ -209,23 +205,14 @@ If ARG is non-nil and we are on terminal, then call
 (use-package argatpt
   :commands (transpose-args forward-arg backward-arg))
 
-(defvar transpose-args-exclude-modes
-  '(emacs-lisp-mode lisp-interaction-mode)
-  "Modes for which we do not attempt transpose-args")
+;; (use-package anchored-transpose
+;;     :bind (:map region-bindings-mode-map
+;;                 ("C-t" . anchored-transpose)))
 
-(defun transpose-dwim (arg)
-  "Transpose args, sexps, or sentences. "
-  (interactive "*p")
-  (cond ((derived-mode-p 'text-mode)
-         (call-interactively #'transpose-sentences))
-        ((and ;; We wouldn't need this for smie enabled modes.
-          (not (memq major-mode transpose-args-exclude-modes))
-          (not (eq forward-sexp-function #'smie-forward-sexp-command))
-          (bounds-of-thing-at-point 'arg))
-         (call-interactively #'transpose-args))
-        ('t
-         (call-interactively #'transpose-sexps))))
-(bind-keys ("C-M-t" . transpose-dwim))
+(use-package transpose-dwim
+  :bind (("C-M-t" . transpose-dwim))
+  :bind (:map region-bindings-mode-map
+              ("C-t" . transpose-dwim-regions)))
 
 
 (use-package easy-kill :ensure
@@ -242,7 +229,7 @@ If ARG is non-nil and we are on terminal, then call
      (call-interactively ,func)))))
   :config
 
-  (easy-kill-defun-on-selection easy-kill-transpose #'anchored-transpose)
+  (easy-kill-defun-on-selection easy-kill-transpose #'transpose-dwim-regions)
   (easy-kill-defun-on-selection easy-kill-wrap-region #'self-insert-command)
   (easy-kill-defun-on-selection easy-kill-indent-region #'indent-region)
   (easy-kill-defun-on-selection easy-kill-comment-dwim #'comment-dwim)
