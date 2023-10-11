@@ -205,10 +205,6 @@ If ARG is non-nil and we are on terminal, then call
 (use-package argatpt
   :commands (transpose-args forward-arg backward-arg))
 
-;; (use-package anchored-transpose
-;;     :bind (:map region-bindings-mode-map
-;;                 ("C-t" . anchored-transpose)))
-
 (use-package transpose-dwim
   :bind (("C-M-t" . transpose-dwim))
   :bind (:map region-bindings-mode-map
