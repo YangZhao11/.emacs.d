@@ -3,8 +3,7 @@
 ;;; Code:
 (eval-when-compile
   (require 'use-package)
-  (require 'hydra)
-  (require 'subr-x))
+  (require 'hydra))
 
 ;; Add several custom shortcuts in the TeX input method.
 (eval-after-load "quail/Latin-ltx"
@@ -13,7 +12,7 @@
       ((append . t))
       ("^\\alpha" ?ᵅ)
       ("\\sqrt" ?√)
-      ("\\mathbb{P}" ?ℙ)
+      ("\\mathbb{P}" ?ℙ) ("\\mathbb{A}" ?𝔸)
       ("\\mathbb{N}" ?ℕ) ("\\mathbb{Z}" ?ℤ)
       ("\\mathbb{Q}" ?ℚ) ("\\mathbb{R}" ?ℝ)
       ("\\mathbb{C}" ?ℂ) ("\\mathbb{H}" ?ℍ)
@@ -550,17 +549,13 @@ Toggle:
 (defvar ctl-j-map (make-sparse-keymap)
   "Keymap behind C-j. Called by `z-goto-char'.")
 
-(use-package binky
-  :bind (:map ctl-j-map
-              ("C-j" . binky-binky)))
-
 (use-package avy :ensure :defer 5
   :bind ("C-j" . z-goto-char)
   :bind (:map minibuffer-local-map
               ("C-j" . z-goto-char))
   :bind (:map ctl-j-map
               ("SPC" . avy-goto-line)
-              ("C-k" . avy-kill-region)
+              ;;("C-k" . avy-kill-region)
               ("C-h" . ctl-j-help)
               ("TAB" . avy-yank-word-1))
   :config
@@ -764,12 +759,38 @@ in `ctl-j-map' first."
          ("M-g M-g" . consult-goto-line)
          ("M-g `" . consult-compile-error)
          ("C-x C-z" . consult-complex-command))
+  :bind (:map ctl-j-map
+              ("C-j" . consult-register-dwim)
+              ("C-k" . consult-register-store))
   :config
   (setq consult-goto-line-numbers nil)
   ;; This might conflict with LSP stuff, see consult doc
   (setq completion-in-region-function #'consult-completion-in-region)
-  (bind-key "C-h" #'consult-narrow-help consult-narrow-map))
+  (bind-key "C-h" #'consult-narrow-help consult-narrow-map)
 
+  (setq register-preview-function #'consult-register-format)
+
+  (defun consult-register-dwim (reg &optional arg)
+    "Do what I mean with a REG.
+
+For existing register, call `consult-register-load'. Otherwise
+try to save something, either the region, arg (number), or point."
+    (interactive
+     (list
+      (and (consult-register--alist)
+           (register-read-with-preview "Register: "))
+      current-prefix-arg))
+    (cond
+     ((get-register reg)
+      (consult-register-load reg arg))
+     ((use-region-p)
+      (let ((beg (region-beginning))
+            (end (region-end)))
+        (copy-to-register reg beg end arg t)))
+     ((numberp arg)
+      (number-to-register arg reg))
+     ('t
+      (point-to-register reg arg)))))
 
 (use-package embark
   :after vertico
