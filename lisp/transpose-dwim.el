@@ -1,14 +1,16 @@
 ;;; transpose-dwim -- Helpful transpose function -*- lexical-binding: t -*-
 ;;; Commentary:
-;;   Provide transpose-dwim. Also an easier version of transpose-regions
+;;   Provide `transpose-dwim'. Also `transpose-dwim-regions' is an easier
+;;   version of `transpose-regions'.
 
 ;;; Code:
 
-;; markers to remember where we want to transpose
-(setq transpose-region-marker1 (make-marker))
-(setq transpose-region-marker2 (make-marker))
+;; Markers used by `transpose-dwim-regions', to remember the region in
+;; the first step.
+(setq transpose-region-marker1 (make-marker)
+      transpose-region-marker2 (make-marker))
 
-(defun transpose-dwim-delete-markers ()
+(defun transpose-dwim--delete-markers ()
   (set-marker transpose-region-marker1 nil)
   (set-marker transpose-region-marker2 nil))
 
@@ -34,16 +36,16 @@
     (let ((beg2 (marker-position transpose-region-marker1))
           (end2 (marker-position transpose-region-marker2)))
       ;; delete markers first, we always confirm the action
-      (transpose-dwim-delete-markers)
+      (transpose-dwim--delete-markers)
       (eval `(transpose-regions . ,(sort (list beg end beg2 end2) '<)))))
 
    ;; different buffer
    ('t
-    (let (s1 s2
+    (let (s1
           (beg2 (marker-position transpose-region-marker1))
           (end2 (marker-position transpose-region-marker2))
           (buf2 (marker-buffer transpose-region-marker1)))
-      (transpose-dwim-delete-markers)
+      (transpose-dwim--delete-markers)
       (setq s1 (filter-buffer-substring beg end 'delete))
       (condition-case nil
           (let ((s2 (with-current-buffer buf2
@@ -58,13 +60,13 @@
          (signal 'text-read-only (list buf2))))))))
 
 (defvar transpose-args-exclude-modes
-  '(emacs-lisp-mode lisp-interaction-mode)
+  nil
   "Modes for which we do not attempt transpose-args")
 
 ;;; autoload
-(defun transpose-dwim (arg)
+(defun transpose-dwim ()
   "Transpose args, sexps, or sentences. "
-  (interactive "*p")
+  (interactive "")
   (cond ((derived-mode-p 'text-mode)
          (call-interactively #'transpose-sentences))
         ((and ;; We wouldn't need this for smie enabled modes.
@@ -74,3 +76,6 @@
          (call-interactively #'transpose-args))
         ('t
          (call-interactively #'transpose-sexps))))
+
+(provide 'transpose-dwim)
+;;; transpose-dwim.el ends here
