@@ -37,7 +37,7 @@
           (end2 (marker-position transpose-region-marker2)))
       ;; delete markers first, we always confirm the action
       (transpose-dwim--delete-markers)
-      (eval `(transpose-regions . ,(sort (list beg end beg2 end2) '<)))))
+      (apply #'transpose-regions (sort (list beg end beg2 end2) '<))))
 
    ;; different buffer
    ('t
@@ -64,18 +64,18 @@
   "Modes for which we do not attempt transpose-args")
 
 ;;; autoload
-(defun transpose-dwim ()
+(defun transpose-dwim (arg &optional interactive)
   "Transpose args, sexps, or sentences. "
-  (interactive "")
+  (interactive "*p\nd")
   (cond ((derived-mode-p 'text-mode)
-         (call-interactively #'transpose-sentences))
+         (transpose-sentences arg))
         ((and ;; We wouldn't need this for smie enabled modes.
           (not (memq major-mode transpose-args-exclude-modes))
           (not (eq forward-sexp-function #'smie-forward-sexp-command))
           (bounds-of-thing-at-point 'arg))
-         (call-interactively #'transpose-args))
+         (transpose-args arg))
         ('t
-         (call-interactively #'transpose-sexps))))
+         (transpose-sexps arg interactive))))
 
 (provide 'transpose-dwim)
 ;;; transpose-dwim.el ends here
