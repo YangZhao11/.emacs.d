@@ -61,7 +61,7 @@ See doc for `arg-separator-default' for details.")
 
 ;;;###autoload
 (defun transpose-args (&optional n)
-  (interactive "^p")
+  (interactive "*p")
   (transpose-subr #'forward-arg n))
 
 (provide 'argatpt)
