@@ -128,8 +128,7 @@ root-_D_iff  log _O_utgoing   _~_:revision  i_G_nore    _g_:annotate _u_:revert
   (interactive "^p")
   (down-list (- (or arg 1))))
 
-(bind-keys ("<C-M-backspace>" . backward-kill-sexp)
-           ("C-M-o"           . up-list)
+(bind-keys ("C-M-o"           . up-list)
            ("C-M-j"           . backward-down-list)
            ("M-r"             . raise-sexp)) ; was move-to-window-line-top-bottom
 
@@ -737,11 +736,9 @@ in `ctl-j-map' first."
          ([remap switch-to-buffer] . consult-buffer)
          ([remap switch-to-buffer-other-window] . consult-buffer-other-window)
          ([remap switch-to-buffer-other-frame] . consult-buffer-other-frame)
-         ([remap multi-occur] . consult-multi-occur)
          ;; C-c C-l in `comint-mode-map'
          ([remap comint-dynamic-list-input-ring] . consult-history)
          ("C-x F" . consult-find)
-         ("<help> a" . consult-apropos)
          ("M-s M-s" . consult-line)
          ("M-s s" . consult-focus-lines)
          ("M-s M-g" . consult-grep)
@@ -749,26 +746,36 @@ in `ctl-j-map' first."
          ("M-s e" . consult-isearch-history)  ; similar to isearch-edit-string
          ("M-y" . consult-yank-pop)
          ("M-g o" . consult-outline)
-         ("M-g i" . consult-imenu)
-         ("M-g M-i" . consult-imenu-multi)
          ("M-g m" . consult-mark)
          ("M-g M-m" . consult-global-mark)
          ("M-g b" . consult-bookmark)
-         ("M-g r" . consult-register)
          ("M-g g" . consult-goto-line)
          ("M-g M-g" . consult-goto-line)
-         ("M-g `" . consult-compile-error)
          ("C-x C-z" . consult-complex-command))
+  :config
+  (setq consult-goto-line-numbers nil)
+
+  ;; This might conflict with LSP stuff, see consult doc
+  (setq completion-in-region-function #'consult-completion-in-region)
+  (bind-key "C-h" #'consult-narrow-help consult-narrow-map))
+
+(use-package consult-imenu
+  :bind (("M-g i" . consult-imenu)
+         ("M-g M-i" . consult-imenu-multi)))
+
+(use-package consult-compile
+  :bind ("M-g `" . consult-compile-error))
+
+(use-package consult-register
+  :bind ("M-g r" . consult-register)
   :bind (:map ctl-j-map
               ("C-j" . consult-register-dwim)
               ("C-k" . consult-register-store))
-  :config
-  (setq consult-goto-line-numbers nil)
-  ;; This might conflict with LSP stuff, see consult doc
-  (setq completion-in-region-function #'consult-completion-in-region)
-  (bind-key "C-h" #'consult-narrow-help consult-narrow-map)
-
+  :init
+  ;; Better preview of registers.
   (setq register-preview-function #'consult-register-format)
+
+  :config
 
   (defun consult-register-dwim (reg &optional arg)
     "Do what I mean with a REG.
@@ -777,8 +784,7 @@ For existing register, call `consult-register-load'. Otherwise
 try to save something, either the region, arg (number), or point."
     (interactive
      (list
-      (and (consult-register--alist)
-           (register-read-with-preview "Register: "))
+      (register-read-with-preview "Register: ")
       current-prefix-arg))
     (cond
      ((get-register reg)
