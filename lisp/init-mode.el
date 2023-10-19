@@ -497,20 +497,6 @@ _q_uit      _RET_: current
           (match-string count)))))
 
 
-;; faces for mode-line status
-(defface status-warning
-  '((t (:foreground "#D8B080")))
-  "Face for flycheck status: warnings" :group 'flycheck)
-(defface status-ok
-  '((t (:foreground "#98DC98")))
-  "Face for flycheck status: OK" :group 'flycheck)
-(defface status-error
-  '((t (:foreground "#D88080")))
-  "Face for flycheck status: error" :group 'flycheck)
-(defface status-info
-  '((t (:foreground "#80D8D8")))
-  "Face for flycheck status: error" :group 'flycheck)
-
 (defun z-status-count (s count)
   "Concat S and COUNT, except when COUNT is nil or 0, return empty string."
   (cond ((or (not count) (= 0 count)) "")
@@ -523,43 +509,22 @@ _q_uit      _RET_: current
   (or nwarning (setq nwarning 0))
   (or ninfo (setq ninfo 0))
   (if (and (= 0 nerror) (= 0 nwarning) (= 0 ninfo))
-      (propertize "✔" 'face 'status-ok)
+      (propertize "✔" 'face 'compilation-mode-line-exit)
     (list ""
      (propertize (z-status-count "✖" nerror)
-                 'face 'status-error)
+                 'face 'compilation-error)
      (if (and (< 0 nwarning) (< 0 nerror)) "/" "")
      (propertize (z-status-count "▴" nwarning)
-                 'face 'status-warning)
+                 'face 'compilation-warning)
      (if (and (or (< 0 nwarning) (< 0 nerror)) (< 0 ninfo)) "/" "")
      (propertize (z-status-count "•" ninfo)
-                 'face 'status-info))))
+                 'face 'compilation-info))))
 
 (use-package flymake
   :commands (flymake-mode)
   :config
 
-  (defun z-flymake-mode-line ()
-    (let* ((running (flymake-running-backends))
-           (disabled (flymake-disabled-backends))
-           (reported (flymake-reporting-backends))
-           (diags-by-type (make-hash-table))
-           (all-disabled (and disabled (null running)))
-           (some-waiting (cl-set-difference running reported)))
-      (maphash (lambda (_b state)
-                 (mapc (lambda (diag)
-                         (push diag
-                               (gethash (flymake--diag-type diag)
-                                        diags-by-type)))
-                       (flymake--backend-state-diags state)))
-               flymake--backend-state)
-      (cond (all-disabled "¿")
-            (some-waiting (propertize "✔" 'face 'status-warning))
-            (:else (z-status-str (length (gethash :error diags-by-type))
-                             (length (gethash :warning diags-by-type))
-                             (length (gethash :note diags-by-type)))))))
-
-  (setq flymake--mode-line-format
-        '(" " (:eval (z-flymake-mode-line))))
+  (setq flymake-mode-line-lighter "m~")
 
   (bind-keys :map flymake-mode-map
              ("M-g k"   . consult-flymake)
@@ -587,12 +552,12 @@ fallback."
                    (if flycheck-current-errors
                        (let-alist (flycheck-count-errors flycheck-current-errors)
                          (z-status-str .error .warning .info))
-                     (propertize "✔" 'face 'status-ok)))
-                  (`running     (propertize "✔" 'face 'status-warning))
-                  (`not-checked (propertize "✔" 'face 'status-error))
+                     (propertize "✔" 'face 'compilation-mode-line-exit)))
+                  (`running     (propertize "✔" 'face 'compilation-mode-line-run))
+                  (`not-checked (propertize "✔" 'face 'compilation-error))
                   (`no-checker  "¿")
-                  (`errored     "‼")
-                  (`interrupted "⁉")
+                  (`errored     (propertize "‼" 'face 'compilation-mode-line-fail))
+                  (`interrupted (propertize "⁉" 'face 'compilation-mode-line-fail))
                   (`suspicious  "‽"))))
       (list " " pick)))
   (setq flycheck-mode-line '(:eval (z-flycheck-mode-line-text)))
