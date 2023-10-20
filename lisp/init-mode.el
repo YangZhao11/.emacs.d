@@ -635,7 +635,7 @@ fallback."
   :config
   (bind-keys :map js-mode-map
              ("M-." . nil)
-             ("C-x ." . js-find-symbol)))
+             ([remap xref-find-definitions] . js-find-symbol)))
 
 (use-package haskell-mode
   :config
@@ -844,8 +844,11 @@ section: _a_rguments  _d_escription  _D_e_t_ails  _e_xamples  _n_ote  _r_eferenc
 
 (use-package tex-mode
   :config
-  (bind-keys :map tex-mode-map
-             ("C-j")))
+  (bind-keys :map tex-mode-map ("C-j")))
+
+(use-package mhtml-mode
+  :config
+  (bind-keys :map mhtml-mode-map ("M-o")))
 
 ;; ----------------------------------------------------------
 (use-package gdb-mi
