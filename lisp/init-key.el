@@ -769,34 +769,11 @@ in `ctl-j-map' first."
 (use-package consult-register
   :bind ("M-g r" . consult-register)
   :bind (:map ctl-j-map
-              ("C-j" . consult-register-dwim)
+              ("C-j" . consult-register-load)
               ("C-k" . consult-register-store))
   :init
   ;; Better preview of registers.
-  (setq register-preview-function #'consult-register-format)
-
-  :config
-
-  (defun consult-register-dwim (reg &optional arg)
-    "Do what I mean with a REG.
-
-For existing register, call `consult-register-load'. Otherwise
-try to save something, either the region, arg (number), or point."
-    (interactive
-     (list
-      (register-read-with-preview "Register: ")
-      current-prefix-arg))
-    (cond
-     ((get-register reg)
-      (consult-register-load reg arg))
-     ((use-region-p)
-      (let ((beg (region-beginning))
-            (end (region-end)))
-        (copy-to-register reg beg end arg t)))
-     ((numberp arg)
-      (number-to-register arg reg))
-     ('t
-      (point-to-register reg arg)))))
+  (setq register-preview-function #'consult-register-format))
 
 (use-package embark
   :after vertico
