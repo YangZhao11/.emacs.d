@@ -5,47 +5,54 @@
 
 ;;; Code:
 
-;; Markers used by `transpose-dwim-regions', to remember the region in
-;; the first step.
-(setq transpose-region-marker1 (make-marker)
-      transpose-region-marker2 (make-marker))
+(defvar transpose-dwim--beg (make-marker)
+  "Marker used by `transpose-dwim-regions', to remember the region
+in the first step.")
+(defvar transpose-dwim--end (make-marker)
+    "Marker used by `transpose-dwim-regions', to remember the region
+in the first step.")
 
 (defun transpose-dwim--delete-markers ()
-  (set-marker transpose-region-marker1 nil)
-  (set-marker transpose-region-marker2 nil))
+  (set-marker transpose-dwim--beg nil)
+  (set-marker transpose-dwim--end nil))
 
 ;;; autoload
 (defun transpose-dwim-regions (beg end)
-  "Similar to anchored-transpose or transpose-regions.
-   2 step process to transpose 2 things."
+  "Transpose in 2 steps, similar to `anchored-transpose'.
+
+To use, mark the region we want to transpose then call this
+function, then do the same for the second part; on the second
+call the two regions will be transposed."
   (interactive "r")
   (unless (and beg end)
     (user-error "The mark is not set now"))
   (cond
    ;; first call
-   ((not (marker-position transpose-region-marker1))
-    (set-marker transpose-region-marker1 beg)
-    (set-marker transpose-region-marker2 end)
+   ((not (marker-position transpose-dwim--beg))
+    (set-marker transpose-dwim--beg beg)
+    (set-marker transpose-dwim--end end)
     (setq deactivate-mark 't)
     (message "Will transpose text \"%s\""
              (query-replace-descr
               (buffer-substring-no-properties beg end))))
-   ;; same buffer
+   ;; second call, same buffer
    ((eq (current-buffer)
-        (marker-buffer transpose-region-marker1))
-    (let ((beg2 (marker-position transpose-region-marker1))
-          (end2 (marker-position transpose-region-marker2)))
+        (marker-buffer transpose-dwim--beg))
+    (let ((beg2 (marker-position transpose-dwim--beg))
+          (end2 (marker-position transpose-dwim--end)))
       ;; delete markers first, we always confirm the action
       (transpose-dwim--delete-markers)
+      ;; transpose-regions may fail, e.g. in read-only buffers
       (apply #'transpose-regions (sort (list beg end beg2 end2) '<))))
 
-   ;; different buffer
+   ;; second call, different buffer
    ('t
     (let (s1
-          (beg2 (marker-position transpose-region-marker1))
-          (end2 (marker-position transpose-region-marker2))
-          (buf2 (marker-buffer transpose-region-marker1)))
+          (beg2 (marker-position transpose-dwim--beg))
+          (end2 (marker-position transpose-dwim--end))
+          (buf2 (marker-buffer transpose-dwim--beg)))
       (transpose-dwim--delete-markers)
+      ;; If deleting the first string fails, we are OK.
       (setq s1 (filter-buffer-substring beg end 'delete))
       (condition-case nil
           (let ((s2 (with-current-buffer buf2
@@ -55,7 +62,9 @@
               (save-excursion
                 (goto-char beg2)
                 (insert s1))))
-        ((buffer-read-only test-read-only)
+        ((buffer-read-only text-read-only)
+         ;; Deleting the second string failed. Recover the first
+         ;; string then signal error.
          (insert s1)
          (signal 'text-read-only (list buf2))))))))
 
