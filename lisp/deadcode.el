@@ -1,3 +1,21 @@
+(use-package ibuffer-sidebar
+  :bind ("M-s b" . z-ibuffer-sidebar)
+  :config
+  (setq ibuffer-sidebar-width 30)
+  (defun z-ibuffer-sidebar ()
+    (interactive)
+    (imenu-list-minor-mode -1)
+    (ibuffer-sidebar-toggle-sidebar)))
+
+(use-package dired-sidebar
+  :bind ("M-s j" . z-dired-sidebar)
+  :config
+  (setq dired-sidebar-theme 'nerd
+        dired-sidebar-width 30)
+  (defun z-dired-sidebar ()
+    (interactive)
+    (imenu-list-minor-mode -1)
+    (dired-sidebar-toggle-sidebar)))
 
 ;; TODO: hydra for table commands. Ref. "Text Based Tables" in emacs manual.
 (use-package table

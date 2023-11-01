@@ -208,25 +208,6 @@ _j_↓  _n_ext  _{__}_: prev/next file
              ("{" . compilation-previous-file)
              ("}" . compilation-next-file)))
 
-(use-package ibuffer-sidebar
-  :bind ("M-s b" . z-ibuffer-sidebar)
-  :config
-  (setq ibuffer-sidebar-width 30)
-  (defun z-ibuffer-sidebar ()
-    (interactive)
-    (imenu-list-minor-mode -1)
-    (ibuffer-sidebar-toggle-sidebar)))
-
-(use-package dired-sidebar
-  :bind ("M-s j" . z-dired-sidebar)
-  :config
-  (setq dired-sidebar-theme 'nerd
-        dired-sidebar-width 30)
-  (defun z-dired-sidebar ()
-    (interactive)
-    (imenu-list-minor-mode -1)
-    (dired-sidebar-toggle-sidebar)))
-
 (use-package dired
   :bind (("C-x C-d" . dired)
          ("C-x C-j" . dired-jump)
