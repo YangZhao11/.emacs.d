@@ -43,10 +43,10 @@
 
 (savehist-mode 1)
 
-  ;; Add prompt indicator to `completing-read-multiple'.
-  ;; Alternatively try `consult-completing-read-multiple'.
-  (defun crm-indicator (args)
-    (cons (concat "⇶ " (car args)) (cdr args)))
+;; Add prompt indicator to `completing-read-multiple'. Also see
+;; `crm-separator'.
+(defun crm-indicator (args)
+  (cons (concat "[,] " (car args)) (cdr args)))
   (advice-add #'completing-read-multiple :filter-args #'crm-indicator)
 
   ;; Do not allow the cursor in the minibuffer prompt
@@ -60,6 +60,6 @@
        #'command-completion-default-include-p)
 
 ;; --------------------------------------------------
-(load-theme 'zenburn 't)   ; load this first for many defaults.
+(load-theme 'doom-zenburn 't)   ; load this first for many defaults.
 
 (provide 'init-default)

@@ -82,7 +82,7 @@ M-w:copy^^  _r_egister^^       _x_/_s_:copy  _n_umber         _M_: no-overwrite
   ("x"   copy-to-register)
   ("y"   yank-rectangle)
   )
-(bind-key "C-x r ?" 'hydra-ctl-x-r/body)
+(bind-key "C-x r ?" #'hydra-ctl-x-r/body)
 
 (defhydra hydra-ctl-x-v (:color blue :hint nil)
   "

@@ -475,7 +475,7 @@ _q_uit      _RET_: current
   (save-excursion
     (save-match-data
       (when (re-search-backward re (point-min) t)
-          (match-string count)))))
+        (match-string count)))))
 
 
 (defun z-status-count (s count)
@@ -631,6 +631,12 @@ fallback."
   (setq julia-repl-captures
         (list (kbd "M-x") (kbd "<home>"))))
 
+(use-package pico8-mode
+  :config
+  (defun z-pico8-mode-hook ()
+    (setq-local lua-indent-level 1))
+  (add-hook 'pico8-mode-hook #'z-pico8-mode-hook))
+
 ;; --------------------------------------------------
 ;; ess
 
@@ -784,7 +790,7 @@ section: _a_rguments  _d_escription  _D_e_t_ails  _e_xamples  _n_ote  _r_eferenc
 
   (setq ess-r-prettify-symbols
         '(("%>%" . ?↦)                  ; magrittr pipe
-          ("|>" . ?▸)                   ; R pipe
+          ("|>" . ?▷)                   ; R pipe
           ("\\" . ?λ)
           ("<-" . ?←)
           ("->" . ?→)

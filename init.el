@@ -78,7 +78,7 @@
  '(link ((t (:foreground "#D0BF8F" :underline t :weight normal))))
  '(marginalia-key ((t (:inherit font-lock-comment-face))))
  '(marginalia-modified ((t (:inherit font-lock-comment-face))))
- '(mode-line ((t (:background "#284460" :foreground "#8FB28F"))))
+ '(mode-line-active ((t (:inherit mode-line :background "#284460"))))
  '(org-todo ((t (:foreground "#CC9393" :underline t :weight bold))))
  '(rainbow-delimiters-base-error-face ((t (:inherit rainbow-delimiters-base-face :foreground "#FF98A0" :weight bold))))
  '(vc-conflict-state ((t (:inherit vc-state-base :foreground "#E06050"))))
