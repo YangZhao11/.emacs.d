@@ -1,7 +1,7 @@
 ; -*- coding: utf-8; lexical-binding: t -*-
 
 (setq z-lighter-emacs
-  '(:propertize (" " (:eval (or current-input-method-title "ε")) " ")
+  '(:propertize (" " (:eval (or current-input-method-title "ɛ")) " ")
                 face (:background "#90E090" :foreground "black")))
 (setq z-lighter-god
       '(:propertize ("" (:eval (let ((m (cdr (assoc nil god-mod-alist))))
@@ -11,17 +11,20 @@
                      " ")
                 face (:background "#4DB0FF" :foreground "black")))
 (setq z-lighter-mortal
-  '(:propertize (" " (:eval (or current-input-method-title "i")) " ")
+  '(:propertize (" " (:eval (or current-input-method-title "I")) " ")
                 face (:background "#88E0C0" :foreground "black")))
 (setq z-lighter-view
-  '(:propertize " ν "
+  '(:propertize " ʘ "
                 face (:background "#D8E874" :foreground "black")))
 (setq z-lighter-special
-  '(:propertize (" " (:eval
-                      (cond
-                       ((eq (local-key-binding "x") 'god-mode-self-insert)
-                        (if (eq (local-key-binding "c") 'god-mode-self-insert) "*" "×"))
-                       (:else "•"))) " ")
+  '(:propertize (" "
+                 (:eval
+                  (cond
+                   ((eq (local-key-binding "x") 'god-mode-self-insert)
+                    (if (eq (local-key-binding "c") 'god-mode-self-insert)
+                        "*" "×"))
+                   (:else "•")))
+                 " ")
                 face (:background "#4D88FF" :foreground "black")))
 
 (defvar z-lighter

@@ -111,6 +111,31 @@ _j_↓ _J_   _n_    _d_own _>_^^    _(__)_ list  _'_: goto   p_@_p    again: _S_
             (lambda () (if view-mode (god-local-mode-pause)
                     (god-local-mode-resume)))))
 
+(use-package rg
+  :bind (("M-s r" . rg)
+         ("M-s R" . rg-menu)))
+
+(use-package isearch
+  :config
+  (defun isearch-exit-other-end ()
+    "Exit isearch, but at the other end of the search string. This is
+useful when followed by an immediate kill."
+    (interactive)
+    (isearch-exit)
+    (goto-char isearch-other-end))
+  (bind-keys :map isearch-mode-map
+             ("M-RET" . isearch-exit-other-end)
+             ("M-e"   . consult-isearch-history) ;isearch-edit-string
+             ("M-k"   . isearch-yank-word-or-char)
+             ("M-z"   . isearch-yank-until-char)
+             ("M-<"   . isearch-beginning-of-buffer)
+             ("M->"   . isearch-end-of-buffer)
+             ("C-j"   . avy-isearch))
+
+  (setq isearch-allow-motion 't)
+  (setcdr (assq 'isearch-mode minor-mode-alist)
+          '((:eval (if isearch-forward " »" " «")))))
+
 (use-package replace
   :bind ("M-s M-o" . multi-occur-in-matching-buffers)
   :config
@@ -727,9 +752,8 @@ fallback."
   :config
   (defhydra hydra-ess-help (:color pink :hint nil)
     "
-_k_↑  _p_rev   _[_ _]_: _s_ection _h_elp-on-obj  _v_ignettes _/_isearch
-_j_↓  _n_ext   _<_ _>_: buf^^     _g_:revert^^     _a_propos      _i_ndex     _q_uit
-eval: _f_unction  _l_ine  _r_egion
+_k_↑ _p_rev  _[__]_: _s_ection  _h_elp-on-obj  _v_ignettes  _/_isearch  ^^eval _f_unction
+_j_↓ _n_ext  _<__>_: buf^^      _g_:revert     _i_ndex      _a_propos   _l_ine _r_egion
 "
     ("/" isearch-forward)
     ("<" beginning-of-buffer)
@@ -835,7 +859,10 @@ section: _a_rguments  _d_escription  _D_e_t_ails  _e_xamples  _n_ote  _r_eferenc
 
 (use-package mhtml-mode
   :config
-  (bind-keys :map mhtml-mode-map ("M-o")))
+  (bind-keys :map mhtml-mode-map ("M-o"))
+  (defun z-mhtml-mode-hook ()
+    (sgml-electric-tag-pair-mode 1))
+  (add-hook 'mhtml-mode-hook #'z-mhtml-mode-hook))
 
 ;; ----------------------------------------------------------
 (use-package gdb-mi

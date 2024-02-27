@@ -1,8 +1,8 @@
 ; -*- lexical-binding: t; coding: utf-8 -*-
 
 (set-frame-font "Menlo-17" nil 't)
-(set-fontset-font t 'unicode
-                  (font-spec :name "Apple Color Emoji" :size 11) nil 'prepend)
+;; (set-fontset-font t 'unicode
+;;                   (font-spec :name "Apple Color Emoji" :size 11) nil 'prepend)
 (setq ns-use-thin-smoothing t)          ; does not seem to have any effect
 
 (setq mac-option-modifier 'none

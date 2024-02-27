@@ -368,31 +368,6 @@ instead of inactivate region."
    (:else
     (string-inflection-underscore-function str)))))
 
-(use-package rg
-  :bind (("M-s r" . rg)
-         ("M-s R" . rg-menu)))
-
-(use-package isearch
-  :config
-  (defun isearch-exit-other-end ()
-    "Exit isearch, but at the other end of the search string. This is
-useful when followed by an immediate kill."
-    (interactive)
-    (isearch-exit)
-    (goto-char isearch-other-end))
-  (bind-keys :map isearch-mode-map
-             ("M-RET" . isearch-exit-other-end)
-             ("M-e"   . consult-isearch-history) ;isearch-edit-string
-             ("M-k"   . isearch-yank-word-or-char)
-             ("M-z"   . isearch-yank-until-char)
-             ("M-<"   . isearch-beginning-of-buffer)
-             ("M->"   . isearch-end-of-buffer)
-             ("C-j"   . avy-isearch))
-
-  (setq isearch-allow-motion 't)
-  (setcdr (assq 'isearch-mode minor-mode-alist)
-          '((:eval (if isearch-forward " »" " «")))))
-
 (use-package find-file
   :bind ("C-x C-r" . ff-find-other-file))
 
@@ -412,9 +387,10 @@ useful when followed by an immediate kill."
          ("S-<f8>" . gud-step)
          ("<f9>"   . gud-finish)))
 
+;; Align with `resize-window-repeat-map'?
 (defhydra hydra-resize-window (:color pink :hint nil)
     "
-use arrow keys or:  _{_ _}_ horizontal   _[_ _]_ vertical
+Resize window: ←↑↓→ or  _{_ _}_ horizontal   _[_ _]_ vertical
 "
     ("{" shrink-window-horizontally)
     ("<left>" shrink-window-horizontally)
@@ -443,14 +419,14 @@ use arrow keys or:  _{_ _}_ horizontal   _[_ _]_ vertical
 
 (defmacro ballotbox (var &optional pos)
   (if pos
-  `(if (bound-and-true-p ,var) ,pos "☐")
-  `(if (bound-and-true-p ,var) "☒" "☐")))
+  `(if (bound-and-true-p ,var) ,pos "·")
+  `(if (bound-and-true-p ,var) "✔" "·")))
 
 (defhydra hydra-toggle (:color blue :hint nil)
   "
 Toggle:
 %s(ballotbox rainbow-delimiters-mode) rainbow-_d_elimiters  ^^ %s(ballotbox abbrev-mode \"∂\") _a_bbrev       %s(ballotbox outline-minor-mode) _o_utline-minor-mode ^^ %s(ballotbox beacon-mode) _b_eacon
-%s(ballotbox rainbow-identifiers-mode) rainbow-_i_dentifiers ^^ %s(ballotbox auto-fill-function \"¶\") auto-_f_ill    %s(if (bound-and-true-p subword-mode) \",\" (if (bound-and-true-p superword-mode) \"²\" \"☐\")) sub_w_ord/super_W_ord   %s(ballotbox xterm-mouse-mode) _x_term-mouse
+%s(ballotbox rainbow-identifiers-mode) rainbow-_i_dentifiers ^^ %s(ballotbox auto-fill-function \"¶\") auto-_f_ill    %s(if (bound-and-true-p subword-mode) \",\" (if (bound-and-true-p superword-mode) \"²\" \"·\")) sub_w_ord/super_W_ord   %s(ballotbox xterm-mouse-mode) _x_term-mouse
 %s(ballotbox rainbow-mode) _R_ainbow colors       ^^%s(ballotbox visual-line-mode \"↵\") visual-lin_e_  %s(ballotbox flyspell-mode \"⍹\") fl_y_spell/_p_rog       %s(ballotbox electric-quote-mode) elec-_'_
 %s(ballotbox hi-lock-mode) _h_i-lock/_c_hanges      %s(ballotbox auto-revert-mode \"↻\") auto-_r_evert  %s(ballotbox flycheck-mode \"✔\") flychec_k_            %s(ballotbox which-function-mode) which-f_u_nc
 %s(ballotbox whitespace-mode \"␣\") white_s_pace/_t_railing  %s(ballotbox display-line-numbers-mode) line _n_um     %s(ballotbox flymake-mode) fly_m_ake
@@ -647,9 +623,7 @@ in `ctl-j-map' first."
             ((string-match-p "[[:alpha:]]" (char-to-string char))
              (avy-goto-subword-1 char arg))
             (:else (avy-goto-nth-char char arg)))))
-
 )
-
 
 (use-package window
   :bind* (("M-j" . other-window)
