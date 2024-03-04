@@ -14,7 +14,7 @@
   '(:propertize (" " (:eval (or current-input-method-title "I")) " ")
                 face (:background "#88E0C0" :foreground "black")))
 (setq z-lighter-view
-  '(:propertize " ʘ "
+  '(:propertize "ʘʘ "
                 face (:background "#D8E874" :foreground "black")))
 (setq z-lighter-special
   '(:propertize (" "
