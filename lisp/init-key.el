@@ -128,9 +128,9 @@ root-_D_iff  log _O_utgoing   _~_:revision  i_G_nore    _g_:annotate _u_:revert
   (interactive "^p")
   (down-list (- (or arg 1))))
 
-(bind-keys ("C-M-o"           . up-list)
-           ("C-M-j"           . backward-down-list)
-           ("M-r"             . raise-sexp)) ; was move-to-window-line-top-bottom
+(bind-keys ("C-M-o" . up-list)
+           ("C-M-j" . backward-down-list)
+           ("M-r"   . raise-sexp)) ; was move-to-window-line-top-bottom
 
 (use-package region-bindings-mode :demand
   :diminish 'region-bindings-mode
@@ -326,6 +326,14 @@ instead of inactivate region."
   (bind-keys :map special-mode-map
              ("j" . scroll-up-command)
              ("k" . scroll-down-command)
+             ("a" . move-beginning-of-line)
+             ("e" . move-end-of-line)
+             ("f" . forward-char)
+             ("b" . backward-char)
+             ("n" . next-line)
+             ("p" . previous-line)
+             ("{" . backward-paragraph)
+             ("}" . forward-paragraph)
              ("[" . backward-page)
              ("]" . forward-page)
              ("c" . god-mode-self-insert)

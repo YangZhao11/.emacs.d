@@ -958,13 +958,17 @@ _j_↓    ^^^^S/tab: buttons   _r_: forward
 
   (bind-keys :map help-mode-map
              ("SPC" . hydra-help/body)
-             ("k" . scroll-down-command)
-             ("j" . scroll-up-command)
              ("n" . next-line)
              ("p" . previous-line)
-             ("{" . backward-paragraph)
-             ("}" . forward-paragraph)
-             ("x" . god-mode-self-insert)))
+             ("[" . help-goto-previous-page)
+             ("]" . help-goto-next-page)
+             ("x" . god-mode-self-insert))
+  (add-to-list
+   'describe-symbol-backends
+   `("keymap"
+     ,(lambda (sym) (and (boundp sym) (keymapp (symbol-value sym))))
+     ,(lambda (s _b _f) (describe-keymap s))))
+)
 
 (use-package server :diminish (server-buffer-clients . " #"))
 (add-hook 'after-init-hook 'server-start)
