@@ -945,17 +945,16 @@ _j_↓     ^^_f_ollow      _r_: forward    _p_rev   _<__>_ first/last
 
 (use-package help-mode
   :config
-  ;; TODO: more content in emacs 28
   (defhydra hydra-help (:color pink :hint nil)
     "
-_k_↑    _<_ _>_ top/bottom   _l_: back
-_j_↓    ^^^^S/tab: buttons   _r_: forward
+_k_↑  _l_/_r_:history  _i_nfo       _s_ource
+_j_↓  ^^⇧/^^↹:buttons  _I_:lispref  _c_ustomize
 "
     ("SPC" nil :exit t)
-    ("<" beginning-of-buffer)
-    (">" end-of-buffer)
-    ("g" revert-buffer)
-    ("h" describe-mode)
+    ("i" help-goto-info :exit t)
+    ("I" help-goto-lispref-info :exit t)
+    ("s" help-view-source :exit t)
+    ("c" help-customize :exit t)
     ("l" help-go-back)
     ("q" quit-window :exit t)
     ("r" help-go-forward)
