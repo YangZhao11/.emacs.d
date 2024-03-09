@@ -695,7 +695,7 @@ fallback."
       (if b (switch-to-buffer b)
         (unless (provided-mode-derived-p major-mode 'inferior-ess-mode)
           (let ((ess-ask-for-ess-directory nil)
-                (ess-directory "~/Projects"))
+                (ess-startup-directory "~/Projects"))
             (run-ess-r))))))
 
   (defun ess-smart-pipe (arg)
@@ -831,6 +831,8 @@ section: _a_rguments  _d_escription  _D_e_t_ails  _e_xamples  _n_ote  _r_eferenc
           ("%*%" . ?×)
           ;;("function" . ?ƒ)
           ))
+  (setenv "ESS_BACKGROUND_MODE" "dark")
+  (setenv "R_CLI_NUM_COLORS" "256")
 
   (defun z-inferior-ess-mode-hook ()
     (setq prettify-symbols-alist ess-r-prettify-symbols)
@@ -838,6 +840,10 @@ section: _a_rguments  _d_escription  _D_e_t_ails  _e_xamples  _n_ote  _r_eferenc
     (setq-local scroll-margin 0)
     (setq-local comint-move-point-for-output t))
   (add-hook 'inferior-ess-r-mode-hook #'z-inferior-ess-mode-hook)
+
+  (bind-keys :map ess-r-mode-map
+             ;; normally bound to C-RET, which is awkward to press
+             ("M-RET" . ess-eval-region-or-line-visibly-and-step))
 
   (bind-keys :map inferior-ess-r-mode-map
              ("\C-cw" . ess-execute-screen-options)
