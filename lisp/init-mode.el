@@ -9,8 +9,8 @@
   (defhydra hydra-bookmark-bmenu (:color pink :hint nil)
     "
 _m_ark     _u_nmark    _1_ window  _v_isit    _s_ave/_l_oad    _a_nnotation
-_d_elete   _DEL_: back _2_ window  _r_ename   _t_oggle fname^^ _A_ll
-_z_ap      _RET_: go   _o_ther win _R_elocate _w_here^^        _e_dit
+_d_elete   _DEL_:back  _2_ window  _r_ename   _t_oggle fname^^ _A_ll
+_z_ap      _RET_:go    _o_ther win _R_elocate _w_here^^        _e_dit
 "
     ("SPC" nil)
     ("m" bookmark-bmenu-mark)
@@ -44,9 +44,9 @@ _z_ap      _RET_: go   _o_ther win _R_elocate _w_here^^        _e_dit
   :config
   (defhydra hydra-view (:color pink :hint nil)
     "
-^^pg/set^^ ½pg^^   _g_o^^  _{__}_ parag │^^register  ^^mark│ _s_earch/_r_    _q_uit/_Q_
-_k_↑ _K_   _u_p    _%_^^   _[__]_ page  │_m_ark      _._set│ regex: _/_ ^\\  ^_i_menu
-_j_↓ _J_   _d_own  _<__>_  _(__)_ list  │_'_:goto    p_@_p │ again: _S_ _R_  ^_o_utline
+^^pg/set^^ ½pg^^   _g_o^^  _{__}_ parag │^^register  ^^mark│ _s_earch/_r_   _q_uit/_Q_
+_k_↑ _K_   _u_p    _%_^^   _[__]_ page  │_m_ark      _._set│ regex:_/_ ^\\  ^_i_menu
+_j_↓ _J_   _d_own  _<__>_  _(__)_ list  │_'_:goto    p_@_p │ again:_S_ _R_  ^_o_utline
 "
     ("SPC" nil)
     ("j" View-scroll-page-forward)
@@ -147,7 +147,7 @@ useful when followed by an immediate kill."
   :config
   (defhydra hydra-occur (:color pink :hint nil)
     "
-_k_↑   _p_rev^^   _<_ _>_       _RET_: goto      _e_dit
+_k_↑   _p_rev^^   _<_ _>_       _RET_:goto       _e_dit
 _j_↓   _n_ext^^   _d_isplay^^   _o_ther window   %s(if next-error-follow-minor-mode \"⇅\" \"☐\") _f_ollow
 "
     ("SPC" nil)
@@ -179,8 +179,8 @@ _j_↓   _n_ext^^   _d_isplay^^   _o_ther window   %s(if next-error-follow-minor
   :config
   (defhydra hydra-grep (:color pink :hint nil)
   "
-_k_↑^^  _p_rev^^  _<__>_  beg/end of buffer _RET_: goto  _e_dit
-_j_↓^^  _n_ext^^  _{__}_: prev/next file    _d_isplay
+_k_↑  _p_rev  _<__>_ beg/end of buffer _RET_:goto  _e_dit
+_j_↓  _n_ext  _{__}_:prev/next file    _d_isplay
 "
   ("SPC" nil)
   ("p" previous-error-no-select)
@@ -212,8 +212,8 @@ _j_↓^^  _n_ext^^  _{__}_: prev/next file    _d_isplay
   :config
   (defhydra hydra-compilation (:color pink :hint nil)
     "
-_k_↑  _p_rev  _<__>_  beg/end of buffer _RET_: goto
-_j_↓  _n_ext  _{__}_: prev/next file
+_k_↑  _p_rev  _<__>_ beg/end of buffer  _RET_:goto
+_j_↓  _n_ext  _{__}_:prev/next file
 "
     ("<" beginning-of-buffer)
     (">" end-of-buffer)
@@ -248,12 +248,12 @@ _j_↓  _n_ext  _{__}_: prev/next file
 
   (defhydra hydra-dired (:color pink :columns 3 :hint nil)
     "
-^Mark^‗‗‗‗‗‗ ^Flag^‗‗‗‗‗‗‗ ^Emacs Op^‗‗‗‗‗‗^‗^‗‗‗‗‗‗‗‗‗‗‗‗ ^^File Op^^‗‗(_e_dit)
-_*_: marks^^   _#_: temp^^     _Q_uery/rep     _F_ind marked   _!_shell_&_ _S_ymlink
-_%_: regexp^^  _~_: backup^^   _A_: grep       _L_oad          ^^_C_opy    _H_ardlink
-_u_n/_m_ark    _d_: this^^     _B_yte compile  _k_ill line     ^^_D_elete  ch_M_od
-_t_oggle/_U_   _z_ap^^         _v_iew          _w_: file name  ^^_R_ename  ch_O_wn
-_[_ _]_:page   _<_ _>_:dirline _o_ther win     redisp_l_ay     ^^_T_ouch   ch_G_rp
+^Mark^‗‗‗‗‗^^ ^Flag^‗‗‗‗‗‗‗^^ ^Emacs Op^‗‗‗^^‗‗‗‗‗‗‗‗‗‗‗  ^^File Op^^‗‗(_e_dit)
+_*_:marks^^   _#_: temp^^     _Q_uery/rep  _F_ind marked  _!_shell_&_ _S_ymlink
+_%_:regexp^^  _~_:backup^^    _A_:grep     _L_oad         ^^_C_opy    _H_ardlink
+_u_n/_m_ark   _d_:this^^      _B_yte comp  _k_ill line    ^^_D_elete  ch_M_od
+_t_oggle/_U_  _z_ap^^         _v_iew       _w_:file name  ^^_R_ename  ch_O_wn
+_[__]_:page   _<__>_:dirline  _o_ther win  redisp_l_ay    ^^_T_ouch   ch_G_rp
 "
     ("SPC" nil)
     ("RET" dired-find-file :exit t)
@@ -318,15 +318,16 @@ _[_ _]_:page   _<_ _>_:dirline _o_ther win     redisp_l_ay     ^^_T_ouch   ch_G_
     ("SPC" nil)
     ("!" dired-unmark-all-marks  "unmark all")
     ("%" dired-mark-files-regexp "regexp")
-    ("(" dired-mark-sexp         "sexp")
     ("*" dired-mark-executables  "executables")
-    ("." dired-mark-extension    "extension")
     ("/" dired-mark-directories  "directories")
     ("?" dired-unmark-all-files  "unmark markchar")
     ("@" dired-mark-symlinks     "symlinks")
-    ("O" dired-mark-omitted      "omitted")
+    ("N" dired-number-of-marked-files "Num marked")
     ("c" dired-change-marks      "change")
-    ("s" dired-mark-subdir-files "subdir-files"))
+    ("m" dired-mark              "mark")
+    ("s" dired-mark-subdir-files "subdir-files")
+    ("t" dired-toggle-marks      "toggle")
+    ("u" dired-unmark            "unmark"))
 
   (defhydra hydra-dired-regexp (:color teal :columns 3 :hint nil
                                 :after-exit
@@ -353,7 +354,9 @@ _[_ _]_:page   _<_ _>_:dirline _o_ther win     redisp_l_ay     ^^_T_ouch   ch_G_
              ("z" . dired-do-flagged-delete)
              ("x" . god-mode-self-insert)
              ("e" . dired-toggle-read-only)
-             ("SPC" . hydra-dired/body)))
+             ("SPC" . hydra-dired/body)
+             ("* SPC" . hydra-dired-mark/body)
+             ("% SPC" . hydra-dired-regexp/body)))
 
 (use-package package
   :init
@@ -368,9 +371,9 @@ _[_ _]_:page   _<_ _>_:dirline _o_ther win     redisp_l_ay     ^^_T_ouch   ch_G_
   :config
   (defhydra hydra-package-menu (:color pink :hint nil)
     "
-_k_↑ _p_rev    _U_pgrade      _d_elete   _/_ :filter  _H_ide       _r_evert
-_j_↓ _n_ext    _~_: obsolete  _i_nstall  _S_ort       _(_: toggle
-_<_  _>_       _z_: execute   _u_nmark   _?_: info    _q_uit
+_k_↑ _p_rev    _U_pgrade     _d_elete   _/_:filter  _H_ide       _r_evert
+_j_↓ _n_ext    _~_:obsolete  _i_nstall  _S_ort      _(_: toggle
+_<_  _>_       _z_:execute   _u_nmark   _?_:info    _q_uit
 "
     ("SPC" nil)
     ("(" package-menu-toggle-hiding)
@@ -381,7 +384,7 @@ _<_  _>_       _z_: execute   _u_nmark   _?_: info    _q_uit
     ("S" tabulated-list-sort)
     ("U" package-menu-mark-upgrades)
     ("d" package-menu-mark-delete)
-    ("/" hydra-package-menu-filter/body)
+    ("/" hydra-package-menu-filter/body :exit t)
     ("g" revert-buffer)
     ("i" package-menu-mark-install)
     ("n" next-line)
@@ -393,18 +396,33 @@ _<_  _>_       _z_: execute   _u_nmark   _?_: info    _q_uit
     ("~" package-menu-mark-obsolete-for-deletion)
     ("j" scroll-up-command)
     ("k" scroll-down-command))
-  ;; TODO: more content in emacs 28
-  (defhydra hydra-package-menu-filter (:color pink :hint nil)
+
+  (defhydra hydra-package-menu-filter
+    (:color teal :hint nil
+     :after-exit
+     (if (eq major-mode 'package-menu-mode)
+         (hydra-package-menu/body)))
     "
-Filter by: _k_eyword    _n_ame    _/_:clear
+Filter by:  _/_:clear
+_k_eyword   _d_escription  _a_rchive  _s_tatus      _v_ersion
+_n_ame      _N_ame/desc    _m_arked   _u_pgradable
 "
     ("SPC" nil)
+    ("/" package-menu-clear-filter)
+    ("N" package-menu-filter-by-name-or-description)
+    ("a" package-menu-filter-by-archive)
+    ("d" package-menu-filter-by-description)
     ("k" package-menu-filter-by-keyword)
+    ("m" package-menu-filter-marked)
     ("n" package-menu-filter-by-name)
-    ("/" package-menu-clear-filter))
+    ("s" package-menu-filter-by-status)
+    ("u" package-menu-filter-upgradable)
+    ("v" package-menu-filter-by-version)
+    )
 
   (bind-keys :map package-menu-mode-map
              ("SPC" . hydra-package-menu/body)
+             ("/ SPC" . hydra-package-menu-filter/body)
              ("z" . package-menu-execute)
              ("x" . god-mode-self-insert)
              ("a" . god-mode-self-insert)
