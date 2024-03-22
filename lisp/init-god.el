@@ -51,6 +51,10 @@ SPEC could be `box', 'bar', or `hbar'."
        (mortal-mode 0)
        (user-error "Buffer is read-only.")))))
 
+;; TODO: `substitute-command-keys' uses `where-is-internal' to decide
+;; the key for a command. Advice it to work with god-mode.
+
+
 ;; use-package god-mode :ensure
 (require 'god-mode)
 

@@ -992,6 +992,7 @@ _j_↓  ^^⇧/^^↹:buttons  _I_:lispref  _c_ustomize
              ("[" . help-goto-previous-page)
              ("]" . help-goto-next-page)
              ("x" . god-mode-self-insert))
+  ;; handle keymap in C-h o. TODO: remove keymap from the variable item.
   (add-to-list
    'describe-symbol-backends
    `("keymap"
