@@ -173,8 +173,8 @@ root-_D_iff  log _O_utgoing   _~_:revision  i_G_nore    _g_:annotate _u_:revert
 
 (use-package z-misc
   :bind
-  ("M-." . z-search-forward-char)
-  ("M-," . z-search-backward-char)
+  ("M-."   . z-search-forward-char)
+  ("M-,"   . z-search-backward-char)
   ("C-x ;" . z-align-char)
   ("C-x $" . z-toggle-selective-display)
   ("C-x /" . z-ediff-this-buffer)
@@ -546,11 +546,26 @@ Toggle:
     "Show help for ctl-j-map."
     (interactive)
     (describe-keymap ctl-j-map)
-    ;; ideally we want to put the dispatch help in the help buffer too.
-    (avy-show-dispatch-help))
+    (let ((inhibit-read-only t)
+          (len (length "avy-action-"))
+          (i 1))
+      (with-current-buffer (help-buffer)
+        (insert "Avy dispatch:\n")
+        (mapcar
+         (lambda (x)
+           (insert
+            (format "%s: %s"
+                    (propertize
+                     (char-to-string (car x))
+                     'face 'help-key-binding)
+                    (substring (symbol-name (cdr x)) len)))
+           (insert (if (eq (mod i 4) 0) "\n" " \t"))
+           (setq i (1+ i)))
+         avy-dispatch-alist)
+        (insert "\n"))))
 
   ;; Used in avy, but defined in ace-window
-  (put 'aw-key-face 'face-alias 'help-key-binding)
+  ;(put 'aw-key-face 'face-alias 'help-key-binding)
 
   (require 'subword)
   (setq avy-styles-alist '((avy-goto-char . de-bruijn))
@@ -562,6 +577,8 @@ Toggle:
 
   (defun avy-yank-word-1 (char &optional arg beg end symbol)
     "Like `avy-goto-word-1', but yank instead."
+    ;; Copy code of avy-goto-word-1. avy-with set avy-action to nil,
+    ;; so we can not set a default action and just call avy-goto-word-1.
     (interactive (list (read-char "char: " t)
                        current-prefix-arg))
     (avy-with avy-goto-word-1
