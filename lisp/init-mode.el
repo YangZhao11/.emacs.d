@@ -33,6 +33,7 @@ _z_ap      _RET_:go    _o_ther win _R_elocate _w_here^^        _e_dit
     ("a" bookmark-bmenu-show-annotation)
     ("A" bookmark-bmenu-show-all-annotations)
     ("e" bookmark-bmenu-edit-annotation))
+
   (bind-keys :map bookmark-bmenu-mode-map
              ("SPC" . hydra-bookmark-bmenu/body)
              ("z" . bookmark-bmenu-execute-deletions)
@@ -163,7 +164,9 @@ _j_↓   _n_ext^^   _d_isplay^^   _o_ther window   %s(if next-error-follow-minor
     ("f" next-error-follow-minor-mode)
     ("o" occur-mode-goto-occurrence-other-window :exit t)
     ("RET" occur-mode-goto-occurrence :exit t))
+
   (bind-keys :map occur-mode-map
+             ("SPC" . hydra-occur/body)
              ("d" . occur-mode-display-occurrence)
              ("j" . scroll-up-command)
              ("k" . scroll-down-command)
@@ -196,6 +199,7 @@ _j_↓  _n_ext  _{__}_:prev/next file    _d_isplay
   ("q" quit-window :exit t)
   ("f" next-error-follow-minor-mode)
   ("RET" compile-goto-error :exit t))
+
   (bind-keys :map grep-mode-map
              ("SPC" . hydra-grep/body)
              ("j" . compilation-next-error)
@@ -617,8 +621,14 @@ fallback."
          'imenu-generic-expression
          '(nil "^\\s-*(\\(defhydra\\)\\s-+\\(\\(\\sw\\|\\s_\\)+\\)" 2)))))
 
+  (setq emacs-lisp-directory
+        (replace-regexp-in-string "/lisp/.*" "" (symbol-file 'elisp-mode)))
   (defun z-elisp-mode-hook ()
-    (z-setup-imenu-for-elisp))
+    (z-setup-imenu-for-elisp)
+    ; turn on read-only mode for emacs bundled elisp files
+    (when (string-prefix-p emacs-lisp-directory
+                          (buffer-file-name))
+      (read-only-mode 1)))
   (add-hook 'emacs-lisp-mode-hook #'z-elisp-mode-hook)
   (bind-keys :map emacs-lisp-mode-map
              ("M-L" . string-inflection-kebab-case))

@@ -323,7 +323,25 @@ instead of inactivate region."
         (deactivate-mark)
       (activate-mark)))
 
+  (defun disable-help-buffer ()
+    (interactive)
+    (quit-window nil (get-buffer-window "*Help*")))
+
+  (defvar-keymap special-hint-disable-map
+    "SPC" #'disable-help-buffer)
+
+  (defun z-maybe-show-hint ()
+    "Show hint on major mode keymap."
+    (interactive)
+    (let* ((kmap-symbol (intern (format "%s-map" major-mode)))
+           (kmap (if (boundp kmap-symbol)
+                     (symbol-value kmap-symbol)
+                   (current-local-map))))
+      (describe-keymap kmap-symbol)
+      (set-transient-map special-hint-disable-map)))
+
   (bind-keys :map special-mode-map
+             ("SPC" . z-maybe-show-hint)
              ("j" . scroll-up-command)
              ("k" . scroll-down-command)
              ("a" . move-beginning-of-line)
@@ -551,7 +569,7 @@ Toggle:
           (i 1))
       (with-current-buffer (help-buffer)
         (insert "Avy dispatch:\n")
-        (mapcar
+        (mapc
          (lambda (x)
            (insert
             (format "%s: %s"
@@ -575,12 +593,10 @@ Toggle:
         avy-orders-alist '((avy-goto-char . avy-order-closest)
                            (avy-goto-subword-1 . avy-order-closest)))
 
-  (defun avy-yank-word-1 (char &optional arg beg end symbol)
-    "Like `avy-goto-word-1', but yank instead."
+  (defun avy-action-on-word-1 (char &optional arg beg end symbol action)
+    "Like `avy-goto-word-1', provide ACTION as argument."
     ;; Copy code of avy-goto-word-1. avy-with set avy-action to nil,
     ;; so we can not set a default action and just call avy-goto-word-1.
-    (interactive (list (read-char "char: " t)
-                       current-prefix-arg))
     (avy-with avy-goto-word-1
       (let* ((str (string char))
              (regex (cond ((string= str ".")
@@ -598,7 +614,13 @@ Toggle:
                   :window-flip arg
                   :beg beg
                   :end end
-                  :action 'avy-action-yank))))
+                  :action action))))
+
+  (defun avy-yank-word-1 (char &optional arg beg end symbol)
+    "Like `avy-goto-word-1', but yank instead."
+    (interactive (list (read-char "char: " t)
+                       current-prefix-arg))
+    (avy-action-on-word-1 char arg beg end symbol 'avy-action-yank))
 
   (defun avy-goto-nth-char (char &optional n)
     "Jump to the currently visible N-th character in a sequence of CHAR.
