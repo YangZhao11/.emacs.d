@@ -767,9 +767,9 @@ in `ctl-j-map' first."
          ("M-s e" . consult-isearch-history)  ; similar to isearch-edit-string
          ("M-y" . consult-yank-pop)
          ("M-g o" . consult-outline)
-         ("M-g m" . consult-mark)
-         ("M-g M-m" . consult-global-mark)
-         ("M-g b" . consult-bookmark)
+         ("M-g SPC" . consult-mark)
+         ("M-g @" . consult-global-mark)
+         ("M-g m" . consult-bookmark)
          ("M-g g" . consult-goto-line)
          ("M-g M-g" . consult-goto-line)
          ("C-x C-z" . consult-complex-command))
