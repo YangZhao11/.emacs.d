@@ -98,5 +98,18 @@ With prefix arg (NO-SPACE), do not leave space before CHAR."
 (put 'z-search-forward-char 'repeat-map 'z-search-repeat-map)
 (put 'z-search-backward-char 'repeat-map 'z-search-repeat-map)
 
+(defun z-shell-command-on-buffer (command
+                                  &optional output-buffer replace
+				  error-buffer display-error-buffer)
+  "Execu string COMMAND on buffer. See `shell-command-on-region'."
+  (interactive (list (read-shell-command "Shell command on buffer: ")
+		       current-prefix-arg
+		       current-prefix-arg
+		       shell-command-default-error-buffer
+		       t))
+  (shell-command-on-region (point-min) (point-max)
+                           command output-buffer replace
+                           error-buffer display-error-buffer))
+
 (provide 'z-misc)
 ;;; z-misc.el ends here

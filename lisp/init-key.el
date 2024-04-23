@@ -149,9 +149,6 @@ root-_D_iff  log _O_utgoing   _~_:revision  i_G_nore    _g_:annotate _u_:revert
          ("M-(" . easy-pair-barf)
          ("M-)" . easy-pair-slurp)))
 
-
-
-
 (defun indent-list-or-sexp ()
   "Indent list at point, or the next sexp."
   (interactive)
@@ -175,10 +172,13 @@ root-_D_iff  log _O_utgoing   _~_:revision  i_G_nore    _g_:annotate _u_:revert
   :bind
   ("M-."   . z-search-forward-char)
   ("M-,"   . z-search-backward-char)
+  ("M-|"   . z-shell-command-on-buffer)
   ("C-x ;" . z-align-char)
   ("C-x $" . z-toggle-selective-display)
   ("C-x /" . z-ediff-this-buffer)
   ("C-x _" . z-shrink-other-window-if-larger-than-buffer))
+(bind-keys :map region-bindings-mode-map
+           ("M-|" . shell-command-on-region))
 
 (use-package like-this
   :bind
@@ -290,12 +290,10 @@ If ARG is non-nil and we are on terminal, then call
          ("M-l"         . downcase-dwim)
          ("M-u"         . upcase-dwim)
          ("M-="         . z-toggle-activate-mark)
+         ("C-?"         . undo-redo)
          ("<XF86Eject>" . keyboard-escape-quit)
          ("<f6>"        . scratch-buffer)
          ([remap exchange-point-and-mark] . z-exchange-point-and-mark))
-  :init
-  (when (fboundp 'undo-redo)
-    (bind-keys ("C-?" . undo-redo)))
   :config
   (setq next-error-message-highlight 't)
 
