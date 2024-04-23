@@ -37,7 +37,7 @@
  '(nrepl-message-colors
    '("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3"))
  '(package-selected-packages
-   '(binky orderless vertico puni visual-regexp ialign diminish magit web-mode ibuffer-project consult-flycheck flycheck csv-mode embark-consult consult consult-selectrum embark marginalia sr-speedbar clipetty transient pcmpl-args yasnippet avy dired-sidebar ibuffer-sidebar rainbow-mode julia-mode julia-repl dired-subtree imenu-list indent-guide rainbow-identifiers string-inflection ace-window region-bindings-mode citc g4-gutter imenu-anywhere wgrep flx hydra color-identifiers-mode org-bullets js2-mode scala-mode2 clang-format markdown-mode use-package go-eldoc beacon anchored-transpose go-mode easy-kill zenburn-theme squery register-channel rainbow-delimiters lua-mode ido-vertical-mode ido-ubiquitous haskell-mode goto-chg god-mode f ess edit-server))
+   '(doom-themes modus-themes rg orderless vertico visual-regexp ialign diminish magit web-mode ibuffer-project consult-flycheck flycheck csv-mode embark-consult consult consult-selectrum embark marginalia sr-speedbar clipetty transient pcmpl-args yasnippet avy rainbow-mode julia-mode julia-repl dired-subtree imenu-list indent-guide rainbow-identifiers string-inflection ace-window region-bindings-mode citc g4-gutter imenu-anywhere wgrep flx hydra color-identifiers-mode org-bullets scala-mode2 clang-format markdown-mode use-package go-eldoc beacon anchored-transpose go-mode easy-kill zenburn-theme squery rainbow-delimiters lua-mode ido-vertical-mode ido-ubiquitous haskell-mode goto-chg god-mode f ess edit-server))
  '(pdf-view-midnight-colors '("#DCDCCC" . "#383838"))
  '(vc-annotate-background "#2B2B2B")
  '(vc-annotate-color-map
@@ -69,7 +69,6 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(comint-highlight-prompt ((t nil)))
  '(company-template-field ((t (:background "#4d5d6d"))))
  '(font-lock-builtin-face ((t (:foreground "#D0DCE0" :weight normal))))
  '(font-lock-constant-face ((t (:foreground "#BFDBBF"))))
@@ -88,7 +87,6 @@
  '(vc-missing-state ((t (:inherit vc-state-base :foreground "red" :weight bold))))
  '(vc-needs-update-state ((t (:inherit vc-state-base :foreground "#F0C040"))))
  '(vc-removed-state ((t (:inherit vc-state-base :foreground "pink"))))
- '(vertico-current ((t (:extend t :background "#2B2B2B"))))
  '(vertico-group-separator ((t (:inherit shadow :strike-through t :height 0.7))))
  '(vertico-group-title ((t (:inherit shadow :height 0.7)))))
 (put 'dired-find-alternate-file 'disabled nil)
