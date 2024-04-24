@@ -149,20 +149,6 @@ root-_D_iff  log _O_utgoing   _~_:revision  i_G_nore    _g_:annotate _u_:revert
          ("M-(" . easy-pair-barf)
          ("M-)" . easy-pair-slurp)))
 
-(defun indent-list-or-sexp ()
-  "Indent list at point, or the next sexp."
-  (interactive)
-  (let ((b (bounds-of-thing-at-point 'list))
-        (p (point)))
-    (if b (indent-region (car b) (cdr b))
-      :else
-      (save-excursion
-        (forward-sexp)
-        (indent-region p (point))))))
-(bind-keys ("C-M-\\" . indent-list-or-sexp))
-(bind-keys :map region-bindings-mode-map
-           ("C-M-\\" . indent-region))
-
 (use-package shell
   ;:bind ("<f6>" . shell)
   :config
@@ -176,9 +162,11 @@ root-_D_iff  log _O_utgoing   _~_:revision  i_G_nore    _g_:annotate _u_:revert
   ("C-x ;" . z-align-char)
   ("C-x $" . z-toggle-selective-display)
   ("C-x /" . z-ediff-this-buffer)
-  ("C-x _" . z-shrink-other-window-if-larger-than-buffer))
+  ("C-x _" . z-shrink-other-window-if-larger-than-buffer)
+  ("C-M-\\" . indent-list-or-sexp))
 (bind-keys :map region-bindings-mode-map
-           ("M-|" . shell-command-on-region))
+           ("M-|"    . shell-command-on-region)
+           ("C-M-\\" . indent-region))
 
 (use-package like-this
   :bind

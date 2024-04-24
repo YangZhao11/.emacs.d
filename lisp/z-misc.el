@@ -111,5 +111,16 @@ With prefix arg (NO-SPACE), do not leave space before CHAR."
                            command output-buffer replace
                            error-buffer display-error-buffer))
 
+(defun indent-list-or-sexp ()
+  "Indent list at point, or the next sexp."
+  (interactive)
+  (let ((b (bounds-of-thing-at-point 'list))
+        (p (point)))
+    (if b (indent-region (car b) (cdr b))
+      :else
+      (save-excursion
+        (forward-sexp)
+        (indent-region p (point))))))
+
 (provide 'z-misc)
 ;;; z-misc.el ends here
