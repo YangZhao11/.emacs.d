@@ -53,11 +53,11 @@
 
 (defhydra hydra-ctl-x-r (:color blue :hint nil)
   "
-┌─────^^Rectangle^^^^──────┐   ┌^^Register^^─save^^────────┐  ┌─^^Bookmark────┐
-_c_lear     _N_umber-lines^^   _+_: inc^^    _SPC_: point     _m_: set
-_d_elete    _o_pen  s_t_ring   _i_nsert^^    _f_rameset       _b_: jump
-_k_ill      _y_ank^^           _j_ump^^      _w_indow-config  _l_ist
-M-w:copy^^  _r_egister^^       _x_/_s_:copy  _n_umber         _M_: no-overwrite
+┌───── ^^Rectangle^^^^ ──────┐ ┌╴^^Register^^┬ save^^ ───────┐ ┌──^^ Bookmark ───┐
+│_c_lear     _N_umber-lines^^│ │_+_: inc^^    _SPC_: point   │ │_m_: set         │
+│_d_elete    _o_pen  s_t_ring│ │_i_nsert^^    _f_rameset     │ │_b_: jump        │
+│_k_ill      _y_ank^^        │ │_j_ump^^      _w_indow-config│ │_l_ist           │
+│M-w:copy^^  _r_egister^^    │ │_x_/_s_:copy  _n_umber       │ │_M_: no-overwrite│
 "
   ("SPC" point-to-register)
   ("+"   increment-register)
@@ -86,9 +86,9 @@ M-w:copy^^  _r_egister^^       _x_/_s_:copy  _n_umber         _M_: no-overwrite
 
 (defhydra hydra-ctl-x-v (:color blue :hint nil)
   "
-_+_:update   ch_a_nge log     print _l_og   _d_ir       _h_istory    _m_erge
-_=_:diff     log _I_ncoming   root _L_og    _P_ush      reg_i_ster   _r_etrieve tag
-root-_D_iff  log _O_utgoing   _~_:revision  i_G_nore    _g_:annotate _u_:revert
+_+_:update   ch_a_nge log    print _l_og   _d_ir     _h_istory     _m_erge
+_=_:diff     log _I_ncoming  root _L_og    _P_ush    reg_i_ster    _r_etrieve tag
+root-_D_iff  log _O_utgoing  _~_:revision  i_G_nore  _g_:annotate  _u_:revert
 "
   ("+" vc-update)
   ("=" vc-diff)
