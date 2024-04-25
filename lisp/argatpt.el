@@ -6,8 +6,8 @@
 
 (defvar arg-separator-alist
   ;; todo: we don't handle alist here.
-   '((emacs-lisp-mode . " +")
-     (lisp-interaction-mode . " +"))
+   '((emacs-lisp-mode . "[ \n\t]+")
+     (lisp-interaction-mode . "[ \n\t]+"))
   "Mode-specific setting for arg separator.
 See doc for `arg-separator-default' for details.")
 
