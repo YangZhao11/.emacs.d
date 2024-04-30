@@ -250,14 +250,18 @@ _j_↓  _n_ext  _{__}_:prev/next file
   :config
   (setq dired-dwim-target 't)
 
-  (defhydra hydra-dired (:color pink :columns 3 :hint nil)
+  (defhydra hydra-dired (:color pink :hint nil)
     "
-^Mark^‗‗‗‗‗^^ ^Flag^‗‗‗‗‗‗‗^^ ^Emacs Op^‗‗‗^^‗‗‗‗‗‗‗‗‗‗‗  ^^File Op^^‗‗(_e_dit)
-_*_:marks^^   _#_: temp^^     _Q_uery/rep  _F_ind marked  _!_shell_&_ _S_ymlink
-_%_:regexp^^  _~_:backup^^    _A_:grep     _L_oad         ^^_C_opy    _H_ardlink
-_u_n/_m_ark   _d_:this^^      _B_yte comp  _k_ill line    ^^_D_elete  ch_M_od
-_t_oggle/_U_  _z_ap^^         _v_iew       _w_:file name  ^^_R_ename  ch_O_wn
-_[__]_:page   _<__>_:dirline  _o_ther win  redisp_l_ay    ^^_T_ouch   ch_G_rp
+^^Mark(_*_)╶┐ ^Flag^╶─────^^──────┐ Go^^╶(_j_ump)─┐ Dir^^╶────┬hide^^╶─┐
+_%_:regexp^^│ _#_: temp   _d_:this│ _[__]_:page   │ _s_ort     _$_ub   │
+_u_n/_m_ark │ _~_: backup _z_ap   │ _<__>_:dirline│ ʌ^^ up     _(_ detl│
+_t_oggle/_U_│ _._: № bkup   ^^    │ _{__}_:marked │ _+_create  _i_nsert│
+
+^Emacs Op^^^╶──────────────^^─────────┐ ^^File Op^^╶─(_e_dit)──^^────────┬ch╶^^┐
+_Q_uery/rep  f-t_y_pe      _v_iew     │ _!_shell_&_ _S_ymlink  _=_ diff   _M_od│
+_A_:grep     _L_oad        _o_ther win│ ^^_C_opy    _H_ardlink _c_ompress _O_wn│
+_B_yte comp  _k_ill line   _a_ltern   │ ^^_D_elete  _T_ouch    _Z_ompress _G_rp│
+redisp_l_ay  _w_:cp fname  _F_ind *   │ ^^_R_ename  _P_rint    _W_eb      ^^   │
 "
     ("SPC" nil)
     ("RET" dired-find-file :exit t)
@@ -267,18 +271,20 @@ _[__]_:page   _<__>_:dirline  _o_ther win  redisp_l_ay    ^^_T_ouch   ch_G_rp
     ("m" dired-mark)
     ("u" dired-unmark)
     ("#" dired-flag-auto-save-files)
-    ("$" dired-hide-subdir "hide subdir")
+    ("$" dired-hide-subdir)
     ("%" hydra-dired-regexp/body :exit t)
     ("&" dired-do-async-shell-command)
-    ("(" dired-hide-details-mode "hide details")
+    ("(" dired-hide-details-mode)
     ("*" hydra-dired-mark/body :exit t)
-    ("+" dired-create-directory "create dir")
-    ("." dired-clean-directory "clean dir")
+    ("+" dired-create-directory)
+    ("." dired-clean-directory)
     ("<" dired-prev-dirline)
-    ("=" dired-diff "diff")
+    ("=" dired-diff)
     (">" dired-next-dirline)
     ("[" backward-page)
     ("]" forward-page)
+    ("{" dired-prev-marked-file)
+    ("}" dired-next-marked-file)
     ("A" dired-do-find-regexp)
     ("B" dired-do-byte-compile)
     ("C" dired-do-copy)
@@ -289,29 +295,29 @@ _[__]_:page   _<__>_:dirline  _o_ther win  redisp_l_ay    ^^_T_ouch   ch_G_rp
     ("L" dired-do-load)
     ("M" dired-do-chmod)
     ("O" dired-do-chown)
-    ("P" dired-do-print "print")
+    ("P" dired-do-print)
     ("Q" dired-do-find-regexp-and-replace)
     ("R" dired-do-rename)
     ("S" dired-do-symlink)
     ("T" dired-do-touch)
     ("U" dired-unmark-all-marks)
-    ("W" browse-url-of-dired-file "Web")
-    ("Z" dired-do-compress "compress")
-    ("^" dired-up-directory "up-directory")
-    ("a" dired-find-alternate-file "find-alternate-file")
-    ("c" dired-do-compress-to "compress-to")
+    ("W" browse-url-of-dired-file)
+    ("Z" dired-do-compress)
+    ("^" dired-up-directory)
+    ("a" dired-find-alternate-file :exit t)
+    ("c" dired-do-compress-to)
     ("d" dired-flag-file-deletion)
-    ("i" dired-maybe-insert-subdir "maybe-insert-subdir")
-    ("j" dired-goto-file "goto-file")
+    ("i" dired-maybe-insert-subdir)
+    ("j" dired-goto-file)
     ("k" dired-do-kill-lines)
     ("l" dired-do-redisplay)
     ("o" dired-find-file-other-window :exit t)
-    ("s" dired-sort-toggle-or-edit "sort-toggle-or-edit")
+    ("s" dired-sort-toggle-or-edit)
     ("t" dired-toggle-marks)
     ("v" dired-view-file :exit t)
     ("w" dired-copy-filename-as-kill)
     ("z" dired-do-flagged-delete)
-    ("y" dired-show-file-type "show-file-type")
+    ("y" dired-show-file-type)
     ("~" dired-flag-backup-files))
 
   (defhydra hydra-dired-mark (:color teal :columns 3 :hint nil
@@ -355,6 +361,8 @@ _[__]_:page   _<__>_:dirline  _o_ther win  redisp_l_ay    ^^_T_ouch   ch_G_rp
   (bind-keys :map dired-mode-map
              ("[" . backward-page)
              ("]" . forward-page)
+             ("{" . dired-prev-marked-file)
+             ("}" . dired-next-marked-file)
              ("z" . dired-do-flagged-delete)
              ("x" . god-mode-self-insert)
              ("e" . dired-toggle-read-only)
