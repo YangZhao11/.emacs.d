@@ -70,6 +70,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(company-template-field ((t (:background "#4d5d6d"))))
+ '(dired-directory ((t (:inherit font-lock-function-name-face :foreground "#93E0E3"))))
  '(font-lock-builtin-face ((t (:foreground "#D0DCE0" :weight normal))))
  '(font-lock-constant-face ((t (:foreground "#BFDBBF"))))
  '(font-lock-keyword-face ((t (:foreground "#ECE4C0" :weight normal))))
