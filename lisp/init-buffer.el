@@ -55,8 +55,8 @@
 
   (define-ibuffer-column modified-read-only
     (:name "*" :inline t)
-    (cond (buffer-read-only "∅")
-          ((derived-mode-p 'comint-mode) "∞")
+    (cond ((derived-mode-p 'comint-mode 'term-mode) "∞")
+          (buffer-read-only "∅")
           ((buffer-modified-p) "♦")
           (:else "♢")))
 
@@ -77,10 +77,15 @@
 
   (defhydra hydra-ibuffer (:color pink :hint nil)
     "
-_s_ort     _D_elete  _v_iew     ^^  _Q_uery      ┌Toggle^^┐  _F_:shell
-_/_ filter _S_ave    _H_:other f^^  _r_eplace    _T_:RdOnly  _X_:pipe
-_%_ regex  re_V_ert  _o_ther win^^  _I_:qr-regex _M_odified  _N_:replace
-_*_ mark   _R_ename  vie_W_-_E_val  _O_ccur      _t_:mark    copy _B_name
+^^Mark(_*_)╶┐ ^Flag^╶┐ List^^  ╶┐
+_%_:regexp^^│ _d_el  │ _s_ort   │
+_u_n/_m_ark │ _z_ap  │ _/_filter│
+_t_oggle/_U_│ ^^     │          │
+
+_D_elete  _v_iew     ^^  _Q_uery      ┌Toggle^^┐  _F_:shell
+_S_ave    _H_:other f^^  _r_eplace    _T_:RdOnly  _X_:pipe
+re_V_ert  _o_ther win^^  _I_:qr-regex _M_odified  _N_:replace
+_R_ename  vie_W_-_E_val  _O_ccur                  copy _B_name
 "
     ("SPC" nil)
     ("RET" ibuffer-visit-buffer :exit t)
@@ -103,11 +108,13 @@ _*_ mark   _R_ename  vie_W_-_E_val  _O_ccur      _t_:mark    copy _B_name
     ("V" ibuffer-do-revert)
     ("W" ibuffer-do-view-and-eval)
     ("X" ibuffer-do-shell-command-pipe)
+    ("d" ibuffer-mark-for-delete)
     ("o" ibuffer-visit-buffer-other-window :exit t)
     ("q" quit-window :exit t)
     ("r" ibuffer-do-replace-regexp)
     ("s" hydra-ibuffer-sort/body :exit t)
     ("t" ibuffer-toggle-marks)
+    ("u" ibuffer-unmark-forward)
     ("v" ibuffer-do-view :exit t)
     ("z" ibuffer-do-kill-on-deletion-marks))
 

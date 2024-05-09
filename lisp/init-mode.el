@@ -9,8 +9,8 @@
   (defhydra hydra-bookmark-bmenu (:color pink :hint nil)
     "
 _m_ark     _u_nmark    _1_ window  _v_isit    _s_ave/_l_oad    _a_nnotation
-_d_elete   _DEL_:back  _2_ window  _r_ename   _t_oggle fname^^ _A_ll
-_z_ap      _RET_:go    _o_ther win _R_elocate _w_here^^        _e_dit
+_d_elete   ^^⌫:back    _2_ window  _r_ename   _t_oggle fname^^ _A_ll
+_z_ap      ^^⏎:go      _o_ther win _R_elocate _w_here^^        _e_dit
 "
     ("SPC" nil)
     ("m" bookmark-bmenu-mark)
@@ -148,7 +148,7 @@ useful when followed by an immediate kill."
   :config
   (defhydra hydra-occur (:color pink :hint nil)
     "
-_k_↑   _p_rev^^   _<_ _>_       _RET_:goto       _e_dit
+_k_↑   _p_rev^^   _<_ _>_       ^^⏎:goto         _e_dit
 _j_↓   _n_ext^^   _d_isplay^^   _o_ther window   %s(if next-error-follow-minor-mode \"⇅\" \"☐\") _f_ollow
 "
     ("SPC" nil)
@@ -182,7 +182,7 @@ _j_↓   _n_ext^^   _d_isplay^^   _o_ther window   %s(if next-error-follow-minor
   :config
   (defhydra hydra-grep (:color pink :hint nil)
   "
-_k_↑  _p_rev  _<__>_ beg/end of buffer _RET_:goto  _e_dit
+_k_↑  _p_rev  _<__>_ beg/end of buffer ^^⏎:goto    _e_dit
 _j_↓  _n_ext  _{__}_:prev/next file    _d_isplay
 "
   ("SPC" nil)
@@ -216,7 +216,7 @@ _j_↓  _n_ext  _{__}_:prev/next file    _d_isplay
   :config
   (defhydra hydra-compilation (:color pink :hint nil)
     "
-_k_↑  _p_rev  _<__>_ beg/end of buffer  _RET_:goto
+_k_↑  _p_rev  _<__>_ beg/end of buffer  ^^⏎:goto
 _j_↓  _n_ext  _{__}_:prev/next file
 "
     ("<" beginning-of-buffer)
@@ -257,11 +257,11 @@ _%_:regexp^^│ _#_: temp   _d_:this│ _[__]_:page   │ _s_ort     _$_ub   │
 _u_n/_m_ark │ _~_: backup _z_ap   │ _<__>_:dirline│ ʌ^^ up     _(_ detl│
 _t_oggle/_U_│ _._: № bkup   ^^    │ _{__}_:marked │ _+_create  _i_nsert│
 
-^Emacs Op^^^╶──────────────^^─────────┐ ^^File Op^^╶─(_e_dit)──^^────────┬ch╶^^┐
-_Q_uery/rep  f-t_y_pe      _v_iew     │ _!_shell_&_ _S_ymlink  _=_ diff   _M_od│
-_A_:grep     _L_oad        _o_ther win│ ^^_C_opy    _H_ardlink _c_ompress _O_wn│
-_B_yte comp  _k_ill line   _a_ltern   │ ^^_D_elete  _T_ouch    _Z_ompress _G_rp│
-redisp_l_ay  _w_:cp fname  _F_ind *   │ ^^_R_ename  _P_rint    _W_eb      ^^   │
+^Emacs Op^^^╶──────────────^^─────────┐ ^^File Op^^╶─(_e_dit)^^──^^────────┬ch╶^^┐
+_Q_uery/rep  f-t_y_pe      _v_iew     │ _!_shell_&_ _S__Y_mlink  _=_ diff   _M_od│
+_A_:grep     _L_oad        _o_ther win│ ^^_C_opy    _H_ardlink^^ _c_ompress _O_wn│
+_B_yte comp  _k_ill line   _a_ltern   │ ^^_D_elete  _T_ouch^^    _Z_ompress _G_rp│
+redisp_l_ay  _w_:cp fname  ^^         │ ^^_R_ename  _P_rint^^    _W_eb      ^^   │
 "
     ("SPC" nil)
     ("RET" dired-find-file :exit t)
@@ -289,7 +289,6 @@ redisp_l_ay  _w_:cp fname  _F_ind *   │ ^^_R_ename  _P_rint    _W_eb      ^^  
     ("B" dired-do-byte-compile)
     ("C" dired-do-copy)
     ("D" dired-do-delete)
-    ("F" dired-do-find-marked-files :exit t)
     ("G" dired-do-chgrp)
     ("H" dired-do-hardlink)
     ("L" dired-do-load)
@@ -302,6 +301,7 @@ redisp_l_ay  _w_:cp fname  _F_ind *   │ ^^_R_ename  _P_rint    _W_eb      ^^  
     ("T" dired-do-touch)
     ("U" dired-unmark-all-marks)
     ("W" browse-url-of-dired-file)
+    ("Y" dired-do-relsymlink)
     ("Z" dired-do-compress)
     ("^" dired-up-directory)
     ("a" dired-find-alternate-file :exit t)
@@ -383,9 +383,10 @@ redisp_l_ay  _w_:cp fname  _F_ind *   │ ^^_R_ename  _P_rint    _W_eb      ^^  
   :config
   (defhydra hydra-package-menu (:color pink :hint nil)
     "
-_k_↑ _p_rev    _U_pgrade     _d_elete   _/_:filter  _H_ide       _r_evert
-_j_↓ _n_ext    _~_:obsolete  _i_nstall  _S_ort      _(_: toggle
-_<_  _>_       _z_:execute   _u_nmark   _?_:info    _q_uit
+Go^^^^╶────┐ Action_z_╶─^^──────────┐ List^^╶─^^──────────┐
+_k_↑ _p_rev│ _i_nstall  _?_:info    │ _/_:filter  _r_evert│
+_j_↓ _n_ext│ _U_pgrade  _~_:obsolete│ _H_ide      _S_ort  │
+_<_  _>_   │ _d_elete   _u_nmark    │ _(_:toggle  ^^      │
 "
     ("SPC" nil)
     ("(" package-menu-toggle-hiding)
@@ -449,23 +450,25 @@ _n_ame      _N_ame/desc    _m_arked   _u_pgradable
   (defhydra hydra-smerge
     (:color red :hint nil :pre (smerge-start-session))
     "
-^Move^‗‗‗‗‗‗^Keep^‗‗‗‗‗‗‗‗‗^Diff^‗‗‗‗‗‗^Pair^‗‗‗‗‗‗‗‗‗‗
-_n_ext      _b_ase         _R_efine    _<_: base-upper
-_p_rev      _l_ower        _E_diff     _=_: upper-lower
-^ ^         _u_pper        _C_ombine   _>_: base-lower
-^ ^         _a_ll          _r_esolve
-_q_uit      _RET_: current
+^Move^╶┐ ^Keep^╶─^^─────┐ ^^Current┐ ^Conflict^^^───────┬╴^diff^╶─────────┐
+_n_ext │ _b_ase  _u_pper│ ⏎^^ keep │ _R_efine  _E_diff    _<_: base-upper │
+_p_rev │ _a_ll   _l_ower│ _K_ill   │ _C_ombine/a_U_to     _=_: upper-lower│
+_q_uit │ ^^      _s_wap │ ^^       │ _r_esolve/_A_ll      _>_: base-lower │
 "
     ("RET" smerge-keep-current)
+    ("A"   smerge-resolve-all)
     ("C"   smerge-combine-with-next)
     ("E"   smerge-ediff)
+    ("K"   smerge-kill-current)
     ("R"   smerge-refine)
+    ("U"   smerge-auto-combine)
     ("a"   smerge-keep-all)
     ("b"   smerge-keep-base)
     ("l"   smerge-keep-lower)
     ("n"   smerge-next)
     ("p"   smerge-prev)
     ("r"   smerge-resolve)
+    ("s"   smerge-swap)
     ("u"   smerge-keep-upper)
     ("<"   smerge-diff-base-upper)
     ("="   smerge-diff-upper-lower)
@@ -922,8 +925,8 @@ section: _a_rguments  _d_escription  _D_e_t_ails  _e_xamples  _n_ote  _r_eferenc
   :config
   (defhydra hydra-man (:color pink :hint nil)
     "
-_k_↑ _<__>_ top/bottom  S/tab:button   _g_oto sec  _m_an        _K_ill
-_j_↓ _[__]_ section                    _s_ee also  _r_eference  _q_uit
+_k_↑ _<__>_  top/bot  _g_oto sec^^    _r_eference │ _K_ill
+_j_↓ ⇧/⇥^^^^ button   _[__]_ section  _s_ee also  │ _q_uit
 "
     ("SPC" nil :exit t)
     ("j" scroll-up-command)
@@ -942,6 +945,8 @@ _j_↓ _[__]_ section                    _s_ee also  _r_eference  _q_uit
              ("SPC" . hydra-man/body)
              ("j" . scroll-up-command)
              ("k" . scroll-down-command)
+             ("n" . next-line)
+             ("p" . previous-line)
              ("K" . Man-kill)
              ("[" . Man-previous-section)
              ("]" . Man-next-section)
@@ -953,15 +958,15 @@ _j_↓ _[__]_ section                    _s_ee also  _r_eference  _q_uit
   :config
   (defhydra hydra-info (:color pink :hint nil)
     "
-^ ^      ^^^^Reference   ^^History       ^^Tree
-_k_↑     ^^^^S/TAB:↔     _l_: back       _n_ext   _d_irectory _T_OC
-_j_↓     ^^_f_ollow      _r_: forward    _p_rev   _<__>_ first/last
-^ ^      ^^_m_enu        _L_: history    _u_p     _[__]_ back/forward
+^Go^ ┐ ^^Reference╶┐ ^^History╶──┐ ^^Tree╶──^^^^───────────────┐
+_k_↑ │ ^^⇧/⇥:cycle │ _l_: back   │ _N_ext   _d_irectory _T_OC  │
+_j_↓ │ _f_ollow    │ _r_: forward│ _P_rev   _<__>_ first/last  │
+^ ^  │ _m_enu      │ _L_ist      │ _u_p     _[__]_ back/forward│
 "
     ("q" quit-window :exit t)
     ("SPC" nil :exit t)
-    ("n" Info-next)
-    ("p" Info-prev)
+    ("N" Info-next)
+    ("P" Info-prev)
     ("u" Info-up)
     ("m" Info-menu)
     ("d" Info-directory)
@@ -980,7 +985,12 @@ _j_↓     ^^_f_ollow      _r_: forward    _p_rev   _<__>_ first/last
              ("SPC" . hydra-info/body)
              ("j" . Info-scroll-up)
              ("k" . Info-scroll-down)
+             ("n" . next-line)
+             ("p" . previous-line)
+             ("N" . Info-next)
+             ("P" . Info-prev)
              ("M-n")                    ; this was clone-buffer
+             ("M-g i" . Info-menu)
              ("{" . backward-paragraph)
              ("}" . forward-paragraph)
              ("x" . god-mode-self-insert)))
@@ -990,7 +1000,7 @@ _j_↓     ^^_f_ollow      _r_: forward    _p_rev   _<__>_ first/last
   (defhydra hydra-help (:color pink :hint nil)
     "
 _k_↑  _l_/_r_:history  _i_nfo       _s_ource
-_j_↓  ^^⇧/^^↹:buttons  _I_:lispref  _c_ustomize
+_j_↓  ^^⇧/^^⇥:buttons  _I_:lispref  _c_ustomize
 "
     ("SPC" nil :exit t)
     ("i" help-goto-info :exit t)

@@ -61,6 +61,12 @@
 
 (setq-default mode-line-modified
   '(:eval (cond
+
+    ((derived-mode-p 'comint-mode 'term-mode)
+     (propertize
+      "∞"
+      'help-echo "Interactive shell"))
+
     (buffer-read-only
      (propertize
       "∅"
@@ -69,11 +75,6 @@
                             'mouse-1
                             #'mode-line-toggle-read-only))
       'mouse-face 'mode-line-highlight))
-
-    ((derived-mode-p 'comint-mode)
-     (propertize
-      "∞"
-      'help-echo "Interactive shell"))
 
     ((buffer-modified-p)
      (propertize
