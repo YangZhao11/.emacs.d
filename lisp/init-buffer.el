@@ -22,8 +22,8 @@
                            project-manual-root-pattern)))))
     (if root (cons 'manual root))))
 
-(cl-defmethod project-roots ((project (head manual)))
-  (list (cdr project)))
+(cl-defmethod project-root ((project (head manual)))
+  (cdr project))
 
 (setq project-find-functions '(project-try-vc project-try-manual))
 (if (require 'project-g3 nil t)
@@ -77,15 +77,11 @@
 
   (defhydra hydra-ibuffer (:color pink :hint nil)
     "
-^^Mark(_*_)╶┐ ^Flag^╶┐ List^^  ╶┐
-_%_:regexp^^│ _d_el  │ _s_ort   │
-_u_n/_m_ark │ _z_ap  │ _/_filter│
-_t_oggle/_U_│ ^^     │          │
-
-_D_elete  _v_iew     ^^  _Q_uery      ┌Toggle^^┐  _F_:shell
-_S_ave    _H_:other f^^  _r_eplace    _T_:RdOnly  _X_:pipe
-re_V_ert  _o_ther win^^  _I_:qr-regex _M_odified  _N_:replace
-_R_ename  vie_W_-_E_val  _O_ccur                  copy _B_name
+^^Mark(_*_)╶┐ List^^╶──┐ Buf Ops^^╶─^^─────────┬Tgl╶^^┐ Text Ops^^╶─^^────────────^^──┐
+_%_:regexp^^│ _s_ort   │ _D_elete  _v_iew       _T_:∅ │ _Q_uery/r        _F_:shell^^  │
+_t_oggle/_U_│ _/_filter│ _S_ave    _H_:other f  _M_:♦ │ replace _r_egex  _X_:pipe^^   │
+_u_n/_m_ark │ _g_:ref  │ re_V_ert  _o_ther win  ^^    │ _I_:qr-regex     _N_:replace^^│
+_d_el/_z_ap │ ^^       │ _R_ename  cp _B_name   ^^    │ _O_ccur          vie_W_-_E_val│
 "
     ("SPC" nil)
     ("RET" ibuffer-visit-buffer :exit t)
@@ -106,9 +102,12 @@ _R_ename  vie_W_-_E_val  _O_ccur                  copy _B_name
     ("S" ibuffer-do-save)
     ("T" ibuffer-do-toggle-read-only)
     ("V" ibuffer-do-revert)
+    ("U" ibuffer-unmark-all-marks)
     ("W" ibuffer-do-view-and-eval)
     ("X" ibuffer-do-shell-command-pipe)
     ("d" ibuffer-mark-for-delete)
+    ("g" ibuffer-update)
+    ("m" ibuffer-mark-forward)
     ("o" ibuffer-visit-buffer-other-window :exit t)
     ("q" quit-window :exit t)
     ("r" ibuffer-do-replace-regexp)
