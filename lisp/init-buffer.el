@@ -39,7 +39,8 @@
   :config
 
   (setq ibuffer-show-empty-filter-groups nil
-        ibuffer-eliding-string "…")
+        ibuffer-eliding-string "…"
+        ibuffer-expert t)
 
   (defadvice ibuffer-make-column-filename (after strip-google3-filename activate)
     "Strip experimental to ~user, .../a/google3 to //a/"
@@ -78,8 +79,8 @@
   (defhydra hydra-ibuffer (:color pink :hint nil)
     "
 ^^Mark(_*_)╶┐ List^^╶──┐ Buf Ops^^╶─^^─────────┬Tgl╶^^┐ Text Ops^^╶─^^────────────^^──┐
-_%_:regexp^^│ _s_ort   │ _D_elete  _v_iew       _T_:∅ │ _Q_uery/r        _F_:shell^^  │
-_t_oggle/_U_│ _/_filter│ _S_ave    _H_:other f  _M_:♦ │ replace _r_egex  _X_:pipe^^   │
+_%_:regexp^^│ _s_ort   │ _D_elete  _v_iew       _T_:∅ │ _Q_uery/r        _!_:shell^^  │
+_t_oggle/_U_│ _/_filter│ _S_ave    _H_:other f  _M_:♦ │ replace _r_egex  _|_:pipe^^   │
 _u_n/_m_ark │ _g_:ref  │ re_V_ert  _o_ther win  ^^    │ _I_:qr-regex     _N_:replace^^│
 _d_el/_z_ap │ ^^       │ _R_ename  cp _B_name   ^^    │ _O_ccur          vie_W_-_E_val│
 "
@@ -91,7 +92,7 @@ _d_el/_z_ap │ ^^       │ _R_ename  cp _B_name   ^^    │ _O_ccur          v
     ("B" ibuffer-copy-buffername-as-kill)
     ("D" ibuffer-do-delete)
     ("E" ibuffer-do-eval)
-    ("F" ibuffer-do-shell-command-file)
+    ("!" ibuffer-do-shell-command-file)
     ("H" ibuffer-do-view-other-frame :exit t)
     ("I" ibuffer-do-query-replace-regexp)
     ("M" ibuffer-do-toggle-modified)
@@ -104,7 +105,7 @@ _d_el/_z_ap │ ^^       │ _R_ename  cp _B_name   ^^    │ _O_ccur          v
     ("V" ibuffer-do-revert)
     ("U" ibuffer-unmark-all-marks)
     ("W" ibuffer-do-view-and-eval)
-    ("X" ibuffer-do-shell-command-pipe)
+    ("|" ibuffer-do-shell-command-pipe)
     ("d" ibuffer-mark-for-delete)
     ("g" ibuffer-update)
     ("m" ibuffer-mark-forward)

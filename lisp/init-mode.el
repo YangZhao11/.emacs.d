@@ -450,10 +450,10 @@ _n_ame      _N_ame/desc    _m_arked   _u_pgradable
   (defhydra hydra-smerge
     (:color red :hint nil :pre (smerge-start-session))
     "
-^Move^╶┐ ^Keep^╶─^^─────┐ ^^Current┐ ^Conflict^^^───────┬╴^diff^╶─────────┐
-_n_ext │ _b_ase  _u_pper│ ⏎^^ keep │ _R_efine  _E_diff    _<_: base-upper │
-_p_rev │ _a_ll   _l_ower│ _K_ill   │ _C_ombine/a_U_to     _=_: upper-lower│
-_q_uit │ ^^      _s_wap │ ^^       │ _r_esolve/_A_ll      _>_: base-lower │
+^Move^╶┐ ^Keep^╶─^^─────┐ ^^Current┐ ^Conflict^^^──────┬╴^diff^╶─────────┐
+_n_ext │ _b_ase  _u_pper│ ⏎^^ keep │ _R_efine  _E_diff   _<_: base-upper │
+_p_rev │ _a_ll   _l_ower│ _K_ill   │ _C_ombine/a_U_to    _=_: upper-lower│
+_q_uit │ ^^      _s_wap │ ^^       │ _r_esolve/_A_ll     _>_: base-lower │
 "
     ("RET" smerge-keep-current)
     ("A"   smerge-resolve-all)

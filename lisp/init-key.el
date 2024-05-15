@@ -319,10 +319,7 @@ instead of inactivate region."
   (defun z-maybe-show-hint ()
     "Show hint on major mode keymap."
     (interactive)
-    (let* ((kmap-symbol (intern (format "%s-map" major-mode)))
-           (kmap (if (boundp kmap-symbol)
-                     (symbol-value kmap-symbol)
-                   (current-local-map))))
+    (let* ((kmap-symbol (intern (format "%s-map" major-mode))))
       (describe-keymap kmap-symbol)
       (set-transient-map special-hint-disable-map)))
 
