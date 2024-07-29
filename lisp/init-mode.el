@@ -383,15 +383,12 @@ redisp_l_ay  _w_:cp fname  ^^         │ ^^_R_ename  _P_rint^^    _W_eb      ^^
   :config
   (defhydra hydra-package-menu (:color pink :hint nil)
     "
-Go^^^^╶────┐ Action_z_╶─^^──────────┐ List^^╶─^^──────────┐
-_k_↑ _p_rev│ _i_nstall  _?_:info    │ _/_:filter  _r_evert│
-_j_↓ _n_ext│ _U_pgrade  _~_:obsolete│ _H_ide      _S_ort  │
-_<_  _>_   │ _d_elete   _u_nmark    │ _(_:toggle  ^^      │
+Go^^^^╶────┐ Action_z_╶─^^────────────^^──────┐ List^^╶─^^──────^^──────┐
+_k_↑ _p_rev│ _i_nstall  _d_elete      _?_:info│ _/_:filter^^    _r_evert│
+_j_↓ _n_ext│ _U_pgrade  _~_:obsolete  _u_nmark│ _H_ide/_(_tgl)  _S_ort  │
 "
     ("SPC" nil)
     ("(" package-menu-toggle-hiding)
-    ("<" beginning-of-buffer)
-    (">" end-of-buffer)
     ("?" package-menu-describe-package)
     ("H" package-menu-hide-package)
     ("S" tabulated-list-sort)
@@ -541,30 +538,6 @@ _q_uit │ ^^      _s_wap │ ^^       │ _r_esolve/_A_ll     _>_: base-lower �
       (when (re-search-backward re (point-min) t)
         (match-string count)))))
 
-
-(defun z-status-count (s count)
-  "Concat S and COUNT, except when COUNT is nil or 0, return empty string."
-  (cond ((or (not count) (= 0 count)) "")
-        ((> count 0) (concat s (number-to-string count)))
-        (:else "")))
-
-(defun z-status-str (nerror nwarning ninfo)
-  "Return mode-line string for NERROR NWARNING NINFO counts."
-  (or nerror (setq nerror 0))
-  (or nwarning (setq nwarning 0))
-  (or ninfo (setq ninfo 0))
-  (if (and (= 0 nerror) (= 0 nwarning) (= 0 ninfo))
-      (propertize "✔" 'face 'compilation-mode-line-exit)
-    (list ""
-     (propertize (z-status-count "✖" nerror)
-                 'face 'compilation-error)
-     (if (and (< 0 nwarning) (< 0 nerror)) "/" "")
-     (propertize (z-status-count "▴" nwarning)
-                 'face 'compilation-warning)
-     (if (and (or (< 0 nwarning) (< 0 nerror)) (< 0 ninfo)) "/" "")
-     (propertize (z-status-count "•" ninfo)
-                 'face 'compilation-info))))
-
 (use-package flymake
   :commands (flymake-mode)
   :config
@@ -576,41 +549,6 @@ _q_uit │ ^^      _s_wap │ ^^       │ _r_esolve/_A_ll     _>_: base-lower �
              ("M-g M-k" . flymake-show-buffer-diagnostics)
              ("M-g f"   . flymake-goto-next-error)
              ("M-g b"   . flymake-goto-prev-error)))
-
-(use-package flycheck
-  :commands (flycheck-mode)
-  :config
-
-  (defun z-flycheck-mode-line-text (&optional status)
-    "Get a text using emoji to describe STATUS for use in the mode line.
-
-STATUS defaults to `flycheck-last-status-change' if omitted or
-nil.
-
-This function is a drop-in replacement for the standard flycheck
-function `flycheck-mode-line-status-text'.  If the selected emoji
-cannot be displayed on the current frame,
-`flycheck-mode-line-status-text' is automatically used as a
-fallback."
-    (let ((pick (pcase (or status flycheck-last-status-change)
-                  (`finished
-                   (if flycheck-current-errors
-                       (let-alist (flycheck-count-errors flycheck-current-errors)
-                         (z-status-str .error .warning .info))
-                     (propertize "✔" 'face 'compilation-mode-line-exit)))
-                  (`running     (propertize "✔" 'face 'compilation-mode-line-run))
-                  (`not-checked (propertize "✔" 'face 'compilation-error))
-                  (`no-checker  "¿")
-                  (`errored     (propertize "‼" 'face 'compilation-mode-line-fail))
-                  (`interrupted (propertize "⁉" 'face 'compilation-mode-line-fail))
-                  (`suspicious  "‽"))))
-      (list " " pick)))
-  (setq flycheck-mode-line '(:eval (z-flycheck-mode-line-text)))
-  (bind-keys :map flycheck-mode-map
-             ("M-g k"   . consult-flycheck)
-             ("M-g M-k" . flycheck-list-errors)
-             ("M-g f"   . flycheck-next-error)
-             ("M-g b"   . flycheck-previous-error)))
 
 ;; --------------------------------------------------
 ;;; modes
@@ -634,6 +572,9 @@ fallback."
 
   (setq emacs-lisp-directory
         (replace-regexp-in-string "/lisp/.*" "" (symbol-file 'elisp-mode)))
+
+  ;; see use-package-core.el; somehow I still need this for emacs 30
+  (font-lock-add-keywords 'emacs-lisp-mode use-package-font-lock-keywords)
   (defun z-elisp-mode-hook ()
     (z-setup-imenu-for-elisp)
     ; turn on read-only mode for emacs bundled elisp files
@@ -699,7 +640,8 @@ fallback."
   :hook (julia-mode . julia-repl-mode)
   :config
   (setq julia-repl-captures
-        (list (kbd "M-x") (kbd "<home>"))))
+        (list (kbd "M-x") (kbd "<home>")
+              (kbd "M-9") (kbd "M-0") (kbd "M-o"))))
 
 (use-package pico8-mode
   :config
@@ -1031,17 +973,6 @@ _j_↓  ^^⇧/^^⇥:buttons  _I_:lispref  _c_ustomize
 (use-package server :diminish (server-buffer-clients . " #"))
 (add-hook 'after-init-hook 'server-start)
 
-(use-package edit-server :ensure
-  :diminish (edit-server-edit-mode)
-  :init
-  (add-hook 'after-init-hook 'edit-server-start)
-  :config
-  (setq edit-server-new-frame nil
-        edit-server-url-major-mode-alist
-        '(("mail\\.google\\.com" . html-mode)
-          ("snippets\\.googleplex\\.com" . markdown-mode)
-          ("b\\.corp\\.google\\.com" . gfm-mode))))
-
 (use-package shell
   :config
   (defun z-shell-mode-hook ()
@@ -1055,11 +986,18 @@ _j_↓  ^^⇧/^^⇥:buttons  _I_:lispref  _c_ustomize
              ("C-M-a" . comint-previous-prompt)
              ("C-M-e" . comint-next-prompt)))
 
+(use-package gap-process
+  :config
+  (setq gap-executable "/opt/homebrew/bin/gap"))
+
 (use-package comint
   :config
   (ansi-color-for-comint-mode-on)
   (setq comint-scroll-to-bottom-on-output 't
         comint-scroll-show-maximum-output nil))
+
+(use-package eterm-256color
+  :hook (term-mode . eterm-256color-mode))
 
 (provide 'init-mode)
 ;;; init-mode.el ends here

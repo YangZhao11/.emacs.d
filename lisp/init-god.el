@@ -84,7 +84,7 @@ SPEC could be `box', 'bar', or `hbar'."
 
 (setq god-mode-low-priority-exempt
       '(self-insert-command
-        c-electric-lt-gt c-electric-brace
+        c-electric-lt-gt c-electric-brace c-electric-slash
         sgml-slash
         ess-smart-pipe ess-insert-assign ess-cycle-assign))
 

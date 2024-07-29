@@ -1033,3 +1033,72 @@ _d_eclare     _u_nstore     _e_dit^^ ^^ ^^
              ("SPC" . hydra-calc/body)
              ("M-n" . calc-trail-next)
              ("M-p" . calc-trail-previous)))
+
+(use-package edit-server :ensure
+  :diminish (edit-server-edit-mode)
+  :init
+  (add-hook 'after-init-hook 'edit-server-start)
+  :config
+  (setq edit-server-new-frame nil
+        edit-server-url-major-mode-alist
+        '(("mail\\.google\\.com" . html-mode)
+          ("snippets\\.googleplex\\.com" . markdown-mode)
+          ("b\\.corp\\.google\\.com" . gfm-mode))))
+
+(defun z-status-count (s count)
+  "Concat S and COUNT, except when COUNT is nil or 0, return empty string."
+  (cond ((or (not count) (= 0 count)) "")
+        ((> count 0) (concat s (number-to-string count)))
+        (:else "")))
+
+(defun z-status-str (nerror nwarning ninfo)
+  "Return mode-line string for NERROR NWARNING NINFO counts."
+  (or nerror (setq nerror 0))
+  (or nwarning (setq nwarning 0))
+  (or ninfo (setq ninfo 0))
+  (if (and (= 0 nerror) (= 0 nwarning) (= 0 ninfo))
+      (propertize "✔" 'face 'compilation-mode-line-exit)
+    (list ""
+     (propertize (z-status-count "✖" nerror)
+                 'face 'compilation-error)
+     (if (and (< 0 nwarning) (< 0 nerror)) "/" "")
+     (propertize (z-status-count "▴" nwarning)
+                 'face 'compilation-warning)
+     (if (and (or (< 0 nwarning) (< 0 nerror)) (< 0 ninfo)) "/" "")
+     (propertize (z-status-count "•" ninfo)
+                 'face 'compilation-info))))
+
+(use-package flycheck
+  :commands (flycheck-mode)
+  :config
+
+  (defun z-flycheck-mode-line-text (&optional status)
+    "Get a text using emoji to describe STATUS for use in the mode line.
+
+STATUS defaults to `flycheck-last-status-change' if omitted or
+nil.
+
+This function is a drop-in replacement for the standard flycheck
+function `flycheck-mode-line-status-text'.  If the selected emoji
+cannot be displayed on the current frame,
+`flycheck-mode-line-status-text' is automatically used as a
+fallback."
+    (let ((pick (pcase (or status flycheck-last-status-change)
+                  (`finished
+                   (if flycheck-current-errors
+                       (let-alist (flycheck-count-errors flycheck-current-errors)
+                         (z-status-str .error .warning .info))
+                     (propertize "✔" 'face 'compilation-mode-line-exit)))
+                  (`running     (propertize "✔" 'face 'compilation-mode-line-run))
+                  (`not-checked (propertize "✔" 'face 'compilation-error))
+                  (`no-checker  "¿")
+                  (`errored     (propertize "‼" 'face 'compilation-mode-line-fail))
+                  (`interrupted (propertize "⁉" 'face 'compilation-mode-line-fail))
+                  (`suspicious  "‽"))))
+      (list " " pick)))
+  (setq flycheck-mode-line '(:eval (z-flycheck-mode-line-text)))
+  (bind-keys :map flycheck-mode-map
+             ("M-g k"   . consult-flycheck)
+             ("M-g M-k" . flycheck-list-errors)
+             ("M-g f"   . flycheck-next-error)
+             ("M-g b"   . flycheck-previous-error)))

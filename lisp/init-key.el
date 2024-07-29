@@ -437,7 +437,7 @@ Toggle:
 %s(ballotbox rainbow-delimiters-mode) rainbow-_d_elimiters  ^^ %s(ballotbox abbrev-mode \"∂\") _a_bbrev       %s(ballotbox outline-minor-mode) _o_utline-minor-mode ^^ %s(ballotbox beacon-mode) _b_eacon
 %s(ballotbox rainbow-identifiers-mode) rainbow-_i_dentifiers ^^ %s(ballotbox auto-fill-function \"¶\") auto-_f_ill    %s(if (bound-and-true-p subword-mode) \",\" (if (bound-and-true-p superword-mode) \"²\" \"·\")) sub_w_ord/super_W_ord   %s(ballotbox xterm-mouse-mode) _x_term-mouse
 %s(ballotbox rainbow-mode) _R_ainbow colors       ^^%s(ballotbox visual-line-mode \"↵\") visual-lin_e_  %s(ballotbox flyspell-mode \"⍹\") fl_y_spell/_p_rog       %s(ballotbox electric-quote-mode) elec-_'_
-%s(ballotbox hi-lock-mode) _h_i-lock/_c_hanges      %s(ballotbox auto-revert-mode \"↻\") auto-_r_evert  %s(ballotbox flycheck-mode \"✔\") flychec_k_            %s(ballotbox which-function-mode) which-f_u_nc
+%s(ballotbox hi-lock-mode) _h_i-lock/_c_hanges      %s(ballotbox auto-revert-mode \"↻\") auto-_r_evert  %s(ballotbox which-function-mode) which-f_u_nc
 %s(ballotbox whitespace-mode \"␣\") white_s_pace/_t_railing  %s(ballotbox display-line-numbers-mode) line _n_um     %s(ballotbox flymake-mode) fly_m_ake
 "
   ("'"    electric-quote-mode)
@@ -449,7 +449,6 @@ Toggle:
   ("f"    auto-fill-mode)
   ("h"    hi-lock-mode)
   ("i"    rainbow-identifiers-mode)
-  ("k"    flycheck-mode)
   ("m"    flymake-mode)
   ("p"    flyspell-prog-mode)
   ("n"    display-line-numbers-mode)
@@ -660,7 +659,7 @@ in `ctl-j-map' first."
   :bind* (("M-j" . other-window)
           ("M-J" . window-swap-states))
   :config
-  (setq recenter-positions '(top middle bottom)))
+  (setq recenter-positions '(middle top bottom)))
 
 (use-package zap-to-char-dwim
   :bind (("M-z" . zap-to-char-dwim)
@@ -682,7 +681,7 @@ in `ctl-j-map' first."
          ("C-x ?" . xref-find-references)
          ("C-x ," . xref-go-back)))
 
-(use-package vertico
+(use-package vertico :ensure
   :bind ("M-s M-d" . vertico-repeat)
   :init
   (vertico-mode)
@@ -692,7 +691,7 @@ in `ctl-j-map' first."
   (setq vertico-cycle t)
   (setq vertico-count-format nil))
 
-(use-package orderless
+(use-package orderless :ensure
   :init
   ;; Configure a custom style dispatcher (see the Consult wiki)
   ;; (setq orderless-style-dispatchers '(+orderless-dispatch)
@@ -701,7 +700,7 @@ in `ctl-j-map' first."
         completion-category-defaults nil
         completion-category-overrides '((file (styles partial-completion)))))
 
-(use-package marginalia
+(use-package marginalia :ensure
   :after vertico
   :init
   (marginalia-mode 1)
@@ -736,7 +735,7 @@ in `ctl-j-map' first."
   (add-to-list 'marginalia-command-categories
                '(consult-find . file)))
 
-(use-package consult
+(use-package consult :ensure
   :bind (("M-o" . consult-buffer)
          ([remap switch-to-buffer] . consult-buffer)
          ([remap switch-to-buffer-other-window] . consult-buffer-other-window)
@@ -780,13 +779,13 @@ in `ctl-j-map' first."
   ;; Better preview of registers.
   (setq register-preview-function #'consult-register-format))
 
-(use-package embark
+(use-package embark :ensure
   :after vertico
   :bind ("M-m" . embark-act)
   :bind (:map vertico-map
               ("M-s o" . embark-export)))
 
-(use-package embark-consult
+(use-package embark-consult :ensure
   :after (embark consult)
   :hook (embark-collect-mode . consult-preview-at-point-mode))
 
