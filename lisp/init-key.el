@@ -384,7 +384,6 @@ instead of inactivate region."
            ("C-x C-0")                  ; unbind text-scale-adjust
            ("<mouse-8>" . mode-line-previous-buffer)
            ("<mouse-9>" . mode-line-next-buffer)
-           ("C-x f" . project-find-file) ; set-fill-column
            ("C-z"))
 
 ;; F1 for help.
@@ -742,7 +741,7 @@ in `ctl-j-map' first."
          ([remap switch-to-buffer-other-frame] . consult-buffer-other-frame)
          ;; C-c C-l in `comint-mode-map'
          ([remap comint-dynamic-list-input-ring] . consult-history)
-         ("C-x F" . consult-find)
+         ("C-x f" . consult-find)
          ("M-s M-s" . consult-line)
          ("M-s s" . consult-focus-lines)
          ("M-s M-g" . consult-grep)

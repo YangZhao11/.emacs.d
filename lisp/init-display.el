@@ -1,31 +1,87 @@
 ; -*- coding: utf-8; lexical-binding: t -*-
 
+(defface god-lighter
+  '((t :inherit mode-line :foreground "black"))
+  "Face for god-lighter")
+
+(defface god-lighter-emacs
+  '((t :inherit god-lighter :background "#90E090"))
+  "Face for god-lighter emacs mode")
+
+(defface god-lighter-emacs-inactive
+  '((t :inherit god-lighter :background "#50A050"))
+  "Face for god-lighter emacs mode")
+
 (setq z-lighter-emacs
-  '(:propertize (" " (:eval (or current-input-method-title "ɛ")) " ")
-                face (:background "#90E090" :foreground "black")))
+      '(:eval
+        (propertize (concat " " (or current-input-method-title "ɛ") " ")
+                    'face (if (mode-line-window-selected-p)
+                              'god-lighter-emacs
+                            'god-lighter-emacs-inactive))))
+
+(defface god-lighter-god
+  '((t :inherit god-lighter :background "#4DB0FF"))
+  "Face for god-lighter emacs mode")
+
+(defface god-lighter-god-inactive
+  '((t :inherit god-lighter :background "#397CC0"))
+  "Face for god-lighter emacs mode")
+
 (setq z-lighter-god
-      '(:propertize ("" (:eval (let ((m (cdr (assoc nil god-mod-alist))))
-                                 (cond ((string= m "C-") " ⌘")
-                                       ((string= m "C-M-") "⌥⌘")
-                                       ('t " ⌥"))))
-                     " ")
-                face (:background "#4DB0FF" :foreground "black")))
+      '(:eval
+        (propertize (let ((m (cdr (assoc nil god-mod-alist))))
+                              (cond ((string= m "C-") " ⌘ ")
+                                    ((string= m "C-M-") "⌥⌘ ")
+                                    ('t " ⌥ ")))
+                    'face (if (mode-line-window-selected-p)
+                             'god-lighter-god 'god-lighter-god-inactive))))
+
+(defface god-lighter-mortal
+  '((t :inherit god-lighter :background "#88E0C0"))
+  "Face for god-lighter emacs mode")
+
+(defface god-lighter-mortal-inactive
+  '((t :inherit god-lighter :background "#66A890"))
+  "Face for god-lighter emacs mode")
+
 (setq z-lighter-mortal
-  '(:propertize (" " (:eval (or current-input-method-title "I")) " ")
-                face (:background "#88E0C0" :foreground "black")))
+      '(:eval (propertize
+               (concat " " (or current-input-method-title "I") " ")
+               'face (if (mode-line-window-selected-p)
+                         'god-lighter-mortal 'god-lighter-mortal-inactive))))
+
+(defface god-lighter-view
+  '((t :inherit god-lighter :background "#D8E874"))
+  "Face for god-lighter emacs mode")
+
+(defface god-lighter-view-inactive
+  '((t :inherit god-lighter :background "#6C743A"))
+  "Face for god-lighter emacs mode")
+
 (setq z-lighter-view
-  '(:propertize "ʘʘ "
-                face (:background "#D8E874" :foreground "black")))
+  '(:eval (propertize "ʘʘ "
+                      'face (if (mode-line-window-selected-p)
+                                'god-lighter-view 'god-lighter-view-inactive))))
+
+(defface god-lighter-special
+  '((t :inherit god-lighter :background "#4D88FF"))
+  "Face for god-lighter emacs mode")
+
+(defface god-lighter-special-inactive
+  '((t :inherit god-lighter :background "#3966C0"))
+  "Face for god-lighter emacs mode")
+
 (setq z-lighter-special
-  '(:propertize (" "
-                 (:eval
-                  (cond
+      '(:eval (propertize
+               (concat " "
+                 (cond
                    ((eq (local-key-binding "x") 'god-mode-self-insert)
                     (if (eq (local-key-binding "c") 'god-mode-self-insert)
                         "*" "×"))
-                   (:else "•")))
+                   (:else "•"))
                  " ")
-                face (:background "#4D88FF" :foreground "black")))
+               'face (if (mode-line-window-selected-p)
+                         'god-lighter-special 'god-lighter-special-inactive))))
 
 (defvar z-lighter
   '(:eval (cond (god-local-mode z-lighter-god)
