@@ -707,10 +707,7 @@ in `ctl-j-map' first."
   (defun marginalia--buffer-status (buffer)
     "Return the status of BUFFER as a string."
     (format-mode-line '((:propertize
-                         (:eval (cond (buffer-read-only "∅")
-                                      ((derived-mode-p 'comint-mode) "∞")
-                                      ((buffer-modified-p) "♦")
-                                      (:else "♢")))
+                         (:eval (z-buffer-status))
                          face marginalia-modified)
                         marginalia-separator
                         ;; InactiveMinibuffer has 18 letters, but there are longer names.

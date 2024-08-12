@@ -43,6 +43,42 @@
 
 (savehist-mode 1)
 
+(defun first-arg (first &rest _)
+  "Return first arg, ignore the rest."
+  first)
+
+(defun z-buffer-status (&optional prop)
+  "1-char status symbol for current buffer.
+
+PROP set to true to add properties for mode line."
+  (let ((p (if prop 'propertize 'first-arg)))
+    (cond
+     ((derived-mode-p 'comint-mode 'term-mode)
+      (funcall p
+       "∞"
+       'help-echo "Interactive shell"))
+
+     (buffer-read-only
+      (funcall p
+       "∅"
+       'help-echo 'mode-line-read-only-help-echo
+       'local-map (purecopy (make-mode-line-mouse-map
+                             'mouse-1
+                             #'mode-line-toggle-read-only))
+       'mouse-face 'mode-line-highlight))
+
+     ((buffer-modified-p)
+      (funcall p
+       "♦"
+       'help-echo 'mode-line-modified-help-echo
+       'local-map (purecopy (make-mode-line-mouse-map
+                             'mouse-1 #'mode-line-toggle-modified))
+       'mouse-face 'mode-line-highlight))
+     (:else
+      (funcall p
+       "♢"
+       'help-echo "Buffer is not modified")))))
+
 ;; Add prompt indicator to `completing-read-multiple'. Also see
 ;; `crm-separator'.
 (defun crm-indicator (args)

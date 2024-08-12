@@ -45,14 +45,16 @@ of it."
 
 (z-defface-with-darken god-lighter-view "#D8E874")
 (setq z-lighter-view
-  '(:eval (propertize "ʘʘ "
+  '(:eval (propertize "⊙⊙ "
                       'face (if (mode-line-window-selected-p)
                                 'god-lighter-view 'god-lighter-view-dark))))
 
 (z-defface-with-darken god-lighter-special "#6B77FF")
+
 (setq z-lighter-special
       '(:eval (propertize
-               (concat " "
+               (concat
+                " "
                  (cond
                    ((eq (local-key-binding "x") 'god-mode-self-insert)
                     (if (eq (local-key-binding "c") 'god-mode-self-insert)
@@ -95,33 +97,7 @@ of it."
     (:eval (mode-line-eol-desc))))
 
 (setq-default mode-line-modified
-  '(:eval (cond
-
-    ((derived-mode-p 'comint-mode 'term-mode)
-     (propertize
-      "∞"
-      'help-echo "Interactive shell"))
-
-    (buffer-read-only
-     (propertize
-      "∅"
-      'help-echo 'mode-line-read-only-help-echo
-      'local-map (purecopy (make-mode-line-mouse-map
-                            'mouse-1
-                            #'mode-line-toggle-read-only))
-      'mouse-face 'mode-line-highlight))
-
-    ((buffer-modified-p)
-     (propertize
-      "♦"
-      'help-echo 'mode-line-modified-help-echo
-      'local-map (purecopy (make-mode-line-mouse-map
-                            'mouse-1 #'mode-line-toggle-modified))
-      'mouse-face 'mode-line-highlight))
-    (:else
-     (propertize
-      "♢"
-      'help-echo "Buffer is not modified")))))
+  '(:eval (z-buffer-status 't)))
 
 (setq-default mode-line-remote
   '(:eval (cond

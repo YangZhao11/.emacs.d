@@ -258,9 +258,9 @@ _u_n/_m_ark │ _~_: backup _z_ap   │ _<__>_:dirline│ ʌ^^ up     _(_ detl�
 _t_oggle/_U_│ _._: № bkup   ^^    │ _{__}_:marked │ _+_create  _i_nsert│
 
 ^Emacs Op^^^╶──────────────^^─────────┐ ^^File Op^^╶─(_e_dit)^^──^^────────┬ch╶^^┐
-_Q_uery/rep  f-t_y_pe      _v_iew     │ _!_shell_&_ _S__Y_mlink  _=_ diff   _M_od│
+_Q_uery/rep  file-t_y_pe   _v_iew     │ _!_shell_&_ _S__Y_mlink  _=_ diff   _M_od│
 _A_:grep     _L_oad        _o_ther win│ ^^_C_opy    _H_ardlink^^ _c_ompress _O_wn│
-_B_yte comp  _k_ill line   _a_ltern   │ ^^_D_elete  _T_ouch^^    _Z_ompress _G_rp│
+_B_yte comp  _k_ill-line   _a_ltern   │ ^^_D_elete  _T_ouch^^    _Z_ompress _G_rp│
 redisp_l_ay  _w_:cp fname  ^^         │ ^^_R_ename  _P_rint^^    _W_eb      ^^   │
 "
     ("SPC" nil)
@@ -435,8 +435,8 @@ _n_ame      _N_ame/desc    _m_arked   _u_pgradable
              ("/ SPC" . hydra-package-menu-filter/body)
              ("z" . package-menu-execute)
              ("x" . god-mode-self-insert)
-             ("a" . god-mode-self-insert)
-             ("e" . god-mode-self-insert)
+             ("a" . move-beginning-of-line)
+             ("e" . move-end-of-line)
              ("s" . consult-line)
              ("j" . scroll-up-command)
              ("k" . scroll-down-command)))
@@ -480,7 +480,6 @@ _q_uit │ ^^      _s_wap │ ^^       │ _r_esolve/_A_ll     _>_: base-lower �
   (bind-keys :map magit-mode-map
              ("[" . magit-section-backward-sibling)
              ("]" . magit-section-forward-sibling)
-             ("*" . god-mode-self-insert)
              ("x" . god-mode-self-insert)))
 
 (use-package eldoc :diminish eldoc-mode

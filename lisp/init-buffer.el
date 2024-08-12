@@ -56,10 +56,7 @@
 
   (define-ibuffer-column modified-read-only
     (:name "*" :inline t)
-    (cond ((derived-mode-p 'comint-mode 'term-mode) "∞")
-          (buffer-read-only "∅")
-          ((buffer-modified-p) "♦")
-          (:else "♢")))
+    (z-buffer-status))
 
   (setq ibuffer-formats
         '((mark modified-read-only " "
