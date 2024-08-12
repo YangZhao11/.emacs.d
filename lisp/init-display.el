@@ -4,28 +4,28 @@
   '((t :inherit mode-line :foreground "black"))
   "Face for god-lighter")
 
-(defface god-lighter-emacs
-  '((t :inherit god-lighter :background "#90E090"))
-  "Face for god-lighter emacs mode")
+(defmacro z-defface-with-darken (face col)
+  "Define two faces, FACE and FACE-dark where bg is col and a dark version
+of it."
+  (let ((face-dark (intern (concat (symbol-name face) "-dark"))))
+    `(progn
+       (defface ,face
+       '((t :inherit god-lighter :background ,col))
+       ,(concat "Face for " (symbol-name face)))
+       (defface ,face-dark
+       '((t :inherit god-lighter :background ,(doom-darken col .3)))
+     ,(concat "Face for " (symbol-name face-dark)))))
+  )
 
-(defface god-lighter-emacs-inactive
-  '((t :inherit god-lighter :background "#50A050"))
-  "Face for god-lighter emacs mode")
+(z-defface-with-darken god-lighter-emacs "#90E090")
 
 (setq z-lighter-emacs
       '(:eval
         (propertize (concat " " (or current-input-method-title "ɛ") " ")
                     'face (if (mode-line-window-selected-p)
-                              'god-lighter-emacs
-                            'god-lighter-emacs-inactive))))
+                              'god-lighter-emacs 'god-lighter-emacs-dark))))
 
-(defface god-lighter-god
-  '((t :inherit god-lighter :background "#4DB0FF"))
-  "Face for god-lighter emacs mode")
-
-(defface god-lighter-god-inactive
-  '((t :inherit god-lighter :background "#397CC0"))
-  "Face for god-lighter emacs mode")
+(z-defface-with-darken god-lighter-god "#4DB0FF")
 
 (setq z-lighter-god
       '(:eval
@@ -34,43 +34,22 @@
                                     ((string= m "C-M-") "⌥⌘ ")
                                     ('t " ⌥ ")))
                     'face (if (mode-line-window-selected-p)
-                             'god-lighter-god 'god-lighter-god-inactive))))
+                             'god-lighter-god 'god-lighter-god-dark))))
 
-(defface god-lighter-mortal
-  '((t :inherit god-lighter :background "#88E0C0"))
-  "Face for god-lighter emacs mode")
-
-(defface god-lighter-mortal-inactive
-  '((t :inherit god-lighter :background "#66A890"))
-  "Face for god-lighter emacs mode")
-
+(z-defface-with-darken god-lighter-mortal "#88E0C0")
 (setq z-lighter-mortal
       '(:eval (propertize
                (concat " " (or current-input-method-title "I") " ")
                'face (if (mode-line-window-selected-p)
-                         'god-lighter-mortal 'god-lighter-mortal-inactive))))
+                         'god-lighter-mortal 'god-lighter-mortal-dark))))
 
-(defface god-lighter-view
-  '((t :inherit god-lighter :background "#D8E874"))
-  "Face for god-lighter emacs mode")
-
-(defface god-lighter-view-inactive
-  '((t :inherit god-lighter :background "#6C743A"))
-  "Face for god-lighter emacs mode")
-
+(z-defface-with-darken god-lighter-view "#D8E874")
 (setq z-lighter-view
   '(:eval (propertize "ʘʘ "
                       'face (if (mode-line-window-selected-p)
-                                'god-lighter-view 'god-lighter-view-inactive))))
+                                'god-lighter-view 'god-lighter-view-dark))))
 
-(defface god-lighter-special
-  '((t :inherit god-lighter :background "#4D88FF"))
-  "Face for god-lighter emacs mode")
-
-(defface god-lighter-special-inactive
-  '((t :inherit god-lighter :background "#3966C0"))
-  "Face for god-lighter emacs mode")
-
+(z-defface-with-darken god-lighter-special "#6B77FF")
 (setq z-lighter-special
       '(:eval (propertize
                (concat " "
@@ -81,7 +60,7 @@
                    (:else "•"))
                  " ")
                'face (if (mode-line-window-selected-p)
-                         'god-lighter-special 'god-lighter-special-inactive))))
+                         'god-lighter-special 'god-lighter-special-dark))))
 
 (defvar z-lighter
   '(:eval (cond (god-local-mode z-lighter-god)
