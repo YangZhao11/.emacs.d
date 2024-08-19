@@ -8,8 +8,11 @@
 ;; manually configured project type that matches given patterns
 (require 'project)
 (setq project-manual-root-pattern
-      '("~/Projects/[^/]*/"
-        "/usr/local/Cellar/[^/]*/"))
+      (list
+       "~/Projects/[^/]*/"
+       (replace-regexp-in-string "/lisp/.*" "/"
+                                 ;; emacs lisp files
+                                 (locate-library "simple"))))
 
 (defun project-try-manual (dir)
   (let* ((dir-normalized (abbreviate-file-name dir))
@@ -54,19 +57,19 @@
           (replace-regexp-in-string ".*/\\([^/]*\\)/google3/" "//\\1/"
                                     ad-return-value)))
 
-  (define-ibuffer-column modified-read-only
+  (define-ibuffer-column buffer-status
     (:name "*" :inline t)
     (z-buffer-status))
 
   (setq ibuffer-formats
-        '((mark modified-read-only " "
+        '((mark buffer-status " "
                 (name 18 18 :left :elide)
                 " "
                 (size 9 -1 :right)
                 " "
                 (mode 16 16 :left :elide)
                 " " filename-and-process)
-          (mark modified-read-only " "
+          (mark buffer-status " "
                 (name 45 45 :left :elide)
                 " "
                 (size 9 -1 :right)
@@ -75,11 +78,11 @@
 
   (defhydra hydra-ibuffer (:color pink :hint nil)
     "
-^^Mark(_*_)╶┐ List^^╶──┐ Buf Ops^^╶─^^─────────┬Tgl╶^^┐ Text Ops^^╶─^^────────────^^──┐
-_%_:regexp^^│ _s_ort   │ _D_elete  _v_iew       _T_:∅ │ _Q_uery/r        _!_:shell^^  │
-_t_oggle/_U_│ _/_filter│ _S_ave    _H_:other f  _M_:♦ │ replace _r_egex  _|_:pipe^^   │
-_u_n/_m_ark │ _g_:ref  │ re_V_ert  _o_ther win  ^^    │ _I_:qr-regex     _N_:replace^^│
-_d_el/_z_ap │ ^^       │ _R_ename  cp _B_name   ^^    │ _O_ccur          vie_W_-_E_val│
+^^Mark(_*_)╶╮ List^^╶──╮ Buf Ops^^╶─^^─────────┬╴Togl╶^^^^─╮ Text Ops^^╶─^^────────────^^──╮
+_%_:regexp^^│ _s_ort   │ _D_elete  _v_iew      │_T_:∅ _M_:♦│ _Q_uery/r        _!_:shell^^  │
+_t_oggle/_U_│ _/_filter│ _S_ave    ⏎^^: open   ╭╴Copy^^^^╶─┤ replace _r_egex  _|_:pipe^^   │
+_u_n/_m_ark │ _g_:ref  │ re_V_ert  _o_ther-win │_B_name^^  │ _I_:qr-regex     _N_:replace^^│
+_d_el/_z_ap │ ^^       │ _R_ename  _H_:other-f │_w_:Fname^^│ _O_ccur          vie_W_-_E_val│
 "
     ("SPC" nil)
     ("RET" ibuffer-visit-buffer :exit t)
@@ -87,6 +90,7 @@ _d_el/_z_ap │ ^^       │ _R_ename  cp _B_name   ^^    │ _O_ccur          v
     ("*" hydra-ibuffer-mark/body :exit t)
     ("/" hydra-ibuffer-filter/body :exit t)
     ("B" ibuffer-copy-buffername-as-kill)
+    ("w" ibuffer-copy-filename-as-kill)
     ("D" ibuffer-do-delete)
     ("E" ibuffer-do-eval)
     ("!" ibuffer-do-shell-command-file)
@@ -166,11 +170,11 @@ _d_el/_z_ap │ ^^       │ _R_ename  cp _B_name   ^^    │ _O_ccur          v
                                          (if (eq major-mode 'ibuffer-mode)
                                              (hydra-ibuffer/body)))
     "
-Filter by  (_DEL_ disable)‗‗‗‗‗‗‗‗‗‗‗^^^^^^  Op‗‗‗‗‗‗‗^^^^^^   _g_roups‗‗‗‗‗‗
-_m_ode/derived_M_  _/_ dir      mod_i_fied   _!_ _&_ _|_       _S_ave/_R_evive
-_b_ase/_n_ame      _._ ext      predicat_e_  _t_:exchg^^^^     _X_:delete
-_f_ilename^^       _*_ starred  _v_isiting   _d_ecompose^^^^   _D_ecompose
-_<_ size _>_       _c_ontent    proc_E_ss    _↑_ _p_op^^       _P_op \\:clear
+Filter by╶─(^^⌫ disable)^^^^──╮ Ops^^^^^^^^╶────────────────╮ _g_roups^^╶────╮
+_m_ode/derived_M_  _/_ dir    │ mod_i_fied   Logic:_&__|__!_│ _S_ave/_R_evive│
+_b_ase/_n_ame      _._ ext    │ predicat_e_  _t_:exchg^^^^  │ _X_:delete^^   │
+_f_ilename^^       _*_ starred│ _v_isiting   _d_ecompose^^^^│ _D_ecompose^^  │
+_<_ size _>_       _c_ontent  │ proc_E_ss    _↑_ _p_op^^    │ _P_op \\:clear^│
 "
     ("SPC" nil)
     ("DEL" ibuffer-filter-disable)

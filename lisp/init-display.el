@@ -83,7 +83,9 @@ of it."
  mode-line-remote " " ;mode-line-frame-identification
  mode-line-buffer-identification "   " mode-line-position
  (vc-mode vc-mode)
- "  " mode-line-modes mode-line-misc-info mode-line-end-spaces))
+ "  " mode-line-modes mode-line-misc-info
+ mode-line-format-right-align
+ (:eval (unless (display-graphic-p) "%F"))))
 
 ;; remove input method from mode-line-mule-info, this is already
 ;; handled by z-lighter.

@@ -53,11 +53,11 @@
 
 (defhydra hydra-ctl-x-r (:color blue :hint nil)
   "
-┌─────╴^^Rectangle^^^^╶──────┐ ┌╴^^Register^^┬╴save^^╶───────┐ ┌──^^╴Bookmark╶───┐
-│_c_lear     _N_umber-lines^^│ │_+_: inc^^    _SPC_: point   │ │_m_: set         │
-│_d_elete    _o_pen  s_t_ring│ │_i_nsert^^    _f_rameset     │ │_b_: jump        │
-│_k_ill      _y_ank^^        │ │_j_ump^^      _w_indow-config│ │_l_ist           │
-│M-w:copy^^  _r_egister^^    │ │_x_/_s_:copy  _n_umber       │ │_M_: no-overwrite│
+Rectangle─────╴^^^^^^╶──────╮ Register╴^^^^┬save^^╶────────╮ Bookmark──^^╴╶───╮
+_c_lear     _N_umber-lines^^│ _+_: inc^^    _SPC_: point   │ _m_: set         │
+_d_elete    _o_pen  s_t_ring│ _i_nsert^^    _f_rameset     │ _b_: jump        │
+_k_ill      _y_ank^^        │ _j_ump^^      _w_indow-config│ _l_ist           │
+M-w:copy^^  _r_egister^^    │ _x_/_s_:copy  _n_umber       │ _M_: no-overwrite│
 "
   ("SPC" point-to-register)
   ("+"   increment-register)
@@ -744,7 +744,7 @@ in `ctl-j-map' first."
          ("M-s M-g" . consult-grep)
          ("M-s M-r" . consult-ripgrep)
          ("M-s e" . consult-isearch-history)  ; similar to isearch-edit-string
-         ("M-y" . consult-yank-pop)
+         ;("M-y" . consult-yank-pop)
          ("M-g o" . consult-outline)
          ("M-g SPC" . consult-mark)
          ("M-g @" . consult-global-mark)
