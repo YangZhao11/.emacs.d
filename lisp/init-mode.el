@@ -907,10 +907,10 @@ _j_⇟ ⇧/⇥^^^^ button   _[__]_ section  _s_ee also  │ _q_uit
   :config
   (defhydra hydra-info (:color pink :hint nil)
     "
-^Go^ ╮ ^^Reference╶╮ ^^History╶──╮ ^^Tree╶──^^^^───────────────╮
-_k_⇞ │ ^^⇧/⇥:cycle │ _l_: back   │ _N_ext   _d_irectory _T_OC  │
-_j_⇟ │ _f_ollow    │ _r_: forward│ _P_rev   _<__>_ first/last  │
-^ ^  │ _m_enu      │ _L_ist      │ _u_p     _[__]_ back/forward│
+Go^^╶╮ ^^Reference╶╮ ^^History╶─╮ Tree^^╶──^^^^───────────────╮
+_k_⇞ │ ^^⇧/⇥:cycle │ _l_:back   │ _N_ext   _d_irectory _T_OC  │
+_j_⇟ │ _f_ollow    │ _r_:forward│ _P_rev   _<__>_ first/last  │
+^ ^  │ _m_enu      │ _L_ist     │ _u_p     _[__]_ back/forward│
 "
     ("q" quit-window :exit t)
     ("SPC" nil :exit t)
@@ -969,13 +969,25 @@ _j_⇟  ^^⇧/^^⇥:buttons  _I_:lispref  _c_ustomize
              ("[" . help-goto-previous-page)
              ("]" . help-goto-next-page)
              ("x" . god-mode-self-insert))
-  ;; handle keymap in C-h o. TODO: remove keymap from the variable item.
-  (add-to-list
-   'describe-symbol-backends
-   `("keymap"
-     ,(lambda (sym) (and (boundp sym) (keymapp (symbol-value sym))))
-     ,(lambda (s _b _f) (describe-keymap s))))
-)
+  ;; Handle keymap in C-h o. We copied the whole thing from the
+  ;; default definition to remove keymap from `describe-variable'.
+  (setq describe-symbol-backends
+        `(("keymap"
+           ,(lambda (sym) (and (boundp sym) (keymapp (symbol-value sym))))
+           ,(lambda (s _b _f) (describe-keymap s)))
+          ("function" ,#'fboundp ,(lambda (s _b _f) (describe-function s)))
+          ("variable"
+           ,(lambda (symbol)
+              (unless (and (boundp symbol)
+                           (keymapp (symbol-value symbol)))
+                (or (and (boundp symbol) (not (keywordp symbol)))
+                    (get symbol 'variable-documentation))))
+           ,#'describe-variable)
+          ;; FIXME: We could go crazy and add another entry so describe-symbol can be
+          ;; used with the slot names of CL structs (and/or EIEIO objects).
+          ("type" ,#'cl-find-class ,#'cl-describe-type)
+          ("face" ,#'facep ,(lambda (s _b _f) (describe-face s)))))
+  )
 
 (use-package server :diminish (server-buffer-clients . " #"))
 (add-hook 'after-init-hook 'server-start)
