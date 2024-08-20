@@ -78,17 +78,22 @@
 
   (defhydra hydra-ibuffer (:color pink :hint nil)
     "
-^^Mark(_*_)╶╮ List^^╶──╮ Buf Ops^^╶─^^─────────┬╴Togl╶^^^^─╮ Text Ops^^╶─^^────────────^^──╮
-_%_:regexp^^│ _s_ort   │ _D_elete  _v_iew      │_T_:∅ _M_:♦│ _Q_uery/r        _!_:shell^^  │
-_t_oggle/_U_│ _/_filter│ _S_ave    ⏎^^: open   ╭╴Copy^^^^╶─┤ replace _r_egex  _|_:pipe^^   │
-_u_n/_m_ark │ _g_:ref  │ re_V_ert  _o_ther-win │_B_name^^  │ _I_:qr-regex     _N_:replace^^│
-_d_el/_z_ap │ ^^       │ _R_ename  _H_:other-f │_w_:Fname^^│ _O_ccur          vie_W_-_E_val│
+_m_ark(_*_)╶╮ List^^^^^^╶──╮ Buf Ops^^╶─^^─────────┬╴Togl╶^^^^─╮ Text Ops^^^^╶───^^^^─────────╮
+_%_:regexp^^│ _s_ort _,_^^ │ _D_elete  _j_ump      │_T_:∅ _M_:♦│ _Q_uery/r^^     _!_:shell^^  │
+_t_oggle/_U_│ _/_filter^^^^│ _S_ave    _v_iew      ╭╴Copy^^^^╶─┤ _I_:q_r_-regex  _|_:pipe^^   │
+_d_el/_z_ap │ _g_:↻ _+__-_ │ re_V_ert  _o_ther-win │_B_name^^  │ _=_:diff^^      _N_:replace^^│
+_._old ^^   │ _k_ill-ln^^^^│ _R_ename  _H_:other-f │_w_:Fname^^│ _O_ccur^^       _E_val/vie_W_│
 "
     ("SPC" nil)
     ("RET" ibuffer-visit-buffer :exit t)
     ("%" hydra-ibuffer-regex/body :exit t)
     ("*" hydra-ibuffer-mark/body :exit t)
     ("/" hydra-ibuffer-filter/body :exit t)
+    ("-" ibuffer-add-to-tmp-hide)
+    ("+" ibuffer-add-to-tmp-show)
+    ("=" ibuffer-diff-with-file)
+    ("," ibuffer-toggle-sorting-mode)
+    ("." ibuffer-mark-old-buffers)
     ("B" ibuffer-copy-buffername-as-kill)
     ("w" ibuffer-copy-filename-as-kill)
     ("D" ibuffer-do-delete)
@@ -109,6 +114,8 @@ _d_el/_z_ap │ ^^       │ _R_ename  _H_:other-f │_w_:Fname^^│ _O_ccur    
     ("|" ibuffer-do-shell-command-pipe)
     ("d" ibuffer-mark-for-delete)
     ("g" ibuffer-update)
+    ("j" ibuffer-jump-to-buffer)
+    ("k" ibuffer-do-kill-lines)
     ("m" ibuffer-mark-forward)
     ("o" ibuffer-visit-buffer-other-window :exit t)
     ("q" quit-window :exit t)

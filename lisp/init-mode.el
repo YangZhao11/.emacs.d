@@ -746,8 +746,9 @@ _q_uit │ ^^      _s_wap │ ^^       │ _r_esolve/_A_ll     _>_: base-lower �
   :config
   (defhydra hydra-ess-help (:color pink :hint nil)
     "
-_k_⇞ _p_rev  _[__]_: _s_ection  _h_elp-on-obj  _v_ignettes  _/_isearch  ^^eval _f_unction
-_j_⇟ _n_ext  _<__>_: buf^^      _g_:revert     _i_ndex      _a_propos   _l_ine _r_egion
+Move^^^╶─────^^^^^^^─────────╮ Eval^^^^╶──────╮ Jump^^╶────────^^───────────^^────────╮
+_k_⇞ _p_rev  _[__]_:_s_ection│ _f_unction ^^  │ _h_elp-on-obj  _v_ignettes  _/_isearch│
+_j_⇟ _n_ext  _<__>_:buf^^    │ _l_ine _r_egion│ _g_:revert     _i_ndex      _a_propos │
 "
     ("/" isearch-forward)
     ("<" beginning-of-buffer)

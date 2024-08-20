@@ -16,7 +16,7 @@
 (add-to-list 'exec-path "~/bin")
 
 ;; Fix environment variables
-(setenv "PATH" (concat "~/bin:/usr/local/brew/bin:/usr/local/brew/sbin:/usr/local/git/current/bin:/usr/local/bin:"
+(setenv "PATH" (concat "~/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/git/current/bin:/usr/local/bin:"
                        (getenv "PATH")))
 (setenv "LANG" "en_US.UTF-8")
 ;(setenv "RIPGREP_CONFIG_PATH" (concat (getenv "HOME") "/.config/ripgrep.conf"))
