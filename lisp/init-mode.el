@@ -479,6 +479,15 @@ _q_uit │ ^^      _s_wap │ ^^       │ _r_esolve/_A_ll     _>_: base-lower �
     (">"   smerge-diff-base-lower)
     ("q"   nil :color blue)))
 
+(use-package diff-mode
+  :config
+  ;; diff-mode-map put diff-mode-shared-map on its ESC binding. The
+  ;; latter inherits special-mode-map, for which I added a bunch of
+  ;; stuff that needs to be masked.
+  (bind-keys :map diff-mode-map
+             ("M--") ("M-9") ("M-0")
+             ("M-SPC") ("M-l") ("M-v") ("M-x")))
+
 (use-package magit
   :bind ("C-x g" . magit-status)
   :config

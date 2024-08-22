@@ -475,16 +475,10 @@ Toggle:
 
 (use-package rainbow-mode :diminish rainbow-mode)
 
-(use-package beacon :ensure :diminish beacon-mode
-  :commands (beacon-mode)
-  :init (beacon-mode 1)
-  :config
-  (add-hook 'beacon-dont-blink-predicates
-            (lambda () (not (display-graphic-p))))
-  (setq beacon-dont-blink-major-modes
-        '(inferior-ess-mode
-          magit-status-mode magit-popup-mode
-          gnus-summary-mode gnus-group-mode)))
+(use-package pulsar
+  :init
+  (setq pulsar-iterations 5)
+  (pulsar-global-mode 1))
 
 (use-package flyspell :diminish " ⍹"
   :commands (flyspell-mode flyspell-prog-mode)

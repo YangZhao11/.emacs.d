@@ -51,7 +51,7 @@
   "1-char status symbol for current buffer.
 
 PROP set to true to add properties for mode line."
-  (let ((p (if prop 'propertize 'first-arg)))
+  (let ((p (if prop #'propertize #'first-arg)))
     (cond
      ((derived-mode-p 'comint-mode 'term-mode)
       (funcall p
@@ -83,15 +83,15 @@ PROP set to true to add properties for mode line."
 ;; `crm-separator'.
 (defun crm-indicator (args)
   (cons (concat "[,] " (car args)) (cdr args)))
-  (advice-add #'completing-read-multiple :filter-args #'crm-indicator)
+(advice-add #'completing-read-multiple :filter-args #'crm-indicator)
 
-  ;; Do not allow the cursor in the minibuffer prompt
-  (setq minibuffer-prompt-properties
-        '(read-only t cursor-intangible t face minibuffer-prompt))
-  (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
+;; Do not allow the cursor in the minibuffer prompt
+(setq minibuffer-prompt-properties
+      '(read-only t cursor-intangible t face minibuffer-prompt))
+(add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
 
 (setq read-extended-command-predicate
-       #'command-completion-default-include-p)
+      #'command-completion-default-include-p)
 
 ;; --------------------------------------------------
 (load-theme 'doom-zenburn 't)   ; load this first for many defaults.
