@@ -53,11 +53,11 @@
 
 (defhydra hydra-ctl-x-r (:color blue :hint nil)
   "
-Rectangle─────╴^^^^^^╶──────╮ Register╴^^^^┬save^^╶─────╮ Bookmark──^^╴╶───╮
-_c_lear     _N_umber-lines^^│ _+_: inc^^    _SPC_:point │ _m_: set         │
-_d_elete    _o_pen  s_t_ring│ _i_nsert^^    _f_rameset  │ _b_: jump        │
-_k_ill      _y_ank^^        │ _j_ump^^      _w_indow-cfg│ _l_ist           │
-M-w:copy^^  _r_egister^^    │ _x_/_s_:copy  _n_umber    │ _M_: no-overwrite│
+Rectangle╶─────^^^^^^───────╮ Register╶^^┬╴save^^╶─────╮ Bookmark──^^╴╶───╮
+_c_lear     _N_umber-lines^^│ _+_: inc   │ _SPC_:point │ _m_: set         │
+_d_elete    _o_pen  s_t_ring│ _j_ump     │ _f_rameset  │ _b_: jump        │
+_k_ill      _y_ank^^        │ _i_nsert   │ _w_indow-cfg│ _l_ist           │
+M-w:copy^^  _r_egister^^    │ _s_:cp text│ _n_umber    │ _M_: no-overwrite│
 "
   ("SPC" point-to-register)
   ("+"   increment-register)

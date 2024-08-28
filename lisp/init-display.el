@@ -85,7 +85,8 @@ of it."
  (vc-mode vc-mode)
  "  " mode-line-modes mode-line-misc-info
  mode-line-format-right-align
- (:eval (unless (display-graphic-p) "%F"))))
+ (:eval (when (and (not (display-graphic-p))
+                   (window-minibuffer-p (next-window nil 't))) "%F"))))
 
 ;; remove input method from mode-line-mule-info, this is already
 ;; handled by z-lighter.

@@ -266,7 +266,7 @@ _t_oggle/_U_│ _._: № bkup   ^^    │ _{__}_:marked │ _+_create  _i_nsert�
 
 ^Emacs Op^^^╶──────────────^^─────────╮ ^^File Op^^╶─(_e_dit)^^──^^────────┬ch╶^^╮
 _Q_uery/rep  file-t_y_pe   _v_iew     │ _!_shell_&_ _S__Y_mlink  _=_ diff   _M_od│
-_A_:grep     _L_oad        _o_ther win│ ^^_C_opy    _H_ardlink^^ _c_ompress _O_wn│
+_A_:grep     _L_oad        _o_ther-win│ ^^_C_opy    _H_ardlink^^ _c_ompress _O_wn│
 _B_yte comp  _k_ill-line   _a_ltern   │ ^^_D_elete  _T_ouch^^    _Z_ompress _G_rp│
 redisp_l_ay  _w_:cp Fname  ^^         │ ^^_R_ename  _P_rint^^    _W_eb      ^^   │
 "
@@ -485,8 +485,8 @@ _q_uit │ ^^      _s_wap │ ^^       │ _r_esolve/_A_ll     _>_: base-lower �
   ;; latter inherits special-mode-map, for which I added a bunch of
   ;; stuff that needs to be masked.
   (bind-keys :map diff-mode-map
-             ("M--") ("M-9") ("M-0")
-             ("M-SPC") ("M-l") ("M-v") ("M-x")))
+             ("M--") ("M-9") ("M-0") ("M-SPC")
+             ("M-l") ("M-o") ("M-v") ("M-x")))
 
 (use-package magit
   :bind ("C-x g" . magit-status)
@@ -917,10 +917,10 @@ _j_⇟ ⇧/⇥^^^^ button   _[__]_ section  _s_ee also  │ _q_uit
   :config
   (defhydra hydra-info (:color pink :hint nil)
     "
-Go^^╶╮ ^^Reference╶╮ ^^History╶─╮ Tree^^╶──^^^^───────────────╮
-_k_⇞ │ ^^⇧/⇥:cycle │ _l_:back   │ _N_ext   _d_irectory _T_OC  │
-_j_⇟ │ _f_ollow    │ _r_:forward│ _P_rev   _<__>_ first/last  │
-^ ^  │ _m_enu      │ _L_ist     │ _u_p     _[__]_ back/forward│
+Go^^╶╮ ^^Reference╶╮ ^^History╶─╮ Tree^^^^^^╶──^^^^────────────╮
+_k_⇞ │ ^^⇧/⇥:cycle │ _l_:back   │ ^^  ↑_u_p^^  _d_irectory^^   │
+_j_⇟ │ _f_ollow    │ _r_:forward│ _P_←∙→_N_^^ ╭In file:_T_OC^^ │
+^ ^  │ _m_enu      │ _L_ist     │ ^^  ↳_[__]_ │_<__>_first/last│
 "
     ("q" quit-window :exit t)
     ("SPC" nil :exit t)
