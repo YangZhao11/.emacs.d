@@ -184,7 +184,7 @@ _j_⇟   _n_ext^^   _d_isplay^^   _o_ther-win   %s(if next-error-follow-minor-mo
              ("SPC" . hydra-occur/body)))
 
 (use-package grep
-  :bind (("M-s g"   . grep)
+  :bind (("M-s g" . grep)
          ("M-s G" . rgrep))
   :config
   (defhydra hydra-grep (:color pink :hint nil)
@@ -195,8 +195,10 @@ _j_⇟  _n_ext  _{__}_:prev/next file    _d_isplay
   ("SPC" nil)
   ("p" previous-error-no-select)
   ("n" next-error-no-select)
-  ("j" compilation-next-error)
-  ("k" compilation-previous-error)
+  ("j" scroll-up-command)
+  ("k" scroll-down-command)
+;  ("j" compilation-next-error)
+;  ("k" compilation-previous-error)
   ("<" beginning-of-buffer)
   (">" end-of-buffer)
   ("{" compilation-previous-file)
@@ -209,8 +211,10 @@ _j_⇟  _n_ext  _{__}_:prev/next file    _d_isplay
 
   (bind-keys :map grep-mode-map
              ("SPC" . hydra-grep/body)
-             ("j" . compilation-next-error)
-             ("k" . compilation-previous-error)
+             ("j" . scroll-up-command)
+             ("k" . scroll-down-command)
+             ;; ("j" . compilation-next-error)
+             ;; ("k" . compilation-previous-error)
              ("e" . wgrep-change-to-wgrep-mode)
              ("d" . compilation-display-error)
              ("x" . god-mode-self-insert)

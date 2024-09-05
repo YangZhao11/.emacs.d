@@ -74,6 +74,13 @@ of it."
                 (:else z-lighter-emacs)))
   "Leftmost lighter in mode line")
 
+(setq mode-line-frame-name
+      ;; Show frame name in text frame, in the bottom right corner,
+      ;; i.e. next window is minibuffer.
+      '(:eval
+        (when (and (not (display-graphic-p))
+                   (window-minibuffer-p (next-window nil 't))) "%F")))
+
 (setq-default mode-line-format
 '("%e"
  (:eval z-lighter)
@@ -85,8 +92,7 @@ of it."
  (vc-mode vc-mode)
  "  " mode-line-modes mode-line-misc-info
  mode-line-format-right-align
- (:eval (when (and (not (display-graphic-p))
-                   (window-minibuffer-p (next-window nil 't))) "%F"))))
+ mode-line-frame-name))
 
 ;; remove input method from mode-line-mule-info, this is already
 ;; handled by z-lighter.

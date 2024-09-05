@@ -130,7 +130,8 @@ root-_D_iff  log _O_utgoing  _~_:revision  i_G_nore  _g_:annotate  _u_:revert
 
 (bind-keys ("C-M-o" . up-list)
            ("C-M-j" . backward-down-list)
-           ("M-r"   . raise-sexp)) ; was move-to-window-line-top-bottom
+           ("C-M-l" . down-list)   ; was `reposition-window'
+           ("M-r"   . raise-sexp)) ; was `move-to-window-line-top-bottom'
 
 (use-package region-bindings-mode :demand
   :diminish 'region-bindings-mode

@@ -46,7 +46,7 @@
     (like-this--previous-matching-face face)
     (setq arg (1+ arg))))
 
-;; TODO: use isearch-forward-thing-at-point setting
+;; TODO: use `isearch-forward-thing-at-point' setting
 (defvar like-this-try-things
   '(email symbol word)
   "Thing at point to try search for")
