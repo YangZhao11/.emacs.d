@@ -79,7 +79,8 @@ of it."
       ;; i.e. next window is minibuffer.
       '(:eval
         (when (and (not (display-graphic-p))
-                   (window-minibuffer-p (next-window nil 't))) "%F")))
+                   (window-minibuffer-p (next-window nil 't))) "%F ")))
+(put 'mode-line-frame-name 'risky-local-variable 't)
 
 (setq-default mode-line-format
 '("%e"
