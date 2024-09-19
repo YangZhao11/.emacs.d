@@ -26,13 +26,13 @@ of it."
                               'god-lighter-emacs 'god-lighter-emacs-dark))))
 
 (z-defface-with-darken god-lighter-god "#4DB0FF")
-
 (setq z-lighter-god
       '(:eval
         (propertize (let ((m (cdr (assoc nil god-mod-alist))))
                               (cond ((string= m "C-") " ⌘ ")
                                     ((string= m "C-M-") "⌥⌘ ")
-                                    ('t " ⌥ ")))
+                                    ((string= m "M-") " ⌥ ")
+                                    ('t " ? ")))
                     'face (if (mode-line-window-selected-p)
                              'god-lighter-god 'god-lighter-god-dark))))
 
@@ -50,7 +50,6 @@ of it."
                                 'god-lighter-view 'god-lighter-view-dark))))
 
 (z-defface-with-darken god-lighter-special "#6B77FF")
-
 (setq z-lighter-special
       '(:eval (propertize
                (concat
@@ -79,7 +78,8 @@ of it."
       ;; i.e. next window is minibuffer.
       '(:eval
         (when (and (not (display-graphic-p))
-                   (window-minibuffer-p (next-window nil 't))) "%F ")))
+                   (window-minibuffer-p (next-window nil 't)))
+          "%F")))
 (put 'mode-line-frame-name 'risky-local-variable 't)
 
 (setq-default mode-line-format

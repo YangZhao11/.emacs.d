@@ -80,7 +80,9 @@ SPEC could be `box', 'bar', or `hbar'."
 (defalias 'true-self-insert-command 'self-insert-command)
 
 (bind-keys ("(" . true-self-insert-command)
-           (")" . true-self-insert-command))
+           (")" . true-self-insert-command)
+           ("C-h k" . god-mode-describe-key) ; this works in special mode too
+)
 
 (setq god-mode-low-priority-exempt
       '(self-insert-command

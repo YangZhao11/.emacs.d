@@ -187,6 +187,8 @@ _j_⇟   _n_ext^^   _d_isplay^^   _o_ther-win   %s(if next-error-follow-minor-mo
   :bind (("M-s g" . grep)
          ("M-s G" . rgrep))
   :config
+  (setq grep-use-headings 't)
+
   (defhydra hydra-grep (:color pink :hint nil)
   "
 _k_⇞  _p_rev  _<__>_ beg/end of buffer ^^⏎:goto    _e_dit
@@ -645,7 +647,7 @@ _q_uit │ ^^      _s_wap │ ^^       │ _r_esolve/_A_ll     _>_: base-lower �
 (use-package js
   :config
   (bind-keys :map js-mode-map
-             ("M-." . nil)
+             ("M-." . nil)              ; not needed in 30
              ([remap xref-find-definitions] . js-find-symbol)))
 
 (use-package haskell-mode

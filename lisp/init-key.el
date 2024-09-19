@@ -16,6 +16,7 @@
       ("\\mathbb{N}" ?ℕ) ("\\mathbb{Z}" ?ℤ)
       ("\\mathbb{Q}" ?ℚ) ("\\mathbb{R}" ?ℝ)
       ("\\mathbb{C}" ?ℂ) ("\\mathbb{H}" ?ℍ)
+      ("\\mathbb{E}" ?𝔼) ("\\mathbb{1}" ?𝟙)
       ("\\rarr" ?→) ("\\larr" ?←) ("\\uarr" ?↑) ("\\darr" ?↓)
       ("\\Rarr" ?⇒) ("\\Larr" ?⇐) ("\\Uarr" ?⇑) ("\\Darr" ?⇓))))
 
