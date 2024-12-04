@@ -1,13 +1,5 @@
 ;;; format-expand -*- lexical-binding: t -*-
 
-;; The format string we support is exactly like what is described in
-;; `format', except that the field description is not supported.
-;; Instead, use parenthesis to indicate an expression to evaluate. For
-;; example, %(identity emacs-version)s should give you the version
-;; string. The s after a sexp can be omitted.
-
-;; In sexps, symbol `_' is available as loop iterator.
-
 (defun format--parse-number-sequence (s)
   "Parse strings to number sequence.
 
@@ -88,26 +80,49 @@ Each element of FORMS corresponds to a `format'-style % form in STR.
                (setq str (concat (substring str 0 start)
                                  (if (eq fexp end) "" "s")
                                  (substring str end)))))
-            (t (push '_ forms))))
+            (t (push 'x forms))))
       (error (message "Malformed sexp: %s" (substring str start))))
     (cons str (nreverse forms))))
 
 ;;;###autoload
 (defun format-expand (beg end seq)
-  "Expand region as if it's a format string.
+  "Expand and repeat region as if it is a format string, using items in SEQ
+to fill out the % constructs.
 
-With prefix arg, SEQ is read as an expression that returns a list."
+The format string we support is exactly like what is described in
+`format', except that the field description is not supported. Instead,
+use parenthesis to indicate an expression to evaluate. For example,
+%(identity emacs-version)s should give you the version string. The `s'
+after a sexp can be omitted. In sexps, symbol `x' is available as loop
+iterator.
+
+BEG and END marks the format string, and defaults to active region or
+the current line if region is not active.
+
+SEQ is read through `format--read-sequence'. Accept a [from to inc]
+format, or verbatim, or elisp expression that returns a list. When
+\\[universal-argument] prefix is specified, also prompt for a lambda to
+transform the sequence.
+
+Push mark if region is not active."
   (interactive
    (list (or (use-region-beginning) (line-beginning-position))
-         (or (use-region-end) (1+ (line-end-position)))
+         (or (use-region-end)
+             (let ((e (line-end-position)))
+               (when (eq e (point-max))
+                 (save-excursion
+                   (goto-char e)
+                   (insert "\n")))
+               (1+ e)))
          (format--read-sequence current-prefix-arg)))
   (let* ((str (filter-buffer-substring beg end t))
          (parsed (format--parse-template str)))
+    (or (use-region-p) (push-mark))
     (dolist (iter seq)
       (insert
        (apply 'format (car parsed)
               (mapcar (lambda (sexp)
-                        (eval sexp `((_ . ,iter))))
+                        (eval sexp `((x . ,iter))))
                       (cdr parsed)))))))
 
 (provide 'format-expand)
