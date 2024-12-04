@@ -9,10 +9,11 @@
   "Saved view-mode before god-mode")
 
 (defun set-cursor-type (spec)
-  "Set cursor type for current frame. This also works for
-terminals with support for setting cursor type.
+  "Set cursor type for current frame.
 
-SPEC could be `box', 'bar', or `hbar'."
+This also works for terminals with support for setting cursor type.
+
+SPEC could be `box', `bar', or `hbar'."
   (cond
    ((display-graphic-p)
     (modify-frame-parameters nil `((cursor-type . ,spec))))
@@ -36,7 +37,7 @@ SPEC could be `box', 'bar', or `hbar'."
   (mortal-mode 0))
 (defvar mortal-mode-map
   (let ((m (make-sparse-keymap)))
-    (define-key m (kbd "RET") 'mortal-mode-exit)
+    (keymap-set m "RET" 'mortal-mode-exit)
     m)
   "Keymap for `mortal-mode'.")
 
@@ -58,16 +59,16 @@ SPEC could be `box', 'bar', or `hbar'."
 ;; use-package god-mode :ensure
 (require 'god-mode)
 
-(bind-keys ("<home>" . god-mode-all))
+(keymap-global-set "<home>" #'god-mode-all)
 (diminish 'god-local-mode)
 
 (require 'god-mode-isearch)
-(bind-keys :map isearch-mode-map
-           ("<home>" . god-mode-isearch-activate))
-(bind-keys :map god-mode-isearch-map
-           ("<home>" . god-mode-isearch-disable))
+(keymap-set isearch-mode-map
+           "<home>" #'god-mode-isearch-activate)
+(keymap-set god-mode-isearch-map
+           "<home>" #'god-mode-isearch-disable)
 (dolist (i '(?s ?r ?w ?v ?% ?< ?>))
-  (define-key god-mode-isearch-map
+  (keymap-set god-mode-isearch-map
     (char-to-string i) 'god-mode-self-insert))
 
 (setq god-mod-alist-default '((nil . "C-") (?g . "M-") (?h . "C-M-")))
@@ -99,18 +100,18 @@ SPEC could be `box', 'bar', or `hbar'."
   (interactive (list (string= "M-" (cdr (assoc nil god-mod-alist)))))
   (if arg
       (progn (setq god-mod-alist god-mod-alist-default)
-             (define-key god-local-mode-map "g" #'god-mode-self-insert))
+             (keymap-set god-local-mode-map "g" #'god-mode-self-insert))
     (setq god-mod-alist '((nil . "M-") (?h . "C-M-")))
-    (define-key god-local-mode-map "g" #'god-mode-toggle-sticky-meta))
+    (keymap-set god-local-mode-map "g" #'god-mode-toggle-sticky-meta))
   (force-mode-line-update))
 
 (defun god-mode-toggle-sticky-cm (arg)
   (interactive (list (string= "C-M-" (cdr (assoc nil god-mod-alist)))))
   (if arg
       (progn (setq god-mod-alist god-mod-alist-default)
-             (define-key god-local-mode-map "h" #'god-mode-self-insert))
+             (keymap-set god-local-mode-map "h" #'god-mode-self-insert))
     (setq god-mod-alist '((nil . "C-M-") (?g . "M-")))
-    (define-key god-local-mode-map "h" #'god-mode-toggle-sticky-cm))
+    (keymap-set god-local-mode-map "h" #'god-mode-toggle-sticky-cm))
     (force-mode-line-update))
 
 (bind-keys :map god-local-mode-map

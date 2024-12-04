@@ -16,7 +16,7 @@ in the first step.")
   (set-marker transpose-dwim--beg nil)
   (set-marker transpose-dwim--end nil))
 
-;;; autoload
+;;;###autoload
 (defun transpose-dwim-regions (beg end)
   "Transpose in 2 steps, similar to `anchored-transpose'.
 
@@ -72,7 +72,7 @@ call the two regions will be transposed."
   nil
   "Modes for which we do not attempt transpose-args")
 
-;;; autoload
+;;;###autoload
 (defun transpose-dwim (arg &optional interactive)
   "Transpose args, sexps, or sentences. "
   (interactive "*p\nd")

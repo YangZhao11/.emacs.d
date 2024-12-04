@@ -150,6 +150,9 @@ useful when followed by an immediate kill."
   (setcdr (assq 'isearch-mode minor-mode-alist)
           '((:eval (if isearch-forward " »" " «")))))
 
+(use-package format-expand
+  :bind ("M-s f" . format-expand))
+
 (use-package replace
   :bind ("M-s M-o" . multi-occur-in-matching-buffers)
   :config
@@ -612,7 +615,7 @@ _q_uit │ ^^      _s_wap │ ^^       │ _r_esolve/_A_ll     _>_: base-lower �
 (use-package cc-mode
   :config
   (setq c-electric-pound-behavior '(alignleft)) ;make a #define left-aligned
-  (bind-key "RET" 'newline-and-indent c-mode-base-map)
+  (keymap-set c-mode-base-map "RET" #'newline-and-indent)
 
   (defun z-c++-mode-hook ()
     (setq flycheck-clang-language-standard "c++14"

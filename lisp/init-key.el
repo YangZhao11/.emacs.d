@@ -25,13 +25,13 @@
   ;; recognize M-z in one step (otherwise it'll ready the ESC only).
   (cl-loop for c from ?! to ?~ do
            (when (not (memq c '(?\[ ?O)))
-             (define-key input-decode-map
-               (kbd (concat "ESC " (char-to-string c)))
-               (kbd (concat "M-" (char-to-string c))))))
+             (keymap-set input-decode-map
+               (concat "ESC " (char-to-string c))
+               (concat "M-" (char-to-string c)))))
   (cl-loop for c from ?a to ?z do
-    (define-key input-decode-map
-      (kbd (concat "ESC C-" (char-to-string c)))
-      (kbd (concat "C-M-" (char-to-string c)))))
+    (keymap-set input-decode-map
+      (concat "ESC C-" (char-to-string c))
+      (concat "C-M-" (char-to-string c))))
 
   ;; CSI u style coding for C-. and C-M-. keys
   (cl-loop for c from ?! to ?~ do
@@ -39,9 +39,9 @@
                   (spaced (replace-regexp-in-string "\\([0-9]\\)" "\\1 " s)))
              (cl-loop for b in
                       '(("5" . "C-") ("7" . "C-M-")) do
-                      (define-key input-decode-map
-                        (kbd (concat "M-[ " spaced "; " (car b) " u"))
-                        (kbd (concat (cdr b) (char-to-string c))))))))
+                      (keymap-set input-decode-map
+                        (concat "M-[ " spaced "; " (car b) " u")
+                        (concat (cdr b) (char-to-string c)))))))
 (add-hook 'tty-setup-hook #'z-setup-terminal)
 
 (repeat-mode 1)
@@ -49,8 +49,11 @@
 (use-package kmacro
   :config
   (setcdr (assq 'defining-kbd-macro minor-mode-alist)
-          '((:propertize " ●" face (:foreground "#D04020")
-                         help-echo "Recording keyboard macro"))))
+          '((" "
+             (:propertize
+              (:eval (if (eq defining-kbd-macro 'append) "⊕" "●"))
+              face (:foreground "#D04020")
+              help-echo "Recording keyboard macro")))))
 
 (defhydra hydra-ctl-x-r (:color blue :hint nil)
   "
@@ -83,7 +86,7 @@ M-w:copy^^  _r_egister^^    │ _s_:cp text│ _n_umber    │ _M_: no-overwrite
   ("x"   copy-to-register)
   ("y"   yank-rectangle)
   )
-(bind-key "C-x r ?" #'hydra-ctl-x-r/body)
+(keymap-global-set "C-x r ?" #'hydra-ctl-x-r/body)
 
 (defhydra hydra-ctl-x-v (:color blue :hint nil)
   "
@@ -113,14 +116,14 @@ root-_D_iff  log _O_utgoing  _~_:revision  i_G_nore  _g_:annotate  _u_:revert
   ("x" vc-delete-file)
   ("~" vc-revision-other-window)
   )
-(bind-key "C-x v ?" 'hydra-ctl-x-v/body)
+(keymap-global-set "C-x v ?" 'hydra-ctl-x-v/body)
 
 (defun z-kill-buffer (arg)
   "Kill this buffer, or with ARG, call `kill-buffer' instead."
   (interactive "P")
   (if arg (call-interactively 'kill-buffer)
     (kill-buffer)))
-(bind-key "C-x k" 'z-kill-buffer)
+(keymap-global-set "C-x k" 'z-kill-buffer)
 
 ;; lisp is not a package
 ;; (use-package lisp)
@@ -184,8 +187,8 @@ If ARG is non-nil and we are on terminal, then call
   (if (and arg (frame-terminal))
       (call-interactively 'clipetty-kill-ring-save)
     (call-interactively 'kill-ring-save)))
-(bind-keys :map region-bindings-mode-map
-           ("M-w" . z-kill-ring-save))
+(keymap-set region-bindings-mode-map
+           "M-w" #'z-kill-ring-save)
 
 (use-package clipetty
   :commands clipetty-kill-ring-save)
@@ -466,7 +469,7 @@ Toggle:
   ("SPC"  nil)
   ("<f2>" nil)
 )
-(bind-key "<f2>" 'hydra-toggle/body)
+(keymap-global-set "<f2>" 'hydra-toggle/body)
 (setq display-line-numbers-type 'relative)
 
 (use-package subword
@@ -732,6 +735,7 @@ in `ctl-j-map' first."
          ([remap switch-to-buffer] . consult-buffer)
          ([remap switch-to-buffer-other-window] . consult-buffer-other-window)
          ([remap switch-to-buffer-other-frame] . consult-buffer-other-frame)
+         ([remap project-switch-to-buffer] . consult-project-buffer)
          ;; C-c C-l in `comint-mode-map'
          ([remap comint-dynamic-list-input-ring] . consult-history)
          ("C-x f" . consult-find)
@@ -753,7 +757,7 @@ in `ctl-j-map' first."
 
   ;; This might conflict with LSP stuff, see consult doc
   (setq completion-in-region-function #'consult-completion-in-region)
-  (bind-key "C-h" #'consult-narrow-help consult-narrow-map))
+  (keymap-set consult-narrow-map "C-h" #'consult-narrow-help))
 
 (use-package consult-imenu
   :bind (("M-g i" . consult-imenu)
