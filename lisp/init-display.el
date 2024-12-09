@@ -4,6 +4,7 @@
   '((t :inherit mode-line :foreground "black"))
   "Face for god-lighter")
 
+
 (defmacro z-defface-with-darken (face col)
   "Define two faces, FACE and FACE-dark where bg is col and a dark version
 of it."
@@ -13,7 +14,7 @@ of it."
        '((t :inherit god-lighter :background ,col))
        ,(concat "Face for " (symbol-name face)))
        (defface ,face-dark
-       '((t :inherit god-lighter :background ,(doom-darken col .3)))
+       '((t :inherit god-lighter :background ,(doom-blend col "#353535" .5)))
      ,(concat "Face for " (symbol-name face-dark)))))
   )
 
