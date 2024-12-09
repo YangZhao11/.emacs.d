@@ -221,7 +221,7 @@ _j_↧  _n_ext  _{__}_:prev/next file    _d_isplay
              ("c" . god-mode-self-insert))
   (unless (fboundp 'grep-change-to-grep-edit-mode)
     (defalias 'grep-change-to-grep-edit-mode 'wgrep-change-to-wgrep-mode)
-    (require 'wgrep)))
+    (autoload 'wgrep-change-to-wgrep-mode "wgrep")))
 
 (use-package compile
   :config
