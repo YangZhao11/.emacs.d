@@ -201,14 +201,12 @@ _j_↧  _n_ext  _{__}_:prev/next file    _d_isplay
   ("n" next-error-no-select)
   ("j" scroll-up-command)
   ("k" scroll-down-command)
-;  ("j" compilation-next-error)
-;  ("k" compilation-previous-error)
   ("<" beginning-of-buffer)
   (">" end-of-buffer)
   ("{" compilation-previous-file)
   ("}" compilation-next-file)
   ("d" compilation-display-error)
-  ("e" wgrep-change-to-wgrep-mode :exit t)
+  ("e" grep-change-to-grep-edit-mode :exit t)
   ("q" quit-window :exit t)
   ("f" next-error-follow-minor-mode)
   ("RET" compile-goto-error :exit t))
@@ -217,15 +215,13 @@ _j_↧  _n_ext  _{__}_:prev/next file    _d_isplay
              ("SPC" . hydra-grep/body)
              ("j" . scroll-up-command)
              ("k" . scroll-down-command)
-             ;; ("j" . compilation-next-error)
-             ;; ("k" . compilation-previous-error)
-             ("e" . wgrep-change-to-wgrep-mode)
              ("d" . compilation-display-error)
+             ("e" . grep-change-to-grep-edit-mode)
              ("x" . god-mode-self-insert)
-             ("c" . god-mode-self-insert)))
-
-(use-package wgrep
-  :commands wgrep-change-to-wgrep-mode)
+             ("c" . god-mode-self-insert))
+  (unless (fboundp 'grep-change-to-grep-edit-mode)
+    (defalias 'grep-change-to-grep-edit-mode 'wgrep-change-to-wgrep-mode)
+    (require 'wgrep)))
 
 (use-package compile
   :config
