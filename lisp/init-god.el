@@ -56,7 +56,6 @@ SPEC could be `box', `bar', or `hbar'."
 ;; the key for a command. Advice it to work with god-mode.
 
 
-;; use-package god-mode :ensure
 (require 'god-mode)
 
 (keymap-global-set "<home>" #'god-mode-all)

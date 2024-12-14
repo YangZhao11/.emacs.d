@@ -14,6 +14,7 @@ of it."
        '((t :inherit god-lighter :background ,col))
        ,(concat "Face for " (symbol-name face)))
        (defface ,face-dark
+         ;; blend with (face-background 'mode-line-inactive)
        '((t :inherit god-lighter :background ,(doom-blend col "#353535" .5)))
      ,(concat "Face for " (symbol-name face-dark)))))
   )
@@ -22,47 +23,84 @@ of it."
 
 (setq z-lighter-emacs
       '(:eval
-        (propertize (concat " " (or current-input-method-title "ɛ") " ")
-                    'face (if (mode-line-window-selected-p)
-                              'god-lighter-emacs 'god-lighter-emacs-dark))))
+        (propertize
+         " ɛ "
+         'face (if (mode-line-window-selected-p)
+                   'god-lighter-emacs 'god-lighter-emacs-dark)
+         'help-echo "Emacs mode")))
+(setq z-lighter-input-method
+      '(:eval
+        (propertize
+         (concat
+              (if (<= (length current-input-method-title) 1) " " "")
+              ;; ref mode-line-mule-info
+              current-input-method-title
+              (if (<= (length current-input-method-title) 2) " " ""))
+         'face (if (mode-line-window-selected-p)
+                   'god-lighter-emacs 'god-lighter-emacs-dark)
+         'help-echo (concat
+		     (purecopy "Current input method: ")
+		     current-input-method
+		     (purecopy "\n\
+mouse-2: Disable input method\n\
+mouse-3: Describe current input method"))
+         'local-map mode-line-input-method-map)))
 
 (z-defface-with-darken god-lighter-god "#4DB0FF")
 (setq z-lighter-god
       '(:eval
-        (propertize (let ((m (cdr (assoc nil god-mod-alist))))
-                              (cond ((string= m "C-") " ⌘ ")
-                                    ((string= m "C-M-") "⌥⌘ ")
-                                    ((string= m "M-") " ⌥ ")
-                                    ('t " ? ")))
-                    'face (if (mode-line-window-selected-p)
-                             'god-lighter-god 'god-lighter-god-dark))))
+        (propertize
+         (let ((m (cdr (assoc nil god-mod-alist))))
+           (cond ((string= m "C-") " ⌘ ")
+                 ((string= m "C-M-") "⌥⌘ ")
+                 ((string= m "M-") " ⌥ ")
+                 ('t " ? ")))
+         'face (if (mode-line-window-selected-p)
+                   'god-lighter-god 'god-lighter-god-dark)
+         'help-echo "Sticky M-: \\[god-mode-toggle-sticky-meta]\n\
+Sticky C-M-: \\[god-mode-toggle-sticky-cm]")))
 
 (z-defface-with-darken god-lighter-mortal "#88E0C0")
 (setq z-lighter-mortal
       '(:eval (propertize
                (concat " " (or current-input-method-title "I") " ")
                'face (if (mode-line-window-selected-p)
-                         'god-lighter-mortal 'god-lighter-mortal-dark))))
+                         'god-lighter-mortal 'god-lighter-mortal-dark)
+               'help-echo "Insert mode, \\[mortal-mode-exit] to exit")))
 
 (z-defface-with-darken god-lighter-view "#D8E874")
 (setq z-lighter-view
   '(:eval (propertize "⊙⊙ "
                       'face (if (mode-line-window-selected-p)
-                                'god-lighter-view 'god-lighter-view-dark))))
+                                'god-lighter-view 'god-lighter-view-dark)
+                      'help-echo "View mode (\\[view-mode])")))
 
 (z-defface-with-darken god-lighter-special "#6B77FF")
 (setq z-lighter-special
-      '(:eval (propertize
-               (concat
-                " "
-                 (cond
-                   ((eq (local-key-binding "x") 'god-mode-self-insert)
-                    (if (eq (local-key-binding "c") 'god-mode-self-insert)
-                        "*" "×"))
-                   (:else "•"))
-                 " ")
-               'face (if (mode-line-window-selected-p)
-                         'god-lighter-special 'god-lighter-special-dark))))
+      '(:eval
+        (propertize
+         (concat
+          (let ((ud (and
+                     (eq (local-key-binding "j") 'scroll-up-command)
+                     (eq (local-key-binding "k") 'scroll-down-command)))
+                (lr (and
+                     (eq (local-key-binding "a") 'move-beginning-of-line)
+                     (eq (local-key-binding "e") 'move-end-of-line))))
+            (cond
+             ((and ud lr) "⇕")
+             (ud "↕")
+             (lr "↔")
+             (:else " ")))
+          (let ((x (eq (local-key-binding "x") 'god-mode-self-insert))
+                (c (eq (local-key-binding "c") 'god-mode-self-insert)))
+            (cond
+             ((and x c) "*")
+             (x "×")
+             (c "c")
+             (:else "•")))
+          " ")
+         'face (if (mode-line-window-selected-p)
+                   'god-lighter-special 'god-lighter-special-dark))))
 
 (defvar z-lighter
   '(:eval (cond (god-local-mode z-lighter-god)
@@ -71,6 +109,7 @@ of it."
                 ((derived-mode-p 'special-mode 'dired-mode
                                  'Info-mode 'ess-help-mode)
                  z-lighter-special)
+                (current-input-method z-lighter-input-method)
                 (:else z-lighter-emacs)))
   "Leftmost lighter in mode line")
 
