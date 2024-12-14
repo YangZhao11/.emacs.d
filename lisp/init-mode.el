@@ -534,7 +534,8 @@ _q_uit │ ^^      _s_wap │ ^^       │ _r_esolve/_A_ll     _>_: base-lower �
              ("C-M-e" . outline-next-visible-heading)))
 
 ;; --------------------------------------------------
-(use-package yasnippet :demand ;; :ensure
+(use-package yasnippet
+  :defer 5
   :diminish yas-global-mode yas-minor-mode
   :config
   (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
@@ -648,12 +649,7 @@ _q_uit │ ^^      _s_wap │ ^^       │ _r_esolve/_A_ll     _>_: base-lower �
              ("M-." . nil)              ; not needed in 30
              ([remap xref-find-definitions] . js-find-symbol)))
 
-(use-package haskell-mode
-  :config
-  (defun z-haskell-mode-hook ()
-    (haskell-indentation-mode))
-  ;;(setq haskell-font-lock-symbols 't)
-  (add-hook 'haskell-mode-hook #'z-haskell-mode-hook))
+
 
 (use-package julia-repl
   :hook (julia-mode . julia-repl-mode)
@@ -700,9 +696,9 @@ _q_uit │ ^^      _s_wap │ ^^       │ _r_esolve/_A_ll     _>_: base-lower �
             (run-ess-r))))))
 
   (defun ess-smart-pipe (arg)
-    "Similar to `ess-insert-assign', but insert %>% instead."
+    "Similar to `ess-insert-assign', but insert |> instead."
     (interactive "p")
-    (let ((ess-assign-list '(" %>% ")))
+    (let ((ess-assign-list '(" |> ")))
       (ess-insert-assign arg)))
 
   (defun ess-debug-next-or-eval-line ()
@@ -759,16 +755,16 @@ _q_uit │ ^^      _s_wap │ ^^       │ _r_esolve/_A_ll     _>_: base-lower �
   :config
   (defhydra hydra-ess-help (:color pink :hint nil)
     "
-Move^^^╶─────^^^^^^^─────────╮ Eval^^^^╶──────╮ Jump^^╶────────^^───────────^^────────╮
-_k_↥ _p_rev  _[__]_:_s_ection│ _f_unction ^^  │ _h_elp-on-obj  _v_ignettes  _/_isearch│
-_j_↧ _n_ext  _<__>_:buf^^    │ _l_ine _r_egion│ _g_:revert     _i_ndex      _a_propos │
+Move^^^╶─────^^^^^^^─────────╮ Eval^^^^╶──────╮ Jump^^╶────────^^────────╮
+_k_↥ _p_rev  _[__]_:_s_ection│ _f_unction ^^  │ _h_elp-on-obj  _/_isearch│
+_j_↧ _n_ext  _<__>_:buf^^    │ _l_ine _r_egion│ _g_o           _i_ndex   │
 "
     ("/" isearch-forward)
     ("<" beginning-of-buffer)
     (">" end-of-buffer)
     ("a" ess-display-help-apropos)
     ("f" ess-eval-function-or-paragraph-and-step)
-    ("g" revert-buffer)
+    ("g" hydra-ess-help-g/body :color blue)
     ("h" ess-display-help-on-object)
     ("i" ess-display-package-index)
     ("j" scroll-up-command)
@@ -799,6 +795,16 @@ section: _a_rguments  _d_escription  _D_e_t_ails  _e_xamples  _n_ote  _r_eferenc
     ("u" ess-skip-to-help-section)
     ("v" ess-skip-to-help-section)
     ("SPC" nil))
+
+  (defhydra hydra-ess-help-g (:color pink :hint nil)
+    "
+go: _g_:revert  _a_propos  _v_ignettes _i_ndex  _h_elp-on-obj"
+    ("g" revert-buffer)
+    ("a" ess-display-help-apropos)
+    ("v" ess-display-vignettes)
+    ("i" ess-display-package-index)
+    ("h" ess-display-help-on-object)
+    ("SPC" nil))
   (bind-keys :map ess-help-mode-map
              ("<f8>" . ess-eval-line-and-step)
              ("<f9>" . ess-eval-function-or-paragraph-and-step)
@@ -810,7 +816,16 @@ section: _a_rguments  _d_escription  _D_e_t_ails  _e_xamples  _n_ote  _r_eferenc
              ("n" . next-line)
              ("p" . previous-line)
              ("x" . god-mode-self-insert)
-             ("c" . god-mode-self-insert)))
+             ("c" . god-mode-self-insert)
+             ("a" . move-beginning-of-line)
+             ("v" . scroll-up-command)
+             ;; put some keys behind g
+             ("g g" . revert-buffer)    ;original g
+             ("g a" . ess-display-help-apropos)
+             ("g v" . ess-display-vignettes)
+             ("g i" . ess-display-package-index)
+             ("g h" . ess-display-help-on-object)
+             ))
 
 
 (use-package ess-r-mode
@@ -869,7 +884,11 @@ section: _a_rguments  _d_escription  _D_e_t_ails  _e_xamples  _n_ote  _r_eferenc
 
 (use-package tex-mode
   :config
-  (bind-keys :map tex-mode-map ("C-j")))
+  (bind-keys :map tex-mode-map
+             ("C-j"))                   ; was on tex-handle-newline
+  (add-hook 'tex-mode-hook
+            (lambda ()
+              (prettify-symbols-mode 1))))
 
 (use-package mhtml-mode
   :config

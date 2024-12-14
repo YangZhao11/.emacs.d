@@ -78,8 +78,10 @@ call the two regions will be transposed."
   (interactive "*p\nd")
   (cond ((derived-mode-p 'text-mode)
          (transpose-sentences arg))
-        ((and ;; We wouldn't need this for smie enabled modes.
+        ((and
           (not (memq major-mode transpose-args-exclude-modes))
+          ;; We wouldn't need this for smie enabled modes. Also
+          ;; exclude treesitter / PEG modes?
           (not (eq forward-sexp-function #'smie-forward-sexp-command))
           (bounds-of-thing-at-point 'arg))
          (transpose-args arg))
