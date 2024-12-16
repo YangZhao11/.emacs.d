@@ -45,17 +45,18 @@
         ibuffer-eliding-string "…"
         ibuffer-expert t)
 
-  (defadvice ibuffer-make-column-filename (after strip-google3-filename activate)
-    "Strip experimental to ~user, .../a/google3 to //a/"
-    (setq ad-return-value
-          (replace-regexp-in-string "/google3/experimental/users/" "/google3/~"
-                                    ad-return-value))
-    (setq ad-return-value
-          (replace-regexp-in-string "/google/src/cloud/.*/google3/" "//"
-                                    ad-return-value))
-    (setq ad-return-value
-          (replace-regexp-in-string ".*/\\([^/]*\\)/google3/" "//\\1/"
-                                    ad-return-value)))
+  (setq long-filename-short-replacements
+        '(("/google3/experimental/users/" "/google3/~")
+          ("/google/src/cloud/.*/google3/" "//")
+          (".*/\\([^/]*\\)/google3/" "//\\1/")))
+  (defun long-filename-short (fn)
+    "Strip several long format names"
+    (dolist (rep long-filename-short-replacements)
+      (setq fn
+            (replace-regexp-in-string (car rep) (cadr rep) fn)))
+    fn)
+  (advice-add 'ibuffer-make-column-filename
+              :filter-return #'long-filename-short)
 
   (define-ibuffer-column buffer-status
     (:name "*" :inline t)

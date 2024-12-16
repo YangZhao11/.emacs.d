@@ -28,6 +28,7 @@ of it."
          'face (if (mode-line-window-selected-p)
                    'god-lighter-emacs 'god-lighter-emacs-dark)
          'help-echo "Emacs mode")))
+(put 'z-lighter-emacs 'risky-local-variable t)
 (setq z-lighter-input-method
       '(:eval
         (propertize
@@ -45,6 +46,7 @@ of it."
 mouse-2: Disable input method\n\
 mouse-3: Describe current input method"))
          'local-map mode-line-input-method-map)))
+(put 'z-lighter-input-method 'risky-local-variable t)
 
 (z-defface-with-darken god-lighter-god "#4DB0FF")
 (setq z-lighter-god
@@ -59,6 +61,7 @@ mouse-3: Describe current input method"))
                    'god-lighter-god 'god-lighter-god-dark)
          'help-echo "Sticky M-: \\[god-mode-toggle-sticky-meta]\n\
 Sticky C-M-: \\[god-mode-toggle-sticky-cm]")))
+(put 'z-lighter-god 'risky-local-variable t)
 
 (z-defface-with-darken god-lighter-mortal "#88E0C0")
 (setq z-lighter-mortal
@@ -67,6 +70,7 @@ Sticky C-M-: \\[god-mode-toggle-sticky-cm]")))
                'face (if (mode-line-window-selected-p)
                          'god-lighter-mortal 'god-lighter-mortal-dark)
                'help-echo "Insert mode, \\[mortal-mode-exit] to exit")))
+(put 'z-lighter-mortal 'risky-local-variable t)
 
 (z-defface-with-darken god-lighter-view "#D8E874")
 (setq z-lighter-view
@@ -74,6 +78,7 @@ Sticky C-M-: \\[god-mode-toggle-sticky-cm]")))
                       'face (if (mode-line-window-selected-p)
                                 'god-lighter-view 'god-lighter-view-dark)
                       'help-echo "View mode (\\[view-mode])")))
+(put 'z-lighter-view 'risky-local-variable t)
 
 (z-defface-with-darken god-lighter-special "#6B77FF")
 (setq z-lighter-special
@@ -101,6 +106,7 @@ Sticky C-M-: \\[god-mode-toggle-sticky-cm]")))
           " ")
          'face (if (mode-line-window-selected-p)
                    'god-lighter-special 'god-lighter-special-dark))))
+(put 'z-lighter-special 'risky-local-variable t)
 
 (defvar z-lighter
   '(:eval (cond (god-local-mode z-lighter-god)
@@ -112,6 +118,7 @@ Sticky C-M-: \\[god-mode-toggle-sticky-cm]")))
                 (current-input-method z-lighter-input-method)
                 (:else z-lighter-emacs)))
   "Leftmost lighter in mode line")
+(put 'z-lighter 'risky-local-variable t)
 
 (setq mode-line-frame-name
       ;; Show frame name in text frame, in the bottom right corner,
