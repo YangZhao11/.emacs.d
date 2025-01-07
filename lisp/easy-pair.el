@@ -30,6 +30,7 @@ match.  Rely on electric-pair logic here."
 
 Keep region active if needed.  Optional KILLP kills instead of
 deletes."
+  ;; TODO: use delete-pair?
   (interactive "p\nr\nP")
   (let ((s1 (buffer-substring-no-properties beg (+ beg arg)))
         (s2 (buffer-substring-no-properties (- end arg) end))

@@ -45,10 +45,11 @@
         ibuffer-eliding-string "…"
         ibuffer-expert t)
 
-  (setq long-filename-short-replacements
+  (defvar long-filename-short-replacements
         '(("/google3/experimental/users/" "/google3/~")
           ("/google/src/cloud/.*/google3/" "//")
-          (".*/\\([^/]*\\)/google3/" "//\\1/")))
+          (".*/\\([^/]*\\)/google3/" "//\\1/"))
+        "Replacement regexps to shorten filename in ibuffer.")
   (defun long-filename-short (fn)
     "Strip several long format names"
     (dolist (rep long-filename-short-replacements)

@@ -20,14 +20,19 @@ of it."
   )
 
 (z-defface-with-darken god-lighter-emacs "#90E090")
-
+(z-defface-with-darken god-lighter-mortal "#88E0C0")
 (setq z-lighter-emacs
       '(:eval
         (propertize
-         " ɛ "
-         'face (if (mode-line-window-selected-p)
-                   'god-lighter-emacs 'god-lighter-emacs-dark)
-         'help-echo "Emacs mode")))
+         (if mortal-mode " I " " ɛ ")
+         'face (let ((s (mode-line-window-selected-p))
+                     (m mortal-mode))
+                 (if m
+                     (if s 'god-lighter-mortal 'god-lighter-mortal-dark)
+                   (if s 'god-lighter-emacs 'god-lighter-emacs-dark)))
+         'help-echo (if mortal-mode
+                        "Insert mode, \\[mortal-mode-exit] to exit"
+                     "Emacs mode"))))
 (put 'z-lighter-emacs 'risky-local-variable t)
 (setq z-lighter-input-method
       '(:eval
@@ -37,14 +42,19 @@ of it."
               ;; ref mode-line-mule-info
               current-input-method-title
               (if (<= (length current-input-method-title) 2) " " ""))
-         'face (if (mode-line-window-selected-p)
-                   'god-lighter-emacs 'god-lighter-emacs-dark)
+         'face (let ((s (mode-line-window-selected-p))
+                     (m mortal-mode))
+                 (if m
+                     (if s 'god-lighter-mortal 'god-lighter-mortal-dark)
+                   (if s 'god-lighter-emacs 'god-lighter-emacs-dark)))
          'help-echo (concat
 		     (purecopy "Current input method: ")
 		     current-input-method
 		     (purecopy "\n\
 mouse-2: Disable input method\n\
-mouse-3: Describe current input method"))
+mouse-3: Describe current input method")
+                     (if mortal-mode
+                         "\nInsert mode, \\[mortal-mode-exit] to exit"))
          'local-map mode-line-input-method-map)))
 (put 'z-lighter-input-method 'risky-local-variable t)
 
@@ -59,18 +69,9 @@ mouse-3: Describe current input method"))
                  ('t " ? ")))
          'face (if (mode-line-window-selected-p)
                    'god-lighter-god 'god-lighter-god-dark)
-         'help-echo "Sticky M-: \\[god-mode-toggle-sticky-meta]\n\
-Sticky C-M-: \\[god-mode-toggle-sticky-cm]")))
+         'help-echo "\\[god-mode-toggle-sticky-meta]: Sticky M-\n\
+\\[god-mode-toggle-sticky-cm]: Sticky C-M-")))
 (put 'z-lighter-god 'risky-local-variable t)
-
-(z-defface-with-darken god-lighter-mortal "#88E0C0")
-(setq z-lighter-mortal
-      '(:eval (propertize
-               (concat " " (or current-input-method-title "I") " ")
-               'face (if (mode-line-window-selected-p)
-                         'god-lighter-mortal 'god-lighter-mortal-dark)
-               'help-echo "Insert mode, \\[mortal-mode-exit] to exit")))
-(put 'z-lighter-mortal 'risky-local-variable t)
 
 (z-defface-with-darken god-lighter-view "#D8E874")
 (setq z-lighter-view
@@ -110,7 +111,6 @@ Sticky C-M-: \\[god-mode-toggle-sticky-cm]")))
 
 (defvar z-lighter
   '(:eval (cond (god-local-mode z-lighter-god)
-                (mortal-mode z-lighter-mortal)
                 (view-mode z-lighter-view)
                 ((derived-mode-p 'special-mode 'dired-mode
                                  'Info-mode 'ess-help-mode)

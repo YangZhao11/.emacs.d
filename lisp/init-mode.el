@@ -124,9 +124,9 @@ _j_↧ _J_   _d_own│ _b__f_ _n_│ _<__>_  _(__)_ list│ _'_:goto    p_@_p �
             (lambda () (if view-mode (god-local-mode-pause)
                     (god-local-mode-resume)))))
 
-(use-package rg
-  :bind (("M-s r" . rg)
-         ("M-s R" . rg-menu)))
+;; (use-package rg
+;;   :bind (("M-s r" . rg)
+;;          ("M-s R" . rg-menu)))
 
 (use-package isearch
   :config
@@ -649,8 +649,6 @@ _q_uit │ ^^      _s_wap │ ^^       │ _r_esolve/_A_ll     _>_: base-lower �
              ("M-." . nil)              ; not needed in 30
              ([remap xref-find-definitions] . js-find-symbol)))
 
-
-
 (use-package julia-repl
   :hook (julia-mode . julia-repl-mode)
   :config
@@ -1048,8 +1046,8 @@ _j_↧  ^^⇧/^^⇥:buttons  _I_:lispref  _c_ustomize
   (setq comint-scroll-to-bottom-on-output 't
         comint-scroll-show-maximum-output nil))
 
-(use-package eterm-256color
-  :hook (term-mode . eterm-256color-mode))
+;(use-package eterm-256color
+;  :hook (term-mode . eterm-256color-mode))
 
 (provide 'init-mode)
 ;;; init-mode.el ends here
