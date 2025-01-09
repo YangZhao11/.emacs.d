@@ -1,27 +1,66 @@
 ;;; format-expand -*- lexical-binding: t -*-
 
-(defun format--parse-number-sequence (s)
+;; util functions for date handling
+(defun date-sequence (date1 date2 &optional inc)
+    ;; return a sequence of "days", using `time-to-days' epoch
+    (number-sequence
+     (date-to-day date1)
+     (date-to-day date2)
+     inc))
+
+(defun format-date (format-string date)
+  (format-time-string format-string
+                      (days-to-time (- date (time-to-days 0)))))
+
+(defun format--maybe-date-to-day (x)
+  (let ((str (if (symbolp x)
+                 (symbol-name x)
+               x)))
+    (condition-case nil (date-to-day str) (error nil))))
+
+(defun format--parse-date (n)
+  "Parse strings that represent date sequence.
+
+date num will be interpreted as date to date+num day.
+date date will be interpreted as date ranges (inclusive).
+optional third argument is INC
+"
+  (when (or (= (length n) 2)
+            (and (= (length n) 3)
+                 (numberp (nth 2 n))))
+    (let* ((n0 (nth 0 n))
+           (n1 (nth 1 n))
+           (d0 (format--maybe-date-to-day n0))
+           (d1 (format--maybe-date-to-day n1)))
+      (cond ((and d0 (numberp n1))
+             (number-sequence d0 (+ d0 n1) (nth 2 n)))
+            ((and d0 d1)
+             (number-sequence d0 d1 (nth 2 n)))))))
+
+(defun format--parse-number (n)
   "Parse strings to number sequence.
 
    10 will be interpreted as 1 to 10.
    1 10 will be interpreted as 1 to 10.
-   1 10 2 will be interpreted as 1 3 5 7 9.
-   for more than 3 items interpret verbatim."
-  (let ((n (read (format "(%s)" s))))
-    (cond ((or (> (length n) 3)
-               (not (seq-every-p #'numberp n)))
-           n)
-          ((eq (length n) 1)
-           (number-sequence 1 (nth 0 n)))
-          ((eq (length n) 2)
-           (number-sequence (nth 0 n) (nth 1 n)))
-          ((eq (length n) 3)
-           (number-sequence (nth 0 n) (nth 1 n) (nth 2 n)))
-          (t
-           (user-error "Sequence length is 0")))))
+   1 10 2 will be interpreted as 1 3 5 7 9."
+  (cond ((not (seq-every-p #'numberp n))
+         nil)
+        ((eq (length n) 1)
+         (number-sequence 1 (nth 0 n)))
+        ((eq (length n) 2)
+         (number-sequence (nth 0 n) (nth 1 n)))
+        ((eq (length n) 3)
+         (number-sequence (nth 0 n) (nth 1 n) (nth 2 n)))))
+
+(defun format--parse-sequence (s)
+  (let* ((n (read (format "(%s)" s))))
+    (or (format--parse-number n)
+        (format--parse-date n)
+        (if (> (length n) 0) n)
+        (user-error "Sequence length is 0"))))
 
 (defun format--read-sequence (prefix)
-  "Read a sequence. With any prefix arg, prompt for lisp. With universal
+  "Read a sequence. With any prefix arg, prompt for lisp. With single -
 prefix, also prompt for a transformer."
   (if prefix
       (let* ((exp
@@ -33,7 +72,7 @@ prefix, also prompt for a transformer."
               (eval (let ((lexical-binding t)) (macroexpand-all exp))
                     t)))
         ;; maybe add a transform option?
-        (if (consp prefix)
+        (if (eq prefix '-)
             (let* ((transform-exp
                    (read--expression
                     (format "%s ▷ " (query-replace-descr (format "%s" result)))
@@ -44,7 +83,7 @@ prefix, also prompt for a transformer."
                 (user-error "Transformer must be a function"))
               (mapcar transform result))
           result))
-    (format--parse-number-sequence
+    (format--parse-sequence
      (read-from-minibuffer "Seq [from to inc]: "))))
 
 (defconst format--format-str
