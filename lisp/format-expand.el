@@ -77,7 +77,8 @@ prefix, also prompt for a transformer."
                    (read--expression
                     (format "%s ▷ " (query-replace-descr (format "%s" result)))
                     "(lambda (x) x)"))
-                   (transform (eval (let ((lexical-binding t)) (macroexpand-all transform-exp))
+                   (transform (eval (let ((lexical-binding t))
+                                      (macroexpand-all transform-exp))
                                     t)))
               (unless (functionp transform)
                 (user-error "Transformer must be a function"))
