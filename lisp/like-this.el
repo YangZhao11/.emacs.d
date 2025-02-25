@@ -1,7 +1,10 @@
 ;;; like-this -- Move to next thing like this -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;    Move to next / previous thing like the thing at point. Here
-;;    "thing" can be decided using font-lock faces or thing-at-pt library.
+;;    "thing" can be decided using font-lock faces or thing-at-pt
+;;    library. Configure `like-this-try-faces' and
+;;    `like-this-try-things' for which faces and things are
+;;    considered.
 
 ;;; Code:
 
