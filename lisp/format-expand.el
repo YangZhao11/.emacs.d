@@ -60,7 +60,7 @@ optional third argument is INC
         (user-error "Sequence length is 0"))))
 
 (defun format--read-sequence (prefix)
-  "Read a sequence. With any prefix arg, prompt for lisp. With single -
+  "Read a sequence. With any prefix arg, prompt for lisp. With single `-'
 prefix, also prompt for a transformer."
   (if prefix
       (let* ((exp

@@ -87,8 +87,10 @@ mouse-3: Describe current input method")
         (propertize
          (concat
           (let ((ud (and
-                     (eq (local-key-binding "j") 'scroll-up-command)
-                     (eq (local-key-binding "k") 'scroll-down-command)))
+                     (memq (local-key-binding "j")
+                           '(scroll-up-command Info-scroll-up))
+                     (memq (local-key-binding "k")
+                           '(scroll-down-command Info-scroll-down))))
                 (lr (and
                      (eq (local-key-binding "a") 'move-beginning-of-line)
                      (eq (local-key-binding "e") 'move-end-of-line))))
@@ -137,6 +139,7 @@ mouse-3: Describe current input method")
  mode-line-modified
  mode-line-remote " " ;mode-line-frame-identification
  mode-line-buffer-identification "   " mode-line-position
+ (project-mode-line project-mode-line-format)
  (vc-mode vc-mode)
  "  " mode-line-modes mode-line-misc-info
  mode-line-format-right-align
@@ -165,6 +168,17 @@ mouse-3: Describe current input method")
       'help-echo "Editing browser content"))
 
     ((and (stringp default-directory)
+          (file-remote-p default-directory)
+          (string-prefix-p "/ssh:cloud:" default-directory))
+     (propertize
+      "ℂ"
+      'face 'font-lock-type-face
+      'mouse-face 'mode-line-highlight
+      'help-echo (purecopy (lambda (window _object _point)
+                             (concat "Current directory is on cloud: "
+                                     default-directory)))))
+
+    ((and (stringp default-directory)
           (file-remote-p default-directory))
      (propertize
       "@"
@@ -172,6 +186,12 @@ mouse-3: Describe current input method")
       'help-echo (purecopy (lambda (window _object _point)
                              (concat "Current directory is remote: "
                                      default-directory)))))
+
+    ((bound-and-true-p crdt--session)
+     (propertize
+      "‰"
+      'mouse-face 'mode-line-highlight
+      'help-echo "CRDT shared buffer"))
 
     ((bound-and-true-p server-buffer-clients)
      (propertize

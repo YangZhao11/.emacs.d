@@ -105,7 +105,7 @@ _._old ^^   │ _k_ill-ln^^^^│ _R_ename  _H_:other-f │_w_:Fname^^│ _O_ccur
     ("I" ibuffer-do-query-replace-regexp)
     ("M" ibuffer-do-toggle-modified)
     ("N" ibuffer-do-shell-command-pipe-replace)
-    ("O" ibuffer-do-occur)
+    ("O" ibuffer-do-occur :exit t)
     ("Q" ibuffer-do-query-replace)
     ("R" ibuffer-do-rename-uniquely)
     ("S" ibuffer-do-save)

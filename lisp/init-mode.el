@@ -152,6 +152,12 @@ useful when followed by an immediate kill."
 (use-package format-expand
   :bind ("M-s f" . format-expand))
 
+(use-package xref
+  :config
+  (bind-keys :map xref--xref-buffer-mode-map
+             ("[" . xref-prev-group)
+             ("]" . xref-next-group)))
+
 (use-package replace
   :bind ("M-s M-o" . multi-occur-in-matching-buffers)
   :config
@@ -263,24 +269,22 @@ _j_↧  _n_ext  _{__}_:prev/next file
 
   (defhydra hydra-dired (:color pink :hint nil)
     "
-^^Mark(_*_)╶╮ ^Flag^╶─────^^──────╮ Go^^╶(_j_ump)─╮ Dir^^╶────┬hide^^╶─╮
-_%_:regexp^^│ _#_: temp   _d_:this│ _[__]_:page   │ _s_ort     _$_ub   │
-_u_n/_m_ark │ _~_: backup _z_ap   │ _<__>_:dirline│ ʌ^^ up     _(_ detl│
-_t_oggle/_U_│ _._: № bkup   ^^    │ _{__}_:marked │ _+_create  _i_nsert│
+^^Mark(_*_)╶╮ ^Flag^╶─────^^──────╮ Go^^╶(_j_ump)─╮ Dir^^╶────^^──────┬ Subdir^^╶╮
+_%_:regexp^^│ _#_: temp   _d_:this│ _[__]_:page   │ _s_ort    _(_ detl  _i_nsert │
+_u_n/_m_ark │ _~_: backup _z_ap   │ _<__>_:dirline│ ʌ^^ up    ^^        _$_:hide │
+_t_oggle/_U_│ _._: № bkup   ^^    │ _{__}_:marked │ _+_create ^^        _K_ill   │
 
 ^Emacs Op^^^╶──────────────^^─────────╮ ^^File Op^^╶─(_e_dit)^^──^^────────┬ch╶^^╮
-_Q_uery/rep  file-t_y_pe   _v_iew     │ _!_shell_&_ _S__Y_mlink  _=_ diff   _M_od│
-_A_:grep     _L_oad        _o_ther-win│ ^^_C_opy    _H_ardlink^^ _c_ompress _O_wn│
-_B_yte comp  _k_ill-line   _a_ltern   │ ^^_D_elete  _T_ouch^^    _Z_ompress _G_rp│
-redisp_l_ay  _w_:cp Fname  ^^         │ ^^_R_ename  _P_rint^^    _W_eb      ^^   │
+_F_ind all   file-t_y_pe   _v_iew     │ _!_shell_&_ _S__Y_mlink  _=_ diff   _M_od│
+_A_:grep     _w_:cp Fname  _a_ltern   │ ^^_C_opy    _H_ardlink^^ _c_ompress _O_wn│
+_Q_uery/rep  _k_ill-line   _o_ther-win│ ^^_D_elete  _T_ouch^^    _Z_ompress _G_rp│
+_B_yte comp  _I_nfo        ^^         │ ^^_R_ename  _P_rint^^    _W_eb      ^^   │
+_L_oad       ma_N_         redisp_l_ay│ ^^_E_xt-open ^^^^        ^^         ^^   │
 "
     ("SPC" nil)
     ("RET" dired-find-file :exit t)
     ("q" quit-window :exit t)
-    ("e" dired-toggle-read-only)
     ("!" dired-do-shell-command)
-    ("m" dired-mark)
-    ("u" dired-unmark)
     ("#" dired-flag-auto-save-files)
     ("$" dired-hide-subdir)
     ("%" hydra-dired-regexp/body :exit t)
@@ -300,10 +304,15 @@ redisp_l_ay  _w_:cp Fname  ^^         │ ^^_R_ename  _P_rint^^    _W_eb      ^^
     ("B" dired-do-byte-compile)
     ("C" dired-do-copy)
     ("D" dired-do-delete)
+    ("E" dired-do-open)
+    ("F" dired-do-find-marked-files)
     ("G" dired-do-chgrp)
     ("H" dired-do-hardlink)
+    ("I" dired-do-info)
+    ("K" dired-kill-subdir)
     ("L" dired-do-load)
     ("M" dired-do-chmod)
+    ("N" dired-do-man)
     ("O" dired-do-chown)
     ("P" dired-do-print)
     ("Q" dired-do-find-regexp-and-replace)
@@ -318,13 +327,16 @@ redisp_l_ay  _w_:cp Fname  ^^         │ ^^_R_ename  _P_rint^^    _W_eb      ^^
     ("a" dired-find-alternate-file :exit t)
     ("c" dired-do-compress-to)
     ("d" dired-flag-file-deletion)
+    ("e" dired-toggle-read-only)
     ("i" dired-maybe-insert-subdir)
     ("j" dired-goto-file)
     ("k" dired-do-kill-lines)
     ("l" dired-do-redisplay)
+    ("m" dired-mark)
     ("o" dired-find-file-other-window :exit t)
     ("s" dired-sort-toggle-or-edit)
     ("t" dired-toggle-marks)
+    ("u" dired-unmark)
     ("v" dired-view-file :exit t)
     ("w" dired-copy-filename-as-kill)
     ("z" dired-do-flagged-delete)
@@ -377,6 +389,7 @@ redisp_l_ay  _w_:cp Fname  ^^         │ ^^_R_ename  _P_rint^^    _W_eb      ^^
              ("z" . dired-do-flagged-delete)
              ("x" . god-mode-self-insert)
              ("e" . dired-toggle-read-only)
+             ("K" . dired-kill-subdir)
              ("SPC" . hydra-dired/body)
              ("* SPC" . hydra-dired-mark/body)
              ("% SPC" . hydra-dired-regexp/body)))
@@ -570,6 +583,16 @@ _q_uit │ ^^      _s_wap │ ^^       │ _r_esolve/_A_ll     _>_: base-lower �
              ("M-g f"   . flymake-goto-next-error)
              ("M-g b"   . flymake-goto-prev-error)))
 
+(use-package completion-preview
+  :config
+  (bind-keys :map completion-preview-active-mode-map
+             ("M-i")                    ; conflicts with goto-chg
+             ("C-M-i" . completion-preview-complete)
+             ("M-n" . completion-preview-next-candidate)
+             ("M-p" . completion-preview-prev-candidate)
+             ("<remap> <forward-word>" . completion-preview-insert-word)
+             ("<remap> <forward-sexp>" . completion-preview-insert-sexp)))
+
 ;; --------------------------------------------------
 ;;; modes
 
@@ -595,12 +618,14 @@ _q_uit │ ^^      _s_wap │ ^^       │ _r_esolve/_A_ll     _>_: base-lower �
 
   ;; see use-package-core.el; somehow I still need this for emacs 30
   (font-lock-add-keywords 'emacs-lisp-mode use-package-font-lock-keywords)
+
   (defun z-elisp-mode-hook ()
     (z-setup-imenu-for-elisp)
     ; turn on read-only mode for emacs bundled elisp files
     (when (string-prefix-p emacs-lisp-directory
                           (buffer-file-name))
-      (read-only-mode 1)))
+      (read-only-mode 1))
+    (completion-preview-mode 1))
   (add-hook 'emacs-lisp-mode-hook #'z-elisp-mode-hook)
   (bind-keys :map emacs-lisp-mode-map
              ("M-L" . string-inflection-kebab-case))
@@ -963,6 +988,7 @@ _j_↧ │ _f_ollow    │ _r_:forward│ _P_←∙→_N_^^ ╭In file:_T_OC^^ �
     ("k" Info-scroll-down))
   (bind-keys :map Info-mode-map
              ("SPC" . hydra-info/body)
+             ("e" . move-end-of-line)
              ("j" . Info-scroll-up)
              ("k" . Info-scroll-down)
              ("n" . next-line)
@@ -1045,6 +1071,10 @@ _j_↧  ^^⇧/^^⇥:buttons  _I_:lispref  _c_ustomize
   (ansi-color-for-comint-mode-on)
   (setq comint-scroll-to-bottom-on-output 't
         comint-scroll-show-maximum-output nil))
+
+(use-package tramp-sh
+  :config
+  (setq tramp-use-ssh-controlmaster-options nil))
 
 ;(use-package eterm-256color
 ;  :hook (term-mode . eterm-256color-mode))

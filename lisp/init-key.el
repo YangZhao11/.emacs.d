@@ -7,26 +7,7 @@
 
 ;; Add several custom shortcuts in the TeX input method.
 (eval-after-load "quail/Latin-ltx"
-  '(let ((quail-current-package (assoc "TeX" quail-package-alist)))
-     (quail-define-rules
-      ((append . t))
-      ("^\\alpha" ?ᵅ) ("\\sqrt" ?√)
-      ("\\mathbb{A}" ?𝔸) ("\\mathbb{B}" ?𝔹)
-      ("\\mathbb{C}" ?ℂ) ("\\mathbb{D}" ?𝔻)
-      ("\\mathbb{E}" ?𝔼) ("\\mathbb{F}" ?𝔽)
-      ("\\mathbb{G}" ?𝔾) ("\\mathbb{H}" ?ℍ)
-      ("\\mathbb{I}" ?𝕀) ("\\mathbb{J}" ?𝕁)
-      ("\\mathbb{K}" ?𝕂) ("\\mathbb{L}" ?𝕃)
-      ("\\mathbb{M}" ?𝕄) ("\\mathbb{N}" ?ℕ)
-      ("\\mathbb{O}" ?𝕆) ("\\mathbb{P}" ?ℙ)
-      ("\\mathbb{Q}" ?ℚ) ("\\mathbb{R}" ?ℝ)
-      ("\\mathbb{S}" ?𝕊) ("\\mathbb{T}" ?𝕋)
-      ("\\mathbb{U}" ?𝕌) ("\\mathbb{V}" ?𝕍)
-      ("\\mathbb{W}" ?𝕎) ("\\mathbb{X}" ?𝕏)
-      ("\\mathbb{Y}" ?𝕐) ("\\mathbb{Z}" ?ℤ)
-      ("\\mathbb{0}" ?𝟘) ("\\mathbb{1}" ?𝟙)
-      ("\\rarr" ?→) ("\\larr" ?←) ("\\uarr" ?↑) ("\\darr" ?↓)
-      ("\\Rarr" ?⇒) ("\\Larr" ?⇐) ("\\Uarr" ?⇑) ("\\Darr" ?⇓))))
+  '(load "init-tex-input-method"))
 
 (defun z-setup-terminal ()
   ;; Translate ESC-* to M-*. This is needed for `read-key' to
