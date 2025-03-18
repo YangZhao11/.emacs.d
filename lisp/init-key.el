@@ -685,7 +685,19 @@ in `ctl-j-map' first."
   ;;       orderless-component-separator #'orderless-escapable-split-on-space)
   (setq completion-styles '(orderless)
         completion-category-defaults nil
-        completion-category-overrides '((file (styles partial-completion)))))
+        completion-category-overrides '((file (styles partial-completion))))
+  (defun first-prefix-dispatch (pattern index _total)
+    (if (= index 0) 'orderless-literal-prefix))
+  (orderless-define-completion-style orderless-first-prefix
+    (orderless-style-dispatchers '(first-prefix-dispatch
+                                   orderless-affix-dispatch)))
+  )
+
+(use-package corfu
+  :bind (:map corfu-map
+              ([remap set-mark-command] . corfu-insert-separator))
+  :init
+  (global-corfu-mode))
 
 (use-package marginalia :ensure
   :after vertico
@@ -724,6 +736,7 @@ in `ctl-j-map' first."
          ([remap switch-to-buffer] . consult-buffer)
          ([remap switch-to-buffer-other-window] . consult-buffer-other-window)
          ([remap switch-to-buffer-other-frame] . consult-buffer-other-frame)
+         ([remap switch-to-buffer-other-tab] . consult-buffer-other-tab)
          ([remap project-switch-to-buffer] . consult-project-buffer)
          ;; C-c C-l in `comint-mode-map'
          ([remap comint-dynamic-list-input-ring] . consult-history)
@@ -745,7 +758,7 @@ in `ctl-j-map' first."
   (setq consult-goto-line-numbers nil)
 
   ;; This might conflict with LSP stuff, see consult doc
-  (setq completion-in-region-function #'consult-completion-in-region)
+  ;(setq completion-in-region-function #'consult-completion-in-region)
   (keymap-set consult-narrow-map "C-h" #'consult-narrow-help))
 
 (use-package consult-imenu
@@ -762,7 +775,9 @@ in `ctl-j-map' first."
               ("C-k" . consult-register-store))
   :init
   ;; Better preview of registers.
-  (setq register-preview-function #'consult-register-format))
+  (setq register-preview-function #'consult-register-format)
+  ;; (advice-add #'register-preview :override #'consult-register-window)
+  )
 
 (use-package embark :ensure
   :after vertico

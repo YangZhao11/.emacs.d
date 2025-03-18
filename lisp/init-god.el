@@ -35,11 +35,9 @@ SPEC could be `box', `bar', or `hbar'."
   (interactive)
   (god-local-mode-resume)
   (mortal-mode 0))
-(defvar mortal-mode-map
-  (let ((m (make-sparse-keymap)))
-    (keymap-set m "RET" 'mortal-mode-exit)
-    m)
-  "Keymap for `mortal-mode'.")
+(defvar-keymap mortal-mode-map
+  :doc "Keymap for `mortal-mode'."
+  "RET" #'mortal-mode-exit)
 
 (define-minor-mode mortal-mode
   "Allow temporary departures from god-mode."

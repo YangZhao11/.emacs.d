@@ -39,6 +39,8 @@
 
 (show-paren-mode 1)
 (setq show-paren-when-point-in-periphery 't)
+(setq show-paren-context-when-offscreen 'overlay)
+(setq blink-matching-paren-highlight-offscreen 't)
 (electric-pair-mode 1)
 
 (savehist-mode 1)
@@ -79,11 +81,14 @@ PROP set to true to add properties for mode line."
        "♢"
        'help-echo "Buffer is not modified")))))
 
-;; Add prompt indicator to `completing-read-multiple'. Also see
-;; `crm-separator'.
-(defun crm-indicator (args)
-  (cons (concat "[,] " (car args)) (cdr args)))
-(advice-add #'completing-read-multiple :filter-args #'crm-indicator)
+(when (< emacs-major-version 31)
+  ;; Add prompt indicator to `completing-read-multiple'. Also see
+  ;; `crm-separator'.
+  (defun crm-indicator (args)
+    (cons (concat "[,] " (car args)) (cdr args)))
+  (advice-add #'completing-read-multiple :filter-args #'crm-indicator))
+;; only in 31
+(setq crm-prompt "[%s] %p")
 
 ;; Do not allow the cursor in the minibuffer prompt
 (setq minibuffer-prompt-properties

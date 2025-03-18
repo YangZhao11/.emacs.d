@@ -585,13 +585,15 @@ _q_uit │ ^^      _s_wap │ ^^       │ _r_esolve/_A_ll     _>_: base-lower �
 
 (use-package completion-preview
   :config
+  (setq completion-preview-completion-styles '(orderless-first-prefix))
   (bind-keys :map completion-preview-active-mode-map
              ("M-i")                    ; conflicts with goto-chg
+             ;; consult capf seems to mess up the preview when completing
              ("C-M-i" . completion-preview-complete)
              ("M-n" . completion-preview-next-candidate)
              ("M-p" . completion-preview-prev-candidate)
-             ("<remap> <forward-word>" . completion-preview-insert-word)
-             ("<remap> <forward-sexp>" . completion-preview-insert-sexp)))
+             ([remap forward-word] . completion-preview-insert-word)
+             ([remap forward-sexp] . completion-preview-insert-sexp)))
 
 ;; --------------------------------------------------
 ;;; modes
@@ -893,6 +895,12 @@ go: _g_:revert  _a_propos  _v_ignettes _i_ndex  _h_elp-on-obj"
              ("\\" . ess-smart-pipe)
              (";" .  ess-cycle-assign)))
 
+(use-package text-mode
+  :config
+  (bind-keys :map text-mode-map
+             ("C-M-a" . backward-paragraph)
+             ("C-M-e" . forward-paragraph)))
+
 (use-package markdown-mode
   :mode ("\\.md\\'" . markdown-mode)
   :init
@@ -1046,8 +1054,12 @@ _j_↧  ^^⇧/^^⇥:buttons  _I_:lispref  _c_ustomize
           ("face" ,#'facep ,(lambda (s _b _f) (describe-face s)))))
   )
 
-(use-package server :diminish (server-buffer-clients . " #"))
-(add-hook 'after-init-hook 'server-start)
+(use-package server :diminish (server-buffer-clients . " #")
+  :init (add-hook 'after-init-hook 'server-start)
+  ;; :config
+  ;; (setq server-use-tcp 't)
+  ;; (setq server-port 9527)
+  )
 
 (use-package shell
   :config
@@ -1074,7 +1086,13 @@ _j_↧  ^^⇧/^^⇥:buttons  _I_:lispref  _c_ustomize
 
 (use-package tramp-sh
   :config
-  (setq tramp-use-ssh-controlmaster-options nil))
+  ;; does not work if this is loaded directly. Delay this a bit
+  (run-with-timer
+   10 nil
+   (lambda ()
+     (setq tramp-use-ssh-controlmaster-options nil)
+     (setq tramp-use-connection-share nil)))
+)
 
 ;(use-package eterm-256color
 ;  :hook (term-mode . eterm-256color-mode))

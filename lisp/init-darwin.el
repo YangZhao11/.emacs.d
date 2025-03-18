@@ -11,8 +11,8 @@
       mac-right-command-modifier 'control)
 (add-to-list 'exec-path "/usr/local/bin")
 (add-to-list 'exec-path "/usr/local/git/current/bin")
-(add-to-list 'exec-path "/usr/local/brew/sbin")
-(add-to-list 'exec-path "/usr/local/brew/bin")
+(add-to-list 'exec-path "/opt/homebrew/sbin")
+(add-to-list 'exec-path "/opt/homebrew/bin")
 (add-to-list 'exec-path "~/bin")
 
 ;; Fix environment variables

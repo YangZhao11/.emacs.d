@@ -1,7 +1,7 @@
 ; -*- coding: utf-8; lexical-binding: t -*-
 
 (defface god-lighter
-  '((t :inherit mode-line :foreground "black"))
+  '((t :inherit mode-line :foreground "black" :group god))
   "Face for god-lighter")
 
 
@@ -11,11 +11,11 @@ of it."
   (let ((face-dark (intern (concat (symbol-name face) "-dark"))))
     `(progn
        (defface ,face
-       '((t :inherit god-lighter :background ,col))
+       '((t :inherit god-lighter :background ,col :group god))
        ,(concat "Face for " (symbol-name face)))
        (defface ,face-dark
          ;; blend with (face-background 'mode-line-inactive)
-       '((t :inherit god-lighter :background ,(doom-blend col "#353535" .5)))
+       '((t :inherit god-lighter :background ,(doom-blend col "#353535" .5) :group god))
      ,(concat "Face for " (symbol-name face-dark)))))
   )
 
@@ -73,12 +73,31 @@ mouse-3: Describe current input method")
 \\[god-mode-toggle-sticky-cm]: Sticky C-M-")))
 (put 'z-lighter-god 'risky-local-variable t)
 
+(defun z-lighter-arrow-char ()
+  "Arrow char for the lighter"
+  (let ((ud (and
+             (memq (key-binding "j")
+                   '(scroll-up-command Info-scroll-up View-scroll-page-forward))
+             (memq (key-binding "k")
+                   '(scroll-down-command Info-scroll-down View-scroll-page-backward))))
+        (lr (and
+             (eq (key-binding "a") 'move-beginning-of-line)
+             (eq (key-binding "e") 'move-end-of-line))))
+    (cond
+     ((and ud lr) "+")
+     (ud "↕")
+     (lr "↔")
+     (:else " "))))
+
 (z-defface-with-darken god-lighter-view "#D8E874")
 (setq z-lighter-view
-  '(:eval (propertize "⊙⊙ "
-                      'face (if (mode-line-window-selected-p)
-                                'god-lighter-view 'god-lighter-view-dark)
-                      'help-echo "View mode (\\[view-mode])")))
+      '(:eval (propertize
+               (concat
+                (z-lighter-arrow-char)
+                "ν ")
+               'face (if (mode-line-window-selected-p)
+                         'god-lighter-view 'god-lighter-view-dark)
+               'help-echo "View mode (\\[view-mode])")))
 (put 'z-lighter-view 'risky-local-variable t)
 
 (z-defface-with-darken god-lighter-special "#6B77FF")
@@ -86,21 +105,9 @@ mouse-3: Describe current input method")
       '(:eval
         (propertize
          (concat
-          (let ((ud (and
-                     (memq (local-key-binding "j")
-                           '(scroll-up-command Info-scroll-up))
-                     (memq (local-key-binding "k")
-                           '(scroll-down-command Info-scroll-down))))
-                (lr (and
-                     (eq (local-key-binding "a") 'move-beginning-of-line)
-                     (eq (local-key-binding "e") 'move-end-of-line))))
-            (cond
-             ((and ud lr) "⇕")
-             (ud "↕")
-             (lr "↔")
-             (:else " ")))
-          (let ((x (eq (local-key-binding "x") 'god-mode-self-insert))
-                (c (eq (local-key-binding "c") 'god-mode-self-insert)))
+          (z-lighter-arrow-char)
+          (let ((x (eq (key-binding "x") 'god-mode-self-insert))
+                (c (eq (key-binding "c") 'god-mode-self-insert)))
             (cond
              ((and x c) "*")
              (x "×")
@@ -115,7 +122,8 @@ mouse-3: Describe current input method")
   '(:eval (cond (god-local-mode z-lighter-god)
                 (view-mode z-lighter-view)
                 ((derived-mode-p 'special-mode 'dired-mode
-                                 'Info-mode 'ess-help-mode)
+                                 'Info-mode 'ess-help-mode
+                                 'emacs-news-view-mode)
                  z-lighter-special)
                 (current-input-method z-lighter-input-method)
                 (:else z-lighter-emacs)))
@@ -137,13 +145,19 @@ mouse-3: Describe current input method")
  mode-line-front-space mode-line-mule-info
  ;; mode-line-client
  mode-line-modified
- mode-line-remote " " ;mode-line-frame-identification
+ mode-line-remote
+ mode-line-window-dedicated
+" " ;mode-line-frame-identification
  mode-line-buffer-identification "   " mode-line-position
- (project-mode-line project-mode-line-format)
- (vc-mode vc-mode)
  "  " mode-line-modes mode-line-misc-info
  mode-line-format-right-align
- mode-line-frame-name))
+ (vc-mode vc-mode)
+ (project-mode-line project-mode-line-format)
+ " "
+; mode-line-frame-name
+))
+(setq project-mode-line 't)
+(setq project-mode-line-face 'font-lock--face)
 
 ;; remove input method from mode-line-mule-info, this is already
 ;; handled by z-lighter.
@@ -221,3 +235,6 @@ mouse-3: Describe current input method")
 (set-display-table-slot standard-display-table 'wrap ?↵)
 (set-display-table-slot standard-display-table 'selective-display [?…])
 (set-display-table-slot standard-display-table 'vertical-border ?│)
+;; tty box unicode from 31
+(when (fboundp #'standard-display-unicode-special-glyphs)
+  (standard-display-unicode-special-glyphs))
