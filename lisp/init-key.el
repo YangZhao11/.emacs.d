@@ -13,6 +13,7 @@
   ;; Translate ESC-* to M-*. This is needed for `read-key' to
   ;; recognize M-z in one step (otherwise it'll ready the ESC only).
   (cl-loop for c from ?! to ?~ do
+           ;; M-[ and M-O are used in function keys
            (when (not (memq c '(?\[ ?O)))
              (keymap-set input-decode-map
                (concat "ESC " (char-to-string c))
@@ -289,8 +290,7 @@ If ARG is non-nil and we are on terminal, then call
     "Like `exchange-point-and-mark', but ARG means toggle active region,
 instead of inactivate region."
     (interactive "P")
-    (let ((active (or (and arg (not (use-region-p)))
-                      (and (not arg) (use-region-p)))))
+    (let ((active (xor arg (use-region-p))))
       (if (and (bound-and-true-p rectangle-mark-mode)
                (fboundp 'rectangle-exchange-point-and-mark))
           (rectangle-exchange-point-and-mark (not active))
@@ -431,7 +431,7 @@ Toggle:
 %s(ballotbox rainbow-identifiers-mode) rainbow-_i_dentifiers ^^ %s(ballotbox auto-fill-function \"¶\") auto-_f_ill    %s(if (bound-and-true-p subword-mode) \",\" (if (bound-and-true-p superword-mode) \"²\" \"·\")) sub_w_ord/super_W_ord   %s(ballotbox xterm-mouse-mode) _x_term-mouse
 %s(ballotbox rainbow-mode) _R_ainbow colors       ^^%s(ballotbox visual-line-mode \"↵\") visual-lin_e_  %s(ballotbox flyspell-mode \"⍹\") fl_y_spell/_p_rog       %s(ballotbox electric-quote-mode) elec-_'_
 %s(ballotbox hi-lock-mode) _h_i-lock/_c_hanges      %s(ballotbox auto-revert-mode \"↻\") auto-_r_evert  %s(ballotbox which-function-mode) which-f_u_nc
-%s(ballotbox whitespace-mode \"␣\") white_s_pace/_t_railing  %s(ballotbox display-line-numbers-mode) line _n_um     %s(ballotbox flymake-mode) fly_m_ake
+%s(ballotbox whitespace-mode \"␣\") white_s_pace/_t_railing  %s(ballotbox display-line-numbers-mode) line-_n_um     %s(ballotbox flymake-mode) fly_m_ake
 "
   ("'"    electric-quote-mode)
   ("a"    abbrev-mode)
@@ -476,7 +476,10 @@ Toggle:
 
 (use-package flyspell :diminish " ⍹"
   :commands (flyspell-mode flyspell-prog-mode)
-  :hook (text-mode . turn-on-flyspell))
+  :hook (text-mode . turn-on-flyspell)
+  :config
+  (bind-keys :map flyspell-mode-map
+            ("C-M-i")))
 
 (use-package rainbow-delimiters :ensure
   :commands (rainbow-delimiters-mode)

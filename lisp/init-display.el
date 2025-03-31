@@ -1,8 +1,9 @@
 ; -*- coding: utf-8; lexical-binding: t -*-
 
 (defface god-lighter
-  '((t :inherit mode-line :foreground "black" :group god))
-  "Face for god-lighter")
+  '((t :inherit mode-line :foreground "black"))
+  "Face for god-lighter"
+  :group 'god)
 
 
 (defmacro z-defface-with-darken (face col)
@@ -11,12 +12,14 @@ of it."
   (let ((face-dark (intern (concat (symbol-name face) "-dark"))))
     `(progn
        (defface ,face
-       '((t :inherit god-lighter :background ,col :group god))
-       ,(concat "Face for " (symbol-name face)))
+       '((t :inherit god-lighter :background ,col))
+       ,(concat "Face for " (symbol-name face))
+       :group 'god)
        (defface ,face-dark
          ;; blend with (face-background 'mode-line-inactive)
-       '((t :inherit god-lighter :background ,(doom-blend col "#353535" .5) :group god))
-     ,(concat "Face for " (symbol-name face-dark)))))
+       '((t :inherit god-lighter :background ,(doom-blend col "#353535" .5)))
+       ,(concat "Face for " (symbol-name face-dark))
+        :group 'god)))
   )
 
 (z-defface-with-darken god-lighter-emacs "#90E090")
@@ -59,18 +62,21 @@ mouse-3: Describe current input method")
 (put 'z-lighter-input-method 'risky-local-variable t)
 
 (z-defface-with-darken god-lighter-god "#4DB0FF")
-(setq z-lighter-god
-      '(:eval
-        (propertize
-         (let ((m (cdr (assoc nil god-mod-alist))))
+
+(defun z-lighter-god-mod-char ()
+  (let ((m (cdr (assoc nil god-mod-alist))))
            (cond ((string= m "C-") " ⌘ ")
                  ((string= m "C-M-") "⌥⌘ ")
                  ((string= m "M-") " ⌥ ")
-                 ('t " ? ")))
+                 ('t " ? "))))
+(setq z-lighter-god
+      '(:eval
+        (propertize
+         (z-lighter-god-mod-char)
          'face (if (mode-line-window-selected-p)
                    'god-lighter-god 'god-lighter-god-dark)
-         'help-echo "\\[god-mode-toggle-sticky-meta]: Sticky M-\n\
-\\[god-mode-toggle-sticky-cm]: Sticky C-M-")))
+         'help-echo "\\[god-mode-toggle-sticky-meta]: Sticky M-*\n\
+\\[god-mode-toggle-sticky-cm]: Sticky C-M-*")))
 (put 'z-lighter-god 'risky-local-variable t)
 
 (defun z-lighter-arrow-char ()
@@ -100,19 +106,22 @@ mouse-3: Describe current input method")
                'help-echo "View mode (\\[view-mode])")))
 (put 'z-lighter-view 'risky-local-variable t)
 
+(defun z-lighter-xc-char ()
+  (let ((x (eq (key-binding "x") 'god-mode-self-insert))
+        (c (eq (key-binding "c") 'god-mode-self-insert)))
+    (cond
+     ((and x c) "*")
+     (x "x")
+     (c "c")
+     (:else "•"))))
+
 (z-defface-with-darken god-lighter-special "#6B77FF")
 (setq z-lighter-special
       '(:eval
         (propertize
          (concat
           (z-lighter-arrow-char)
-          (let ((x (eq (key-binding "x") 'god-mode-self-insert))
-                (c (eq (key-binding "c") 'god-mode-self-insert)))
-            (cond
-             ((and x c) "*")
-             (x "×")
-             (c "c")
-             (:else "•")))
+          (z-lighter-xc-char)
           " ")
          'face (if (mode-line-window-selected-p)
                    'god-lighter-special 'god-lighter-special-dark))))

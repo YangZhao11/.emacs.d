@@ -575,7 +575,7 @@ _q_uit │ ^^      _s_wap │ ^^       │ _r_esolve/_A_ll     _>_: base-lower �
   :commands (flymake-mode)
   :config
 
-  (setq flymake-mode-line-lighter "m~")
+  (setq flymake-mode-line-lighter "")
 
   (bind-keys :map flymake-mode-map
              ("M-g k"   . consult-flymake)
@@ -670,11 +670,11 @@ _q_uit │ ^^      _s_wap │ ^^       │ _r_esolve/_A_ll     _>_: base-lower �
     )
   (add-hook 'go-mode-hook #'z-go-mode-hook))
 
-(use-package js
-  :config
-  (bind-keys :map js-mode-map
-             ("M-." . nil)              ; not needed in 30
-             ([remap xref-find-definitions] . js-find-symbol)))
+;; (use-package js
+;;   :config
+;;   (bind-keys :map js-mode-map
+;;              ("M-." . nil)              ; not needed in 30
+;;              ([remap xref-find-definitions] . js-find-symbol)))
 
 (use-package julia-repl
   :hook (julia-mode . julia-repl-mode)
@@ -892,6 +892,8 @@ go: _g_:revert  _a_propos  _v_ignettes _i_ndex  _h_elp-on-obj"
              ("<f7>" . ess-show-R-traceback)
              ("C-x <f8>" . ess-tracebug)
              ("_")
+             ("C-M-a" . comint-previous-prompt)
+             ("C-M-e" . comint-next-prompt)
              ("\\" . ess-smart-pipe)
              (";" .  ess-cycle-assign)))
 
