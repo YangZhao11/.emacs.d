@@ -191,7 +191,6 @@ If ARG is non-nil and we are on terminal, then call
   :bind (:map region-bindings-mode-map
               ("C-t" . transpose-dwim-regions)))
 
-
 (use-package easy-kill :ensure
   :functions (easy-kill-mark-region easy-kill-exit)
   :bind ([remap kill-ring-save] . easy-kill)
@@ -283,7 +282,8 @@ If ARG is non-nil and we are on terminal, then call
   (defun cycle-spacing-0 ()
     "Remove adjacent spaces, but undo if the command is issued a second time."
     (interactive)
-    (cycle-spacing 0))
+    (let ((cycle-spacing-actions '(delete-all-space restore)))
+      (call-interactively #'cycle-spacing)))
 
   ;; Decouple exchange-point-and-mark and activating region.
   (defun z-exchange-point-and-mark (&optional arg)
