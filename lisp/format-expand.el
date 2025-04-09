@@ -1,4 +1,11 @@
-;;; format-expand -*- lexical-binding: t -*-
+;;; format-expand --- expand a template -*- lexical-binding: t -*-
+
+;;; Commentary:
+
+;;; Select a template string, and expand it like a loop, using loop
+;;; variable x. For example, if the template is "%d-%(1+ x)d", and we
+;;; loop through 1 to 10, we will get 1-2, 2-3, ... till 10-11. We do
+;;; not automatically add a separator.
 
 ;; util functions for date handling
 (defun date-sequence (date1 date2 &optional inc)
@@ -8,8 +15,9 @@
      (date-to-day date2)
      inc))
 
-(defun format-date (format-string date)
-  (format-time-string format-string
+(defun format-date (str date)
+  "Format STR, replacing %-constructs with components from DATE."
+  (format-time-string str
                       (days-to-time (- date (time-to-days 0)))))
 
 (defun format--maybe-date-to-day (x)
@@ -99,8 +107,7 @@ prefix, also prompt for a transformer."
 (defun format--parse-template (str)
   "Parse % forms in STR, return a list of (STR FORMS).
 
-Each element of FORMS corresponds to a `format'-style % form in STR.
-"
+Each element of FORMS corresponds to a `format'-style % form in STR."
   (let ((start 0)
         forms beg fexp)
     (condition-case nil
