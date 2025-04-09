@@ -30,8 +30,11 @@ SPEC could be `box', `bar', or `hbar'."
   (dolist (f (frame-list))
     (with-selected-frame f (set-cursor-type spec))))
 
+;; maybe record kmacro during mortal mode, so that the whole action
+;; can be repeated as a whole. However, emacs macro does not work
+;; recursively.
 (defun mortal-mode-exit ()
-  "Exit mortal-mode and resume god mode."
+  "Exit mortal-mode and resume god mode. Bind to RET."
   (interactive)
   (god-local-mode-resume)
   (mortal-mode 0))
