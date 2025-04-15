@@ -275,7 +275,10 @@ _<_ size _>_       _c_ontent  │ proc_E_ss    _↑_ _p_op^^    │ _P_op \\:cle
                         (name . "^\\*ESS-")))
             . ,(ibuffer-project-generate-filter-groups))))
   (z-ibuffer-hook)             ; ensure groups are set on the first run.
-  (add-hook 'ibuffer-hook 'z-ibuffer-hook))
+  (add-hook 'ibuffer-hook 'z-ibuffer-hook)
+
+  (put 'ibuffer-forward-line 'command-semantic 'next-line)
+  (put 'ibuffer-backward-line 'command-semantic 'previous-line))
 
 ;; how to solve collision of buffer names: filename:pathpart
 (use-package uniquify

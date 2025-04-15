@@ -120,9 +120,13 @@ _j_↧ _J_   _d_own│ _b__f_ _n_│ _<__>_  _(__)_ list│ _'_:goto    p_@_p �
              ("z" . repeat)
              ;;("C-x k" . View-kill-and-leave)
              )
+
+  (put 'View-scroll-page-forward 'command-semantic 'scroll-up-command)
+  (put 'View-scroll-page-backward 'command-semantic 'scroll-down-command)
+
   (add-hook 'view-mode-hook
             (lambda () (if view-mode (god-local-mode-pause)
-                    (god-local-mode-resume)))))
+                         (god-local-mode-resume)))))
 
 ;; (use-package rg
 ;;   :bind (("M-s r" . rg)
@@ -189,7 +193,11 @@ _j_↧   _n_ext^^   _d_isplay^^   _o_ther-win   %s(if next-error-follow-minor-mo
              ("p" . occur-prev)
              ("x" . god-mode-self-insert)
              ("c" . god-mode-self-insert)
-             ("SPC" . hydra-occur/body)))
+             ("SPC" . hydra-occur/body))
+
+  ;; For lighter hint
+  (put 'occur-next 'command-semantic 'next-line)
+  (put 'occur-prev 'command-semantic 'previous-line))
 
 (use-package grep
   :bind (("M-s g" . grep)
@@ -258,7 +266,10 @@ _j_↧  _n_ext  _{__}_:prev/next file
              ("n" . compilation-next-error)
              ("p" . compilation-previous-error)
              ("{" . compilation-previous-file)
-             ("}" . compilation-next-file)))
+             ("}" . compilation-next-file))
+
+  (put 'compilation-next-error 'command-semantic 'next-line)
+  (put 'compilation-previous-error 'command-semantic 'previous-line))
 
 (use-package dired
   :bind (("C-x C-d" . dired)
@@ -392,7 +403,9 @@ _L_oad       ma_N_         redisp_l_ay│ ^^_E_xt-open ^^^^        ^^         ^^
              ("K" . dired-kill-subdir)
              ("SPC" . hydra-dired/body)
              ("* SPC" . hydra-dired-mark/body)
-             ("% SPC" . hydra-dired-regexp/body)))
+             ("% SPC" . hydra-dired-regexp/body))
+  (put 'dired-next-line 'command-semantic 'next-line)
+  (put 'dired-previous-line 'command-semantic 'previous-line))
 
 (use-package package
   :init
@@ -513,7 +526,9 @@ _q_uit │ ^^      _s_wap │ ^^       │ _r_esolve/_A_ll     _>_: base-lower �
   (bind-keys :map magit-mode-map
              ("[" . magit-section-backward-sibling)
              ("]" . magit-section-forward-sibling)
-             ("x" . god-mode-self-insert)))
+             ("x" . god-mode-self-insert))
+  (put 'magit-section-forward 'command-semantic 'next-line)
+  (put 'magit-section-backward 'command-semantic 'previous-line))
 
 (use-package eldoc :diminish eldoc-mode
   :commands eldoc-mode)
@@ -565,10 +580,15 @@ _q_uit │ ^^      _s_wap │ ^^       │ _r_esolve/_A_ll     _>_: base-lower �
   (yas-global-mode))
 
 (defun z-re-backward (re count)
-  "Search RE backward, return COUNT submatch.  Used in snippets."
+  "Search RE backward, return COUNT submatch.  Used in snippets.
+
+Limit search to a few pages before."
   (save-excursion
     (save-match-data
-      (when (re-search-backward re (point-min) t)
+      (when (re-search-backward
+             re
+             (max (point-min)
+                  (- (window-start) 5000)) t)
         (match-string count)))))
 
 (use-package flymake
@@ -584,6 +604,7 @@ _q_uit │ ^^      _s_wap │ ^^       │ _r_esolve/_A_ll     _>_: base-lower �
              ("M-g b"   . flymake-goto-prev-error)))
 
 (use-package completion-preview
+  :diminish " ©"
   :config
   (setq completion-preview-completion-styles '(orderless-first-prefix))
   (bind-keys :map completion-preview-active-mode-map
@@ -843,6 +864,7 @@ go: _g_:revert  _a_propos  _v_ignettes _i_ndex  _h_elp-on-obj"
              ("x" . god-mode-self-insert)
              ("c" . god-mode-self-insert)
              ("a" . move-beginning-of-line)
+             ;; e already bound to move-end-of-line
              ("v" . scroll-up-command)
              ;; put some keys behind g
              ("g g" . revert-buffer)    ;original g
@@ -1009,7 +1031,10 @@ _j_↧ │ _f_ollow    │ _r_:forward│ _P_←∙→_N_^^ ╭In file:_T_OC^^ �
              ("M-g i" . Info-menu)
              ("{" . backward-paragraph)
              ("}" . forward-paragraph)
-             ("x" . god-mode-self-insert)))
+             ("x" . god-mode-self-insert))
+
+  (put 'Info-scroll-up 'command-semantic 'scroll-up-command)
+  (put 'Info-scroll-down 'command-semantic 'scroll-down-command))
 
 (use-package help-mode
   :config

@@ -81,18 +81,23 @@ mouse-3: Describe current input method")
 
 (defun z-lighter-arrow-char ()
   "Arrow char for the lighter"
-  (let ((ud (and
-             (memq (key-binding "j")
-                   '(scroll-up-command Info-scroll-up View-scroll-page-forward))
-             (memq (key-binding "k")
-                   '(scroll-down-command Info-scroll-down View-scroll-page-backward))))
-        (lr (and
+  (let ((jk (and
+             (eq (get (key-binding "j") 'command-semantic) 'scroll-up-command)
+             (eq (get (key-binding "k") 'command-semantic) 'scroll-down-command)))
+        (np (and
+             (eq (get (key-binding "n") 'command-semantic) 'next-line)
+             (eq (get (key-binding "p") 'command-semantic) 'previous-line)))
+        (ae (and
              (eq (key-binding "a") 'move-beginning-of-line)
              (eq (key-binding "e") 'move-end-of-line))))
     (cond
-     ((and ud lr) "+")
-     (ud "↕")
-     (lr "↔")
+     ((and jk np ae) "⧺")
+     ((and jk ae) "+")
+     ((and jk np) "⇕")
+     (jk "↕")
+     ((and ae np) "÷")
+     (ae "-")
+     (np "❘")
      (:else " "))))
 
 (z-defface-with-darken god-lighter-view "#D8E874")
@@ -111,7 +116,7 @@ mouse-3: Describe current input method")
         (c (eq (key-binding "c") 'god-mode-self-insert)))
     (cond
      ((and x c) "*")
-     (x "x")
+     (x "×")
      (c "c")
      (:else "•"))))
 
@@ -131,6 +136,7 @@ mouse-3: Describe current input method")
   '(:eval (cond (god-local-mode z-lighter-god)
                 (view-mode z-lighter-view)
                 ((derived-mode-p 'special-mode 'dired-mode
+                                 'compilation-mode
                                  'Info-mode 'ess-help-mode
                                  'emacs-news-view-mode)
                  z-lighter-special)

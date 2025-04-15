@@ -334,7 +334,9 @@ instead of inactivate region."
              ("c" . god-mode-self-insert)
              ("l" . god-mode-self-insert)
              ("v" . god-mode-self-insert)
-             ("x" . god-mode-self-insert)))
+             ("x" . god-mode-self-insert))
+  (put 'previous-error-no-select 'command-semantic 'previous-line)
+  (put 'next-error-no-select 'command-semantic 'next-line))
 
 (use-package string-inflection
   :bind (("M-U" . string-inflection-upcase)
