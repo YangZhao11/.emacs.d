@@ -135,12 +135,17 @@ SPEC could be `box', `bar', or `hbar'."
         ("C-<" "M-<") ("C->" "M->") ("C-:" "M-:") ("C-|" "M-|") ("C-\\" "M-\\")
         ("C-+" "M-+") ("C-=" "M-=") ("C-," "M-,") ("C-." "M-.")))
 
+(defun window-selected-p (window)
+  (eq (frame-selected-window (window-frame window)) window))
+
 (defun z-god-mode-enabled-hook ()
-  ;; somehow this hook can be called multiple times on a buffer,
-  ;; which messes up saving states here. Maybe consider using
-  ;; post-command-hook to run this once.
   (mortal-mode 0)
-  (set-cursor-type 'box)
+  ;; only change cursor once for selected window. eldoc will trigger
+  ;; major mode change on its buffer thus triggering this hook. If the
+  ;; focusted buffer is in mortal mode, we'll mess up the cursor (for
+  ;; the whole frame).
+  (if (eq (get-buffer-window) (selected-window))
+      (set-cursor-type-all-frames 'box))
   (setq-local z-god-saved-input-method current-input-method)
   (if current-input-method
       (deactivate-input-method))
@@ -150,7 +155,8 @@ SPEC could be `box', `bar', or `hbar'."
 (add-hook 'god-mode-enabled-hook 'z-god-mode-enabled-hook)
 
 (defun z-god-mode-disabled-hook ()
-  (set-cursor-type 'bar)
+  (if (eq (get-buffer-window) (selected-window))
+      (set-cursor-type-all-frames 'bar))
   (if z-god-saved-input-method
       (set-input-method z-god-saved-input-method))
   (if z-god-saved-view-mode

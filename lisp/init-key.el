@@ -303,22 +303,7 @@ instead of inactivate region."
         (deactivate-mark)
       (activate-mark)))
 
-  (defun disable-help-buffer ()
-    (interactive)
-    (quit-window nil (get-buffer-window "*Help*")))
-
-  (defvar-keymap special-hint-disable-map
-    "SPC" #'disable-help-buffer)
-
-  (defun z-maybe-show-hint ()
-    "Show hint on major mode keymap."
-    (interactive)
-    (let* ((kmap-symbol (intern (format "%s-map" major-mode))))
-      (describe-keymap kmap-symbol)
-      (set-transient-map special-hint-disable-map)))
-
   (bind-keys :map special-mode-map
-             ("SPC" . z-maybe-show-hint)
              ("j" . scroll-up-command)
              ("k" . scroll-down-command)
              ("a" . move-beginning-of-line)

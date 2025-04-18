@@ -2,48 +2,30 @@
 
 (eval-when-compile
   (require 'use-package)
-  (require 'hydra))
+  (require 'hydra)
+  (require 'keymap-hint))
+
+(use-package keymap-hint
+  :commands (keymap-hint-set keymap-hint-show))
 
 (use-package bookmark
   :config
-  (defhydra hydra-bookmark-bmenu (:color pink :hint nil)
-    "
-_m_ark^^╶────────╮ Item^^^^╶─────^^────────┬╴Annot^^╶╮ List^^╶────╮
-⏎^^:go   _u_nmark│ _v_isit^^     _r_ename    _a_:show│ _s_ave     │
-_d_elete ^^⌫:back│ _1_/_2_-win   _w_here     _A_ll   │ _l_oad     │
-_z_ap    ^^      │ _o_ther-win^^ _R_elocate  _e_dit  │ _t_gl Fname│
-"
-    ("SPC" nil)
-    ("m" bookmark-bmenu-mark)
-    ("v" bookmark-bmenu-select :color blue)
-    ("t" bookmark-bmenu-toggle-filenames)
-    ("w" bookmark-bmenu-locate)
-    ("1" bookmark-bmenu-1-window :color blue)
-    ("2" bookmark-bmenu-2-window :color blue)
-    ("RET" bookmark-bmenu-this-window :color blue)
-    ("o" bookmark-bmenu-other-window :color blue)
-    ("r" bookmark-bmenu-rename)
-    ("R" bookmark-bmenu-relocate)
-    ("d" bookmark-bmenu-delete)
-    ("z" bookmark-bmenu-execute-deletions)
-    ("s" bookmark-bmenu-save)
-    ("l" bookmark-bmenu-load)
-    ("u" bookmark-bmenu-unmark)
-    ("q" quit-window :exit t)
-    ("DEL" bookmark-bmenu-backup-unmark)
-    ("a" bookmark-bmenu-show-annotation)
-    ("A" bookmark-bmenu-show-all-annotations)
-    ("e" bookmark-bmenu-edit-annotation))
-
+  (keymap-hint-set bookmark-bmenu-mode-map "SPC" "
+_m_ark╶──◦◦──────╮ Item╶─◦◦◦◦────◦◦────────┬╴Annot◦◦╶╮ List◦◦╶────╮
+_⏎_:go   _u_nmark│ _v_isit◦◦     _r_ename    _a_:show│ _s_ave     │
+_d_elete _⌫_:back│ _1_/_2_-win   _w_here     _A_ll   │ _l_oad     │
+_z_ap    ◦◦      │ _o_ther-win◦◦ _R_elocate  _e_dit  │ _t_gl Fname│
+")
   (bind-keys :map bookmark-bmenu-mode-map
-             ("SPC" . hydra-bookmark-bmenu/body)
+             ("j" . scroll-down-command)
+             ("k" . scroll-up-command)
              ("z" . bookmark-bmenu-execute-deletions)
              ("x" . god-mode-self-insert)))
 
 (use-package view :diminish view-mode
   :bind ("C-x C-v" . view-mode)         ; find-alternate-file
   :config
-  (defhydra hydra-view (:color pink :hint nil)
+(defhydra hydra-view (:color pink :hint nil)
     "
 ^^pg/set^^ ½^^╶──╮ ↔╶^^^^^^──╮ _g_o(_%_)^^^^╶─────╮ ^^Register┬╴^^Mark╮ _s_earch/_r_╶╮ _q_uit/_Q_
 _k_↥ _K_   _u_p  │ _a__e_ _p_│ _{__}_  _[__]_ page│ _m_:point   _._set│ again:_S_ _R_│ _i_menu
@@ -86,6 +68,8 @@ _j_↧ _J_   _d_own│ _b__f_ _n_│ _<__>_  _(__)_ list│ _'_:goto    p_@_p �
     ("Q" View-leave :color blue)
     ("i" consult-imenu)
     ("o" consult-outline))
+
+
   (bind-keys :map view-mode-map
              ("SPC" . hydra-view/body)
              ("C-j" . nil)
@@ -167,7 +151,7 @@ useful when followed by an immediate kill."
   :config
   (defhydra hydra-occur (:color pink :hint nil)
     "
-_k_↥   _p_rev^^   _<_ _>_       ^^⏎:goto      _e_dit
+_k_↥   _p_rev^^   _<_ _>_       _⏎_:goto      _e_dit
 _j_↧   _n_ext^^   _d_isplay^^   _o_ther-win   %s(if next-error-follow-minor-mode \"⇅\" \"☐\") _f_ollow
 "
     ("SPC" nil)
@@ -205,32 +189,18 @@ _j_↧   _n_ext^^   _d_isplay^^   _o_ther-win   %s(if next-error-follow-minor-mo
   :config
   (setq grep-use-headings 't)
 
-  (defhydra hydra-grep (:color pink :hint nil)
-  "
-_k_↥  _p_rev  _<__>_ beg/end of buffer ^^⏎:goto    _e_dit
-_j_↧  _n_ext  _{__}_:prev/next file    _d_isplay
-"
-  ("SPC" nil)
-  ("p" previous-error-no-select)
-  ("n" next-error-no-select)
-  ("j" scroll-up-command)
-  ("k" scroll-down-command)
-  ("<" beginning-of-buffer)
-  (">" end-of-buffer)
-  ("{" compilation-previous-file)
-  ("}" compilation-next-file)
-  ("d" compilation-display-error)
-  ("e" grep-change-to-grep-edit-mode :exit t)
-  ("q" quit-window :exit t)
-  ("f" next-error-follow-minor-mode)
-  ("RET" compile-goto-error :exit t))
+  (keymap-hint-set grep-mode-map "SPC" "
+_k_↥  _p_rev  _<__>_ beg/end of buffer _⏎_:goto    _e_dit
+_j_↧  _n_ext  _[__]_:prev/next file    _d_isplay
+")
 
   (bind-keys :map grep-mode-map
-             ("SPC" . hydra-grep/body)
              ("j" . scroll-up-command)
              ("k" . scroll-down-command)
              ("d" . compilation-display-error)
              ("e" . grep-change-to-grep-edit-mode)
+             ("[" . compilation-previous-file)
+             ("]" . compilation-next-file)
              ("x" . god-mode-self-insert)
              ("c" . god-mode-self-insert))
   (unless (fboundp 'grep-change-to-grep-edit-mode)
@@ -239,25 +209,11 @@ _j_↧  _n_ext  _{__}_:prev/next file    _d_isplay
 
 (use-package compile
   :config
-  (defhydra hydra-compilation (:color pink :hint nil)
-    "
-_k_↥  _p_rev  _<__>_ beg/end of buffer  ^^⏎:goto
-_j_↧  _n_ext  _{__}_:prev/next file
-"
-    ("<" beginning-of-buffer)
-    (">" end-of-buffer)
-    ("g" recompile)
-    ("q" quit-window :color blue)
-    ("j" scroll-up-command)
-    ("k" scroll-down-command)
-    ("n" compilation-next-error)
-    ("p" compilation-previous-error)
-    ("{" compilation-previous-file)
-    ("}" compilation-next-file)
-    ("RET" compile-goto-error)
-    ("SPC" nil))
+  (keymap-hint-set compilation-mode-map "SPC" "
+_k_↥  _p_rev  _<__>_ beg/end of buffer  _⏎_:goto
+_j_↧  _n_ext  _[__]_:prev/next file
+")
   (bind-keys :map compilation-mode-map
-             ("SPC" . hydra-compilation/body)
              ("x" . god-mode-self-insert)
              ("c" . god-mode-self-insert)
              ("`" . next-error)
@@ -265,8 +221,8 @@ _j_↧  _n_ext  _{__}_:prev/next file
              ("k" . scroll-down-command)
              ("n" . compilation-next-error)
              ("p" . compilation-previous-error)
-             ("{" . compilation-previous-file)
-             ("}" . compilation-next-file))
+             ("[" . compilation-previous-file)
+             ("]" . compilation-next-file))
 
   (put 'compilation-next-error 'command-semantic 'next-line)
   (put 'compilation-previous-error 'command-semantic 'previous-line))
@@ -418,57 +374,13 @@ _L_oad       ma_N_         redisp_l_ay│ ^^_E_xt-open ^^^^        ^^         ^^
         '(("melpa-stable" . 20) ("gnu" . 10) ("melpa" . 0)))
 
   :config
-  (defhydra hydra-package-menu (:color pink :hint nil)
-    "
-Go^^^^╶────╮ Action_z_╶─^^────────────^^──────╮ List^^╶─^^──────^^──────╮
-_k_↥ _p_rev│ _i_nstall  _d_elete      _?_:info│ _/_:filter^^    _r_evert│
+  (keymap-hint-set package-menu-mode-map "SPC" "
+Go◦◦◦◦╶────╮ Action_z_╶─◦◦────────────◦◦──────╮ List◦◦╶─◦◦──────◦◦──────╮
+_k_↥ _p_rev│ _i_nstall  _d_elete      _?_:info│ _/_:filter◦◦    _r_evert│
 _j_↧ _n_ext│ _U_pgrade  _~_:obsolete  _u_nmark│ _H_ide/_(_tgl)  _S_ort  │
-"
-    ("SPC" nil)
-    ("(" package-menu-toggle-hiding)
-    ("?" package-menu-describe-package)
-    ("H" package-menu-hide-package)
-    ("S" tabulated-list-sort)
-    ("U" package-menu-mark-upgrades)
-    ("d" package-menu-mark-delete)
-    ("/" hydra-package-menu-filter/body :exit t)
-    ("g" revert-buffer)
-    ("i" package-menu-mark-install)
-    ("n" next-line)
-    ("p" previous-line)
-    ("q" quit-window :color blue)
-    ("r" revert-buffer)
-    ("u" package-menu-mark-unmark)
-    ("z" package-menu-execute)
-    ("~" package-menu-mark-obsolete-for-deletion)
-    ("j" scroll-up-command)
-    ("k" scroll-down-command))
-
-  (defhydra hydra-package-menu-filter
-    (:color teal :hint nil
-     :after-exit
-     (if (eq major-mode 'package-menu-mode)
-         (hydra-package-menu/body)))
-    "
-Filter by:  _/_:clear
-_k_eyword   _d_escription  _a_rchive  _s_tatus      _v_ersion
-_n_ame      _N_ame/desc    _m_arked   _u_pgradable
-"
-    ("SPC" nil)
-    ("/" package-menu-clear-filter)
-    ("N" package-menu-filter-by-name-or-description)
-    ("a" package-menu-filter-by-archive)
-    ("d" package-menu-filter-by-description)
-    ("k" package-menu-filter-by-keyword)
-    ("m" package-menu-filter-marked)
-    ("n" package-menu-filter-by-name)
-    ("s" package-menu-filter-by-status)
-    ("u" package-menu-filter-upgradable)
-    ("v" package-menu-filter-by-version)
-    )
+")
 
   (bind-keys :map package-menu-mode-map
-             ("SPC" . hydra-package-menu/body)
              ("/ SPC" . hydra-package-menu-filter/body)
              ("z" . package-menu-execute)
              ("x" . god-mode-self-insert)
@@ -485,7 +397,7 @@ _n_ame      _N_ame/desc    _m_arked   _u_pgradable
     (:color red :hint nil :pre (smerge-start-session))
     "
 Move^^╶╮ Keep^^╶─^^─────╮ Current^^╮ Conflict^^^^──────┬╴diff^^╶─────────╮
-_n_ext │ _b_ase  _u_pper│ ⏎^^ keep │ _R_efine  _E_diff   _<_: base-upper │
+_n_ext │ _b_ase  _u_pper│ _⏎_ keep │ _R_efine  _E_diff   _<_: base-upper │
 _p_rev │ _a_ll   _l_ower│ _K_ill   │ _C_ombine/a_U_to    _=_: upper-lower│
 _q_uit │ ^^      _s_wap │ ^^       │ _r_esolve/_A_ll     _>_: base-lower │
 "
@@ -799,32 +711,11 @@ Limit search to a few pages before."
 
 (use-package ess-help
   :config
-  (defhydra hydra-ess-help (:color pink :hint nil)
-    "
-Move^^^╶─────^^^^^^^─────────╮ Eval^^^^╶──────╮ Jump^^╶────────^^────────╮
-_k_↥ _p_rev  _[__]_:_s_ection│ _f_unction ^^  │ _h_elp-on-obj  _/_isearch│
-_j_↧ _n_ext  _<__>_:buf^^    │ _l_ine _r_egion│ _g_o           _i_ndex   │
-"
-    ("/" isearch-forward)
-    ("<" beginning-of-buffer)
-    (">" end-of-buffer)
-    ("a" ess-display-help-apropos)
-    ("f" ess-eval-function-or-paragraph-and-step)
-    ("g" hydra-ess-help-g/body :color blue)
-    ("h" ess-display-help-on-object)
-    ("i" ess-display-package-index)
-    ("j" scroll-up-command)
-    ("k" scroll-down-command)
-    ("l" ess-eval-line-and-step)
-    ("[" ess-skip-to-previous-section)
-    ("]" ess-skip-to-next-section)
-    ("q" quit-window :color blue)
-    ("r" ess-eval-region-and-go)
-    ("s" hydra-ess-help-s/body :color blue)
-    ("v" ess-display-vignettes)
-    ("n" next-line)
-    ("p" previous-line)
-    ("SPC" nil))
+  (keymap-hint-set ess-help-mode-map "SPC" "
+Move◦◦◦╶─────◦◦◦◦◦◦◦─────────╮ Eval◦◦◦◦╶──────╮ Jump◦◦╶────────◦◦────────╮
+_k_↥ _p_rev  _[__]_:_s_ection│ _f_unction ◦◦  │ _h_elp-on-obj  _/_isearch│
+_j_↧ _n_ext  _<__>_:buf◦◦    │ _l_ine _r_egion│ _g_o           _i_ndex   │
+")
 
   (defhydra hydra-ess-help-s (:color pink :hint nil)
     "
@@ -854,7 +745,6 @@ go: _g_:revert  _a_propos  _v_ignettes _i_ndex  _h_elp-on-obj"
   (bind-keys :map ess-help-mode-map
              ("<f8>" . ess-eval-line-and-step)
              ("<f9>" . ess-eval-function-or-paragraph-and-step)
-             ("SPC" . hydra-ess-help/body)
              ("j" . scroll-up-command)
              ("k" . scroll-down-command)
              ("[" . ess-skip-to-previous-section)
@@ -960,26 +850,11 @@ go: _g_:revert  _a_propos  _v_ignettes _i_ndex  _h_elp-on-obj"
 
 (use-package man
   :config
-  (defhydra hydra-man (:color pink :hint nil)
-    "
-_k_↥ _<__>_  top/bot  _g_oto sec^^    _r_eference │ _K_ill
-_j_↧ ⇧/⇥^^^^ button   _[__]_ section  _s_ee also  │ _q_uit
-"
-    ("SPC" nil :exit t)
-    ("j" scroll-up-command)
-    ("k" scroll-down-command)
-    ("K" Man-kill :exit t)
-    ("q" quit-window :exit t)
-    ("<" beginning-of-buffer)
-    (">" end-of-buffer)
-    ("[" Man-previous-section)
-    ("]" Man-next-section)
-    ("g" Man-goto-section)
-    ("s" Man-goto-see-also-section)
-    ("m" man)
-    ("r" Man-follow-manual-reference))
+  (keymap-hint-set Man-mode-map "SPC" "
+_k_↥ _<__>_  top/bot  _g_oto sec◦◦    _r_eference │ _K_ill
+_j_↧ _⇧_/_⇥_ button   _[__]_ section  _s_ee also  │ _q_uit
+")
   (bind-keys :map Man-mode-map
-             ("SPC" . hydra-man/body)
              ("j" . scroll-up-command)
              ("k" . scroll-down-command)
              ("n" . next-line)
@@ -993,33 +868,13 @@ _j_↧ ⇧/⇥^^^^ button   _[__]_ section  _s_ee also  │ _q_uit
 
 (use-package info
   :config
-  (defhydra hydra-info (:color pink :hint nil)
-    "
-Go^^╶╮ ^^Reference╶╮ ^^History╶─╮ Tree^^^^^^╶──^^^^────────────╮
-_k_↥ │ ^^⇧/⇥:cycle │ _l_:back   │ ^^  ↑_u_p^^  _d_irectory^^   │
-_j_↧ │ _f_ollow    │ _r_:forward│ _P_←∙→_N_^^ ╭In file:_T_OC^^ │
-^ ^  │ _m_enu      │ _L_ist     │ ^^  ↳_[__]_ │_<__>_first/last│
-"
-    ("q" quit-window :exit t)
-    ("SPC" nil :exit t)
-    ("N" Info-next)
-    ("P" Info-prev)
-    ("u" Info-up)
-    ("m" Info-menu)
-    ("d" Info-directory)
-    ("<" Info-top-node)
-    (">" Info-final-node)
-    ("[" Info-backward-node)
-    ("]" Info-forward-node)
-    ("f" Info-follow-reference)
-    ("l" Info-history-back)
-    ("r" Info-history-forward)
-    ("L" Info-history)
-    ("T" Info-toc)
-    ("j" Info-scroll-up)
-    ("k" Info-scroll-down))
+  (keymap-hint-set Info-mode-map "SPC" "
+Go◦◦╶╮ ◦◦Reference◦◦╶╮ ◦◦History╶─╮ Tree◦◦◦◦◦◦╶─┬ _d_irectory◦◦───╮
+_k_↥ │ _⇧_/_⇥_:cycle │ _l_:back   │ ◦◦  ↑_u_p◦◦ │ In file:_T_OC◦◦ │
+_j_↧ │ _⏎_:_f_ollow  │ _r_:forward│ _P_←∙→_N_◦◦ │ _<__>_first/last│
+◦ ◦  │ _m_enu◦◦      │ _L_ist     │ ◦◦  ↳_[__]_ │ ◦◦◦◦            │
+")
   (bind-keys :map Info-mode-map
-             ("SPC" . hydra-info/body)
              ("e" . move-end-of-line)
              ("j" . Info-scroll-up)
              ("k" . Info-scroll-down)
@@ -1038,24 +893,12 @@ _j_↧ │ _f_ollow    │ _r_:forward│ _P_←∙→_N_^^ ╭In file:_T_OC^^ �
 
 (use-package help-mode
   :config
-  (defhydra hydra-help (:color pink :hint nil)
-    "
+  (keymap-hint-set help-mode-map "SPC" "
 _k_↥  _l_/_r_:history  _i_nfo       _s_ource
-_j_↧  ^^⇧/^^⇥:buttons  _I_:lispref  _c_ustomize
-"
-    ("SPC" nil :exit t)
-    ("i" help-goto-info :exit t)
-    ("I" help-goto-lispref-info :exit t)
-    ("s" help-view-source :exit t)
-    ("c" help-customize :exit t)
-    ("l" help-go-back)
-    ("q" quit-window :exit t)
-    ("r" help-go-forward)
-    ("k" scroll-down-command)
-    ("j" scroll-up-command))
+_j_↧  _⇧_/_⇥_:buttons  _I_:lispref  _c_ustomize
+")
 
   (bind-keys :map help-mode-map
-             ("SPC" . hydra-help/body)
              ("n" . next-line)
              ("p" . previous-line)
              ("[" . help-goto-previous-page)
