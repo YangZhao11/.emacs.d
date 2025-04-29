@@ -104,6 +104,9 @@ prefix, also prompt for a transformer."
             flags width precision character))
   "Matches format string (stuff after `%').")
 
+(defvar format-loop-variable 'x
+  "Symbol used as loop variable in `format-expand'.")
+
 (defun format--parse-template (str)
   "Parse % forms in STR, return a list of (STR FORMS).
 
@@ -127,7 +130,7 @@ Each element of FORMS corresponds to a `format'-style % form in STR."
                (setq str (concat (substring str 0 start)
                                  (if (eq fexp end) "" "s")
                                  (substring str end)))))
-            (t (push 'x forms))))
+            (t (push format-loop-variable forms))))
       (error (message "Malformed sexp: %s" (substring str start))))
     (cons str (nreverse forms))))
 
@@ -141,7 +144,7 @@ The format string we support is exactly like what is described in
 use parenthesis to indicate an expression to evaluate. For example,
 %(identity emacs-version)s should give you the version string. The `s'
 after a sexp can be omitted. In sexps, symbol `x' is available as loop
-iterator.
+iterator (configurable using `format-loop-variable').
 
 BEG and END marks the format string, and defaults to active region or
 the current line if region is not active.
@@ -169,7 +172,7 @@ Push mark if region is not active."
       (insert
        (apply 'format (car parsed)
               (mapcar (lambda (sexp)
-                        (eval sexp `((x . ,iter))))
+                        (eval sexp (list (cons format-loop-variable iter))))
                       (cdr parsed)))))))
 
 (provide 'format-expand)
