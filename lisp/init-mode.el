@@ -25,53 +25,13 @@ _z_ap    ◦◦      │ _o_ther-win◦◦ _R_elocate  _e_dit  │ _t_gl Fname�
 (use-package view :diminish view-mode
   :bind ("C-x C-v" . view-mode)         ; find-alternate-file
   :config
-(defhydra hydra-view (:color pink :hint nil)
-    "
-^^pg/set^^ ½^^╶──╮ ↔╶^^^^^^──╮ _g_o(_%_)^^^^╶─────╮ ^^Register┬╴^^Mark╮ _s_earch/_r_╶╮ _q_uit/_Q_
+(keymap-hint-set view-mode-map "SPC"     "
+◦◦pg/set◦◦ ½◦◦╶──╮ ↔╶◦◦◦◦◦◦──╮ _g_o(_%_)◦◦◦◦╶─────╮ ◦◦Register┬╴◦◦Mark╮ _s_earch/_r_╶╮ _q_uit/_Q_
 _k_↥ _K_   _u_p  │ _a__e_ _p_│ _{__}_  _[__]_ page│ _m_:point   _._set│ again:_S_ _R_│ _i_menu
-_j_↧ _J_   _d_own│ _b__f_ _n_│ _<__>_  _(__)_ list│ _'_:goto    p_@_p │ regex:_/_ ^\\│ _o_utline
-"
-    ("SPC" nil)
-    ("j" View-scroll-page-forward)
-    ("k" View-scroll-page-backward)
-    ("J" View-scroll-page-forward-set-page-size)
-    ("K" View-scroll-page-backward-set-page-size)
-    ("u" View-scroll-half-page-backward)
-    ("d" View-scroll-half-page-forward)
-    ("<" beginning-of-buffer)
-    (">" end-of-buffer)
-    ("g" consult-goto-line)
-    ("%" View-goto-percent)
-    ("s" isearch-forward)
-    ("r" isearch-backward)
-    ("\\" View-search-regexp-backward)
-    ("/" View-search-regexp-forward)
-    ("S" View-search-last-regexp-forward)
-    ("R" View-search-last-regexp-backward)
-    ("m" point-to-register)
-    ("'" register-to-point)
-    ("." set-mark-command)
-    ("@" View-back-to-mark)
-    ("{" backward-paragraph)
-    ("}" forward-paragraph)
-    ("[" backward-page)
-    ("]" forward-page)
-    ("(" backward-list)
-    (")" forward-list)
-    ("a" move-beginning-of-line)
-    ("e" move-end-of-line)
-    ("f" forward-char)
-    ("b" backward-char)
-    ("n" next-line)
-    ("p" previous-line)
-    ("q" View-exit :color blue)
-    ("Q" View-leave :color blue)
-    ("i" consult-imenu)
-    ("o" consult-outline))
-
+_j_↧ _J_   _d_own│ _b__f_ _n_│ _<__>_  _(__)_ list│ _'_:goto    p_@_p │ regex:_/_ ◦\\│ _o_utline
+")
 
   (bind-keys :map view-mode-map
-             ("SPC" . hydra-view/body)
              ("C-j" . nil)
              ("(" . backward-list)
              (")" . forward-list)
@@ -381,7 +341,6 @@ _j_↧ _n_ext│ _U_pgrade  _~_:obsolete  _u_nmark│ _H_ide/_(_tgl)  _S_ort  �
 ")
 
   (bind-keys :map package-menu-mode-map
-             ("/ SPC" . hydra-package-menu-filter/body)
              ("z" . package-menu-execute)
              ("x" . god-mode-self-insert)
              ("a" . move-beginning-of-line)
@@ -393,33 +352,13 @@ _j_↧ _n_ext│ _U_pgrade  _~_:obsolete  _u_nmark│ _H_ide/_(_tgl)  _S_ort  �
 (use-package smerge-mode
   :bind ("C-x m" . hydra-smerge/body)
   :config
-  (defhydra hydra-smerge
-    (:color red :hint nil :pre (smerge-start-session))
-    "
-Move^^╶╮ Keep^^╶─^^─────╮ Current^^╮ Conflict^^^^──────┬╴diff^^╶─────────╮
+  (keymap-hint-set smerge-mode-map "SPC" "
+Move◦◦╶╮ Keep◦◦╶─◦◦─────╮ Current◦◦╮ Conflict◦◦◦◦──────┬╴diff◦◦╶─────────╮
 _n_ext │ _b_ase  _u_pper│ _⏎_ keep │ _R_efine  _E_diff   _<_: base-upper │
 _p_rev │ _a_ll   _l_ower│ _K_ill   │ _C_ombine/a_U_to    _=_: upper-lower│
-_q_uit │ ^^      _s_wap │ ^^       │ _r_esolve/_A_ll     _>_: base-lower │
-"
-    ("RET" smerge-keep-current)
-    ("A"   smerge-resolve-all)
-    ("C"   smerge-combine-with-next)
-    ("E"   smerge-ediff)
-    ("K"   smerge-kill-current)
-    ("R"   smerge-refine)
-    ("U"   smerge-auto-combine)
-    ("a"   smerge-keep-all)
-    ("b"   smerge-keep-base)
-    ("l"   smerge-keep-lower)
-    ("n"   smerge-next)
-    ("p"   smerge-prev)
-    ("r"   smerge-resolve)
-    ("s"   smerge-swap)
-    ("u"   smerge-keep-upper)
-    ("<"   smerge-diff-base-upper)
-    ("="   smerge-diff-upper-lower)
-    (">"   smerge-diff-base-lower)
-    ("q"   nil :color blue)))
+_q_uit │ ◦◦      _s_wap │ ◦◦       │ _r_esolve/_A_ll     _>_: base-lower │
+")
+)
 
 (use-package diff-mode
   :config

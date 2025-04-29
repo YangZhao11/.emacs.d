@@ -3,7 +3,8 @@
 ;;; Code:
 (eval-when-compile
   (require 'use-package)
-  (require 'hydra))
+  (require 'hydra)
+  (require 'keymap-hint))
 
 ;; Add several custom shortcuts in the TeX input method.
 (eval-after-load "quail/Latin-ltx"
@@ -45,68 +46,19 @@
               face (:foreground "#D04020")
               help-echo "Recording keyboard macro")))))
 
-(defhydra hydra-ctl-x-r (:color blue :hint nil)
-  "
-Rectangle╶─────^^^^^^───────╮ Register╶^^┬╴save^^╶─────╮ Bookmark──^^╴╶───╮
-_c_lear     _N_umber-lines^^│ _+_: inc   │ _SPC_:point │ _m_: set         │
+(keymap-hint-set ctl-x-r-map "?" "
+Rectangle╶─────◦◦◦◦◦◦───────╮ Register╶◦◦┬╴save◦◦╶─────╮ Bookmark──◦◦╴╶───╮
+_c_lear     _N_umber-lines◦◦│ _+_: inc   │ _SPC_:point │ _m_: set         │
 _d_elete    _o_pen  s_t_ring│ _j_ump     │ _f_rameset  │ _b_: jump        │
-_k_ill      _y_ank^^        │ _i_nsert   │ _w_indow-cfg│ _l_ist           │
-M-w:copy^^  _r_egister^^    │ _s_:cp text│ _n_umber    │ _M_: no-overwrite│
-"
-  ("SPC" point-to-register)
-  ("+"   increment-register)
-  ("M"   bookmark-set-no-overwrite)
-  ("N"   rectangle-number-lines)
-  ("b"   bookmark-jump)
-  ("c"   clear-rectangle)
-  ("d"   delete-rectangle)
-  ("f"   frameset-to-register)
-  ("g"   insert-register)
-  ("i"   insert-register)
-  ("j"   jump-to-register)
-  ("k"   kill-rectangle)
-  ("l"   bookmark-bmenu-list)
-  ("m"   bookmark-set)
-  ("n"   number-to-register)
-  ("o"   open-rectangle)
-  ("r"   copy-rectangle-to-register)
-  ("s"   copy-to-register)
-  ("t"   string-rectangle)
-  ("w"   window-configuration-to-register)
-  ("x"   copy-to-register)
-  ("y"   yank-rectangle)
-  )
-(keymap-global-set "C-x r ?" #'hydra-ctl-x-r/body)
+_k_ill      _y_ank◦◦        │ _i_nsert   │ _w_indow-cfg│ _l_ist           │
+_M-w_:copy  _r_egister◦◦    │ _s_:cp text│ _n_umber    │ _M_: no-overwrite│
+" :load)
 
-(defhydra hydra-ctl-x-v (:color blue :hint nil)
-  "
+(keymap-hint-set vc-prefix-map "?" "
 _+_:update   ch_a_nge log    print _l_og   _d_ir     _h_istory     _m_erge
 _=_:diff     log _I_ncoming  root _L_og    _P_ush    reg_i_ster    _r_etrieve tag
 root-_D_iff  log _O_utgoing  _~_:revision  i_G_nore  _g_:annotate  _u_:revert
-"
-  ("+" vc-update)
-  ("=" vc-diff)
-  ("D" vc-root-diff)
-  ("G" vc-ignore)
-  ("I" vc-log-incoming)
-  ("L" vc-print-root-log)
-  ("O" vc-log-outgoing)
-  ("P" vc-push)
-  ("a" vc-update-change-log)
-  ("d" vc-dir)
-  ("g" vc-annotate)
-  ("h" vc-region-history)
-  ("i" vc-register)
-  ("l" vc-print-log)
-  ("m" vc-merge)
-  ("r" vc-retrieve-tag)
-  ("s" vc-create-tag)
-  ("u" vc-revert)
-  ("v" vc-next-action)
-  ("x" vc-delete-file)
-  ("~" vc-revision-other-window)
-  )
-(keymap-global-set "C-x v ?" 'hydra-ctl-x-v/body)
+" :load)
 
 (defun z-kill-buffer (arg)
   "Kill this buffer, or with ARG, call `kill-buffer' instead."

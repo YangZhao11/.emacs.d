@@ -2,6 +2,9 @@
 
 (require 'lv)
 
+(defvar keymap-hint--current nil
+  "Current hint that is showing")
+
 (defun propertize-regexp (string regexp &rest properties)
   "Propertize STRING capatured by REGEXP.
 
@@ -27,25 +30,37 @@ capture group. PROPERTIES are passed to `propertize' directly."
 (defun keymap-hint-hide ()
   "Hide current hint."
   (interactive)
+  (setq keymap-hint--current nil)
   (lv-delete-window))
 
 (defvar-keymap keymap-hint-transient-map
   "SPC" #'keymap-hint-hide)
 
+
 (defun keymap-hint--keep-hint ()
   "Decide if we keep the transient map."
   (cond
+   ;; this-command might be a lambda.
+   ;; TODO: turn off transient map when lambda of keymap-hint-show is called.
+   ((not (symbolp this-command)) 't)
    ((eq this-command 'keymap-hint-hide) nil)
+   ((eq (get this-command 'command-semantic) 'keymap-hint-show) nil)
    ((memq (get this-command 'command-semantic)
           '(switch-buffer switch-window))
     (keymap-hint-hide)
     nil)
-   (:else t)))
+   (:else 't)))
 
 ;;;###autoload
-(defun keymap-hint-show (hint)
-  "Show mode hint attached to major mode symbol if present."
+(defun keymap-hint-show (hint &optional load-map)
+  "Show mode hint attached to major mode symbol if present.
+
+LOAD-MAP is active as transient map afterwards."
   (interactive)
+  (if (eq hint keymap-hint--current)
+      (keymap-hint-hide)
+    :else
+    (setq keymap-hint--current hint)
   (if (symbolp hint)
       (setq hint (get hint 'hint)))
   (unless (stringp hint)
@@ -53,35 +68,35 @@ capture group. PROPERTIES are passed to `propertize' directly."
   (when hint
       (lv-message hint)
       (set-transient-map
-       keymap-hint-transient-map 'keymap-hint--keep-hint)))
+       (or load-map
+           keymap-hint-transient-map)
+       'keymap-hint--keep-hint
+))))
 
 ;;;###autoload
-(defmacro keymap-hint-set (keymap key hint)
-  "Set HINT for keymap."
-  (unless (or (keymapp (eval keymap))
-              (and (symbolp keymap) (keymapp (symbol-value keymap))))
-     (error "Need a keymap to show hint."))
+(defmacro keymap-hint-set (keymap key hint &optional load)
+  "Set HINT for KEYMAP, which is a symbol of keymap name.
+
+Bind KEY in KEYMAP to show hint. If LOAD is non-nil, the keymap is
+loaded after showing hint."
+  (unless (and (symbolp keymap) (keymapp (symbol-value keymap)))
+    (error "KEYMAP should be a symbol to a keymap."))
   (setq hint (string-trim hint))
   (setq hint (replace-regexp-in-string "◦" "" hint))
   (setq hint (propertize-regexp hint "_\\([^_]+\\)_" 'face 'font-lock-function-name-face))
 
-  (if (symbolp keymap)
-      `(progn
-        (put (quote ,keymap) 'hint ,hint)
-        (keymap-set ,keymap ,key
-                     (lambda () ,(concat "Show hint for `" (symbol-name keymap) "'.")
-                       (interactive)
-                       (keymap-hint-show (quote ,keymap)))))
-    ;; else
-    `(keymap-set ,keymap ,key
-                 (lambda () "Show hint for keymap"
-                   (interactive)
-                   (keymap-hint-show ,hint)))))
-
-
-  (unless (keymapp bookmark-bmenu-mode-map)
-    (error "Need a keymap to show hint."))
-
-
+  (let ((show-hint-symbol
+         (intern (concat (symbol-name keymap) "-hint"))))
+    `(progn
+       (put (quote ,keymap) 'hint ,hint)
+       (defun ,show-hint-symbol ()
+         ,(concat "Show hint for `" (symbol-name keymap) "'.")
+         (interactive)
+         (keymap-hint-show
+          (quote ,keymap)
+          ,(if load
+               keymap)))
+       (put (quote ,show-hint-symbol) 'command-semantic 'keymap-hint-show)
+       (keymap-set ,keymap ,key (quote ,show-hint-symbol)))))
 
 (provide 'keymap-hint)

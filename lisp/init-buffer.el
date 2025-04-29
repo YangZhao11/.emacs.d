@@ -78,6 +78,9 @@
                 " "
                 (mode 16 16 :left :elide))))
 
+
+
+
   (defhydra hydra-ibuffer (:color pink :hint nil)
     "
 _m_ark(_*_)╶╮ List^^^^^^╶──╮ Buf Ops^^╶─^^─────────┬╴Togl╶^^^^─╮ Text Ops^^^^╶───^^^^─────────╮
