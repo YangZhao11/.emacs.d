@@ -11,10 +11,10 @@
 (use-package bookmark
   :config
   (keymap-hint-set bookmark-bmenu-mode-map "SPC" "
-_m_ark╶──◦◦──────╮ Item╶─◦◦◦◦────◦◦────────┬╴Annot◦◦╶╮ List◦◦╶────╮
-_⏎_:go   _u_nmark│ _v_isit◦◦     _r_ename    _a_:show│ _s_ave     │
+_m_ark╶──··──────╮ Item╶─····────··────────┬╴Annot··╶╮ List··╶────╮
+_⏎_:go   _u_nmark│ _v_isit··     _r_ename    _a_:show│ _s_ave     │
 _d_elete _⌫_:back│ _1_/_2_-win   _w_here     _A_ll   │ _l_oad     │
-_z_ap    ◦◦      │ _o_ther-win◦◦ _R_elocate  _e_dit  │ _t_gl Fname│
+_z_ap    ··      │ _o_ther-win·· _R_elocate  _e_dit  │ _t_gl Fname│
 ")
   (bind-keys :map bookmark-bmenu-mode-map
              ("j" . scroll-down-command)
@@ -26,9 +26,9 @@ _z_ap    ◦◦      │ _o_ther-win◦◦ _R_elocate  _e_dit  │ _t_gl Fname�
   :bind ("C-x C-v" . view-mode)         ; find-alternate-file
   :config
 (keymap-hint-set view-mode-map "SPC"     "
-◦◦pg/set◦◦ ½◦◦╶──╮ ↔╶◦◦◦◦◦◦──╮ _g_o(_%_)◦◦◦◦╶─────╮ ◦◦Register┬╴◦◦Mark╮ _s_earch/_r_╶╮ _q_uit/_Q_
+··pg/set·· ½··╶──╮ ↔╶······──╮ _g_o(_%_)····╶─────╮ ··Register┬╴··Mark╮ _s_earch/_r_╶╮ _q_uit/_Q_
 _k_↥ _K_   _u_p  │ _a__e_ _p_│ _{__}_  _[__]_ page│ _m_:point   _._set│ again:_S_ _R_│ _i_menu
-_j_↧ _J_   _d_own│ _b__f_ _n_│ _<__>_  _(__)_ list│ _'_:goto    p_@_p │ regex:_/_ ◦\\│ _o_utline
+_j_↧ _J_   _d_own│ _b__f_ _n_│ _<__>_  _(__)_ list│ _'_:goto    p_@_p │ regex:_/_ ·\\│ _o_utline
 ")
 
   (bind-keys :map view-mode-map
@@ -335,8 +335,8 @@ _L_oad       ma_N_         redisp_l_ay│ ^^_E_xt-open ^^^^        ^^         ^^
 
   :config
   (keymap-hint-set package-menu-mode-map "SPC" "
-Go◦◦◦◦╶────╮ Action_z_╶─◦◦────────────◦◦──────╮ List◦◦╶─◦◦──────◦◦──────╮
-_k_↥ _p_rev│ _i_nstall  _d_elete      _?_:info│ _/_:filter◦◦    _r_evert│
+Go····╶────╮ Action_z_╶─··────────────··──────╮ List··╶─··──────··──────╮
+_k_↥ _p_rev│ _i_nstall  _d_elete      _?_:info│ _/_:filter··    _r_evert│
 _j_↧ _n_ext│ _U_pgrade  _~_:obsolete  _u_nmark│ _H_ide/_(_tgl)  _S_ort  │
 ")
 
@@ -353,10 +353,10 @@ _j_↧ _n_ext│ _U_pgrade  _~_:obsolete  _u_nmark│ _H_ide/_(_tgl)  _S_ort  �
   :bind ("C-x m" . hydra-smerge/body)
   :config
   (keymap-hint-set smerge-mode-map "SPC" "
-Move◦◦╶╮ Keep◦◦╶─◦◦─────╮ Current◦◦╮ Conflict◦◦◦◦──────┬╴diff◦◦╶─────────╮
+Move··╶╮ Keep··╶─··─────╮ Current··╮ Conflict····──────┬╴diff··╶─────────╮
 _n_ext │ _b_ase  _u_pper│ _⏎_ keep │ _R_efine  _E_diff   _<_: base-upper │
 _p_rev │ _a_ll   _l_ower│ _K_ill   │ _C_ombine/a_U_to    _=_: upper-lower│
-_q_uit │ ◦◦      _s_wap │ ◦◦       │ _r_esolve/_A_ll     _>_: base-lower │
+_q_uit │ ··      _s_wap │ ··       │ _r_esolve/_A_ll     _>_: base-lower │
 ")
 )
 
@@ -651,36 +651,17 @@ Limit search to a few pages before."
 (use-package ess-help
   :config
   (keymap-hint-set ess-help-mode-map "SPC" "
-Move◦◦◦╶─────◦◦◦◦◦◦◦─────────╮ Eval◦◦◦◦╶──────╮ Jump◦◦╶────────◦◦────────╮
-_k_↥ _p_rev  _[__]_:_s_ection│ _f_unction ◦◦  │ _h_elp-on-obj  _/_isearch│
-_j_↧ _n_ext  _<__>_:buf◦◦    │ _l_ine _r_egion│ _g_o           _i_ndex   │
+Move···╶─────·····─────────╮ Eval····╶──────╮ Jump··╶────────··────────╮
+_k_↥ _p_rev  _[__]_:section│ _f_unction ··  │ _h_elp-on-obj  _/_isearch│
+_j_↧ _n_ext  _<__>_:buf    │ _l_ine _r_egion│ _g_o           _i_ndex   │
 ")
 
-  (defhydra hydra-ess-help-s (:color pink :hint nil)
-    "
-section: _a_rguments  _d_escription  _D_e_t_ails  _e_xamples  _n_ote  _r_eferences  _s_ee-also  _u_sage  _v_alue[s]
-"
-    ("a" ess-skip-to-help-section)
-    ("d" ess-skip-to-help-section)
-    ("D" ess-skip-to-help-section)
-    ("t" ess-skip-to-help-section)
-    ("e" ess-skip-to-help-section)
-    ("n" ess-skip-to-help-section)
-    ("r" ess-skip-to-help-section)
-    ("s" ess-skip-to-help-section)
-    ("u" ess-skip-to-help-section)
-    ("v" ess-skip-to-help-section)
-    ("SPC" nil))
+  (setq ess-help-mode-g-map (lookup-key ess-help-mode-map "g"))
+  (keymap-hint-set
+   ess-help-mode-g-map nil
+   " go: _g_:revert  _a_propos  _v_ignettes _i_ndex  _h_elp-on-obj"                :load)
+  (keymap-set ess-help-mode-map "g" #'ess-help-mode-g-map-hint)
 
-  (defhydra hydra-ess-help-g (:color pink :hint nil)
-    "
-go: _g_:revert  _a_propos  _v_ignettes _i_ndex  _h_elp-on-obj"
-    ("g" revert-buffer)
-    ("a" ess-display-help-apropos)
-    ("v" ess-display-vignettes)
-    ("i" ess-display-package-index)
-    ("h" ess-display-help-on-object)
-    ("SPC" nil))
   (bind-keys :map ess-help-mode-map
              ("<f8>" . ess-eval-line-and-step)
              ("<f9>" . ess-eval-function-or-paragraph-and-step)
@@ -738,6 +719,8 @@ go: _g_:revert  _a_propos  _v_ignettes _i_ndex  _h_elp-on-obj"
              ;; normally bound to C-RET, which is awkward to press
              ("M-RET" . ess-eval-region-or-line-visibly-and-step))
 
+  ;; TODO: map ess-r-help-mode-map "s" key
+
   (bind-keys :map inferior-ess-r-mode-map
              ("\C-cw" . ess-execute-screen-options)
              ("<f7>" . ess-show-R-traceback)
@@ -790,7 +773,7 @@ go: _g_:revert  _a_propos  _v_ignettes _i_ndex  _h_elp-on-obj"
 (use-package man
   :config
   (keymap-hint-set Man-mode-map "SPC" "
-_k_↥ _<__>_  top/bot  _g_oto sec◦◦    _r_eference │ _K_ill
+_k_↥ _<__>_  top/bot  _g_oto sec··    _r_eference │ _K_ill
 _j_↧ _⇧_/_⇥_ button   _[__]_ section  _s_ee also  │ _q_uit
 ")
   (bind-keys :map Man-mode-map
@@ -808,10 +791,10 @@ _j_↧ _⇧_/_⇥_ button   _[__]_ section  _s_ee also  │ _q_uit
 (use-package info
   :config
   (keymap-hint-set Info-mode-map "SPC" "
-Go◦◦╶╮ ◦◦Reference◦◦╶╮ ◦◦History╶─╮ Tree◦◦◦◦◦◦╶─┬ _d_irectory◦◦───╮
-_k_↥ │ _⇧_/_⇥_:cycle │ _l_:back   │ ◦◦  ↑_u_p◦◦ │ In file:_T_OC◦◦ │
-_j_↧ │ _⏎_:_f_ollow  │ _r_:forward│ _P_←∙→_N_◦◦ │ _<__>_first/last│
-◦ ◦  │ _m_enu◦◦      │ _L_ist     │ ◦◦  ↳_[__]_ │ ◦◦◦◦            │
+Go··╶╮ ··Reference··╶╮ ··History╶─╮ Tree······╶─┬ _d_irectory··───╮
+_k_↥ │ _⇧_/_⇥_:cycle │ _l_:back   │ ··  ↑_u_p·· │ In file:_T_OC·· │
+_j_↧ │ _⏎_:_f_ollow  │ _r_:forward│ _P_←∙→_N_·· │ _<__>_first/last│
+· ·  │ _m_enu··      │ _L_ist     │ ··  ↳_[__]_ │ ····            │
 ")
   (bind-keys :map Info-mode-map
              ("e" . move-end-of-line)

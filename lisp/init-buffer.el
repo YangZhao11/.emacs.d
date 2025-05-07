@@ -131,6 +131,9 @@ _._old ^^   │ _k_ill-ln^^^^│ _R_ename  _H_:other-f │_w_:Fname^^│ _O_ccur
     ("v" ibuffer-do-view :exit t)
     ("z" ibuffer-do-kill-on-deletion-marks))
 
+  (put 'ibuffer-visit-buffer 'command-semantic 'switch-buffer)
+  (put 'ibuffer-do-view 'command-semantic 'switch-buffer)
+
   (defhydra hydra-ibuffer-mark (:color teal :columns 5 :hint nil
                                        :after-exit
                                        (if (eq major-mode 'ibuffer-mode)

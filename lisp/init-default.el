@@ -105,6 +105,8 @@ PROP set to true to add properties for mode line."
 (put 'next-line 'command-semantic 'next-line)
 (put 'previous-line 'command-semantic 'previous-line)
 
+(put 'quit-window 'command-semantic 'quit-window)
+
 ;; --------------------------------------------------
 (load-theme 'doom-zenburn 't)   ; load this first for many defaults.
 
