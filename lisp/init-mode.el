@@ -109,35 +109,19 @@ useful when followed by an immediate kill."
 (use-package replace
   :bind ("M-s M-o" . multi-occur-in-matching-buffers)
   :config
-  (defhydra hydra-occur (:color pink :hint nil)
-    "
-_k_↥   _p_rev^^   _<_ _>_       _⏎_:goto      _e_dit
-_j_↧   _n_ext^^   _d_isplay^^   _o_ther-win   %s(if next-error-follow-minor-mode \"⇅\" \"☐\") _f_ollow
-"
-    ("SPC" nil)
-    ("j" scroll-up-command)
-    ("k" scroll-down-command)
-    ("p" occur-prev)
-    ("n" occur-next)
-    ("<" beginning-of-buffer)
-    (">" end-of-buffer)
-    ("d" occur-mode-display-occurrence)
-    ("e" occur-edit-mode :exit t)
-    ("q" quit-window :exit t)
-    ("f" next-error-follow-minor-mode)
-    ("o" occur-mode-goto-occurrence-other-window :exit t)
-    ("RET" occur-mode-goto-occurrence :exit t))
-
+  (keymap-hint-set occur-mode-map "SPC" "
+_k_↥   _p_rev··   _<_ _>_       _⏎_:goto      _e_dit
+_j_↧   _n_ext··   _d_isplay··   _o_ther-win   _f_ollow
+")
   (bind-keys :map occur-mode-map
-             ("SPC" . hydra-occur/body)
+             ("SPC" . occur-mode-map-hint)
              ("d" . occur-mode-display-occurrence)
              ("j" . scroll-up-command)
              ("k" . scroll-down-command)
              ("n" . occur-next)
              ("p" . occur-prev)
              ("x" . god-mode-self-insert)
-             ("c" . god-mode-self-insert)
-             ("SPC" . hydra-occur/body))
+             ("c" . god-mode-self-insert))
 
   ;; For lighter hint
   (put 'occur-next 'command-semantic 'next-line)
@@ -582,7 +566,7 @@ Limit search to a few pages before."
               (lambda (b)
                 (and (provided-mode-derived-p
                       (buffer-local-value 'major-mode b)
-                      'inferior-ess-mode 'inferior-julia-mode)
+                      '(inferior-ess-mode inferior-julia-mode))
                      (not (eq b (current-buffer)))))
               (buffer-list))))
       (if b (switch-to-buffer b)
@@ -655,11 +639,11 @@ Move···╶─────·····─────────╮ Eval···�
 _k_↥ _p_rev  _[__]_:section│ _f_unction ··  │ _h_elp-on-obj  _/_isearch│
 _j_↧ _n_ext  _<__>_:buf    │ _l_ine _r_egion│ _g_o           _i_ndex   │
 ")
-
+  (put 'ess-help-mode 'mode-class 'special)
   (setq ess-help-mode-g-map (lookup-key ess-help-mode-map "g"))
   (keymap-hint-set
    ess-help-mode-g-map nil
-   " go: _g_:revert  _a_propos  _v_ignettes _i_ndex  _h_elp-on-obj"                :load)
+   " go: _g_:revert  _a_propos  _v_ignettes _i_ndex  _h_elp-on-obj" :load)
   (keymap-set ess-help-mode-map "g" #'ess-help-mode-g-map-hint)
 
   (bind-keys :map ess-help-mode-map
@@ -772,6 +756,7 @@ _j_↧ _n_ext  _<__>_:buf    │ _l_ine _r_egion│ _g_o           _i_ndex   │
 
 (use-package man
   :config
+  (put 'Man-mode 'mode-class 'special)
   (keymap-hint-set Man-mode-map "SPC" "
 _k_↥ _<__>_  top/bot  _g_oto sec··    _r_eference │ _K_ill
 _j_↧ _⇧_/_⇥_ button   _[__]_ section  _s_ee also  │ _q_uit

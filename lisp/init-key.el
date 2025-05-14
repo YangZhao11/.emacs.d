@@ -80,14 +80,23 @@ root-_D_iff  log _O_utgoing  _~_:revision  i_G_nore  _g_:annotate  _u_:revert
            ("C-M-l" . down-list)   ; was `reposition-window'
            ("M-r"   . raise-sexp)) ; was `move-to-window-line-top-bottom'
 
+(defun region-multiline-p ()
+  "Return non-nil of region is active and across multiple lines."
+  (when (use-region-p)
+    (let ((p (point))
+          (m (mark)))
+    (if (> p m)
+        (< m (line-beginning-position))
+      (> m (line-end-position))))))
 
 (defvar-local last-narrow-region nil
   "Remember last narrowing region, used by `narrow-dwim'.")
 (defun narrow-dwim ()
-  "If region is active, narrow to region. Otherwise toggle narrowing."
+  "If region is multiline, narrow to region. Otherwise toggle narrowing."
   (interactive)
-  (cond ((use-region-p)
-         (narrow-to-region (region-beginning) (region-end)))
+  (cond ((region-multiline-p)
+         (narrow-to-region (region-beginning) (region-end))
+         (deactivate-mark))
         ((buffer-narrowed-p)
          (setq last-narrow-region (cons (point-min-marker) (point-max-marker)))
          (widen))
@@ -97,7 +106,6 @@ root-_D_iff  log _O_utgoing  _~_:revision  i_G_nore  _g_:annotate  _u_:revert
         ('t
          (message "No previous narrowing."))))
 (bind-keys ("C-x n n" . narrow-dwim))
-
 
 (use-package region-bindings-mode :demand
   :diminish 'region-bindings-mode
