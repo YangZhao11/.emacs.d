@@ -2,7 +2,6 @@
 
 (eval-when-compile
   (require 'use-package)
-  (require 'hydra)
   (require 'keymap-hint))
 
 (use-package keymap-hint
@@ -10,12 +9,12 @@
 
 (use-package bookmark
   :config
-  (keymap-hint-set bookmark-bmenu-mode-map "SPC" "
+  (keymap-hint-set bookmark-bmenu-mode-map "
 _m_ark╶──··──────╮ Item╶─····────··────────┬╴Annot··╶╮ List··╶────╮
 _⏎_:go   _u_nmark│ _v_isit··     _r_ename    _a_:show│ _s_ave     │
 _d_elete _⌫_:back│ _1_/_2_-win   _w_here     _A_ll   │ _l_oad     │
 _z_ap    ··      │ _o_ther-win·· _R_elocate  _e_dit  │ _t_gl Fname│
-")
+" :bind "SPC")
   (bind-keys :map bookmark-bmenu-mode-map
              ("j" . scroll-down-command)
              ("k" . scroll-up-command)
@@ -25,11 +24,11 @@ _z_ap    ··      │ _o_ther-win·· _R_elocate  _e_dit  │ _t_gl Fname│
 (use-package view :diminish view-mode
   :bind ("C-x C-v" . view-mode)         ; find-alternate-file
   :config
-(keymap-hint-set view-mode-map "SPC"     "
+(keymap-hint-set view-mode-map "
 ··pg/set·· ½··╶──╮ ↔╶······──╮ _g_o(_%_)····╶─────╮ ··Register┬╴··Mark╮ _s_earch/_r_╶╮ _q_uit/_Q_
 _k_↥ _K_   _u_p  │ _a__e_ _p_│ _{__}_  _[__]_ page│ _m_:point   _._set│ again:_S_ _R_│ _i_menu
 _j_↧ _J_   _d_own│ _b__f_ _n_│ _<__>_  _(__)_ list│ _'_:goto    p_@_p │ regex:_/_ ·\\│ _o_utline
-")
+" :bind "SPC")
 
   (bind-keys :map view-mode-map
              ("C-j" . nil)
@@ -109,10 +108,10 @@ useful when followed by an immediate kill."
 (use-package replace
   :bind ("M-s M-o" . multi-occur-in-matching-buffers)
   :config
-  (keymap-hint-set occur-mode-map "SPC" "
+  (keymap-hint-set occur-mode-map "
 _k_↥   _p_rev··   _<_ _>_       _⏎_:goto      _e_dit
 _j_↧   _n_ext··   _d_isplay··   _o_ther-win   _f_ollow
-")
+" :bind "SPC")
   (bind-keys :map occur-mode-map
              ("SPC" . occur-mode-map-hint)
              ("d" . occur-mode-display-occurrence)
@@ -133,10 +132,10 @@ _j_↧   _n_ext··   _d_isplay··   _o_ther-win   _f_ollow
   :config
   (setq grep-use-headings 't)
 
-  (keymap-hint-set grep-mode-map "SPC" "
+  (keymap-hint-set grep-mode-map "
 _k_↥  _p_rev  _<__>_ beg/end of buffer _⏎_:goto    _e_dit
 _j_↧  _n_ext  _[__]_:prev/next file    _d_isplay
-")
+" :bind "SPC")
 
   (bind-keys :map grep-mode-map
              ("j" . scroll-up-command)
@@ -153,10 +152,10 @@ _j_↧  _n_ext  _[__]_:prev/next file    _d_isplay
 
 (use-package compile
   :config
-  (keymap-hint-set compilation-mode-map "SPC" "
+  (keymap-hint-set compilation-mode-map "
 _k_↥  _p_rev  _<__>_ beg/end of buffer  _⏎_:goto
 _j_↧  _n_ext  _[__]_:prev/next file
-")
+" :bind "SPC")
   (bind-keys :map compilation-mode-map
              ("x" . god-mode-self-insert)
              ("c" . god-mode-self-insert)
@@ -178,119 +177,32 @@ _j_↧  _n_ext  _[__]_:prev/next file
   :config
   (setq dired-dwim-target 't)
 
-  (defhydra hydra-dired (:color pink :hint nil)
+  (keymap-hint-set dired-mode-map
     "
-^^Mark(_*_)╶╮ ^Flag^╶─────^^──────╮ Go^^╶(_j_ump)─╮ Dir^^╶────^^──────┬ Subdir^^╶╮
-_%_:regexp^^│ _#_: temp   _d_:this│ _[__]_:page   │ _s_ort    _(_ detl  _i_nsert │
-_u_n/_m_ark │ _~_: backup _z_ap   │ _<__>_:dirline│ ʌ^^ up    ^^        _$_:hide │
-_t_oggle/_U_│ _._: № bkup   ^^    │ _{__}_:marked │ _+_create ^^        _K_ill   │
+··Mark(_*_)╶╮ ·Flag·╶─────··──────╮ Go··╶(_j_ump)─╮ Dir··╶────··──────┬ Subdir··╶╮
+_%_:regexp··│ _#_: temp   _d_:this│ _[__]_:page   │ _s_ort    _(_ detl  _i_nsert │
+_u_n/_m_ark │ _~_: backup _z_ap   │ _<__>_:dirline│ ʌ·· up    ··        _$_:hide │
+_t_oggle/_U_│ _._: № bkup   ··    │ _{__}_:marked │ _+_create ··        _K_ill   │
 
-^Emacs Op^^^╶──────────────^^─────────╮ ^^File Op^^╶─(_e_dit)^^──^^────────┬ch╶^^╮
+·Emacs Op···╶──────────────··─────────╮ ··File Op··╶─(_e_dit)··──··────────┬ch╶··╮
 _F_ind all   file-t_y_pe   _v_iew     │ _!_shell_&_ _S__Y_mlink  _=_ diff   _M_od│
-_A_:grep     _w_:cp Fname  _a_ltern   │ ^^_C_opy    _H_ardlink^^ _c_ompress _O_wn│
-_Q_uery/rep  _k_ill-line   _o_ther-win│ ^^_D_elete  _T_ouch^^    _Z_ompress _G_rp│
-_B_yte comp  _I_nfo        ^^         │ ^^_R_ename  _P_rint^^    _W_eb      ^^   │
-_L_oad       ma_N_         redisp_l_ay│ ^^_E_xt-open ^^^^        ^^         ^^   │
-"
-    ("SPC" nil)
-    ("RET" dired-find-file :exit t)
-    ("q" quit-window :exit t)
-    ("!" dired-do-shell-command)
-    ("#" dired-flag-auto-save-files)
-    ("$" dired-hide-subdir)
-    ("%" hydra-dired-regexp/body :exit t)
-    ("&" dired-do-async-shell-command)
-    ("(" dired-hide-details-mode)
-    ("*" hydra-dired-mark/body :exit t)
-    ("+" dired-create-directory)
-    ("." dired-clean-directory)
-    ("<" dired-prev-dirline)
-    ("=" dired-diff)
-    (">" dired-next-dirline)
-    ("[" backward-page)
-    ("]" forward-page)
-    ("{" dired-prev-marked-file)
-    ("}" dired-next-marked-file)
-    ("A" dired-do-find-regexp)
-    ("B" dired-do-byte-compile)
-    ("C" dired-do-copy)
-    ("D" dired-do-delete)
-    ("E" dired-do-open)
-    ("F" dired-do-find-marked-files)
-    ("G" dired-do-chgrp)
-    ("H" dired-do-hardlink)
-    ("I" dired-do-info)
-    ("K" dired-kill-subdir)
-    ("L" dired-do-load)
-    ("M" dired-do-chmod)
-    ("N" dired-do-man)
-    ("O" dired-do-chown)
-    ("P" dired-do-print)
-    ("Q" dired-do-find-regexp-and-replace)
-    ("R" dired-do-rename)
-    ("S" dired-do-symlink)
-    ("T" dired-do-touch)
-    ("U" dired-unmark-all-marks)
-    ("W" browse-url-of-dired-file)
-    ("Y" dired-do-relsymlink)
-    ("Z" dired-do-compress)
-    ("^" dired-up-directory)
-    ("a" dired-find-alternate-file :exit t)
-    ("c" dired-do-compress-to)
-    ("d" dired-flag-file-deletion)
-    ("e" dired-toggle-read-only)
-    ("i" dired-maybe-insert-subdir)
-    ("j" dired-goto-file)
-    ("k" dired-do-kill-lines)
-    ("l" dired-do-redisplay)
-    ("m" dired-mark)
-    ("o" dired-find-file-other-window :exit t)
-    ("s" dired-sort-toggle-or-edit)
-    ("t" dired-toggle-marks)
-    ("u" dired-unmark)
-    ("v" dired-view-file :exit t)
-    ("w" dired-copy-filename-as-kill)
-    ("z" dired-do-flagged-delete)
-    ("y" dired-show-file-type)
-    ("~" dired-flag-backup-files))
+_A_:grep     _w_:cp Fname  _a_ltern   │ ··_C_opy    _H_ardlink·· _c_ompress _O_wn│
+_Q_uery/rep  _k_ill-line   _o_ther-win│ ··_D_elete  _T_ouch··    _Z_ompress _G_rp│
+_B_yte comp  _I_nfo        ··         │ ··_R_ename  _P_rint··    _W_eb      ··   │
+_L_oad       ma_N_         redisp_l_ay│ ··_E_xt-open ····        ··         ··   │
+" :bind "SPC")
 
-  (defhydra hydra-dired-mark (:color teal :columns 3 :hint nil
-                              :after-exit
-                                (if (eq major-mode 'dired-mode)
-                                    (hydra-dired/body)))
-    "Mark"
-    ("SPC" nil)
-    ("!" dired-unmark-all-marks  "unmark all")
-    ("%" dired-mark-files-regexp "regexp")
-    ("*" dired-mark-executables  "executables")
-    ("/" dired-mark-directories  "directories")
-    ("?" dired-unmark-all-files  "unmark markchar")
-    ("@" dired-mark-symlinks     "symlinks")
-    ("N" dired-number-of-marked-files "Num marked")
-    ("c" dired-change-marks      "change")
-    ("m" dired-mark              "mark")
-    ("s" dired-mark-subdir-files "subdir-files")
-    ("t" dired-toggle-marks      "toggle")
-    ("u" dired-unmark            "unmark"))
+  (keymap-hint-set-sub dired-mode-map "*" "
+_m_ark╶────────··─────────··──────╮ _u_nmark╶╮ _t_oggle
+_*_executable _/_dir      _s_ubdir│ _!_all   │ _c_hange
+_%_regexp     _@_symlink  ··      │ _?_char  │ _N_umber
+" :bind "SPC")
 
-  (defhydra hydra-dired-regexp (:color teal :columns 3 :hint nil
-                                :after-exit
-                                (if (eq major-mode 'dired-mode)
-                                    (hydra-dired/body)))
-    "Regexp"
-    ("SPC" nil)
-    ("&" dired-flag-garbage-files "flag-garbage-files")
-    ("C" dired-do-copy-regexp "copy")
-    ("H" dired-do-hardlink-regexp "hardlink")
-    ("R" dired-do-rename-regexp "rename")
-    ("S" dired-do-symlink-regexp "symlink")
-    ("Y" dired-do-relsymlink-regexp "relsymlink")
-    ("d" dired-flag-files-regexp "flag-files")
-    ("g" dired-mark-files-containing-regexp "mark-containing")
-    ("l" dired-downcase "downcase")
-    ("m" dired-mark-files-regexp "mark")
-    ("r" dired-do-rename-regexp "rename")
-    ("u" dired-upcase "upcase"))
+  (keymap-hint-set-sub dired-mode-map "%" "
+Flag╶─··──╮ _m_ark╶────╮ _r_ename╶──╮ _C_opy
+_&_garbage│ _g_rep-mark│ _u_pcase   │ _H_ardlink
+_d_:this  │ ··         │ _l_owercase│ _S__Y_mlink
+" :bind "SPC")
 
   (bind-keys :map dired-mode-map
              ("[" . backward-page)
@@ -300,10 +212,7 @@ _L_oad       ma_N_         redisp_l_ay│ ^^_E_xt-open ^^^^        ^^         ^^
              ("z" . dired-do-flagged-delete)
              ("x" . god-mode-self-insert)
              ("e" . dired-toggle-read-only)
-             ("K" . dired-kill-subdir)
-             ("SPC" . hydra-dired/body)
-             ("* SPC" . hydra-dired-mark/body)
-             ("% SPC" . hydra-dired-regexp/body))
+             ("K" . dired-kill-subdir))
   (put 'dired-next-line 'command-semantic 'next-line)
   (put 'dired-previous-line 'command-semantic 'previous-line))
 
@@ -318,12 +227,16 @@ _L_oad       ma_N_         redisp_l_ay│ ^^_E_xt-open ^^^^        ^^         ^^
         '(("melpa-stable" . 20) ("gnu" . 10) ("melpa" . 0)))
 
   :config
-  (keymap-hint-set package-menu-mode-map "SPC" "
+  (keymap-hint-set package-menu-mode-map "
 Go····╶────╮ Action_z_╶─··────────────··──────╮ List··╶─··──────··──────╮
 _k_↥ _p_rev│ _i_nstall  _d_elete      _?_:info│ _/_:filter··    _r_evert│
 _j_↧ _n_ext│ _U_pgrade  _~_:obsolete  _u_nmark│ _H_ide/_(_tgl)  _S_ort  │
-")
+" :bind "SPC")
 
+  (keymap-hint-set-sub package-menu-mode-map "/" "
+_/_clear      _a_rchive  _d_escription  _k_eyword  _m_arked  _n_ame  _s_tatus
+_u_pgradable  _v_ersion  _N_ame/desc
+" :bind "SPC")
   (bind-keys :map package-menu-mode-map
              ("z" . package-menu-execute)
              ("x" . god-mode-self-insert)
@@ -334,14 +247,14 @@ _j_↧ _n_ext│ _U_pgrade  _~_:obsolete  _u_nmark│ _H_ide/_(_tgl)  _S_ort  �
              ("k" . scroll-down-command)))
 
 (use-package smerge-mode
-  :bind ("C-x m" . hydra-smerge/body)
+  :bind ("C-x m" . smerge-mode)
   :config
-  (keymap-hint-set smerge-mode-map "SPC" "
+  (keymap-hint-set smerge-mode-map "
 Move··╶╮ Keep··╶─··─────╮ Current··╮ Conflict····──────┬╴diff··╶─────────╮
 _n_ext │ _b_ase  _u_pper│ _⏎_ keep │ _R_efine  _E_diff   _<_: base-upper │
 _p_rev │ _a_ll   _l_ower│ _K_ill   │ _C_ombine/a_U_to    _=_: upper-lower│
 _q_uit │ ··      _s_wap │ ··       │ _r_esolve/_A_ll     _>_: base-lower │
-")
+" :bind "SPC")
 )
 
 (use-package diff-mode
@@ -634,17 +547,18 @@ Limit search to a few pages before."
 
 (use-package ess-help
   :config
-  (keymap-hint-set ess-help-mode-map "SPC" "
+  ;; ess forgot this
+  (put 'ess-help-mode 'mode-class 'special)
+
+  (keymap-hint-set ess-help-mode-map "
 Move···╶─────·····─────────╮ Eval····╶──────╮ Jump··╶────────··────────╮
 _k_↥ _p_rev  _[__]_:section│ _f_unction ··  │ _h_elp-on-obj  _/_isearch│
 _j_↧ _n_ext  _<__>_:buf    │ _l_ine _r_egion│ _g_o           _i_ndex   │
-")
-  (put 'ess-help-mode 'mode-class 'special)
-  (setq ess-help-mode-g-map (lookup-key ess-help-mode-map "g"))
-  (keymap-hint-set
-   ess-help-mode-g-map nil
-   " go: _g_:revert  _a_propos  _v_ignettes _i_ndex  _h_elp-on-obj" :load)
-  (keymap-set ess-help-mode-map "g" #'ess-help-mode-g-map-hint)
+" :bind "SPC")
+
+(keymap-hint-set-sub ess-help-mode-map "g"
+ " go: _g_:revert  _a_propos  _v_ignettes _i_ndex  _h_elp-on-obj"
+:bind "SPC")
 
   (bind-keys :map ess-help-mode-map
              ("<f8>" . ess-eval-line-and-step)
@@ -757,10 +671,10 @@ _j_↧ _n_ext  _<__>_:buf    │ _l_ine _r_egion│ _g_o           _i_ndex   │
 (use-package man
   :config
   (put 'Man-mode 'mode-class 'special)
-  (keymap-hint-set Man-mode-map "SPC" "
+  (keymap-hint-set Man-mode-map "
 _k_↥ _<__>_  top/bot  _g_oto sec··    _r_eference │ _K_ill
 _j_↧ _⇧_/_⇥_ button   _[__]_ section  _s_ee also  │ _q_uit
-")
+" :bind "SPC")
   (bind-keys :map Man-mode-map
              ("j" . scroll-up-command)
              ("k" . scroll-down-command)
@@ -775,12 +689,12 @@ _j_↧ _⇧_/_⇥_ button   _[__]_ section  _s_ee also  │ _q_uit
 
 (use-package info
   :config
-  (keymap-hint-set Info-mode-map "SPC" "
+  (keymap-hint-set Info-mode-map "
 Go··╶╮ ··Reference··╶╮ ··History╶─╮ Tree······╶─┬ _d_irectory··───╮
 _k_↥ │ _⇧_/_⇥_:cycle │ _l_:back   │ ··  ↑_u_p·· │ In file:_T_OC·· │
 _j_↧ │ _⏎_:_f_ollow  │ _r_:forward│ _P_←∙→_N_·· │ _<__>_first/last│
 · ·  │ _m_enu··      │ _L_ist     │ ··  ↳_[__]_ │ ····            │
-")
+" :bind "SPC")
   (bind-keys :map Info-mode-map
              ("e" . move-end-of-line)
              ("j" . Info-scroll-up)
@@ -800,10 +714,10 @@ _j_↧ │ _⏎_:_f_ollow  │ _r_:forward│ _P_←∙→_N_·· │ _<__>_firs
 
 (use-package help-mode
   :config
-  (keymap-hint-set help-mode-map "SPC" "
+  (keymap-hint-set help-mode-map "
 _k_↥  _l_/_r_:history  _i_nfo       _s_ource
 _j_↧  _⇧_/_⇥_:buttons  _I_:lispref  _c_ustomize
-")
+" :bind "SPC")
 
   (bind-keys :map help-mode-map
              ("n" . next-line)

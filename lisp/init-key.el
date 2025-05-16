@@ -46,19 +46,19 @@
               face (:foreground "#D04020")
               help-echo "Recording keyboard macro")))))
 
-(keymap-hint-set ctl-x-r-map "?" "
+(keymap-hint-set ctl-x-r-map "
 Rectangle╶─────······───────╮ Register╶··┬╴save··╶─────╮ Bookmark──··─────╮
 _c_lear     _N_umber-lines··│ _+_: inc   │ _␣_:point   │ _m_: set         │
 _d_elete    _o_pen  s_t_ring│ _j_ump     │ _f_rameset  │ _b_: jump        │
 _k_ill      _y_ank··        │ _i_nsert   │ _w_indow-cfg│ _l_ist           │
 _M-w_:copy  _r_egister··    │ _s_ave text│ _n_umber    │ _M_: no-overwrite│
-" :load)
+" :load-map 't :bind "?")
 
-(keymap-hint-set vc-prefix-map "?" "
+(keymap-hint-set vc-prefix-map "
 _+_:update   ch_a_nge log    print _l_og   _d_ir     _h_istory     _m_erge
 _=_:diff     log _I_ncoming  root _L_og    _P_ush    reg_i_ster    _r_etrieve tag
 root-_D_iff  log _O_utgoing  _~_:revision  i_G_nore  _g_:annotate  _u_:revert
-" :load)
+" :load-map 't :bind "?")
 
 (defun z-kill-buffer (arg)
   "Kill this buffer, or with ARG, call `kill-buffer' instead."
@@ -357,9 +357,9 @@ instead of inactivate region."
          ("<f9>"   . gud-finish)))
 
 
-(keymap-hint-set resize-window-repeat-map "SPC" "
+(keymap-hint-set resize-window-repeat-map "
 _^_ large _v_ shrink  _{_ _}_ horizontal
-" :load)
+" :load-map 't :bind "?")
 (bind-keys ("<f10>"   . resize-window-repeat-map-hint)
            ("<f11>"   . shrink-window)
            ("<f12>"   . enlarge-window)
@@ -380,14 +380,14 @@ _^_ large _v_ shrink  _{_ _}_ horizontal
 
 (defmacro ballotbox (var &optional pos)
   (if pos
-  `(if (bound-and-true-p ,var) ,pos "·")
-  `(if (bound-and-true-p ,var) "✔" "·")))
+  `(if (bound-and-true-p ,var) ,pos "•")
+  `(if (bound-and-true-p ,var) "✔" "•")))
 
 (defhydra hydra-toggle (:color blue :hint nil)
   "
 Toggle:
 %s(ballotbox rainbow-delimiters-mode) rainbow-_d_elimiters  ^^ %s(ballotbox abbrev-mode \"∂\") _a_bbrev       %s(ballotbox outline-minor-mode) _o_utline-minor-mode ^^ %s(ballotbox beacon-mode) _b_eacon
-%s(ballotbox rainbow-identifiers-mode) rainbow-_i_dentifiers ^^ %s(ballotbox auto-fill-function \"¶\") auto-_f_ill    %s(if (bound-and-true-p subword-mode) \",\" (if (bound-and-true-p superword-mode) \"²\" \"·\")) sub_w_ord/super_W_ord   %s(ballotbox xterm-mouse-mode) _x_term-mouse
+%s(ballotbox rainbow-identifiers-mode) rainbow-_i_dentifiers ^^ %s(ballotbox auto-fill-function \"¶\") auto-_f_ill    %s(if (bound-and-true-p subword-mode) \",\" (if (bound-and-true-p superword-mode) \"²\" \"•\")) sub_w_ord/super_W_ord   %s(ballotbox xterm-mouse-mode) _x_term-mouse
 %s(ballotbox rainbow-mode) _R_ainbow colors       ^^%s(ballotbox visual-line-mode \"↵\") visual-lin_e_  %s(ballotbox flyspell-mode \"⍹\") fl_y_spell/_p_rog       %s(ballotbox electric-quote-mode) elec-_'_
 %s(ballotbox hi-lock-mode) _h_i-lock/_c_hanges      %s(ballotbox auto-revert-mode \"↻\") auto-_r_evert  %s(ballotbox which-function-mode) which-f_u_nc
 %s(ballotbox whitespace-mode \"␣\") white_s_pace/_t_railing  %s(ballotbox display-line-numbers-mode) line-_n_um     %s(ballotbox flymake-mode) fly_m_ake
