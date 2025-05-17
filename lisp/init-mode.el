@@ -177,14 +177,13 @@ _j_↧  _n_ext  _[__]_:prev/next file
   :config
   (setq dired-dwim-target 't)
 
-  (keymap-hint-set dired-mode-map
-    "
+  (keymap-hint-set dired-mode-map "
 ··Mark(_*_)╶╮ ·Flag·╶─────··──────╮ Go··╶(_j_ump)─╮ Dir··╶────··──────┬ Subdir··╶╮
 _%_:regexp··│ _#_: temp   _d_:this│ _[__]_:page   │ _s_ort    _(_ detl  _i_nsert │
 _u_n/_m_ark │ _~_: backup _z_ap   │ _<__>_:dirline│ ʌ·· up    ··        _$_:hide │
 _t_oggle/_U_│ _._: № bkup   ··    │ _{__}_:marked │ _+_create ··        _K_ill   │
 
-·Emacs Op···╶──────────────··─────────╮ ··File Op··╶─(_e_dit)··──··────────┬ch╶··╮
+·Emacs Ops···╶─────────────··─────────╮ ··File Ops··╶─(_e_dit)··──··───────┬ch╶··╮
 _F_ind all   file-t_y_pe   _v_iew     │ _!_shell_&_ _S__Y_mlink  _=_ diff   _M_od│
 _A_:grep     _w_:cp Fname  _a_ltern   │ ··_C_opy    _H_ardlink·· _c_ompress _O_wn│
 _Q_uery/rep  _k_ill-line   _o_ther-win│ ··_D_elete  _T_ouch··    _Z_ompress _G_rp│
@@ -370,7 +369,7 @@ Limit search to a few pages before."
 (use-package elisp-mode
   :config
   (defun z-setup-imenu-for-elisp ()
-    "Recognize `use-package` and defhydra in imenu, for init files."
+    "Recognize `use-package` in imenu, for init files."
     (let ((emacsd (expand-file-name "~/.emacs.d/lisp/"))
           (initel (expand-file-name "init.el" "~/.emacs.d")))
       (when (and buffer-file-name
@@ -379,10 +378,7 @@ Limit search to a few pages before."
                                    buffer-file-name)))
         (add-to-list
          'imenu-generic-expression
-         '("Packages" "^\\s-*(\\(use-package\\)\\s-+\\(\\(\\sw\\|\\s_\\)+\\)" 2))
-        (add-to-list
-         'imenu-generic-expression
-         '(nil "^\\s-*(\\(defhydra\\)\\s-+\\(\\(\\sw\\|\\s_\\)+\\)" 2)))))
+         '("Packages" "^\\s-*(\\(use-package\\)\\s-+\\(\\(\\sw\\|\\s_\\)+\\)" 2)))))
 
   (setq emacs-lisp-directory
         (replace-regexp-in-string "/lisp/.*" "" (symbol-file 'elisp-mode)))
@@ -550,16 +546,6 @@ Limit search to a few pages before."
   ;; ess forgot this
   (put 'ess-help-mode 'mode-class 'special)
 
-  (keymap-hint-set ess-help-mode-map "
-Move···╶─────·····─────────╮ Eval····╶──────╮ Jump··╶────────··────────╮
-_k_↥ _p_rev  _[__]_:section│ _f_unction ··  │ _h_elp-on-obj  _/_isearch│
-_j_↧ _n_ext  _<__>_:buf    │ _l_ine _r_egion│ _g_o           _i_ndex   │
-" :bind "SPC")
-
-(keymap-hint-set-sub ess-help-mode-map "g"
- " go: _g_:revert  _a_propos  _v_ignettes _i_ndex  _h_elp-on-obj"
-:bind "SPC")
-
   (bind-keys :map ess-help-mode-map
              ("<f8>" . ess-eval-line-and-step)
              ("<f9>" . ess-eval-function-or-paragraph-and-step)
@@ -580,7 +566,18 @@ _j_↧ _n_ext  _<__>_:buf    │ _l_ine _r_egion│ _g_o           _i_ndex   │
              ("g v" . ess-display-vignettes)
              ("g i" . ess-display-package-index)
              ("g h" . ess-display-help-on-object)
-             ))
+             )
+
+  (keymap-hint-set ess-help-mode-map "
+Move···╶─────·····─────────╮ Eval····╶──────╮ Jump··╶────────··────────╮
+_k_↥ _p_rev  _[__]_:section│ _f_unction ··  │ _h_elp-on-obj  _/_isearch│
+_j_↧ _n_ext  _<__>_:buf    │ _l_ine _r_egion│ _g_o           _i_ndex   │
+" :bind "SPC")
+
+  (keymap-hint-set-sub ess-help-mode-map "g"
+" go: _g_:revert  _a_propos  _v_ignettes _i_ndex  _h_elp-on-obj"
+ :bind "SPC")
+)
 
 
 (use-package ess-r-mode

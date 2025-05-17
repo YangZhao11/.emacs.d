@@ -110,4 +110,7 @@ PROP set to true to add properties for mode line."
 ;; --------------------------------------------------
 (load-theme 'doom-zenburn 't)   ; load this first for many defaults.
 
+;; autoload not working yet, load the whole thing
+(require 'keymap-hint)
+
 (provide 'init-default)

@@ -60,7 +60,7 @@ capture group. PROPERTIES are passed to `propertize' directly."
   "Returns non-nil if COMMAND should cancal hints."
   (if (symbolp command)
       (or (memq (get command 'command-semantic)
-                '(switch-buffer quit-window))
+                '(switch-buffer display-buffer quit-window switch-frame))
           ;; major mode change commands.
           (get command 'derived-mode-parent))
     ;; Don't know how to detect anything for lambda commands.
@@ -95,7 +95,7 @@ capture group. PROPERTIES are passed to `propertize' directly."
     (when hint
       (if (listp hint)
           (setq hint (eval hint 't)))
-        (lv-message hint)
+        (lv-message "%s" hint)
         (set-transient-map
          (cond ((keymapp load-map)
                 load-map)
@@ -200,7 +200,7 @@ automatically generate one. The rest of the arguments are same as
   (let ((hint-command-symbol
          (intern (concat (symbol-name symbol) "-hint"))))
     `(progn
-       (setq ,symbol (lookup-key ,keymap ,key))
+       (defvar ,symbol (lookup-key ,keymap ,key))
        (keymap-hint-set ,symbol ,hint
                         :bind ,bind :load-map 't :keep 'once)
        (keymap-hint-load-map-set

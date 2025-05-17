@@ -383,6 +383,36 @@ _^_ large _v_ shrink  _{_ _}_ horizontal
   `(if (bound-and-true-p ,var) ,pos "•")
   `(if (bound-and-true-p ,var) "✔" "•")))
 
+(defvar-keymap toggle-options-map
+  :doc "Shortcut for toggle some options"
+  "'"    #'electric-quote-mode
+  "a"    #'abbrev-mode
+  "b"    #'beacon-mode
+  "c"    #'highlight-changes-mode
+  "d"    #'rainbow-delimiters-mode
+  "e"    #'visual-line-mode
+  "f"    #'auto-fill-mode
+  "h"    #'hi-lock-mode
+  "i"    #'rainbow-identifiers-mode
+  "m"    #'flymake-mode
+  "p"    #'flyspell-prog-mode
+  "n"    #'display-line-numbers-mode
+  "o"    #'outline-minor-mode
+  "r"    #'auto-revert-mode
+  "R"    #'rainbow-mode
+  "s"    #'whitespace-mode
+  "t"    #'toggle-show-trailing-whitespace
+  "u"    #'which-function-mode
+  "w"    #'subword-mode
+  "W"    #'superword-mode
+  "x"    #'xterm-mouse-mode
+  "y"    #'flyspell-mode
+  )
+(keymap-hint-set toggle-options-map "
+" :keep 'once)
+
+(keymap-global-set "<f2>" #'toggle-options-map-hint)
+
 (defhydra hydra-toggle (:color blue :hint nil)
   "
 Toggle:
@@ -417,7 +447,7 @@ Toggle:
   ("SPC"  nil)
   ("<f2>" nil)
 )
-(keymap-global-set "<f2>" 'hydra-toggle/body)
+
 (setq display-line-numbers-type 'relative)
 
 (use-package subword

@@ -1,4 +1,7 @@
 ; -*- coding: utf-8; lexical-binding: t -*-
+(eval-when-compile
+  ;; for `doom-blend'
+  (require 'doom-themes))
 
 (defface god-lighter
   '((t :inherit mode-line :foreground "black"))
@@ -135,7 +138,7 @@ mouse-3: Describe current input method")
 (defvar z-lighter
   '(:eval (cond (god-local-mode z-lighter-god)
                 (view-mode z-lighter-view)
-                ((or (eq (get major-mode 'mode-class) 'special-mode)
+                ((or (eq (get major-mode 'mode-class) 'special)
                      (derived-mode-p 'special-mode
                                      'emacs-news-view-mode))
                  z-lighter-special)
@@ -171,7 +174,7 @@ mouse-3: Describe current input method")
 ; mode-line-frame-name
 ))
 (setq project-mode-line 't)
-(setq project-mode-line-face 'font-lock--face)
+;(setq project-mode-line-face 'font-lock-comment-face)
 
 ;; remove input method from mode-line-mule-info, this is already
 ;; handled by z-lighter.
