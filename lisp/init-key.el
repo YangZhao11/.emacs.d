@@ -183,8 +183,8 @@ If ARG is non-nil and we are on terminal, then call
     (save-mark-and-excursion
      (easy-kill-mark-region)
      (call-interactively ,func)))))
-  :config
 
+  :config
   (easy-kill-defun-on-selection easy-kill-transpose #'transpose-dwim-regions)
   (easy-kill-defun-on-selection easy-kill-wrap-region #'self-insert-command)
   (easy-kill-defun-on-selection easy-kill-indent-region #'indent-region)
@@ -204,6 +204,26 @@ If ARG is non-nil and we are on terminal, then call
       (message "No selection, exit easy-kill")
       (easy-kill-exit)))
 
+  (defun easy-kill--build-match ()
+    "Build a match list for `like-this-next'."
+    (let* ((s (easy-kill-get thing))
+           (str (buffer-substring-no-properties
+                 (easy-kill-get start)
+                 (easy-kill-get end)))
+           (poffset (- (point) (easy-kill-get start))))
+      (list s str poffset)))
+
+  (easy-kill-defun easy-kill-next-like-this (&optional arg)
+    (interactive "p")
+    (like-this-next arg (easy-kill--build-match))
+    (setq this-command 'like-this-next))
+
+  (easy-kill-defun easy-kill-prev-like-this (&optional arg)
+    (interactive "p")
+    (like-this-prev arg (easy-kill--build-match))
+    (setq this-command 'like-this-prev))
+
+
   (setq easy-kill-unhighlight-key (kbd "SPC"))
   (setq easy-kill-try-things '(url email arg sexp line))
 
@@ -221,6 +241,8 @@ If ARG is non-nil and we are on terminal, then call
                           (?b buffer-file-name)))
   (bind-keys
    :map easy-kill-base-map
+   ([remap like-this-next] . easy-kill-next-like-this)
+   ([remap like-this-prev] . easy-kill-prev-like-this)
    ("<f1>" . easy-kill-help)
    ("C-h"  . easy-kill-help)
    ("DEL"  . easy-kill-delete-pairs)
