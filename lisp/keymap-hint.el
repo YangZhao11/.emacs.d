@@ -43,8 +43,10 @@ capture group. PROPERTIES are passed to `propertize' directly."
   (pop keymap-hint--stack)
   (lv-delete-window)
   (when keymap-hint--stack
-    ;; TODO: reliably show top of stack after command, even if the
-    ;; command triggered an error.
+    ;; TODO: Ideally we only re-show after a command finished, however
+    ;; `post-command-hook' would not trigger if the command had an
+    ;; error. Using idle timer would interfere with command that
+    ;; requires input.
     (run-with-idle-timer 0 nil #'keymap-hint--show-top)))
 
 (defun keymap-hint-cancel ()

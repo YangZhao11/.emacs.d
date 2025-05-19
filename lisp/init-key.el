@@ -365,7 +365,11 @@ _^_ large _v_ shrink  _{_ _}_ horizontal
            ("<f12>"   . enlarge-window)
            ("M-9"     . previous-buffer)
            ("M-0"     . next-buffer)
+           ("M-m"     . bury-buffer)
+           ("M-M"     . unbury-buffer)
            ("C-x 4 o" . display-buffer))
+(put 'bury-buffer 'command-semantic 'switch-buffer)
+(put 'unbury-buffer 'command-semantic 'switch-buffer)
 (put 'previous-buffer 'command-semantic 'switch-buffer)
 (put 'next-buffer 'command-semantic 'switch-buffer)
 
@@ -773,7 +777,7 @@ in `ctl-j-map' first."
 
 (use-package embark :ensure
   :after vertico
-  :bind ("M-m" . embark-act)
+;  :bind ("M-m" . embark-act)
   :bind (:map vertico-map
               ("M-s o" . embark-export)))
 
