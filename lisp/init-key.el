@@ -363,10 +363,9 @@ instead of inactivate region."
 (use-package find-file
   :bind ("C-x C-r" . ff-find-other-file))
 
-(bind-keys ("C-x 9" . delete-other-windows-vertically)
-           ("C-x C-0")                  ; unbind text-scale-adjust
-           ("<mouse-8>" . mode-line-previous-buffer)
-           ("<mouse-9>" . mode-line-next-buffer)
+(bind-keys ("C-x C-0")                  ; unbind text-scale-adjust
+           ("<mouse-3>" . mode-line-previous-buffer)
+           ("<mouse-4>" . mode-line-next-buffer)
            ("C-z"))
 
 ;; F1 for help.
@@ -379,21 +378,24 @@ instead of inactivate region."
          ("<f9>"   . gud-finish)))
 
 
-(keymap-hint-set resize-window-repeat-map "
+(use-package window
+  :bind (("<f11>"   . shrink-window)
+         ("<f12>"   . enlarge-window)
+         ("M-9"     . previous-buffer)
+         ("M-0"     . next-buffer)
+         ("M-m"     . bury-buffer)
+         ("M-M"     . unbury-buffer)
+         ("C-x 4 o" . display-buffer)
+         ("C-x 9"   . delete-other-windows-vertically))
+  :config
+  (keymap-hint-set resize-window-repeat-map "
 _^_ large _v_ shrink  _{_ _}_ horizontal
 " :load-map 't :bind "?")
-(bind-keys ("<f10>"   . resize-window-repeat-map-hint)
-           ("<f11>"   . shrink-window)
-           ("<f12>"   . enlarge-window)
-           ("M-9"     . previous-buffer)
-           ("M-0"     . next-buffer)
-           ("M-m"     . bury-buffer)
-           ("M-M"     . unbury-buffer)
-           ("C-x 4 o" . display-buffer))
-(put 'bury-buffer 'command-semantic 'switch-buffer)
-(put 'unbury-buffer 'command-semantic 'switch-buffer)
-(put 'previous-buffer 'command-semantic 'switch-buffer)
-(put 'next-buffer 'command-semantic 'switch-buffer)
+  (bind-keys ("<f10>"   . resize-window-repeat-map-hint))
+  (put 'bury-buffer 'command-semantic 'switch-buffer)
+  (put 'unbury-buffer 'command-semantic 'switch-buffer)
+  (put 'previous-buffer 'command-semantic 'switch-buffer)
+  (put 'next-buffer 'command-semantic 'switch-buffer))
 
 
 (defun toggle-show-trailing-whitespace ()

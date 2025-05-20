@@ -28,6 +28,7 @@
 (defvar like-this--last-match nil)
 
 ;; Handle faces case
+;; TODO: do this for text property in general.
 (defun like-this--face-matches (face)
   "Returns true if face is active at point"
   (let ((f (get-text-property (point) 'face)))

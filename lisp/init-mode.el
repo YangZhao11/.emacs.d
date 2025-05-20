@@ -482,7 +482,6 @@ Limit search to a few pages before."
         (unless (provided-mode-derived-p major-mode 'inferior-ess-mode)
           (let ((ess-ask-for-ess-directory nil)
                 (ess-startup-directory "~/Projects"))
-            (cd "~/Projects")
             (run-ess-r))))))
 
   (defun ess-smart-pipe (arg)
