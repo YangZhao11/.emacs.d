@@ -27,6 +27,16 @@
 ;; accidentally change what we search for.
 (defvar like-this--last-match nil)
 
+(defun like-this--fail-message (arg)
+  (cond
+   ((eq arg 1)
+    (message "At last occurrence"))
+   ((eq arg -1)
+    (message "At first occurrence"))
+   ('t
+    (message "No %s %d occurrences"
+             (if (> arg 0) "next" "previous") arg))))
+
 ;; Handle faces case
 ;; TODO: do this for text property in general.
 (defun like-this--face-matches (face)
@@ -37,30 +47,45 @@
           ((listp f) (and (memq face f) face))
           (:else nil))))
 
-(defun like-this--next-matching-face (face)
-  "Move to next place where the face matches"
-  (while (like-this--face-matches face)
-    (goto-char (next-single-property-change (point) 'face)))
-  (while (not (like-this--face-matches face))
-    (goto-char (next-single-property-change (point) 'face))))
+(defun like-this--next-matching-face (face arg)
+  "Move to next ARG-th place where the FACE matches"
+  (dotimes (_ arg)
+    (while (like-this--face-matches face)
+      (if-let* ((c (next-single-property-change (point) 'face)))
+          (goto-char c)
+        (signal 'search-failed nil)))
+    (while (not (like-this--face-matches face))
+      (if-let* ((c (next-single-property-change (point) 'face)))
+          (goto-char c)
+        (signal 'search-failed nil)))))
 
-(defun like-this--previous-matching-face (face)
-  "Move to previous place where the face matches"
-  (while (like-this--face-matches face)
-    (goto-char (previous-single-property-change (point) 'face)))
-  (while (not (like-this--face-matches face))
-    (goto-char (previous-single-property-change (point) 'face))))
+(defun like-this--previous-matching-face (face arg)
+  "Move to previous ARG-th place where the FACE matches"
+  (dotimes (_ arg)
+    (while (like-this--face-matches face)
+      (if-let* ((c (previous-single-property-change (point) 'face)))
+          (goto-char c)
+        (signal 'search-failed nil)))
+    (while (not (like-this--face-matches face))
+      (if-let* ((c (previous-single-property-change (point) 'face)))
+          (goto-char c)
+        (signal 'search-failed nil)))))
 
 
+;; TODO: handle failure
 (defun like-this--next-face (face arg)
-  (while (> arg 0)
-    (like-this--next-matching-face face)
-    (setq arg (1- arg)))
-  (while (< arg 0)
-    (like-this--previous-matching-face face)
-    (setq arg (1+ arg))))
+  (let ((saved-point (point)))
+    (condition-case nil
+        (if (> arg 0)
+            (like-this--next-matching-face face arg)
+          (like-this--previous-matching-face face (- arg)))
+      (search-failed
+       (like-this--fail-message arg)
+       (goto-char saved-point))
+    )))
 
 ;; Handle thing-at-point cases
+;; TODO: handle failure
 (defun like-this--next-thing (match arg)
   "Search for next ARG'th occurrence of MATCH.
 
@@ -80,10 +105,17 @@ point-offset)."
          (p (nth 2 match))
          (l (length str))
          (offset (if (> arg 0) (- p l)
-                       p)))
-    (forward-char (- offset))
-    (re-search-forward regexp nil nil arg)
-    (forward-char offset)))
+                   p))
+         (saved-point (point)))
+    (condition-case nil
+        (progn
+          (forward-char (- offset))
+          (re-search-forward regexp nil nil arg)
+          (forward-char offset))
+      (search-failed
+       (like-this--fail-message arg)
+       (goto-char saved-point)
+       ))))
 
 (defun like-this--find-match ()
   "Find a thing to search for.
@@ -96,7 +128,7 @@ pair. For thing, return (thing str pointer-offset) list."
            (s (cdr try-item)))
        (cond ((eq type 'face)
               (if (like-this--face-matches s)
-                  try-item))
+                  (list 'face s)))
              ((eq type 'thing)
               (if-let* ((bounds (bounds-of-thing-at-point s)))
                   (list s
@@ -104,23 +136,34 @@ pair. For thing, return (thing str pointer-offset) list."
                         (- (point) (car bounds))))))))
    like-this-try-list))
 
+(defun string-or-symbol-name (x)
+  (cond ((stringp x) x)
+        ((symbolp x) (symbol-name x))))
+
 ;;;###autoload
 (defun like-this-next (&optional arg match)
   "Navigate to ARG'th thing like this at point."
   (interactive "p")
-  (setq match (or match
-                  (and (memq last-command '(like-this-next like-this-prev))
-                       like-this--last-match)
-                  (like-this--find-match)))
-  (if match
-      (progn
-        (setq like-this--last-match match)
-        (cond ((eq (car match) 'face)
-               (like-this--next-face (cdr match) arg))
-              (:else                      ; other cases are things
-               (like-this--next-thing match arg))))
-    :else
-    (user-error "Not sure what to look for.")))
+  (unless match
+    (if (and (memq last-command '(like-this-next like-this-prev))
+             like-this--last-match)
+        (setq match like-this--last-match)
+      :else
+      (setq match (like-this--find-match))
+      (if match
+          (message "%s %s like `%s'"
+                   (if (> arg 0) "Next" "Prev")
+                   (symbol-name (car match))
+                   (string-or-symbol-name (cadr match)))
+        :else
+        (user-error "Not sure what to look for.")
+        ))
+    )
+  (setq like-this--last-match match)
+  (cond ((eq (car match) 'face)
+         (like-this--next-face (cadr match) arg))
+        (:else                      ; other cases are things
+         (like-this--next-thing match arg))))
 
 ;;;###autoload
 (defun like-this-prev (&optional arg match)
