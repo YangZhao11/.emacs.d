@@ -434,37 +434,35 @@ _^_ large _v_ shrink  _{_ _}_ horizontal
   "x"    #'xterm-mouse-mode
   "y"    #'flyspell-mode
   )
-(keymap-hint-set toggle-options-map "
+(keymap-hint-set toggle-options-map
+ (format
+  "
 Toggle:
 %s rainbow-_d_elimiters  ·· %s _a_bbrev       %s _o_utline-minor-mode ··
 %s rainbow-_i_dentifiers ·· %s auto-_f_ill    %s sub_w_ord/super_W_ord   %s _x_term-mouse
 %s _R_ainbow colors      ·· %s visual-lin_e_  %s fl_y_spell/_p_rog       %s elec-_'_
 %s _h_i-lock/_c_hanges      %s auto-_r_evert  %s which-f_u_nc
 %s white_s_pace/_t_railing  %s line-_n_um     %s fly_m_ake
-" :bind "SPC" :keep 'once :load-map 't)
-;; TODO: let keymap-hint-set handle this.
-(let* ((h (get 'toggle-options-map 'hint))
-       (s (plist-get h :hint)))
-  (plist-put h :hint
-             `(format ,s
-                      (ballotbox rainbow-delimiters-mode)
-                      (ballotbox abbrev-mode "∂")
-                      (ballotbox outline-minor-mode)
-                      (ballotbox rainbow-identifiers-mode)
-                      (ballotbox auto-fill-function "¶")
-                      (if (bound-and-true-p subword-mode) ","
-                        (if (bound-and-true-p superword-mode) "²" "•"))
-                      (ballotbox xterm-mouse-mode)
-                      (ballotbox rainbow-mode)
-                      (ballotbox visual-line-mode "↵")
-                      (ballotbox flyspell-mode "⍹")
-                      (ballotbox electric-quote-mode)
-                      (ballotbox hi-lock-mode)
-                      (ballotbox auto-revert-mode "↻")
-                      (ballotbox which-function-mode)
-                      (ballotbox whitespace-mode "␣")
-                      (ballotbox display-line-numbers-mode)
-                      (ballotbox flymake-mode))))
+"
+  (ballotbox rainbow-delimiters-mode)
+  (ballotbox abbrev-mode "∂")
+  (ballotbox outline-minor-mode)
+  (ballotbox rainbow-identifiers-mode)
+  (ballotbox auto-fill-function "¶")
+  (if (bound-and-true-p subword-mode) ","
+    (if (bound-and-true-p superword-mode) "²" "•"))
+  (ballotbox xterm-mouse-mode)
+  (ballotbox rainbow-mode)
+  (ballotbox visual-line-mode "↵")
+  (ballotbox flyspell-mode "⍹")
+  (ballotbox electric-quote-mode)
+  (ballotbox hi-lock-mode)
+  (ballotbox auto-revert-mode "↻")
+  (ballotbox which-function-mode)
+  (ballotbox whitespace-mode "␣")
+  (ballotbox display-line-numbers-mode)
+  (ballotbox flymake-mode))
+ :bind "SPC" :keep 'once :load-map 't)
 (keymap-global-set "<f2>" #'toggle-options-map-hint)
 
 (setq display-line-numbers-type 'relative)

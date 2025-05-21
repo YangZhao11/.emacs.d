@@ -135,19 +135,31 @@ the keymap is deactivated after one command."
     (push keymap-symbol keymap-hint--stack)
     (keymap-hint--show-top)))
 
-(defun keymap-hint--format (hint)
-  "Format raw HINT to what we store in the hint property."
+(defun keymap-hint--format-string (hint)
+  "Format string HINT to what we store in the hint property."
   (setq hint (string-trim hint))
   (setq hint (replace-regexp-in-string "·" "" hint))
   (setq hint (propertize-regexp
               hint "_\\([^_]+\\)_" 'face 'font-lock-function-name-face))
   hint)
 
+(defun keymap-hint--format (hint)
+  "Format HINT to what we store in the hint property."
+  (cond ((stringp hint)
+         (keymap-hint--format-string hint))
+        ((and (listp hint) (eq (car hint) 'format))
+         ;; changing the original list, but we should be fine.
+         (setf (cadr hint) (keymap-hint--format-string (cadr hint)))
+         hint)
+        ('t hint)))
+
 
 ;;;###autoload
 (cl-defmacro keymap-hint-set (keymap hint &key bind load-map keep)
-  ;; TODO: parse hint to format form if it contains %() constructs.
   "Set HINT for KEYMAP, which is a symbol of keymap name.
+
+If HINT is a string or format call, we process _X_ constructs to add
+highlight, and remove `·' to allow better aligning.
 
 BIND specifies a key in KEYMAP to bind to show HINT function.
 
