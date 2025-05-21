@@ -405,10 +405,17 @@ _^_ large _v_ shrink  _{_ _}_ horizontal
 
 ;; Toggle commands
 
-(defmacro ballotbox (var &optional pos)
-  (if pos
-  `(if (bound-and-true-p ,var) ,pos "•")
-  `(if (bound-and-true-p ,var) "✔" "•")))
+(defun mode-char (sym)
+  "Return a char for mode denoted by SYM"
+  (if (and (boundp sym) (symbol-value sym))
+      (if-let* ((str (car (alist-get sym minor-mode-alist)))
+                (s (and (stringp str) (string-trim str)))
+                (char (and (= (length s) 1) s)))
+          char "✔")
+    "·"))
+
+(mode-char 'outline-minor-mode)
+
 
 (defvar-keymap toggle-options-map
   :doc "Shortcut for toggle some options"
@@ -434,6 +441,7 @@ _^_ large _v_ shrink  _{_ _}_ horizontal
   "x"    #'xterm-mouse-mode
   "y"    #'flyspell-mode
   )
+
 (keymap-hint-set toggle-options-map
  (format
   "
@@ -444,26 +452,28 @@ Toggle:
 %s _h_i-lock/_c_hanges      %s auto-_r_evert  %s which-f_u_nc
 %s white_s_pace/_t_railing  %s line-_n_um     %s fly_m_ake
 "
-  (ballotbox rainbow-delimiters-mode)
-  (ballotbox abbrev-mode "∂")
-  (ballotbox outline-minor-mode)
-  (ballotbox rainbow-identifiers-mode)
-  (ballotbox auto-fill-function "¶")
+  (mode-char 'rainbow-delimiters-mode)
+  (mode-char 'abbrev-mode)
+  (mode-char 'outline-minor-mode)
+  (mode-char 'rainbow-identifiers-mode)
+  (mode-char 'auto-fill-function)
   (if (bound-and-true-p subword-mode) ","
-    (if (bound-and-true-p superword-mode) "²" "•"))
-  (ballotbox xterm-mouse-mode)
-  (ballotbox rainbow-mode)
-  (ballotbox visual-line-mode "↵")
-  (ballotbox flyspell-mode "⍹")
-  (ballotbox electric-quote-mode)
-  (ballotbox hi-lock-mode)
-  (ballotbox auto-revert-mode "↻")
-  (ballotbox which-function-mode)
-  (ballotbox whitespace-mode "␣")
-  (ballotbox display-line-numbers-mode)
-  (ballotbox flymake-mode))
+    (if (bound-and-true-p superword-mode) "²" "·"))
+  (mode-char 'xterm-mouse-mode)
+  (mode-char 'rainbow-mode)
+  (mode-char 'visual-line-mode)
+  (mode-char 'flyspell-mode)
+  (mode-char 'electric-quote-mode)
+  (mode-char 'hi-lock-mode)
+  (mode-char 'auto-revert-mode)
+  (mode-char 'which-function-mode)
+  (mode-char 'whitespace-mode)
+  (mode-char 'display-line-numbers-mode)
+  (mode-char 'flymake-mode))
  :bind "SPC" :keep 'once :load-map 't)
 (keymap-global-set "<f2>" #'toggle-options-map-hint)
+
+(car (plist-get (get 'toggle-options-map 'hint) :hint))
 
 (setq display-line-numbers-type 'relative)
 

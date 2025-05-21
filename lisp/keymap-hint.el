@@ -146,13 +146,18 @@ the keymap is deactivated after one command."
 (defun keymap-hint--format (hint)
   "Format HINT to what we store in the hint property."
   (cond ((stringp hint)
+         (message "string hint")
          (keymap-hint--format-string hint))
-        ((and (listp hint) (eq (car hint) 'format))
-         ;; changing the original list, but we should be fine.
+        ((and (listp hint)
+              (eq (car hint) 'format)
+              (stringp (cadr hint)))
+         (message "Format form")
+         (setq hint (purecopy hint))
          (setf (cadr hint) (keymap-hint--format-string (cadr hint)))
          hint)
-        ('t hint)))
-
+        ('t
+         (message "verbatim")
+         hint)))
 
 ;;;###autoload
 (cl-defmacro keymap-hint-set (keymap hint &key bind load-map keep)
@@ -167,12 +172,13 @@ If LOAD-MAP is a keymap or symbol of a keymap, it is loaded. For other
 non-nil value, KEYMAP is loaded after showing hint.
 
 If KEEP is the symbol `once', the keymap is disabled after one command."
-  ;;(and (symbolp keymap) (keymapp (symbol-value keymap)))
   (setq hint (keymap-hint--format hint))
 
   (let ((show-hint-symbol
          (intern (concat (symbol-name keymap) "-hint")))
-        (hint-prop `(list :hint ,hint :load-map ,load-map :keep ,keep)))
+        (hint-prop `(list :hint ,(if (listp hint) `(quote ,hint) hint)
+                          :load-map ,load-map
+                          :keep ,keep)))
     `(progn
        (put (quote ,keymap) 'hint ,hint-prop)
        (defun ,show-hint-symbol ()
