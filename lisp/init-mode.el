@@ -286,8 +286,8 @@ _q_uit │ ··      _s_wap │ ··       │ _r_esolve/_A_ll     _>_: base-low
   (defun z-bug-to-link ()
     "Convert text captured from bug-reference-bug-regexp into links."
     (let ((m (match-string 2)))
-      (if (s-ends-with? "@" m)
-          (concat "teams/" (s-chop-suffix "@" m))
+      (if (string-suffix-p "@" m)
+          (concat "teams/" (string-trim-right m "@"))
         (concat "http://" m))))
   (put 'z-bug-to-link 'bug-reference-url-format 't)
   (setq bug-reference-url-format 'z-bug-to-link

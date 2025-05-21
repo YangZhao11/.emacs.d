@@ -82,9 +82,11 @@ capture group. PROPERTIES are passed to `propertize' directly."
 
 (defun keymap-hint--keep-once ()
   "Always return nil, but hide the hint accordingly."
-  (if (keymap-hint--should-cancel this-command)
-      (keymap-hint-cancel)
-    (keymap-hint-hide))
+  (cond ((keymap-hint--should-cancel this-command)
+         (keymap-hint-cancel))
+        ((not (eq (get this-command 'command-semantic) 'keymap-hint-show))
+         ;; do not hide for keymap-hint-show, otherwise it'll show it again.
+         (keymap-hint-hide)))
   nil)
 
 (defun keymap-hint--show-top ()
