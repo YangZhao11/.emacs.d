@@ -81,11 +81,9 @@
           (like-this--previous-matching-face face (- arg)))
       (search-failed
        (like-this--fail-message arg)
-       (goto-char saved-point))
-    )))
+       (goto-char saved-point)))))
 
 ;; Handle thing-at-point cases
-;; TODO: handle failure
 (defun like-this--next-thing (match arg)
   "Search for next ARG'th occurrence of MATCH.
 
@@ -114,8 +112,7 @@ point-offset)."
           (forward-char offset))
       (search-failed
        (like-this--fail-message arg)
-       (goto-char saved-point)
-       ))))
+       (goto-char saved-point)))))
 
 (defun like-this--find-match ()
   "Find a thing to search for.
@@ -132,7 +129,8 @@ pair. For thing, return (thing str pointer-offset) list."
              ((eq type 'thing)
               (if-let* ((bounds (bounds-of-thing-at-point s)))
                   (list s
-                        (buffer-substring-no-properties (car bounds) (cdr bounds))
+                        (buffer-substring-no-properties (car bounds)
+                                                        (cdr bounds))
                         (- (point) (car bounds))))))))
    like-this-try-list))
 
@@ -156,9 +154,7 @@ pair. For thing, return (thing str pointer-offset) list."
                    (symbol-name (car match))
                    (string-or-symbol-name (cadr match)))
         :else
-        (user-error "Not sure what to look for.")
-        ))
-    )
+        (user-error "Not sure what to look for."))))
   (setq like-this--last-match match)
   (cond ((eq (car match) 'face)
          (like-this--next-face (cadr match) arg))
