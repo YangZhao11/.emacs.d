@@ -180,7 +180,7 @@ _j_↧  _n_ext  _[__]_:prev/next file
   (keymap-hint-set dired-mode-map "
 ··Mark(_*_)╶╮ ·Flag·╶─────··──────╮ Go··╶(_j_ump)─╮ Dir··╶────··──────┬ Subdir··╶╮
 _%_:regexp··│ _#_: temp   _d_:this│ _[__]_:page   │ _s_ort    _(_ detl  _i_nsert │
-_u_n/_m_ark │ _~_: backup _z_ap   │ _<__>_:dirline│ ʌ·· up    ··        _$_:hide │
+_u_n/_m_ark │ _~_: backup _z_ap   │ _<__>_:dirline│ _^_ up    ··        _$_:hide │
 _t_oggle/_U_│ _._: № bkup   ··    │ _{__}_:marked │ _+_create ··        _K_ill   │
 
 ·Emacs Ops···╶─────────────··─────────╮ ··File Ops··╶─(_e_dit)··──··───────┬ch╶··╮

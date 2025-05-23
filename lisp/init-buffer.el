@@ -107,11 +107,11 @@ _a_lphabetic  _f_ilename  _m_ode  _s_ize  _v_:recency │ _i_nvert
 " :bind "SPC")
 
 (keymap-hint-set-sub ibuffer-mode-map "/" "
-Filter by╶─(_⌫_ disable)····──╮ Ops········╶────────────────╮ _g_roups··╶────╮
-_m_ode/derived_M_  _/_ dir    │ mod_i_fied   Logic:_&__|__!_│ _S_ave/_R_evive│
-_b_ase/_n_ame      _._ ext    │ predicat_e_  _t_:exchg····  │ _X_:delete··   │
-_f_ilename··       _*_ starred│ _v_isiting   _d_ecompose····│ _D_ecompose··  │
-_<_ size _>_       _c_ontent  │ proc_E_ss    _↑_ _p_op··    │ _P_op \\:clear·│
+Filter by╶─(_/_ disable)····───────··──────╮ Ops╶······─────╮ Named╶··╮ _g_roups···╶────╮
+_m_ode/derived_M_  _F_ dir      mod_i_fied │ Logic:_&__|__!_│ _s_ave  │ _S_ave/_R_evive·│
+_b_ase/_n_ame      _._ ext      predicat_e_│ _t_:exchg····  │ _r_evive│ _X_:delete···   │
+_f_ilename··       _*_ starred  _v_isiting │ _d_ecompose····│ _a_dd   │ _D_ecompose···  │
+_<_ size _>_       _c_ontent    proc_E_ss  │ _↑_ _p_op··    │ _x_:del │ _P_op \\:clear··│
 " :bind "SPC")
 
   (defun ibuffer-dired-jump (&optional other-window)
