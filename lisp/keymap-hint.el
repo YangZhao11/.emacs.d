@@ -11,10 +11,16 @@
 (eval-when-compile
   (require 'cl-macs))
 
-;; TODO: make this a stack, so that we can do layered hint and return
-;; to previous state.
+;; TODO: consider buffer local values.
 (defvar keymap-hint--stack nil
   "Stack of hint symbols we are showing.")
+
+;; Keep a consistent state (recursion-depth). post-command-hook will
+;; trigger before the whole command finishes, in the case of recursive
+;; edit (completing read).
+;; TODO: if we trigger keymap hint during recursive edit, we then need
+;; to implement a stack here.
+(defvar keymap-hint--show-top-pending nil)
 
 (defun propertize-regexp (string regexp &rest properties)
   "Propertize STRING capatured by REGEXP.
@@ -47,7 +53,12 @@ capture group. PROPERTIES are passed to `propertize' directly."
     ;; `post-command-hook' would not trigger if the command had an
     ;; error. Using idle timer would interfere with command that
     ;; requires input.
-    (run-with-idle-timer 0 nil #'keymap-hint--show-top)))
+    ;; We need to remember some state to re-show the top, and respect this state
+    ;; in `keymap-hint-show'.
+    ;;(run-with-idle-timer 0 nil #'keymap-hint--show-top)
+    (setq keymap-hint--show-top-pending (recursion-depth))
+    (add-hook 'post-command-hook #'keymap-hint--show-top-once)
+    ))
 
 (defun keymap-hint-cancel ()
   "Cancel the whole hint stack."
@@ -84,21 +95,26 @@ capture group. PROPERTIES are passed to `propertize' directly."
   "Always return nil, but hide the hint accordingly."
   (cond ((keymap-hint--should-cancel this-command)
          (keymap-hint-cancel))
-        ((not (eq (get this-command 'command-semantic) 'keymap-hint-show))
-         ;; do not hide for keymap-hint-show, otherwise it'll show it again.
+        ((not (or (eq (get this-command 'command-semantic) 'keymap-hint-show)
+                  (eq this-command 'keymap-hint-show)))
+         ;; do not hide for `keymap-hint-show', otherwise it'll show it again.
          (keymap-hint-hide)))
   nil)
 
 (defun keymap-hint--show-top ()
-  "Show hint for top of `keymap-hint--stack'"
+  "Show hint for top of `keymap-hint--stack'."
+  (setq keymap-hint--show-top-pending nil)
   (let* ((keymap-symbol (car keymap-hint--stack))
          (prop (get keymap-symbol 'hint))
          (hint (plist-get prop :hint))
          (keep (plist-get prop :keep))
          (load-map (plist-get prop :load-map)))
     (when hint
-      (if (listp hint)
-          (setq hint (eval hint 't)))
+      (cond ((or (and (symbolp hint) (fboundp hint))
+                 (and (listp hint) (eq (car hint) 'lambda)))
+             (setq hint (funcall hint)))
+            ((listp hint)               ; all other forms
+             (setq hint (eval hint 't))))
         (lv-message "%s" hint)
         (set-transient-map
          (cond ((keymapp load-map)
@@ -117,6 +133,15 @@ capture group. PROPERTIES are passed to `propertize' directly."
            'keymap-hint--keep-hint)
          ))))
 
+(defun keymap-hint--show-top-once ()
+  (if (null keymap-hint--show-top-pending)
+      (remove-hook 'post-command-hook #'keymap-hint--show-top-once)
+    (when (<= (recursion-depth) keymap-hint--show-top-pending)
+      (remove-hook 'post-command-hook #'keymap-hint--show-top-once)
+      (keymap-hint--show-top))))
+
+
+
 ;;;###autoload
 (defun keymap-hint-show (keymap-symbol)
   "Show mode hint attached to KEYMAP-SYMBOL if present.
@@ -129,10 +154,12 @@ the keymap is deactivated after one command."
   (unless (and (symbolp keymap-symbol)
                (keymapp (symbol-value keymap-symbol)))
     (error "Keymap symbol expected"))
-  (if (eq keymap-symbol (car keymap-hint--stack))
+  (if (and (eq keymap-symbol (car keymap-hint--stack))
+           (not keymap-hint--show-top-pending))
       (keymap-hint-hide)
     :else
-    (push keymap-symbol keymap-hint--stack)
+    (unless (eq keymap-symbol (car keymap-hint--stack))
+      (push keymap-symbol keymap-hint--stack))
     (keymap-hint--show-top)))
 
 (defun keymap-hint--format-string (hint)
@@ -146,17 +173,14 @@ the keymap is deactivated after one command."
 (defun keymap-hint--format (hint)
   "Format HINT to what we store in the hint property."
   (cond ((stringp hint)
-         (message "string hint")
          (keymap-hint--format-string hint))
         ((and (listp hint)
               (eq (car hint) 'format)
               (stringp (cadr hint)))
-         (message "Format form")
          (setq hint (purecopy hint))
          (setf (cadr hint) (keymap-hint--format-string (cadr hint)))
          hint)
         ('t
-         (message "verbatim")
          hint)))
 
 ;;;###autoload
@@ -191,8 +215,9 @@ If KEEP is the symbol `once', the keymap is disabled after one command."
 
 ;;;###autoload
 (defun keymap-hint-load-map-set (keymap-symbol key definition &optional remove)
-  "Bind KEY for the load-map of KEYMAP-SYMBOL to DEFINITION. The load-map
-is loaded when hint for the keymap is shown."
+  "Bind KEY for the load-map of KEYMAP-SYMBOL to DEFINITION.
+
+ The load-map is the map loaded when hint for the keymap is shown."
   (let* ((prop (get keymap-symbol 'hint))
          (m (plist-get prop :load-map))
          new-map)
@@ -213,8 +238,7 @@ is loaded when hint for the keymap is shown."
 
 SYMBOL specifies a symbol for the sub-keymap; if unspecified we
 automatically generate one. The rest of the arguments are same as
-`keymap-hint-set'.
-"
+`keymap-hint-set'."
   (unless symbol
     (let* ((parent-map-name (string-trim-right (symbol-name keymap) "-map"))
            (this-map-name (concat parent-map-name "-" key "-map")))
