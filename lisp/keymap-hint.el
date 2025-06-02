@@ -11,15 +11,12 @@
 (eval-when-compile
   (require 'cl-macs))
 
-;; TODO: consider buffer local values.
 (defvar keymap-hint--stack nil
   "Stack of hint symbols we are showing.")
 
-;; Keep a consistent state (recursion-depth). post-command-hook will
+;; Keep a consistent state (minibuffer-depth). post-command-hook will
 ;; trigger before the whole command finishes, in the case of recursive
 ;; edit (completing read).
-;; TODO: if we trigger keymap hint during recursive edit, we then need
-;; to implement a stack here.
 (defvar keymap-hint--show-top-pending nil)
 
 (defun propertize-regexp (string regexp &rest properties)
@@ -49,14 +46,13 @@ capture group. PROPERTIES are passed to `propertize' directly."
   (pop keymap-hint--stack)
   (lv-delete-window)
   (when keymap-hint--stack
-    ;; TODO: Ideally we only re-show after a command finished, however
-    ;; `post-command-hook' would not trigger if the command had an
-    ;; error. Using idle timer would interfere with command that
-    ;; requires input.
-    ;; We need to remember some state to re-show the top, and respect this state
-    ;; in `keymap-hint-show'.
-    ;;(run-with-idle-timer 0 nil #'keymap-hint--show-top)
-    (setq keymap-hint--show-top-pending (recursion-depth))
+    ;; We need to remember some state to re-show the top, and respect
+    ;; this state in `keymap-hint-show'. Note post-command-hook will
+    ;; trigger when the command calls `recursive-edit', e.g. in
+    ;; `completing-read'. We want to show the top of stack after that
+    ;; command finishes, so we remember minibuffer-depth here. Not
+    ;; using recursion-depth for actual recursive edit.
+    (setq keymap-hint--show-top-pending (minibuffer-depth))
     (add-hook 'post-command-hook #'keymap-hint--show-top-once)
     ))
 
@@ -69,11 +65,18 @@ capture group. PROPERTIES are passed to `propertize' directly."
 (defvar-keymap keymap-hint-transient-map
   "SPC" #'keymap-hint-hide)
 
+(defvar keymap-hint-cancel-commands
+  '(switch-buffer
+    display-buffer
+    quit-window
+    other-frame ; this triggers when going into this buffer?
+    delete-other-windows))
+
 (defun keymap-hint--should-cancel (command)
   "Returns non-nil if COMMAND should cancal hints."
   (if (symbolp command)
-      (or (memq (get command 'command-semantic)
-                '(switch-buffer display-buffer quit-window switch-frame))
+      (or (memq (or (get command 'command-semantic) command)
+                keymap-hint-cancel-commands)
           ;; major mode change commands.
           (get command 'derived-mode-parent))
     ;; Don't know how to detect anything for lambda commands.
@@ -136,11 +139,9 @@ capture group. PROPERTIES are passed to `propertize' directly."
 (defun keymap-hint--show-top-once ()
   (if (null keymap-hint--show-top-pending)
       (remove-hook 'post-command-hook #'keymap-hint--show-top-once)
-    (when (<= (recursion-depth) keymap-hint--show-top-pending)
+    (when (<= (minibuffer-depth) keymap-hint--show-top-pending)
       (remove-hook 'post-command-hook #'keymap-hint--show-top-once)
       (keymap-hint--show-top))))
-
-
 
 ;;;###autoload
 (defun keymap-hint-show (keymap-symbol)
