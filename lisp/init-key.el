@@ -775,6 +775,7 @@ in `ctl-j-map' first."
          ("C-x C-z" . consult-complex-command))
   :config
   (setq consult-goto-line-numbers nil)
+  (put 'consult-buffer 'command-semantic 'switch-buffer)
 
   ;; This might conflict with LSP stuff, see consult doc
   ;(setq completion-in-region-function #'consult-completion-in-region)

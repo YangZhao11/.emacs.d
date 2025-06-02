@@ -138,7 +138,8 @@ mouse-3: Describe current input method")
 (defvar z-lighter
   '(:eval (cond (god-local-mode z-lighter-god)
                 (view-mode z-lighter-view)
-                ((or (eq (get major-mode 'mode-class) 'special)
+                ((or (and (eq (get major-mode 'mode-class) 'special)
+                          (not (derived-mode-p 'comint-mode)))
                      (derived-mode-p 'special-mode
                                      'emacs-news-view-mode))
                  z-lighter-special)

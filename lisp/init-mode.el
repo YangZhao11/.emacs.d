@@ -146,7 +146,7 @@ _j_↧  _n_ext  _[__]_:prev/next file    _d_isplay
              ("]" . compilation-next-file)
              ("x" . god-mode-self-insert)
              ("c" . god-mode-self-insert))
-  (unless (fboundp 'grep-change-to-grep-edit-mode)
+  (unless (fboundp #'grep-change-to-grep-edit-mode)
     (defalias 'grep-change-to-grep-edit-mode 'wgrep-change-to-wgrep-mode)
     (autoload 'wgrep-change-to-wgrep-mode "wgrep")))
 
@@ -178,10 +178,10 @@ _j_↧  _n_ext  _[__]_:prev/next file
   (setq dired-dwim-target 't)
 
   (keymap-hint-set dired-mode-map "
-··Mark(_*_)╶╮ ·Flag·╶─────··──────╮ Go··╶(_j_ump)─╮ Dir··╶────··──────┬ Subdir··╶╮
-_%_:regexp··│ _#_: temp   _d_:this│ _[__]_:page   │ _s_ort    _(_ detl  _i_nsert │
-_u_n/_m_ark │ _~_: backup _z_ap   │ _<__>_:dirline│ _^_ up    ··        _$_:hide │
-_t_oggle/_U_│ _._: № bkup   ··    │ _{__}_:marked │ _+_create ··        _K_ill   │
+··Mark(_*_)╶╮ ·Flag·╶────··──────╮ Go··╶(_j_ump)─╮ Dir··╶────··──────┬ Subdir··╶╮
+_%_:regexp··│ _#_:temp   _d_:this│ _[__]_:page   │ _s_ort    _(_ detl  _i_nsert │
+_u_n/_m_ark │ _~_:backup _z_ap   │ _<__>_:dirline│ _^_ up    ··        _$_:hide │
+_t_oggle/_U_│ _._:№ bkup   ··    │ _{__}_:marked │ _+_create ··        _K_ill   │
 
 ·Emacs Ops···╶─────────────··─────────╮ ··File Ops··╶─(_e_dit)··──··───────┬ch╶··╮
 _F_ind all   file-t_y_pe   _v_iew     │ _!_shell_&_ _S__Y_mlink  _=_ diff   _M_od│
@@ -558,24 +558,13 @@ Limit search to a few pages before."
              ("c" . god-mode-self-insert)
              ("a" . move-beginning-of-line)
              ;; e already bound to move-end-of-line
-             ("v" . scroll-up-command)
-             ;; put some keys behind g
-             ("g g" . revert-buffer)    ;original g
-             ("g a" . ess-display-help-apropos)
-             ("g v" . ess-display-vignettes)
-             ("g i" . ess-display-package-index)
-             ("g h" . ess-display-help-on-object)
              )
 
   (keymap-hint-set ess-help-mode-map "
 Move···╶─────·····─────────╮ Eval····╶──────╮ Jump··╶────────··────────╮
 _k_↥ _p_rev  _[__]_:section│ _f_unction ··  │ _h_elp-on-obj  _/_isearch│
-_j_↧ _n_ext  _<__>_:buf    │ _l_ine _r_egion│ _g_o           _i_ndex   │
+_j_↧ _n_ext  _<__>_:buf    │ _l_ine _r_egion│ _w_eb          _i_ndex   │
 " :bind "SPC")
-
-  (keymap-hint-set-sub ess-help-mode-map "g"
-" go: _g_:revert  _a_propos  _v_ignettes _i_ndex  _h_elp-on-obj"
- :bind "SPC")
 )
 
 
