@@ -11,8 +11,11 @@
 (eval-when-compile
   (require 'cl-macs))
 
-(defvar keymap-hint--stack nil
-  "Stack of hint symbols we are showing.")
+;; Buffer we are showing the hint on.
+(defvar keymap-hint--buffer nil)
+
+;; Remember the set of symbols we are showing hint.
+(defvar keymap-hint--stack nil)
 
 ;; Keep a consistent state (minibuffer-depth). post-command-hook will
 ;; trigger before the whole command finishes, in the case of recursive
@@ -45,31 +48,34 @@ capture group. PROPERTIES are passed to `propertize' directly."
   (interactive)
   (pop keymap-hint--stack)
   (lv-delete-window)
-  (when keymap-hint--stack
+  (if keymap-hint--stack
     ;; We need to remember some state to re-show the top, and respect
     ;; this state in `keymap-hint-show'. Note post-command-hook will
     ;; trigger when the command calls `recursive-edit', e.g. in
     ;; `completing-read'. We want to show the top of stack after that
     ;; command finishes, so we remember minibuffer-depth here. Not
     ;; using recursion-depth for actual recursive edit.
-    (setq keymap-hint--show-top-pending (minibuffer-depth))
-    (add-hook 'post-command-hook #'keymap-hint--show-top-once)
+      (progn
+        (setq keymap-hint--show-top-pending (minibuffer-depth))
+        (add-hook 'post-command-hook #'keymap-hint--show-top-once))
+    (setq keymap-hint--buffer nil)
     ))
 
 (defun keymap-hint-cancel ()
   "Cancel the whole hint stack."
   (interactive)
+  (setq keymap-hint--buffer nil)
   (setq keymap-hint--stack nil)
   (lv-delete-window))
 
 (defvar-keymap keymap-hint-transient-map
+  :doc "Default keymap for keymap hint."
   "SPC" #'keymap-hint-hide)
 
 (defvar keymap-hint-cancel-commands
   '(switch-buffer
     display-buffer
     quit-window
-    other-frame ; this triggers when going into this buffer?
     delete-other-windows))
 
 (defun keymap-hint--should-cancel (command)
@@ -118,30 +124,35 @@ capture group. PROPERTIES are passed to `propertize' directly."
              (setq hint (funcall hint)))
             ((listp hint)               ; all other forms
              (setq hint (eval hint 't))))
-        (lv-message "%s" hint)
-        (set-transient-map
-         (cond ((keymapp load-map)
-                load-map)
-               ((and (symbolp load-map)
-                     (boundp load-map)
-                     (keymapp (symbol-value load-map)))
-                (symbol-value load-map))
-               ;; for other non-nil values, we load the
-               (load-map
-                (symbol-value keymap-symbol))
-               ('t
-                keymap-hint-transient-map))
-         (if (eq keep 'once)
-             'keymap-hint--keep-once
-           'keymap-hint--keep-hint)
-         ))))
+      (lv-message "%s" hint)
+      (set-transient-map
+       (cond ((keymapp load-map)
+              load-map)
+             ((and (symbolp load-map)
+                   (boundp load-map)
+                   (keymapp (symbol-value load-map)))
+              (symbol-value load-map))
+             ;; for other non-nil values, we load the
+             (load-map
+              (symbol-value keymap-symbol))
+             ('t
+              keymap-hint-transient-map))
+       (if (eq keep 'once)
+           'keymap-hint--keep-once
+         'keymap-hint--keep-hint)
+       ))))
 
 (defun keymap-hint--show-top-once ()
   (if (null keymap-hint--show-top-pending)
       (remove-hook 'post-command-hook #'keymap-hint--show-top-once)
     (when (<= (minibuffer-depth) keymap-hint--show-top-pending)
       (remove-hook 'post-command-hook #'keymap-hint--show-top-once)
-      (keymap-hint--show-top))))
+      (if (and (bufferp keymap-hint--buffer)
+               (get-buffer-window keymap-hint--buffer))
+          (with-current-buffer keymap-hint--buffer
+              (keymap-hint--show-top))
+        ;; the buffer is no longer visible, cancel instead
+        (keymap-hint-cancel)))))
 
 ;;;###autoload
 (defun keymap-hint-show (keymap-symbol)
@@ -151,16 +162,19 @@ Look up the hint property from keymap symbol; it is a list of
 format (hint load). hint is a string or a form to be evaluated.
 If load is non-nil we load the keymap. If load is the symbol once,
 the keymap is deactivated after one command."
-  (interactive)
   (unless (and (symbolp keymap-symbol)
                (keymapp (symbol-value keymap-symbol)))
     (error "Keymap symbol expected"))
+  (if (and keymap-hint--buffer
+           (not (eq (current-buffer) keymap-hint--buffer)))
+      (keymap-hint-cancel))
   (if (and (eq keymap-symbol (car keymap-hint--stack))
            (not keymap-hint--show-top-pending))
       (keymap-hint-hide)
     :else
     (unless (eq keymap-symbol (car keymap-hint--stack))
       (push keymap-symbol keymap-hint--stack))
+    (setq keymap-hint--buffer (current-buffer))
     (keymap-hint--show-top)))
 
 (defun keymap-hint--format-string (hint)
