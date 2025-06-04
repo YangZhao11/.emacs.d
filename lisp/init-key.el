@@ -414,9 +414,6 @@ _^_ large _v_ shrink  _{_ _}_ horizontal
           char "✔")
     "·"))
 
-(mode-char 'outline-minor-mode)
-
-
 (defvar-keymap toggle-options-map
   :doc "Shortcut for toggle some options"
   "'"    #'electric-quote-mode

@@ -40,10 +40,10 @@ _j_↧ _J_   _d_own│ _b__f_ _n_│ _<__>_  _(__)_ list│ _'_:goto    p_@_p �
              ("}" . forward-paragraph)
              ("a" . move-beginning-of-line)
              ("b" . backward-char)
-             ("c" . god-mode-self-insert)
+             ("c" . god-mode-self-insert) ;View-leave
              ("e" . move-end-of-line)
              ("f" . forward-char)
-             ("g" . consult-goto-line)
+             ("g" . consult-goto-line)  ;View-goto-line
              ("h" . god-mode-self-insert)
              ("i" . consult-imenu)
              ("j" . View-scroll-page-forward)
@@ -59,7 +59,7 @@ _j_↧ _J_   _d_own│ _b__f_ _n_│ _<__>_  _(__)_ list│ _'_:goto    p_@_p �
              ("R" . View-search-last-regexp-backward)
              ("S" . View-search-last-regexp-forward)
              ("v" . scroll-up-command)
-             ("x" . god-mode-self-insert)
+             ("x" . god-mode-self-insert) ;exchange-point-and-mark
              ("z" . repeat)
              ;;("C-x k" . View-kill-and-leave)
              )
@@ -108,10 +108,14 @@ useful when followed by an immediate kill."
 (use-package replace
   :bind ("M-s M-o" . multi-occur-in-matching-buffers)
   :config
-  (keymap-hint-set occur-mode-map "
-_k_↥   _p_rev··   _<_ _>_       _⏎_:goto      _e_dit
-_j_↧   _n_ext··   _d_isplay··   _o_ther-win   _f_ollow
-" :bind "SPC")
+  (keymap-hint-set
+   occur-mode-map
+   (format "
+_k_↥  _p_rev   _<_ _>_       _⏎_:goto      %s _e_dit
+_j_↧  _n_ext   _d_isplay··   _o_ther-win   %s _^c^f_ollow"
+           (mode-char 'occur-edit-mode)
+           (mode-char 'next-error-follow-minor-mode))
+   :bind "SPC")
   (bind-keys :map occur-mode-map
              ("SPC" . occur-mode-map-hint)
              ("d" . occur-mode-display-occurrence)
