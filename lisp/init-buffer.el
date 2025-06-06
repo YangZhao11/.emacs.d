@@ -86,11 +86,12 @@ _d_el/_z_ap │ _g_:↻ _+__-_ │ re_V_ert  _o_ther-win │_B_name··  │ _=_
 _._old ··   │ _k_ill-ln····│ _R_ename  _H_:other-f │_w_:Fname··│ _O_ccur··       _E_val/vie_W_│
 " :bind "SPC")
 
-(put 'ibuffer-visit-buffer 'command-semantic 'switch-buffer)
+(put 'ibuffer-visit-buffer 'command-semantic 'switch-to-buffer)
 (put 'ibuffer-do-view-other-frame 'command-semantic 'switch-frame)
 (put 'ibuffer-do-occur 'command-semantic 'display-buffer)
 (put 'ibuffer-visit-buffer-other-window 'command-semantic 'display-buffer)
-(put 'ibuffer-do-view 'command-semantic 'switch-buffer)
+(put 'ibuffer-do-view 'command-semantic 'switch-to-buffer)
+(put 'ibuffer 'command-semantic 'display-buffer)
 
 (keymap-hint-set-sub ibuffer-mode-map "*" "
 _*_ unmark all│ _M_ode _/_dired │ _u_nsaved    _m_odified      _z_:compressed

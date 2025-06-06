@@ -391,10 +391,10 @@ instead of inactivate region."
 _^_ large _v_ shrink  _{_ _}_ horizontal
 " :load-map 't :bind "?")
   (bind-keys ("<f10>"   . resize-window-repeat-map-hint))
-  (put 'bury-buffer 'command-semantic 'switch-buffer)
-  (put 'unbury-buffer 'command-semantic 'switch-buffer)
-  (put 'previous-buffer 'command-semantic 'switch-buffer)
-  (put 'next-buffer 'command-semantic 'switch-buffer))
+  (put 'bury-buffer 'command-semantic 'switch-to-buffer)
+  (put 'unbury-buffer 'command-semantic 'switch-to-buffer)
+  (put 'previous-buffer 'command-semantic 'switch-to-buffer)
+  (put 'next-buffer 'command-semantic 'switch-to-buffer))
 
 
 (defun toggle-show-trailing-whitespace ()
@@ -405,24 +405,27 @@ _^_ large _v_ shrink  _{_ _}_ horizontal
 
 ;; Toggle commands
 
-(defun mode-char (sym)
+(defun mode-char (&rest syms)
   "Return a char for mode denoted by SYM"
-  (if (and (boundp sym) (symbol-value sym))
-      (if-let* ((str (car (alist-get sym minor-mode-alist)))
-                (s (and (stringp str) (string-trim str)))
-                (char (and (= (length s) 1) s)))
-          char "✔")
-    "·"))
+  (or (seq-some
+       (lambda (sym)
+         (if (and (boundp sym) (symbol-value sym))
+             (if-let* ((str (car (alist-get sym minor-mode-alist)))
+                       (s (and (stringp str) (string-trim str)))
+                       (char (and (= (length s) 1) s)))
+                 char "✔")))
+       syms)
+      "·"))
 
 (defvar-keymap toggle-options-map
   :doc "Shortcut for toggle some options"
   "'"    #'electric-quote-mode
   "a"    #'abbrev-mode
-  "c"    #'highlight-changes-mode
+  "c"    #'completion-preview-mode
   "d"    #'rainbow-delimiters-mode
   "e"    #'visual-line-mode
   "f"    #'auto-fill-mode
-  "h"    #'hi-lock-mode
+  "h"    #'highlight-changes-mode
   "i"    #'rainbow-identifiers-mode
   "m"    #'flymake-mode
   "p"    #'flyspell-prog-mode
@@ -443,36 +446,37 @@ _^_ large _v_ shrink  _{_ _}_ horizontal
  (format
   "
 Toggle:
-%s rainbow-_d_elimiters  ·· %s _a_bbrev       %s _o_utline-minor-mode ··
-%s rainbow-_i_dentifiers ·· %s auto-_f_ill    %s sub_w_ord/super_W_ord   %s _x_term-mouse
+%s rainbow-_d_elimiters  ·· %s _a_bbrev       %s _o_utline-minor-mode··  %s fly_m_ake
+%s rainbow-_i_dentifiers ·· %s auto-_f_ill    %s _c_ompletion-preview··  %s _x_term-mouse
 %s _R_ainbow colors      ·· %s visual-lin_e_  %s fl_y_spell/_p_rog       %s elec-_'_
-%s _h_i-lock/_c_hanges      %s auto-_r_evert  %s which-f_u_nc
-%s white_s_pace/_t_railing  %s line-_n_um     %s fly_m_ake
+%s _h_ighlight-changes   ·· %s auto-_r_evert  %s sub_w_ord/super_W_ord
+%s white_s_pace/_t_railing  %s line-_n_um     %s which-f_u_nc
 "
   (mode-char 'rainbow-delimiters-mode)
   (mode-char 'abbrev-mode)
   (mode-char 'outline-minor-mode)
+  (mode-char 'flymake-mode)
   (mode-char 'rainbow-identifiers-mode)
   (mode-char 'auto-fill-function)
-  (if (bound-and-true-p subword-mode) ","
-    (if (bound-and-true-p superword-mode) "²" "·"))
+  (mode-char 'completion-preview-mode)
   (mode-char 'xterm-mouse-mode)
   (mode-char 'rainbow-mode)
   (mode-char 'visual-line-mode)
   (mode-char 'flyspell-mode)
   (mode-char 'electric-quote-mode)
-  (mode-char 'hi-lock-mode)
+  (mode-char 'highlight-changes-mode)
   (mode-char 'auto-revert-mode)
-  (mode-char 'which-function-mode)
+  (mode-char 'subword-mode 'superword-mode)
   (mode-char 'whitespace-mode)
   (mode-char 'display-line-numbers-mode)
-  (mode-char 'flymake-mode))
+  (mode-char 'which-function-mode))
  :bind "SPC" :keep 'once :load-map 't)
 (keymap-global-set "<f2>" #'toggle-options-map-hint)
 
-(car (plist-get (get 'toggle-options-map 'hint) :hint))
-
 (setq display-line-numbers-type 'relative)
+
+(use-package hi-lock
+  :bind ("M-s h SPC" . hi-lock-mode))
 
 (use-package subword
   :bind (("M-F" . subword-forward)
@@ -772,10 +776,9 @@ in `ctl-j-map' first."
          ("C-x C-z" . consult-complex-command))
   :config
   (setq consult-goto-line-numbers nil)
-  (put 'consult-buffer 'command-semantic 'switch-buffer)
+  (put 'consult-buffer 'command-semantic 'switch-to-buffer)
+  (put 'consult-project-buffer 'command-semantic 'switch-to-buffer)
 
-  ;; This might conflict with LSP stuff, see consult doc
-  ;(setq completion-in-region-function #'consult-completion-in-region)
   (keymap-set consult-narrow-map "C-h" #'consult-narrow-help))
 
 (use-package consult-imenu
@@ -798,8 +801,8 @@ in `ctl-j-map' first."
 
 (use-package embark :ensure
   :after vertico
-;  :bind ("M-m" . embark-act)
-  :bind (:map vertico-map
+  :bind (:map vertico-map          ; maybe use `minibuffer-local-map'.
+              ("M-m"   . embark-act)
               ("M-s o" . embark-export)))
 
 (use-package embark-consult :ensure

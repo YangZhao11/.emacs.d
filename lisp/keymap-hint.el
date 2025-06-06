@@ -22,6 +22,17 @@
 ;; edit (completing read).
 (defvar keymap-hint--show-top-pending nil)
 
+(defvar-keymap keymap-hint-transient-map
+  :doc "Default keymap for keymap hint."
+  "SPC" #'keymap-hint-hide)
+
+(defvar keymap-hint-cancel-commands
+  '(switch-to-buffer
+    display-buffer
+    find-file
+    quit-window
+    delete-other-windows))
+
 (defun propertize-regexp (string regexp &rest properties)
   "Propertize STRING capatured by REGEXP.
 
@@ -67,16 +78,6 @@ capture group. PROPERTIES are passed to `propertize' directly."
   (setq keymap-hint--buffer nil)
   (setq keymap-hint--stack nil)
   (lv-delete-window))
-
-(defvar-keymap keymap-hint-transient-map
-  :doc "Default keymap for keymap hint."
-  "SPC" #'keymap-hint-hide)
-
-(defvar keymap-hint-cancel-commands
-  '(switch-buffer
-    display-buffer
-    quit-window
-    delete-other-windows))
 
 (defun keymap-hint--should-cancel (command)
   "Returns non-nil if COMMAND should cancal hints."
@@ -182,7 +183,7 @@ the keymap is deactivated after one command."
   (setq hint (string-trim hint))
   (setq hint (replace-regexp-in-string "·" "" hint))
   (setq hint (propertize-regexp
-              hint "_\\([^_]+\\)_" 'face 'font-lock-function-name-face))
+              hint "_\\([^_]+\\)_" 'face 'help-key-binding))
   hint)
 
 (defun keymap-hint--format (hint)

@@ -101,7 +101,7 @@ With prefix arg (NO-SPACE), do not leave space before CHAR."
 (defun z-shell-command-on-buffer (command
                                   &optional output-buffer replace
 				  error-buffer display-error-buffer)
-  "Execu string COMMAND on buffer. See `shell-command-on-region'."
+  "Execute COMMAND on buffer. See `shell-command-on-region'."
   (interactive (list (read-shell-command "Shell command on buffer: ")
 		       current-prefix-arg
 		       current-prefix-arg

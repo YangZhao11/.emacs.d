@@ -19,12 +19,13 @@ _z_ap    ··      │ _o_ther-win·· _R_elocate  _e_dit  │ _t_gl Fname│
              ("j" . scroll-down-command)
              ("k" . scroll-up-command)
              ("z" . bookmark-bmenu-execute-deletions)
-             ("x" . god-mode-self-insert)))
+             ("x" . god-mode-self-insert))
+  (put 'bookmark-bmenu-list 'command-semantic 'switch-to-buffer))
 
 (use-package view :diminish view-mode
   :bind ("C-x C-v" . view-mode)         ; find-alternate-file
   :config
-(keymap-hint-set view-mode-map "
+  (keymap-hint-set view-mode-map "
 ··pg/set·· ½··╶──╮ ↔╶······──╮ _g_o(_%_)····╶─────╮ ··Register┬╴··Mark╮ _s_earch/_r_╶╮ _q_uit/_Q_
 _k_↥ _K_   _u_p  │ _a__e_ _p_│ _{__}_  _[__]_ page│ _m_:point   _._set│ again:_S_ _R_│ _i_menu
 _j_↧ _J_   _d_own│ _b__f_ _n_│ _<__>_  _(__)_ list│ _'_:goto    p_@_p │ regex:_/_ ·\\│ _o_utline
@@ -145,14 +146,16 @@ _j_↧  _n_ext  _[__]_:prev/next file    _d_isplay
              ("j" . scroll-up-command)
              ("k" . scroll-down-command)
              ("d" . compilation-display-error)
-             ("e" . grep-change-to-grep-edit-mode)
+             ("e" . grep-change-to-grep-edit-mode) ;compatibility for 29
              ("[" . compilation-previous-file)
              ("]" . compilation-next-file)
              ("x" . god-mode-self-insert)
              ("c" . god-mode-self-insert))
   (unless (fboundp #'grep-change-to-grep-edit-mode)
     (defalias 'grep-change-to-grep-edit-mode 'wgrep-change-to-wgrep-mode)
-    (autoload 'wgrep-change-to-wgrep-mode "wgrep")))
+    (autoload 'wgrep-change-to-wgrep-mode "wgrep"))
+  (put 'grep 'command-semantic 'display-buffer)
+  (put 'rgrep 'command-semantic 'display-buffer))
 
 (use-package compile
   :config
@@ -217,7 +220,12 @@ _d_:this  │ ··         │ _l_owercase│ _S__Y_mlink
              ("e" . dired-toggle-read-only)
              ("K" . dired-kill-subdir))
   (put 'dired-next-line 'command-semantic 'next-line)
-  (put 'dired-previous-line 'command-semantic 'previous-line))
+  (put 'dired-previous-line 'command-semantic 'previous-line)
+  (put 'dired-find-file 'command-semantic 'find-file)
+  (put 'dired-up-directory 'command-semantic 'display-buffer)
+  (put 'dired 'command-semantic 'find-file)
+  (put 'dired-jump 'command-semantic 'find-file)
+  (put 'dired-jump-other-window 'command-semantic 'display-buffer))
 
 (use-package package
   :init
@@ -247,7 +255,8 @@ _u_pgradable  _v_ersion  _N_ame/desc
              ("e" . move-end-of-line)
              ("s" . consult-line)
              ("j" . scroll-up-command)
-             ("k" . scroll-down-command)))
+             ("k" . scroll-down-command))
+  (put 'list-packages 'command-semantic 'display-buffer))
 
 (use-package smerge-mode
   :bind ("C-x m" . smerge-mode)
