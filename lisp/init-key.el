@@ -210,7 +210,7 @@ If ARG is non-nil and we are on terminal, then call
                  (easy-kill-get start)
                  (easy-kill-get end)))
            (poffset (- (point) (easy-kill-get start))))
-      (list s str poffset)))
+      (list 'thing s str poffset)))
 
   (easy-kill-defun easy-kill-next-like-this (&optional arg)
     (interactive "p")
