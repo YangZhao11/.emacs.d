@@ -77,6 +77,7 @@
         (list 'face s))))
 
 (cl-defmethod like-this-match-name ((match (head face)))
+  ;; maybe use `query-replace-descr'.
   (format "face `%s'" (symbol-name (cadr match))))
 
 (cl-defmethod like-this-next-match ((match (head face)) arg)
@@ -111,10 +112,8 @@ point-offset)."
                    (isearch-symbol-regexp str))
                   ((eq thing 'word)
                    (word-search-regexp str))
-                  ((eq thing 'region)
-                   (regexp-quote str))
-                  ('t
-                   (concat "\\b" (regexp-quote str) "\\b"))))
+                  (:else
+                   (regexp-quote str))))
          (p (nth 3 match))
          (l (length str))
          (offset (if (> arg 0) (- p l)
@@ -144,21 +143,22 @@ With universal arg, look for the previous match."
         (universal-arg (and (listp current-prefix-arg)
                             (numberp (car current-prefix-arg)))))
     (if universal-arg
-      (setq arg (if (> arg 0) 1 -1)))
-    (unless match
-      (cond ((and like-this--last-match
-                  (memq last-command '(like-this-next like-this-prev)))
-             (setq match like-this--last-match))
-            ((and like-this--last-match universal-arg)
-             (setq match like-this--last-match)
-             (setq show-message 't))
-            ((setq match (seq-some
-                          'like-this-try-match
-                          like-this-try-alist))
-             (setq like-this--last-match match)
-             (setq show-message 't))
-            (:else
-             (user-error "Nothing to look for."))))
+        (setq arg (if (> arg 0) 1 -1)))
+    (cond (match
+           (setq like-this--last-match match))
+          ((and like-this--last-match
+                (memq last-command '(like-this-next like-this-prev)))
+           (setq match like-this--last-match))
+          ((and like-this--last-match universal-arg)
+           (setq match like-this--last-match)
+           (setq show-message 't))
+          ((setq match (seq-some
+                        'like-this-try-match
+                        like-this-try-alist))
+           (setq like-this--last-match match)
+           (setq show-message 't))
+          (:else
+           (user-error "Nothing to look for.")))
 
     (let ((saved-point (point)))
       (condition-case nil
