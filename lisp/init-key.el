@@ -9,6 +9,7 @@
 (eval-after-load "quail/Latin-ltx"
   '(load "init-tex-input-method"))
 
+;; TODO: look into term/xterm.el
 (defun z-setup-terminal ()
   ;; Translate ESC-* to M-*. This is needed for `read-key' to
   ;; recognize M-z in one step (otherwise it'll ready the ESC only).

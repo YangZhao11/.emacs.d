@@ -23,18 +23,19 @@
     (face . button))
   "Things to try look for.")
 
-;; Remember the last thing we got, so successive calls do not
-;; accidentally change what we search for.
-(defvar like-this--last-match nil)
-
 (cl-defgeneric like-this-try-match (matcher)
   "Try to match an item in `like-this-try-alist'.")
 
 (cl-defgeneric like-this-next-match (match arg)
-  "Search for next ARG-th MATCH.")
+  "Search for next ARG-th MATCH.
+MATCH is returned from `like-this-try-match'.")
 
 (cl-defgeneric like-this-match-name (match)
-  "Short name for a match for messages.")
+  "Short name for a MATCH for messages.")
+
+;; Remember the last thing we got, so successive calls do not
+;; accidentally change what we search for.
+(defvar like-this--last-match nil)
 
 ;;; Face case
 ;; TODO: do this for text property in general.
@@ -78,7 +79,7 @@
 
 (cl-defmethod like-this-match-name ((match (head face)))
   ;; maybe use `query-replace-descr'.
-  (format "face `%s'" (symbol-name (cadr match))))
+  (format "face ‘%s’" (symbol-name (cadr match))))
 
 (cl-defmethod like-this-next-match ((match (head face)) arg)
   (let ((face (cadr match)))
@@ -98,7 +99,7 @@
             (- (point) (car bounds)))))
 
 (cl-defmethod like-this-match-name ((match (head thing)))
-  (format "%s `%s'" (cadr match) (caddr match)))
+  (format "%s ‘%s’" (cadr match) (caddr match)))
 
 (cl-defmethod like-this-next-match ((match (head thing)) arg)
   "Search for next ARG'th occurrence of MATCH.
@@ -158,6 +159,7 @@ With universal arg, look for the previous match."
            (setq like-this--last-match match)
            (setq show-message 't))
           (:else
+           (setq like-this--last-match nil)
            (user-error "Nothing to look for.")))
 
     (let ((saved-point (point)))
