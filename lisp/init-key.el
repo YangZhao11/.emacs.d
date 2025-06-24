@@ -171,6 +171,9 @@ If ARG is non-nil and we are on terminal, then call
   :bind (:map region-bindings-mode-map
               ("C-t" . transpose-dwim-regions)))
 
+;; Maybe we want to expand on thing-at-point a bit to support
+;; list-like things that can nest, by adding an "expand" function.
+;; Also embark has similar logic, see `embark-target-finders'.
 (use-package easy-kill :ensure
   :functions (easy-kill-mark-region easy-kill-exit)
   :bind ([remap kill-ring-save] . easy-kill)
@@ -407,12 +410,13 @@ _^_ large _v_ shrink  _{_ _}_ horizontal
 ;; Toggle commands
 
 (defun mode-char (&rest syms)
-  "Return a char for mode denoted by SYM"
+  "Return a char for the first active minor mode in SYMS."
   (or (seq-some
        (lambda (sym)
          (if (and (boundp sym) (symbol-value sym))
-             (if-let* ((str (car (alist-get sym minor-mode-alist)))
-                       (s (and (stringp str) (string-trim str)))
+           (if-let* ((m (car (alist-get sym minor-mode-alist)))
+                     (str (format-mode-line m))
+                     (s (and (stringp str) (string-trim str)))
                        (char (and (= (length s) 1) s)))
                  char "✔")))
        syms)
@@ -440,8 +444,7 @@ _^_ large _v_ shrink  _{_ _}_ horizontal
   "w"    #'subword-mode
   "W"    #'superword-mode
   "x"    #'xterm-mouse-mode
-  "y"    #'flyspell-mode
-  )
+  "y"    #'flyspell-mode)
 
 (keymap-hint-set toggle-options-map
  (format

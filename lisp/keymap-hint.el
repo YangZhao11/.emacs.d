@@ -6,6 +6,10 @@
 ;;; option to load the keymap using `set-transient-map'.
 
 ;;; Code:
+;; TODO: `defvar-keymap' supports adding some hints for repeat-map, by
+;; adding a repeat-hint property on the command symbol. Maybe align
+;; with that.
+
 ;; TODO: maybe display-buffer with some action / hint would be enough.
 (require 'lv)
 (eval-when-compile
