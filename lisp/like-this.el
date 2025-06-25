@@ -38,7 +38,7 @@ MATCH is returned from `like-this-try-match'.")
 (defvar like-this--last-match nil)
 
 ;;; Util functions for properties
-(defun like-this--prop-matches (prop &optional extractor &rest args)
+(defun like-this--prop-value (prop &optional extractor &rest args)
   "Returns property value for PROP.
 
 If EXTRACTOR is a function, call it with the property value as first argument, and ARGS as the rest arguments."
@@ -53,31 +53,39 @@ If EXTRACTOR is a function, call it with the property value as first argument, a
     (prop value n &optional extractor &rest args)
   "Move to next N-th place where the PROP matches value"
   (dotimes (_ n)
-    (while (eq (apply 'like-this--prop-matches prop extractor args) value)
-      (if-let* ((c (next-single-char-property-change (point) prop)))
-          (goto-char c)
-        (signal 'search-failed nil)))
-    (while (not (eq (apply 'like-this--prop-matches prop extractor args) value))
-      (if-let* ((c (next-single-char-property-change (point) prop)))
-          (goto-char c)
-        (signal 'search-failed nil)))))
+    (while (eq (apply 'like-this--prop-value prop extractor args) value)
+      (let* ((p (point))
+             (c (next-single-char-property-change p prop)))
+        (if (< p c)
+            (goto-char c)
+          (signal 'search-failed nil))))
+    (while (not (eq (apply 'like-this--prop-value prop extractor args) value))
+      (let* ((p (point))
+             (c (next-single-char-property-change p prop)))
+        (if (< p c)
+            (goto-char c)
+          (signal 'search-failed nil))))))
 
 (defun like-this--previous-matching-prop
     (prop value n &optional extractor &rest args)
   "Move to previous ARG-th place where the FACE matches"
   (dotimes (_ n)
-    (while (eq (apply 'like-this--prop-matches prop extractor args) value)
-      (if-let* ((c (previous-single-char-property-change (point) prop)))
-          (goto-char c)
-        (signal 'search-failed nil)))
-    (while (not (eq (apply 'like-this--prop-matches prop extractor args) value))
-      (if-let* ((c (previous-single-char-property-change (point) prop)))
-          (goto-char c)
-        (signal 'search-failed nil)))))
+    (while (eq (apply 'like-this--prop-value prop extractor args) value)
+      (let* ((p (point))
+             (c (previous-single-char-property-change p prop)))
+        (if (< c p)
+            (goto-char c)
+          (signal 'search-failed nil))))
+    (while (not (eq (apply 'like-this--prop-value prop extractor args) value))
+      (let* ((p (point))
+             (c (previous-single-char-property-change p prop)))
+        (if (< c p)
+            (goto-char c)
+          (signal 'search-failed nil))))))
 
 ;;; Button by button-type
 (cl-defmethod like-this-try-match ((matcher (head button)))
-  (if-let* ((button-type (like-this--prop-matches 'button #'car)))
+  (if-let* ((button-type (like-this--prop-value 'button #'car)))
       (list 'button button-type)))
 
 (cl-defmethod like-this-match-name ((match (head button)))
@@ -100,7 +108,7 @@ If EXTRACTOR is a function, call it with the property value as first argument, a
 (cl-defmethod like-this-try-match ((matcher (head face)))
   "Handle (face . button) type of cases."
   (let ((s (cdr matcher)))
-    (if (like-this--prop-matches 'face #'like-this--face-extractor s)
+    (if (like-this--prop-value 'face #'like-this--face-extractor s)
         (list 'face s))))
 
 (cl-defmethod like-this-match-name ((match (head face)))
