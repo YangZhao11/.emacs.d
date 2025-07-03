@@ -89,7 +89,7 @@ If EXTRACTOR is a function, call it with the property value as first argument, a
       (list 'button button-type)))
 
 (cl-defmethod like-this-match-name ((match (head button)))
-  (format "button type %s" (symbol-name (cadr match))))
+  (format "button type ‘%s’" (symbol-name (cadr match))))
 
 (cl-defmethod like-this-next-match ((match (head button)) arg)
   (let ((button-type (cadr match)))
