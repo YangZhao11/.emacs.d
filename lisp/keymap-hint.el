@@ -50,7 +50,7 @@ capture group. PROPERTIES are passed to `propertize' directly."
             (setq string
                   (replace-match
                    (apply #'propertize matched properties)
-                   t nil string))
+                   't 't string))
             (setq start (+ (match-beginning 0) (length matched))))
         :else                    ; nothing to replace, just propertize
         (add-text-properties

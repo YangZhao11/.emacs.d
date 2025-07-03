@@ -26,9 +26,9 @@ _z_ap    ··      │ _o_ther-win·· _R_elocate  _e_dit  │ _t_gl Fname│
   :bind ("C-x C-v" . view-mode)         ; find-alternate-file
   :config
   (keymap-hint-set view-mode-map "
-··pg/set·· ½··╶──╮ ↔╶······──╮ _g_o(_%_)····╶─────╮ ··Register┬╴··Mark╮ _s_earch/_r_╶╮ _q_uit/_Q_
-_k_↥ _K_   _u_p  │ _a__e_ _p_│ _{__}_  _[__]_ page│ _m_:point   _._set│ again:_S_ _R_│ _i_menu
-_j_↧ _J_   _d_own│ _b__f_ _n_│ _<__>_  _(__)_ list│ _'_:goto    p_@_p │ regex:_/_ ·\\│ _o_utline
+··pg/set·· ½··╶──╮ _g_o(_%_)····╶─────╮ ··Register┬╴··Mark╮ _s_earch/_r_·╶╮ _q_uit/_Q_
+_k_↥ _K_   _u_p  │ _{__}_  _[__]_ page│ _m_:point   _._set│ again:_S_ _R_·│ _i_menu
+_j_↧ _J_   _d_own│ _<__>_  _(__)_ list│ _'_:goto    p_@_p │ regex:_/_ _\\_│ _o_utline
 " :bind "SPC")
 
   (bind-keys :map view-mode-map
