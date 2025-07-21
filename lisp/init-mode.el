@@ -770,6 +770,9 @@ _j_↧  _⇧_/_⇥_:buttons  _I_:lispref  _c_ustomize
 (use-package comint
   :config
   (ansi-color-for-comint-mode-on)
+  ;; Maybe create a term mode for dumb-emacs-ansi. See search result for "Found
+  ;; a simple solution to colorize ls on shell mode".
+  (setq comint-terminfo-terminal "ansi")
   (setq comint-scroll-to-bottom-on-output 't
         comint-scroll-show-maximum-output nil))
 
