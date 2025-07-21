@@ -64,9 +64,9 @@ SPEC could be `box', `bar', or `hbar'."
 
 (require 'god-mode-isearch)
 (keymap-set isearch-mode-map
-           "<home>" #'god-mode-isearch-activate)
+            "<home>" #'god-mode-isearch-activate)
 (keymap-set god-mode-isearch-map
-           "<home>" #'god-mode-isearch-disable)
+            "<home>" #'god-mode-isearch-disable)
 (dolist (i '(?s ?r ?w ?v ?% ?< ?>))
   (keymap-set god-mode-isearch-map
     (char-to-string i) 'god-mode-self-insert))

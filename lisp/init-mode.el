@@ -754,7 +754,7 @@ _j_↧  _⇧_/_⇥_:buttons  _I_:lispref  _c_ustomize
   :config
   (defun z-shell-mode-hook ()
     (setq dirtrack-list
-          '(":\\[[0-9;]*m\\([^]*\\)" 1))
+          '(" \\[[0-9;]*m\\([^]*\\)" 1))
     (shell-dirtrack-mode -1)
     (dirtrack-mode 1))
   (add-hook 'shell-mode-hook #'z-shell-mode-hook)

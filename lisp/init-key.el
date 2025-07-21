@@ -12,7 +12,7 @@
 ;; TODO: look into term/xterm.el
 (defun z-setup-terminal ()
   ;; Translate ESC-* to M-*. This is needed for `read-key' to
-  ;; recognize M-z in one step (otherwise it'll ready the ESC only).
+  ;; recognize M-z in one step (otherwise it'll read the ESC only).
   (cl-loop for c from ?! to ?~ do
            ;; M-[ and M-O are used in function keys
            (when (not (memq c '(?\[ ?O)))
@@ -380,14 +380,13 @@ instead of inactivate region."
          ("S-<f8>" . gud-step)
          ("<f9>"   . gud-finish)))
 
-
 (use-package window
   :bind (("<f11>"   . shrink-window)
          ("<f12>"   . enlarge-window)
          ("M-9"     . previous-buffer)
          ("M-0"     . next-buffer)
-         ("M-m"     . bury-buffer)
-         ("M-M"     . unbury-buffer)
+         ("M-1"     . bury-buffer)
+         ("M-2"     . unbury-buffer)
          ("C-x 4 o" . display-buffer)
          ("C-x 9"   . delete-other-windows-vertically))
   :config
@@ -417,7 +416,7 @@ _^_ large _v_ shrink  _{_ _}_ horizontal
            (if-let* ((m (car (alist-get sym minor-mode-alist)))
                      (str (format-mode-line m))
                      (s (and (stringp str) (string-trim str)))
-                       (char (and (= (length s) 1) s)))
+                     (char (and (= (length s) 1) s)))
                  char "✔")))
        syms)
       "·"))
@@ -805,9 +804,11 @@ in `ctl-j-map' first."
 
 (use-package embark :ensure
   :after vertico
+  :bind ("M-m" . embark-act)
   :bind (:map vertico-map          ; maybe use `minibuffer-local-map'.
-              ("M-m"   . embark-act)
-              ("M-s o" . embark-export)))
+              ("M-s o" . embark-export))
+  ;; TODO: (setq prefix-help-command #'embark-prefix-help-command)
+  )
 
 (use-package embark-consult :ensure
   :after (embark consult)
