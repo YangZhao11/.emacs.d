@@ -119,10 +119,10 @@ root-_D_iff  log _O_utgoing  _~_:revision  i_G_nore  _g_:annotate  _u_:revert
   :bind (:map region-bindings-mode-map
               ("DEL" . easy-pair-delete)
               ("i" . easy-pair-kill-inside))
-  :bind (("M-7" . easy-pair-backward-slurp)
-         ("M-8" . easy-pair-backward-barf)
-         ("M-(" . easy-pair-barf)
-         ("M-)" . easy-pair-slurp)))
+  :bind (("M-*" . easy-pair-backward-slurp)
+         ("M-(" . easy-pair-backward-barf)
+         ("M-)" . easy-pair-barf)
+         ("M-_" . easy-pair-slurp)))
 
 (use-package shell
   ;:bind ("<f6>" . shell)
@@ -385,8 +385,8 @@ instead of inactivate region."
          ("<f12>"   . enlarge-window)
          ("M-9"     . previous-buffer)
          ("M-0"     . next-buffer)
-         ("M-1"     . bury-buffer)
-         ("M-2"     . unbury-buffer)
+         ("M-8"     . bury-buffer)
+         ("M-7"     . unbury-buffer)
          ("C-x 4 o" . display-buffer)
          ("C-x 9"   . delete-other-windows-vertically))
   :config

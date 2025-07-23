@@ -55,14 +55,13 @@ _j_↧ _J_   _d_own│ _<__>_  _(__)_ list│ _'_:goto    p_@_p │ regex:_/_ _\
              ("n" . next-line)
              ("o" . consult-outline)
              ("p" . previous-line)
-             ("q" . View-exit)
-             ("Q" . View-leave)
+             ("q" . View-quit)
+             ("Q" . View-kill-and-leave)
              ("R" . View-search-last-regexp-backward)
              ("S" . View-search-last-regexp-forward)
              ("v" . scroll-up-command)
              ("x" . god-mode-self-insert) ;exchange-point-and-mark
              ("z" . repeat)
-             ;;("C-x k" . View-kill-and-leave)
              )
 
   (put 'View-scroll-page-forward 'command-semantic 'scroll-up-command)
