@@ -80,8 +80,8 @@ SPEC could be `box', `bar', or `hbar'."
 ;; Avoid remapped self-insert-command
 (defalias 'true-self-insert-command 'self-insert-command)
 
-(bind-keys ("(" . true-self-insert-command)
-           (")" . true-self-insert-command)
+(bind-keys ;("(" . true-self-insert-command)
+           ;(")" . true-self-insert-command)
            ("C-h k" . god-mode-describe-key) ; this works in special mode too
 )
 
@@ -117,8 +117,7 @@ SPEC could be `box', `bar', or `hbar'."
 (bind-keys :map god-local-mode-map
            ("i" . mortal-mode)
            ("G" . god-mode-toggle-sticky-meta)
-           ("H" . god-mode-toggle-sticky-cm)
-           ("(") (")"))
+           ("H" . god-mode-toggle-sticky-cm))
 
 (setq god-mode-translate-alist
       '(;; C-[ is a prefix key (ESC), remap here.
@@ -131,9 +130,11 @@ SPEC could be `box', `bar', or `hbar'."
         ("M-g C-i" "M-g i")
         ;; one-key command that maps to M-?
         ("C-~" "M-~") ("C-!" "M-!") ("C-@" "M-@") ("C-$" "M-$") ("C-%" "M-%")
-        ("C-^" "M-^") ("C-&" "M-&") ("C-*" "M-*") ("C-{" "M-{") ("C-}" "M-}")
-        ("C-<" "M-<") ("C->" "M->") ("C-:" "M-:") ("C-|" "M-|") ("C-\\" "M-\\")
-        ("C-+" "M-+") ("C-=" "M-=") ("C-," "M-,") ("C-." "M-.")))
+        ("C-^" "M-^") ("C-&" "M-&") ("C-*" "M-*") ("C-(" "M-(") ("C-)" "M-)")
+        ("C-_" "M-_") ("C-+" "M-+") ("C-=" "M-=") ("C-{" "M-{") ("C-}" "M-}")
+        ("C-:" "M-:") ("C-;" "M-;") ; M-' is for abbrev, not useful in god-mode
+        ("C-|" "M-|") ("C-\\" "M-\\")
+        ("C-<" "M-<") ("C->" "M->") ("C-," "M-,") ("C-." "M-.")))
 
 (defun window-selected-p (window)
   (eq (frame-selected-window (window-frame window)) window))
