@@ -606,9 +606,16 @@ _j_↧ _n_ext  _<__>_:buf    │ _l_ine _r_egion│ _w_eb          _i_ndex   │
   (defun z-inferior-ess-mode-hook ()
     (setq prettify-symbols-alist ess-r-prettify-symbols)
     (prettify-symbols-mode 1)
+    ;; Performance issue with `ess-r-project'.
+    (kill-local-variable 'project-find-functions)
     (setq-local scroll-margin 0)
     (setq-local comint-move-point-for-output t))
   (add-hook 'inferior-ess-r-mode-hook #'z-inferior-ess-mode-hook)
+
+  (defun z-ess-mode-hook ()
+    ;; Performance issue with `ess-r-project'.
+    (kill-local-variable 'project-find-functions))
+  (add-hook 'ess-r-mode-hook #'z-ess-mode-hook)
 
   (bind-keys :map ess-r-mode-map
              ;; normally bound to C-RET, which is awkward to press
