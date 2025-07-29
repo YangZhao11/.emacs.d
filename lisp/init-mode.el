@@ -756,6 +756,18 @@ _j_↧  _⇧_/_⇥_:buttons  _I_:lispref  _c_ustomize
   ;; (setq server-port 9527)
   )
 
+(defun view-file-as-pipe (pipe-name &optional pwd)
+  "View file that is a named pipe."
+  (with-current-buffer (find-file-read-only pipe-name)
+    (if pwd
+        (setq default-directory pwd))
+    (auto-revert-mode 1)
+    (setq-local auto-revert-verbose nil)
+    (set-visited-file-name nil)
+    (rename-buffer "*Pipe Output*" 't)
+    (view-buffer (current-buffer) 'kill-buffer-if-not-modified)
+    (current-buffer)))
+
 (use-package shell
   :config
   (defun z-shell-mode-hook ()
