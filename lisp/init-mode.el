@@ -151,6 +151,7 @@ _j_↧  _n_ext  _[__]_:prev/next file    _d_isplay
              ("x" . god-mode-self-insert)
              ("c" . god-mode-self-insert))
   (unless (fboundp #'grep-change-to-grep-edit-mode)
+    ;; new in 31
     (defalias 'grep-change-to-grep-edit-mode 'wgrep-change-to-wgrep-mode)
     (autoload 'wgrep-change-to-wgrep-mode "wgrep"))
   (put 'grep 'command-semantic 'display-buffer)
@@ -412,6 +413,12 @@ Limit search to a few pages before."
              ("C-j")
              ("M-L" . string-inflection-kebab-case)))
 
+(use-package cc-cmds
+  :config
+  (put 'c-electric-lt-gt 'command-semantic 'self-insert-command)
+  (put 'c-electric-brace 'command-semantic 'self-insert-command)
+  (put 'c-electric-slash 'command-semantic 'self-insert-command))
+
 (use-package cc-mode
   :config
   (setq c-electric-pound-behavior '(alignleft)) ;make a #define left-aligned
@@ -501,6 +508,9 @@ Limit search to a few pages before."
     (interactive "p")
     (let ((ess-assign-list '(" |> ")))
       (ess-insert-assign arg)))
+  (put 'ess-smart-pipe 'command-semantic 'self-insert-command)
+  (put 'ess-insert-assign 'command-semantic 'self-insert-command)
+  (put 'ess-cycle-assign 'command-semantic 'self-insert-command)
 
   (defun ess-debug-next-or-eval-line ()
     (interactive)
@@ -658,6 +668,10 @@ _j_↧ _n_ext  _<__>_:buf    │ _l_ine _r_egion│ _w_eb          _i_ndex   │
   (add-hook 'tex-mode-hook
             (lambda ()
               (prettify-symbols-mode 1))))
+
+(use-package sgml-mode
+  :config
+  (put 'sgml-slash 'command-semantic 'self-insert-command))
 
 (use-package mhtml-mode
   :config

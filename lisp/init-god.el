@@ -77,6 +77,7 @@ SPEC could be `box', `bar', or `hbar'."
       god-exempt-predicates nil
       god-mode-can-omit-literal-key 't)
 
+
 ;; Avoid remapped self-insert-command
 (defalias 'true-self-insert-command 'self-insert-command)
 
@@ -85,11 +86,11 @@ SPEC could be `box', `bar', or `hbar'."
            ("C-h k" . god-mode-describe-key) ; this works in special mode too
 )
 
-(setq god-mode-low-priority-exempt
-      '(self-insert-command
-        c-electric-lt-gt c-electric-brace c-electric-slash
-        sgml-slash
-        ess-smart-pipe ess-insert-assign ess-cycle-assign))
+(defun god-mode-low-priority-command-semantic (command)
+  (eq 'self-insert-command
+      (or command (get command 'command-semantic))))
+(setq god-mode-low-priority-command-predicate
+      'god-mode-low-priority-command-semantic)
 
 (setq god-mode-low-priority-keys
       '(?z ?# ?q ?\[ ?\] ?U ?`
