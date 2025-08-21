@@ -185,7 +185,7 @@ the keymap is deactivated after one command."
 (defun keymap-hint--format-string (hint)
   "Format string HINT to what we store in the hint property."
   (setq hint (string-trim hint))
-  (setq hint (replace-regexp-in-string "·" "" hint))
+  (setq hint (replace-regexp-in-string " " "" hint))
   (setq hint (propertize-regexp
               hint "_\\([^_]+\\)_" 'face 'help-key-binding))
   hint)

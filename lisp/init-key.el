@@ -47,16 +47,16 @@
               help-echo "Recording keyboard macro")))))
 
 (keymap-hint-set ctl-x-r-map "
-Rectangle╶─────······───────╮ Register╶··┬╴save··╶─────╮ Bookmark──··─────╮
-_c_lear     _N_umber-lines··│ _+_: inc   │ _␣_:point   │ _m_: set         │
+Rectangle╶─────      ───────╮ Register╶  ┬╴save  ╶─────╮ Bookmark╶─  ─────╮
+_c_lear     _N_umber-lines  │ _+_: inc   │ _␣_:point   │ _m_: set         │
 _d_elete    _o_pen  s_t_ring│ _j_ump     │ _f_rameset  │ _b_: jump        │
-_k_ill      _y_ank··        │ _i_nsert   │ _w_indow-cfg│ _l_ist           │
-_M-w_:copy  _r_egister··    │ _s_ave text│ _n_umber    │ _M_: no-overwrite│
+_k_ill      _y_ank          │ _i_nsert   │ _w_indow-cfg│ _l_ist           │
+_M-w_:copy  _r_egister      │ _s_ave text│ _n_umber    │ _M_: no-overwrite│
 " :load-map 't :bind "?")
 
 (keymap-hint-set vc-prefix-map "
 _+_:update   ch_a_nge log    print _l_og   _d_ir     _h_istory     _m_erge
-_=_:diff     log _I_ncoming  root _L_og    _P_ush    reg_i_ster    _r_etrieve tag
+_=_:diff     log _I_ncoming  root _L_og    _P_ush    reg_i_ster    _r_etrieve-tag
 root-_D_iff  log _O_utgoing  _~_:revision  i_G_nore  _g_:annotate  _u_:revert
 " :load-map 't :bind "?")
 
@@ -383,6 +383,9 @@ instead of inactivate region."
 (use-package window
   :bind (("<f11>"   . shrink-window)
          ("<f12>"   . enlarge-window)
+         ;; We only have a frame parameter buffer-predicate. If we
+         ;; have one at window level, we can implement something like
+         ;; `purpose'.
          ("M-9"     . previous-buffer)
          ("M-0"     . next-buffer)
          ("M-8"     . bury-buffer)
@@ -419,7 +422,7 @@ _^_ large _v_ shrink  _{_ _}_ horizontal
                      (char (and (= (length s) 1) s)))
                  char "✔")))
        syms)
-      "·"))
+      "⁃"))
 
 (defvar-keymap toggle-options-map
   :doc "Shortcut for toggle some options"
@@ -449,10 +452,10 @@ _^_ large _v_ shrink  _{_ _}_ horizontal
  (format
   "
 Toggle:
-%s rainbow-_d_elimiters  ·· %s _a_bbrev       %s _o_utline-minor-mode··  %s fly_m_ake
-%s rainbow-_i_dentifiers ·· %s auto-_f_ill    %s _c_ompletion-preview··  %s _x_term-mouse
-%s _R_ainbow colors      ·· %s visual-lin_e_  %s fl_y_spell/_p_rog       %s elec-_'_
-%s _h_ighlight-changes   ·· %s auto-_r_evert  %s sub_w_ord/super_W_ord
+%s rainbow-_d_elimiters     %s _a_bbrev       %s _o_utline-minor-mode    %s fly_m_ake
+%s rainbow-_i_dentifiers    %s auto-_f_ill    %s _c_ompletion-preview    %s _x_term-mouse
+%s _R_ainbow colors         %s visual-lin_e_  %s fl_y_spell/_p_rog       %s elec-_'_
+%s _h_ighlight-changes      %s auto-_r_evert  %s sub_w_ord/super_W_ord
 %s white_s_pace/_t_railing  %s line-_n_um     %s which-f_u_nc
 "
   (mode-char 'rainbow-delimiters-mode)
@@ -802,13 +805,26 @@ in `ctl-j-map' first."
   ;; (advice-add #'register-preview :override #'consult-register-window)
   )
 
+(keymap-global-set "M-M" 'embark-act-all)
+
 (use-package embark :ensure
   :after vertico
-  :bind ("M-m" . embark-act)
+  :bind (("M-m" . embark-act)
+         ("M-M" . embark-act-all))
   :bind (:map vertico-map          ; maybe use `minibuffer-local-map'.
               ("M-s o" . embark-export))
+  :config
   ;; TODO: (setq prefix-help-command #'embark-prefix-help-command)
+  (defun embark-target-easy-kill ()
+    "Target from `easy-kill'."
+    (when (and (bound-and-true-p easy-kill-candidate)
+               (eq (current-buffer) (easy-kill-get buffer)))
+      `(,(easy-kill-get thing)
+        ,(easy-kill-candidate)
+        .  ,(easy-kill-get bounds))))
+  (add-to-list 'embark-target-finders 'embark-target-easy-kill)
   )
+
 
 (use-package embark-consult :ensure
   :after (embark consult)

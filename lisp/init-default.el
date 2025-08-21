@@ -98,7 +98,6 @@ PROP set to true to add properties for mode line."
 (setq read-extended-command-predicate
       #'command-completion-default-include-p)
 
-;; Defaults for lighter hint.
 (put 'scroll-up-command 'command-semantic 'scroll-up-command)
 (put 'scroll-down-command 'command-semantic 'scroll-down-command)
 
@@ -106,6 +105,7 @@ PROP set to true to add properties for mode line."
 (put 'previous-line 'command-semantic 'previous-line)
 
 (put 'quit-window 'command-semantic 'quit-window)
+(put 'self-insert-command 'command-semantic 'self-insert-command)
 
 ;; --------------------------------------------------
 (load-theme 'doom-zenburn 't)   ; load this first for many defaults.

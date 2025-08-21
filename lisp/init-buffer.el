@@ -79,11 +79,11 @@
                 (mode 16 16 :left :elide))))
 
 (keymap-hint-set ibuffer-mode-map "
-_m_ark(_*_)╶╮ List······╶──╮ Buf Ops··╶─··─────────┬╴Togl╶····─╮ Text Ops····╶───····─────────╮
-_%_:regexp··│ _s_ort _,_·· │ _D_elete  _j_ump      │_T_:∅ _M_:♦│ _Q_uery/r··     _!_:shell··  │
-_t_oggle/_U_│ _/_filter····│ _S_ave    _v_iew      ╭╴Copy····╶─┤ _I_:q_r_-regex  _|_:pipe··   │
-_d_el/_z_ap │ _g_:↻ _+__-_ │ re_V_ert  _o_ther-win │_B_name··  │ _=_:diff··      _N_:replace··│
-_._old ··   │ _k_ill-ln····│ _R_ename  _H_:other-f │_w_:Fname··│ _O_ccur··       _E_val/vie_W_│
+_m_ark(_*_)╶╮ List      ╶──╮ Buf Ops  ╶─  ─────────┬╴Togl╶    ─╮ Text Ops    ╶───    ─────────╮
+_%_:regexp  │ _s_ort _,_   │ _D_elete  _j_ump      │_T_:∅ _M_:♦│ _Q_uery/r       _!_:shell    │
+_t_oggle/_U_│ _/_filter    │ _S_ave    _v_iew      ╭╴Copy    ╶─┤ _I_:q_r_-regex  _|_:pipe     │
+_d_el/_z_ap │ _g_:↻ _+__-_ │ re_V_ert  _o_ther-win │_B_name    │ _=_:diff        _N_:replace  │
+_._old      │ _k_ill-ln    │ _R_ename  _H_:other-f │_w_:Fname  │ _O_ccur         _E_val/vie_W_│
 " :bind "SPC")
 
 (put 'ibuffer-visit-buffer 'command-semantic 'switch-to-buffer)
@@ -108,11 +108,11 @@ _a_lphabetic  _f_ilename  _m_ode  _s_ize  _v_:recency │ _i_nvert
 " :bind "SPC")
 
 (keymap-hint-set-sub ibuffer-mode-map "/" "
-Filter by╶─(_/_ disable)····───────··──────╮ Ops╶······─────╮ Named╶··╮ _g_roups···╶────╮
-_m_ode/derived_M_  _F_ dir      mod_i_fied │ Logic:_&__|__!_│ _s_ave  │ _S_ave/_R_evive·│
-_b_ase/_n_ame      _._ ext      predicat_e_│ _t_:exchg····  │ _r_evive│ _X_:delete···   │
-_f_ilename··       _*_ starred  _v_isiting │ _d_ecompose····│ _a_dd   │ _D_ecompose···  │
-_<_ size _>_       _c_ontent    proc_E_ss  │ _↑_ _p_op··    │ _x_:del │ _P_op \\:clear··│
+Filter by╶─(_/_ disable)    ───────  ──────╮ Ops╶      ─────╮ Named╶  ╮ _g_roups   ╶────╮
+_m_ode/derived_M_  _F_ dir      mod_i_fied │ Logic:_&__|__!_│ _s_ave  │ _S_ave/_R_evive │
+_b_ase/_n_ame      _._ ext      predicat_e_│ _t_:exchg      │ _r_evive│ _X_:delete      │
+_f_ilename         _*_ starred  _v_isiting │ _d_ecompose    │ _a_dd   │ _D_ecompose     │
+_<_ size _>_       _c_ontent    proc_E_ss  │ _↑_ _p_op      │ _x_:del │ _P_op \\:clear  │
 " :bind "SPC")
 
   (defun ibuffer-dired-jump (&optional other-window)

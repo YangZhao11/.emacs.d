@@ -10,10 +10,10 @@
 (use-package bookmark
   :config
   (keymap-hint-set bookmark-bmenu-mode-map "
-_m_ark╶──··──────╮ Item╶─····────··────────┬╴Annot··╶╮ List··╶────╮
-_⏎_:go   _u_nmark│ _v_isit··     _r_ename    _a_:show│ _s_ave     │
+_m_ark╶──  ──────╮ Item╶─    ────  ────────┬╴Annot  ╶╮ List  ╶────╮
+_⏎_:go   _u_nmark│ _v_isit       _r_ename    _a_:show│ _s_ave     │
 _d_elete _⌫_:back│ _1_/_2_-win   _w_here     _A_ll   │ _l_oad     │
-_z_ap    ··      │ _o_ther-win·· _R_elocate  _e_dit  │ _t_gl Fname│
+_z_ap            │ _o_ther-win   _R_elocate  _e_dit  │ _t_gl Fname│
 " :bind "SPC")
   (bind-keys :map bookmark-bmenu-mode-map
              ("j" . scroll-down-command)
@@ -26,8 +26,8 @@ _z_ap    ··      │ _o_ther-win·· _R_elocate  _e_dit  │ _t_gl Fname│
   :bind ("C-x C-v" . view-mode)         ; find-alternate-file
   :config
   (keymap-hint-set view-mode-map "
-··pg/set·· ½··╶──╮ _g_o(_%_)····╶─────╮ ··Register┬╴··Mark╮ _s_earch/_r_·╶╮ _q_uit/_Q_
-_k_↥ _K_   _u_p  │ _{__}_  _[__]_ page│ _m_:point   _._set│ again:_S_ _R_·│ _i_menu
+  pg/set   ½  ╶──╮ _g_o(_%_)    ╶─────╮   Register┬╴  Mark╮ _s_earch/_r_ ╶╮ _q_uit/_Q_
+_k_↥ _K_   _u_p  │ _{__}_  _[__]_ page│ _m_:point   _._set│ again:_S_ _R_ │ _i_menu
 _j_↧ _J_   _d_own│ _<__>_  _(__)_ list│ _'_:goto    p_@_p │ regex:_/_ _\\_│ _o_utline
 " :bind "SPC")
 
@@ -112,7 +112,7 @@ useful when followed by an immediate kill."
    occur-mode-map
    (format "
 _k_↥  _p_rev   _<_ _>_       _⏎_:goto      %s _e_dit
-_j_↧  _n_ext   _d_isplay··   _o_ther-win   %s _^c^f_ollow"
+_j_↧  _n_ext   _d_isplay     _o_ther-win   %s _^c^f_ollow"
            (mode-char 'occur-edit-mode)
            (mode-char 'next-error-follow-minor-mode))
    :bind "SPC")
@@ -185,29 +185,29 @@ _j_↧  _n_ext  _[__]_:prev/next file
   (setq dired-dwim-target 't)
 
   (keymap-hint-set dired-mode-map "
-··Mark(_*_)╶╮ ·Flag·╶────··──────╮ Go··╶(_j_ump)─╮ Dir··╶────··──────┬ Subdir··╶╮
-_%_:regexp··│ _#_:temp   _d_:this│ _[__]_:page   │ _s_ort    _(_ detl  _i_nsert │
-_u_n/_m_ark │ _~_:backup _z_ap   │ _<__>_:dirline│ _^_ up    ··        _$_:hide │
-_t_oggle/_U_│ _._:№ bkup   ··    │ _{__}_:marked │ _+_create ··        _K_ill   │
+  Mark(_*_)╶╮  Flag ╶────  ──────╮ Go  ╶(_j_ump)─╮ Dir  ╶────  ──────┬ Subdir  ╶╮
+_%_:regexp  │ _#_:temp   _d_:this│ _[__]_:page   │ _s_ort    _(_ detl  _i_nsert │
+_u_n/_m_ark │ _~_:backup _z_ap   │ _<__>_:dirline│ _^_ up              _$_:hide │
+_t_oggle/_U_│ _._:№ bkup         │ _{__}_:marked │ _+_create           _K_ill   │
 
-·Emacs Ops···╶─────────────··─────────╮ ··File Ops··╶─(_e_dit)··──··───────┬ch╶··╮
+ Emacs Ops   ╶─────────────  ─────────╮   File Ops  ╶─(_e_dit)  ──  ───────┬ch╶  ╮
 _F_ind all   file-t_y_pe   _v_iew     │ _!_shell_&_ _S__Y_mlink  _=_ diff   _M_od│
-_A_:grep     _w_:cp Fname  _a_ltern   │ ··_C_opy    _H_ardlink·· _c_ompress _O_wn│
-_Q_uery/rep  _k_ill-line   _o_ther-win│ ··_D_elete  _T_ouch··    _Z_ompress _G_rp│
-_B_yte comp  _I_nfo        ··         │ ··_R_ename  _P_rint··    _W_eb      ··   │
-_L_oad       ma_N_         redisp_l_ay│ ··_E_xt-open ····        ··         ··   │
+_A_:grep     _w_:cp Fname  _a_ltern   │   _C_opy    _H_ardlink   _c_ompress _O_wn│
+_Q_uery/rep  _k_ill-line   _o_ther-win│   _D_elete  _T_ouch      _Z_ompress _G_rp│
+_B_yte comp  _I_nfo                   │   _R_ename  _P_rint      _W_eb           │
+_L_oad       ma_N_         redisp_l_ay│   _E_xt-open                             │
 " :bind "SPC")
 
   (keymap-hint-set-sub dired-mode-map "*" "
-_m_ark╶────────··─────────··──────╮ _u_nmark╶╮ _t_oggle
+_m_ark╶────────  ─────────  ──────╮ _u_nmark╶╮ _t_oggle
 _*_executable _/_dir      _s_ubdir│ _!_all   │ _c_hange
-_%_regexp     _@_symlink  ··      │ _?_char  │ _N_umber
+_%_regexp     _@_symlink          │ _?_char  │ _N_umber
 " :bind "SPC")
 
   (keymap-hint-set-sub dired-mode-map "%" "
-Flag╶─··──╮ _m_ark╶────╮ _r_ename╶──╮ _C_opy
+Flag╶─  ──╮ _m_ark╶────╮ _r_ename╶──╮ _C_opy
 _&_garbage│ _g_rep-mark│ _u_pcase   │ _H_ardlink
-_d_:this  │ ··         │ _l_owercase│ _S__Y_mlink
+_d_:this  │            │ _l_owercase│ _S__Y_mlink
 " :bind "SPC")
 
   (bind-keys :map dired-mode-map
@@ -239,8 +239,8 @@ _d_:this  │ ··         │ _l_owercase│ _S__Y_mlink
 
   :config
   (keymap-hint-set package-menu-mode-map "
-Go····╶────╮ Action_z_╶─··────────────··──────╮ List··╶─··──────··──────╮
-_k_↥ _p_rev│ _i_nstall  _d_elete      _?_:info│ _/_:filter··    _r_evert│
+Go    ╶────╮ Action_z_╶─  ────────────  ──────╮ List  ╶─  ──────  ──────╮
+_k_↥ _p_rev│ _i_nstall  _d_elete      _?_:info│ _/_:filter      _r_evert│
 _j_↧ _n_ext│ _U_pgrade  _~_:obsolete  _u_nmark│ _H_ide/_(_tgl)  _S_ort  │
 " :bind "SPC")
 
@@ -262,10 +262,10 @@ _u_pgradable  _v_ersion  _N_ame/desc
   :bind ("C-x m" . smerge-mode)
   :config
   (keymap-hint-set smerge-mode-map "
-Move··╶╮ Keep··╶─··─────╮ Current··╮ Conflict····──────┬╴diff··╶─────────╮
+Move  ╶╮ Keep  ╶─  ─────╮ Current  ╮ Conflict    ──────┬╴diff  ╶─────────╮
 _n_ext │ _b_ase  _u_pper│ _⏎_ keep │ _R_efine  _E_diff   _<_: base-upper │
 _p_rev │ _a_ll   _l_ower│ _K_ill   │ _C_ombine/a_U_to    _=_: upper-lower│
-_q_uit │ ··      _s_wap │ ··       │ _r_esolve/_A_ll     _>_: base-lower │
+_q_uit │         _s_wap │          │ _r_esolve/_A_ll     _>_: base-lower │
 " :bind "SPC")
 )
 
@@ -320,6 +320,17 @@ _q_uit │ ··      _s_wap │ ··       │ _r_esolve/_A_ll     _>_: base-low
   (bind-keys :map outline-mode-map
              ("C-M-a" . outline-previous-visible-heading)
              ("C-M-e" . outline-next-visible-heading)))
+
+(use-package cus-edit
+  :config
+  (bind-keys :map custom-mode-map
+             ("x" . god-mode-self-insert)
+             ("c" . god-mode-self-insert)
+             ("j" . scroll-up-command)
+             ("k" . scroll-down-command)
+             ("a" . move-beginning-of-line)
+             ("e" . move-end-of-line)
+             ("SPC" . Custom-no-edit)))
 
 ;; --------------------------------------------------
 (use-package yasnippet
@@ -583,8 +594,8 @@ Limit search to a few pages before."
              )
 
   (keymap-hint-set ess-help-mode-map "
-Move···╶─────·····─────────╮ Eval····╶──────╮ Jump··╶────────··────────╮
-_k_↥ _p_rev  _[__]_:section│ _f_unction ··  │ _h_elp-on-obj  _/_isearch│
+Move   ╶─────     ─────────╮ Eval    ╶──────╮ Jump  ╶────────  ────────╮
+_k_↥ _p_rev  _[__]_:section│ _f_unction     │ _h_elp-on-obj  _/_isearch│
 _j_↧ _n_ext  _<__>_:buf    │ _l_ine _r_egion│ _w_eb          _i_ndex   │
 " :bind "SPC")
 )
@@ -599,7 +610,7 @@ _j_↧ _n_ext  _<__>_:buf    │ _l_ine _r_egion│ _w_eb          _i_ndex   │
 
   (setq ess-r-prettify-symbols
         '(("%>%" . ?↦)                  ; magrittr pipe
-          ("|>" . ?▷)                   ; R pipe
+          ;;("|>" . ?▷)                 ; R pipe - use ligature
           ("\\" . ?λ)
           ("<-" . ?←)
           ("->" . ?→)
@@ -690,7 +701,7 @@ _j_↧ _n_ext  _<__>_:buf    │ _l_ine _r_egion│ _w_eb          _i_ndex   │
   :config
   (put 'Man-mode 'mode-class 'special)
   (keymap-hint-set Man-mode-map "
-_k_↥ _<__>_  top/bot  _g_oto sec··    _r_eference │ _K_ill
+_k_↥ _<__>_  top/bot  _g_oto sec      _r_eference │ _K_ill
 _j_↧ _⇧_/_⇥_ button   _[__]_ section  _s_ee also  │ _q_uit
 " :bind "SPC")
   (bind-keys :map Man-mode-map
@@ -708,10 +719,10 @@ _j_↧ _⇧_/_⇥_ button   _[__]_ section  _s_ee also  │ _q_uit
 (use-package info
   :config
   (keymap-hint-set Info-mode-map "
-Go··╶╮ ··Reference··╶╮ ··History╶─╮ Tree······╶─┬ _d_irectory··───╮
-_k_↥ │ _⇧_/_⇥_:cycle │ _l_:back   │ ··  ↑_u_p·· │ In file:_T_OC·· │
-_j_↧ │ _⏎_:_f_ollow  │ _r_:forward│ _P_←∙→_N_·· │ _<__>_first/last│
-· ·  │ _m_enu··      │ _L_ist     │ ··  ↳_[__]_ │ ····            │
+Go  ╶╮   Reference  ╶╮   History╶─╮ Tree      ╶─┬ _d_irectory  ───╮
+_k_↥ │ _⇧_/_⇥_:cycle │ _l_:back   │     ↑_u_p   │ In file:_T_OC   │
+_j_↧ │ _⏎_:_f_ollow  │ _r_:forward│ _P_←∙→_N_   │ _<__>_first/last│
+     │ _m_enu        │ _L_ist     │     ↳_[__]_ │                 │
 " :bind "SPC")
   (bind-keys :map Info-mode-map
              ("e" . move-end-of-line)
@@ -791,7 +802,16 @@ _j_↧  _⇧_/_⇥_:buttons  _I_:lispref  _c_ustomize
     (dirtrack-mode 1))
   (add-hook 'shell-mode-hook #'z-shell-mode-hook)
 
+  (defun shell-input-async-command (command &optional output-buffer error-buffer)
+    "Like `async-shell-command', but default command is current input."
+    (interactive
+     (let* ((default (comint-current-input))
+            (cmd (read-shell-command "Async shell command: " default)))
+       (list cmd nil shell-command-default-error-buffer)))
+    (async-shell-command command output-buffer error-buffer))
+
   (bind-keys :map shell-mode-map
+             ([remap async-shell-command] . shell-input-async-command)
              ("C-M-a" . comint-previous-prompt)
              ("C-M-e" . comint-next-prompt)))
 
@@ -801,6 +821,16 @@ _j_↧  _⇧_/_⇥_:buttons  _I_:lispref  _c_ustomize
 
 (use-package comint
   :config
+  (defun comint-current-input ()
+    "Return the comint input line as a string.
+
+We use the presence of some prompt to detect this line is an input line."
+    (when (derived-mode-p 'comint-mode)
+      (let ((cline (comint-line-beginning-position))
+            (line (pos-bol)))
+        (when (> cline line)
+          (buffer-substring-no-properties cline (line-end-position))))))
+
   ;(ansi-color-for-comint-mode-on)
   (eterm-256color-mode)
   (setq comint-terminfo-terminal "eterm-256color")

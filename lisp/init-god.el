@@ -56,7 +56,6 @@ SPEC could be `box', `bar', or `hbar'."
 ;; TODO: `substitute-command-keys' uses `where-is-internal' to decide
 ;; the key for a command. Advice it to work with god-mode.
 
-
 (require 'god-mode)
 
 (keymap-global-set "<home>" #'god-mode-all)
