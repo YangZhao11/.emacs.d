@@ -256,11 +256,3 @@ mouse-3: Describe current input method")
 ;; tty box unicode from 31
 (when (fboundp #'standard-display-unicode-special-glyphs)
   (standard-display-unicode-special-glyphs))
-
-
-(use-package ligature
-  :config
-  (ligature-set-ligatures 'prog-mode '("|>" "::"))
-  (ligature-set-ligatures 'inferior-ess-mode '("|>" "::"))
-  (ligature-set-ligatures 'julia-repl-mode '("|>" "::" "->" "=>"))
-  (global-ligature-mode t))

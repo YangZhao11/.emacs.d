@@ -3,6 +3,14 @@
 (set-frame-font "JuliaMono-17" nil 't)
 ;; (set-fontset-font t 'unicode
 ;;                   (font-spec :name "Apple Color Emoji" :size 11) nil 'prepend)
+
+(use-package ligature
+  :config
+  (ligature-set-ligatures 'prog-mode '("|>" "::"))
+  (ligature-set-ligatures 'inferior-ess-mode '("|>" "::"))
+  (ligature-set-ligatures 'julia-repl-mode '("|>" "::" "->" "=>"))
+  (global-ligature-mode t))
+
 (setq ns-use-thin-smoothing t)          ; does not seem to have any effect
 
 (setq mac-option-modifier 'none
