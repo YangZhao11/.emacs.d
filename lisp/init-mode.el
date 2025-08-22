@@ -810,6 +810,26 @@ _j_↧  _⇧_/_⇥_:buttons  _I_:lispref  _c_ustomize
        (list cmd nil shell-command-default-error-buffer)))
     (async-shell-command command output-buffer error-buffer))
 
+  (defun shell-mode:pager (&rest args)
+    "Shell-mode command line pager"
+    (when (let ((l (seq-length args)))
+            (or (< l 5)
+                (yes-or-no-p (format "Really view %d files?" l))))
+      (dolist (fname (seq-reverse args))
+        (view-file fname))))
+
+  (defun shell-mode:grep (&rest args)
+    "Shell-mode command line grep"
+    (require 'grep)
+    (unless grep-command (grep-compute-defaults))
+    (let ((arg-str (mapconcat #'shell-quote-argument args " ")))
+      (grep (concat grep-command " " arg-str))))
+
+  (defun shell-mode:man (&rest args)
+    "Shell-mode command line for man"
+    (let ((arg-str (mapconcat #'shell-quote-argument args " ")))
+    (man arg-str)))
+
   (bind-keys :map shell-mode-map
              ([remap async-shell-command] . shell-input-async-command)
              ("C-M-a" . comint-previous-prompt)
