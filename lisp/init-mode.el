@@ -815,7 +815,7 @@ _j_↧  _⇧_/_⇥_:buttons  _I_:lispref  _c_ustomize
     (when (let ((l (seq-length args)))
             (or (< l 5)
                 (yes-or-no-p (format "Really view %d files?" l))))
-      (dolist (fname (seq-reverse args))
+      (dolist (fname (seq-reverse args) args)
         (view-file fname))))
 
   (defun shell-mode:grep (&rest args)
