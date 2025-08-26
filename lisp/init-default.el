@@ -39,7 +39,8 @@
 
 (show-paren-mode 1)
 (setq show-paren-when-point-in-periphery 't)
-(setq show-paren-context-when-offscreen 'overlay)
+;; overlay face is hard coded and does not work well on terminal
+(setq show-paren-context-when-offscreen 't)
 (setq blink-matching-paren-highlight-offscreen 't)
 (electric-pair-mode 1)
 

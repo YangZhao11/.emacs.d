@@ -279,6 +279,9 @@ _q_uit │         _s_wap │          │ _r_esolve/_A_ll     _>_: base-low
              ("M-l") ("M-o") ("M-v") ("M-x")))
 
 (use-package magit
+  ;; Make sure when compiling, the correct magit package is loaded.
+  ;; otherwise this may generate an autoload pointing to an incorrect
+  ;; location, e.g. in site-lisp instead in elpa.
   :bind ("C-x g" . magit-status)
   :config
   (setq with-editor-mode-lighter "")
@@ -661,7 +664,7 @@ _j_↧ _n_ext  _<__>_:buf    │ _l_ine _r_egion│ _w_eb          _i_ndex   │
              ("C-M-e" . forward-paragraph)))
 
 (use-package markdown-mode
-  :mode ("\\.md\\'" . markdown-mode)
+  :mode ("\\.md\\'" . gfm-mode)
   :init
   (setq markdown-header-scaling 't
         markdown-header-scaling-values
@@ -670,7 +673,37 @@ _j_↧ _n_ext  _<__>_:buf    │ _l_ine _r_egion│ _w_eb          _i_ndex   │
   (bind-keys :map markdown-mode-map
              ("C-M-a" . markdown-previous-visible-heading)
              ("C-M-e" . markdown-next-visible-heading)
-             ("C-c C-m" . ess-r-mode)))
+             ("C-c C-m" . ess-r-mode))
+  (defvar-keymap markdown-navigation-repeat-map
+    :repeat t
+    "C-b" #'markdown-outline-previous-same-level
+    "b"   #'markdown-outline-previous-same-level
+    "C-f" #'markdown-outline-next-same-level
+    "f"   #'markdown-outline-next-same-level
+    "C-n" #'markdown-outline-next
+    "n"   #'markdown-outline-next
+    "C-p" #'markdown-outline-previous
+    "p"   #'markdown-outline-previous
+    "C-u" #'markdown-outline-up
+    "u"   #'markdown-outline-up)
+
+  (defvar-keymap markdown-indent-repeat-map
+    :repeat t
+    "<" #'markdown-outdent-region
+    ">" #'markdown-indent-region)
+
+  (defvar-keymap markdown-promot-repeat-map
+    :repeat t
+    "-"       #'markdown-promote
+    "<left>"  #'markdown-promote
+    "="       #'markdown-demote
+    "<right>" #'markdown-demote)
+
+  (defvar-keymap markdown-move-repeat-map
+    :repeat t
+    "<up>"   #'markdown-move-up
+    "<down>" #'markdown-move-down)
+)
 
 (use-package tex-mode
   :config
