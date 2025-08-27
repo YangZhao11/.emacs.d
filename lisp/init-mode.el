@@ -858,6 +858,13 @@ _j_↧  _⇧_/_⇥_:buttons  _I_:lispref  _c_ustomize
     (let ((arg-str (mapconcat #'shell-quote-argument args " ")))
       (grep (concat grep-command " " arg-str))))
 
+  (defun shell-mode:rg (&rest args)
+    "Shell-mode command line rg (ripgrep)"
+    (require 'rg)
+    (rg (car args)
+        (mapconcat #'identity (cdr args) " ")
+        default-directory))
+
   (defun shell-mode:man (&rest args)
     "Shell-mode command line for man"
     (let ((arg-str (mapconcat #'shell-quote-argument args " ")))
