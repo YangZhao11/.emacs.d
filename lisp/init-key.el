@@ -695,7 +695,7 @@ in `ctl-j-map' first."
          ("C-x ," . xref-go-back)))
 
 (use-package vertico :ensure
-  :bind ("M-s M-d" . vertico-repeat)
+  :bind ("M-s M-s" . vertico-repeat)
   :init
   (vertico-mode)
   (add-hook 'minibuffer-setup-hook #'vertico-repeat-save)
@@ -767,12 +767,13 @@ in `ctl-j-map' first."
          ;; C-c C-l in `comint-mode-map'
          ([remap comint-dynamic-list-input-ring] . consult-history)
          ("C-x f" . consult-find)
-         ("M-s M-s" . consult-line)
-         ("M-s s" . consult-focus-lines)
+         ("M-s l" . consult-focus-lines) ; similar to loccur
+         ("M-s M-l" . consult-keep-lines)
          ("M-s M-g" . consult-grep)
          ("M-s M-r" . consult-ripgrep)
          ("M-s e" . consult-isearch-history)  ; similar to isearch-edit-string
          ;("M-y" . consult-yank-pop)
+         ("M-g l" . consult-line)
          ("M-g o" . consult-outline)
          ("M-g SPC" . consult-mark)
          ("M-g @" . consult-global-mark)

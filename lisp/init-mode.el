@@ -71,9 +71,9 @@ _j_↧ _J_   _d_own│ _<__>_  _(__)_ list│ _'_:goto    p_@_p │ regex:_/_ _\
             (lambda () (if view-mode (god-local-mode-pause)
                          (god-local-mode-resume)))))
 
-;; (use-package rg
-;;   :bind (("M-s r" . rg)
-;;          ("M-s R" . rg-menu)))
+(use-package rg
+  :bind (("M-s r" . rg)
+         ("M-s R" . rg-menu)))
 
 (use-package isearch
   :config
@@ -106,7 +106,7 @@ useful when followed by an immediate kill."
              ("]" . xref-next-group)))
 
 (use-package replace
-  :bind ("M-s M-o" . multi-occur-in-matching-buffers)
+  :bind ("M-s O" . multi-occur-in-matching-buffers)
   :config
   (keymap-hint-set
    occur-mode-map
