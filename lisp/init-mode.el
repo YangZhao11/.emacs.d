@@ -511,7 +511,8 @@ Limit search to a few pages before."
                       '(inferior-ess-mode inferior-julia-mode))
                      (not (eq b (current-buffer)))))
               (buffer-list))))
-      (if b (switch-to-buffer b)
+      ;; todo: make this display-buffer, and config "side" correctly.
+      (if b (display-buffer-in-side-window b '((side . bottom)))
         (unless (provided-mode-derived-p major-mode 'inferior-ess-mode)
           (let ((ess-ask-for-ess-directory nil)
                 (ess-startup-directory "~/Projects"))

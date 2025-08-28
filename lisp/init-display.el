@@ -164,18 +164,50 @@ mouse-3: Describe current input method")
  ;; mode-line-client
  mode-line-modified
  mode-line-remote
- mode-line-window-dedicated
+; mode-line-window-dedicated
 " " ;mode-line-frame-identification
  mode-line-buffer-identification "   " mode-line-position
  "  " mode-line-modes mode-line-misc-info
  mode-line-format-right-align
  (vc-mode vc-mode)
- (project-mode-line project-mode-line-format)
+                                        ;;(project-mode-line project-mode-line-format)
+ (:eval (mode-line-window-side))
+ (:eval (mode-line-window-state))
  " "
 ; mode-line-frame-name
 ))
 (setq project-mode-line 't)
 ;(setq project-mode-line-face 'font-lock-comment-face)
+
+(defvar window-side-lighter
+  '((top . "⬒")
+    (bottom . "⬓")
+    (left . "◧")
+    (right . "◨")))
+
+(defvar-keymap mode-line-window-side-keymap
+  :doc "Keymap for what is displayed by `mode-line-window-side'."
+  "<mode-line> <mouse-1>" #'window-toggle-side-windows)
+
+(defun mode-line-window-side ()
+  "Mode line string for window sides"
+  (when-let* ((s (window-parameter (selected-window) 'window-side)))
+    (propertize (alist-get s window-side-lighter)
+                'help-echo "Side window\nmouse-1: Toggle all"
+                'local-map mode-line-window-side-keymap
+                'mouse-face 'mode-line-highlight)))
+
+(defun mode-line-window-state ()
+  "Mode line string for window state, including dedicated, project."
+  (or
+   (if (window-dedicated-p)
+    (concat "[" (mode-line-window-control) "]"))
+   (if-let* ((pred (window-parameter (selected-window) 'buffer-predicate)))
+       (propertize (get pred 'mode-line)
+                   'help-echo (documentation pred 't)))
+   (if project-mode-line
+       (project-mode-line-format))))
+
 
 ;; remove input method from mode-line-mule-info, this is already
 ;; handled by z-lighter.

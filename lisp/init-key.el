@@ -391,8 +391,38 @@ instead of inactivate region."
          ("M-8"     . bury-buffer)
          ("M-7"     . unbury-buffer)
          ("C-x 4 o" . display-buffer)
-         ("C-x 9"   . delete-other-windows-vertically))
+         ("C-x 9"   . delete-other-windows-vertically)
+         ("C-x w c" . window-toggle-bottom-console))
   :config
+  ;;Customize `switch-to-prev-buffer-skip' to respect buffer-predicate
+  ;;parameter on windows. This is used by `previous-buffer' and
+  ;;`next-buffer'.
+  (defun window-predicate-should-skip (window buffer bury-or-kill)
+    (let ((pred (window-parameter window 'buffer-predicate)))
+      (and pred
+           (not (funcall pred buffer)))))
+  (setq switch-to-prev-buffer-skip 'window-predicate-should-skip)
+  (add-to-list 'window-persistent-parameters '(buffer-predicate . writable))
+
+  (defun window-toggle-bottom-console ()
+    "Set window to be a dedicated console window that show comint buffers only."
+    (interactive)
+    (set-window-parameter (selected-window) 'buffer-predicate 'buffer-comint-p))
+
+  (defun buffer-repl-p (buffer)
+    "Filter for repl buffers."
+    (with-current-buffer buffer
+      (derived-mode-p 'comint-mode)))
+  (put 'buffer-repl-p 'mode-line "[∞]")
+
+  ;; TODO
+  (defun display-buffer-with-predicate (pred &optional buffer)
+    ())
+
+  ;; TODO: a version of delete-other-windows that keeps side windows.
+  ;; If there is no side windows (see `window-toggle-side-windows'),
+  ;; then call the real `delete-other-windows'.
+
   (keymap-hint-set resize-window-repeat-map "
 _^_ large _v_ shrink  _{_ _}_ horizontal
 " :load-map 't :bind "?")
