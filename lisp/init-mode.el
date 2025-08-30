@@ -495,28 +495,14 @@ Limit search to a few pages before."
 ;;   (setq inferior-julia-program "~/bin/julia"))
 
 (use-package ess-mode
-  :bind ("<f5>" . z-switch-to-R)
   :defines ess-local-process-name
   :functions ess-debug-command-next
     ess-eval-line-and-step ess-eval-linewise
   :config
-  (defun z-switch-to-R ()
-    "Go to R session or create one if none exists"
-    (interactive)
-    (let ((b (cl-find-if
-              ;; is there another buffer to switch to?
-              (lambda (b)
-                (and (provided-mode-derived-p
-                      (buffer-local-value 'major-mode b)
-                      '(inferior-ess-mode inferior-julia-mode))
-                     (not (eq b (current-buffer)))))
-              (buffer-list))))
-      ;; todo: make this display-buffer, and config "side" correctly.
-      (if b (display-buffer-in-side-window b '((side . bottom)))
-        (unless (provided-mode-derived-p major-mode 'inferior-ess-mode)
-          (let ((ess-ask-for-ess-directory nil)
-                (ess-startup-directory "~/Projects"))
-            (run-ess-r))))))
+  (defun new-default-r-buffer ()
+    (let ((ess-ask-for-ess-directory nil)
+          (ess-startup-directory "~/Projects"))
+      (run-ess-r)))
 
   (defun ess-smart-pipe (arg)
     "Similar to `ess-insert-assign', but insert |> instead."

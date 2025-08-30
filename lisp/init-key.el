@@ -380,6 +380,21 @@ instead of inactivate region."
          ("S-<f8>" . gud-step)
          ("<f9>"   . gud-finish)))
 
+(use-package window-role
+  :bind   ("<f5>" . window-toggle-repl)
+  :config
+  (defvar-window-role window-role-repl
+  "Window role for REPL buffers"
+  :predicate (derived-mode . comint-mode)
+  :mode-line "[∞]"
+  :new-buffer-func new-default-r-buffer)
+
+  (defun window-toggle-repl ()
+    "Toggle repl windows"
+    (interactive)
+    (window-role-toggle 'window-role-repl))
+)
+
 (use-package window
   :bind (("<f11>"   . shrink-window)
          ("<f12>"   . enlarge-window)
@@ -391,33 +406,13 @@ instead of inactivate region."
          ("M-8"     . bury-buffer)
          ("M-7"     . unbury-buffer)
          ("C-x 4 o" . display-buffer)
-         ("C-x 9"   . delete-other-windows-vertically)
-         ("C-x w c" . window-toggle-bottom-console))
+         ("C-x 9"   . delete-other-windows-vertically))
   :config
-  ;;Customize `switch-to-prev-buffer-skip' to respect buffer-predicate
-  ;;parameter on windows. This is used by `previous-buffer' and
-  ;;`next-buffer'.
-  (defun window-predicate-should-skip (window buffer bury-or-kill)
-    (let ((pred (window-parameter window 'buffer-predicate)))
-      (and pred
-           (not (funcall pred buffer)))))
-  (setq switch-to-prev-buffer-skip 'window-predicate-should-skip)
-  (add-to-list 'window-persistent-parameters '(buffer-predicate . writable))
 
-  (defun window-toggle-bottom-console ()
-    "Set window to be a dedicated console window that show comint buffers only."
-    (interactive)
-    (set-window-parameter (selected-window) 'buffer-predicate 'buffer-comint-p))
-
-  (defun buffer-repl-p (buffer)
-    "Filter for repl buffers."
-    (with-current-buffer buffer
-      (derived-mode-p 'comint-mode)))
-  (put 'buffer-repl-p 'mode-line "[∞]")
-
-  ;; TODO
-  (defun display-buffer-with-predicate (pred &optional buffer)
-    ())
+  (setq display-buffer-alist
+        '(((category . window-role-repl)
+           (display-buffer-at-bottom) ; maybe use display-buffer-in-side-window
+           (side . bottom) (dedicated . nil))))
 
   ;; TODO: a version of delete-other-windows that keeps side windows.
   ;; If there is no side windows (see `window-toggle-side-windows'),

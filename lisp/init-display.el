@@ -202,9 +202,8 @@ mouse-3: Describe current input method")
   (or
    (if (window-dedicated-p)
     (concat "[" (mode-line-window-control) "]"))
-   (if-let* ((pred (window-parameter (selected-window) 'buffer-predicate)))
-       (propertize (get pred 'mode-line)
-                   'help-echo (documentation pred 't)))
+   (if (window-parameter (selected-window) 'window-role)
+       (mode-line-window-role))
    (if project-mode-line
        (project-mode-line-format))))
 
