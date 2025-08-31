@@ -29,8 +29,7 @@ TODO: a ROLE can have arguments.
     `(progn (defvar ,role ',alist ,doc)
             (add-to-list 'window-role-list ',role))))
 
-;; TODO: add arguments
-(defun window-role-display (role)
+(defun window-role-display (role &rest args)
   "Display a window in ROLE.
 
 A buffer suitable for ROLE is searched, if not found the new-buffer-func
@@ -41,7 +40,7 @@ like (category . ROLE)."
   (let* ((pred (alist-get 'predicate (symbol-value role)))
          (buf (cl-find-if
             (lambda (b)
-              (buffer-match-p pred b))
+              (apply #'buffer-match-p pred b args))
             (buffer-list)))
          win)
 
@@ -50,53 +49,54 @@ like (category . ROLE)."
               (alist-get 'new-buffer-func (symbol-value role)))
              (display-buffer-overriding-action
                          `(nil . ((category . ,role)))))
-        (setq buf (funcall new-buffer-func))))
+        (setq buf (funcall new-buffer-func args))))
 
     (setq win (or (get-buffer-window buf)
                   (display-buffer buf `(nil (category . ,role)))))
-    (set-window-parameter win 'window-role role)
+    (set-window-parameter win 'window-role (cons role args))
     (force-mode-line-update)
     win))
 
-(defun window-role-toggle (role)
+(defun window-role-toggle (role &rest args)
   "Toggle window of ROLE.
 
 If current window is of ROLE, delete it. If there is an unselected
 window of ROLE, select it. Otherwise create one using
 new-buffer-func on ROLE."
-    (cond
-     ((eq (window-parameter (selected-window) 'window-role)
-            role)
-      (delete-window))
-     ((if-let* ((win (window-with-parameter
-                      'window-role role)))
-          (select-window win)))
-     (t
-      (select-window (window-role-display role)))))
+  (cond
+   ((equal (window-parameter (selected-window) 'window-role)
+           (cons role args))
+    (condition-case nil
+        (delete-window)
+      (error
+       ;; Can not delete window, disable window-role on it.
+       (set-window-parameter (selected-window) 'window-role nil)
+       (force-mode-line-update))))
+   ((if-let* ((win (window-with-parameter
+                    'window-role (cons role args))))
+        (select-window win)))
+   (t
+    (select-window (apply #'window-role-display role args)))))
 
 ;;Customize `switch-to-prev-buffer-skip' to respect window-role parameter.
 ;;parameter on windows. This is used by `previous-buffer' and
 ;;`next-buffer'.
 (defun window-role-should-skip (window buffer bury-or-kill)
-  (let ((role-symbol (window-parameter window 'window-role)))
-    (and role-symbol
-         (not (buffer-match-p
-               (alist-get 'predicate (symbol-value role-symbol))
-               buffer)))))
+  (let* ((role-param (window-parameter window 'window-role))
+         (role (car role-param))
+         (args (cdr role-param)))
+    (and role
+         (not (apply #'buffer-match-p
+                     (alist-get 'predicate (symbol-value role))
+                     buffer args)))))
 (setq switch-to-prev-buffer-skip 'window-role-should-skip)
 (add-to-list 'window-persistent-parameters '(window-role . writable))
 
 
-;; A display-buffer-action. We decouple this and
-;; `window-role-display', so that a buffer can be configured to always display in window of certain role
-(defun display-buffer-in-window-role ()
-  "")
-
-
 (defun mode-line-window-role ()
-  (let ((role (window-parameter (selected-window) 'window-role)))
-    (if role
-        (propertize (alist-get 'mode-line (symbol-value role))
-                    'help-echo (documentation-property role 'variable-documentation)))))
+  (if-let* ((role-param (window-parameter (selected-window) 'window-role))
+            (role (car role-param)))
+    (propertize (alist-get 'mode-line (symbol-value role))
+                'help-echo (documentation-property role 'variable-documentation))))
 
 (provide 'window-role)
