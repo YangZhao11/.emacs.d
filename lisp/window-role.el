@@ -49,7 +49,12 @@ like (category . ROLE)."
               (alist-get 'new-buffer-func (symbol-value role)))
              (display-buffer-overriding-action
                          `(nil . ((category . ,role)))))
-        (setq buf (funcall new-buffer-func args))))
+        (if new-buffer-func
+            (setq buf (apply new-buffer-func args))
+          (error "No buffer matching `%s'" role))))
+
+    (unless buf
+      (error "Failed to create buffer for `%s'" role))
 
     (setq win (or (get-buffer-window buf)
                   (display-buffer buf `(nil (category . ,role)))))
@@ -58,7 +63,17 @@ like (category . ROLE)."
     win))
 
 (defun window-role-toggle (role &rest args)
-  "Toggle window of ROLE.
+  "Toggle ROLE on current window."
+  (let ((role-param (cons role args)))
+    (set-window-parameter
+     (selected-window) 'window-role
+     (unless (equal (window-parameter (selected-window) 'window-role)
+                    role-param)
+       role-param))
+    (force-mode-line-update)))
+
+(defun window-role-toggle-window (role &rest args)
+  "Show / hide window of ROLE.
 
 If current window is of ROLE, delete it. If there is an unselected
 window of ROLE, select it. Otherwise create one using
@@ -96,7 +111,7 @@ new-buffer-func on ROLE."
 (defun mode-line-window-role ()
   (if-let* ((role-param (window-parameter (selected-window) 'window-role))
             (role (car role-param)))
-    (propertize (alist-get 'mode-line (symbol-value role))
+    (propertize (format-mode-line (alist-get 'mode-line (symbol-value role)))
                 'help-echo (documentation-property role 'variable-documentation))))
 
 (provide 'window-role)

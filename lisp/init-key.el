@@ -384,16 +384,16 @@ instead of inactivate region."
   :bind   ("<f5>" . window-toggle-repl)
   :config
   (defvar-window-role window-role-repl
-  "Window role for REPL buffers"
-  :predicate (derived-mode . comint-mode)
-  :mode-line "[∞]"
-  :new-buffer-func new-default-r-buffer)
+    "Window role for REPL buffers"
+    :predicate (derived-mode . comint-mode)
+    :mode-line "[∞]"
+    :new-buffer-func new-default-r-buffer)
 
   (defun window-toggle-repl ()
     "Toggle repl windows"
     (interactive)
-    (window-role-toggle 'window-role-repl))
-)
+    (window-role-toggle-window 'window-role-repl))
+  )
 
 (use-package window
   :bind (("<f11>"   . shrink-window)

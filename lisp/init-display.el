@@ -170,7 +170,7 @@ mouse-3: Describe current input method")
  "  " mode-line-modes mode-line-misc-info
  mode-line-format-right-align
  (vc-mode vc-mode)
-                                        ;;(project-mode-line project-mode-line-format)
+ ;;(project-mode-line project-mode-line-format)
  (:eval (mode-line-window-side))
  (:eval (mode-line-window-state))
  " "

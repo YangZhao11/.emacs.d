@@ -32,6 +32,26 @@
 (if (require 'project-g3 nil t)
     (add-to-list 'project-find-functions 'project-try-g3))
 
+;; window role for currenct project
+(require 'window-role)
+(defvar-window-role window-role-project
+  "Window role for current project"
+  :predicate (lambda (buf project)
+               (with-current-buffer buf
+                 (equal (project-current) project)))
+  :mode-line ("["
+              (:eval (project-name
+                      (cadr (window-parameter (selected-window) 'window-role))))
+              "]")
+  )
+
+(defun window-toggle-role-project ()
+    "Toggle window role of current project"
+    (interactive)
+    (window-role-toggle 'window-role-project (project-current)))
+(bind-key "C-x w p" #'window-toggle-role-project)
+
+
 (use-package ibuffer-project
   :config
   (setq ibuffer-project-use-cache 't))
