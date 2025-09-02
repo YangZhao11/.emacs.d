@@ -114,4 +114,10 @@ new-buffer-func on ROLE."
     (propertize (format-mode-line (alist-get 'mode-line (symbol-value role)))
                 'help-echo (documentation-property role 'variable-documentation))))
 
+;; TODO: add a display-buffer action to use an existing window of given role.
+;; maybe: add a display-buffer alist item to configure an action of setting role to window; we need to advice `window--display-buffer' for this purpose.
+
+;; TODO: a version of `switch-to-buffer' that respects window-role.
+
+
 (provide 'window-role)
