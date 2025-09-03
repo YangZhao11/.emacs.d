@@ -87,7 +87,7 @@ SPEC could be `box', `bar', or `hbar'."
 
 (defun god-mode-low-priority-command-semantic (command)
   (eq 'self-insert-command
-      (or command (get command 'command-semantic))))
+      (or (get command 'command-semantic) command)))
 (setq god-mode-low-priority-command-predicate
       'god-mode-low-priority-command-semantic)
 

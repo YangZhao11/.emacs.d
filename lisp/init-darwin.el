@@ -6,9 +6,9 @@
 
 (use-package ligature
   :config
-  (ligature-set-ligatures 'prog-mode '("|>" "::"))
+  (ligature-set-ligatures 'prog-mode '("|>" "::" "->" "=>"))
   (ligature-set-ligatures 'inferior-ess-mode '("|>" "::"))
-  (ligature-set-ligatures 'julia-repl-mode '("|>" "::" "->" "=>"))
+  (ligature-set-ligatures 'julia-repl-mode '("|>" "::" "->" "=>" "<|"))
   (global-ligature-mode t))
 
 (setq ns-use-thin-smoothing t)          ; does not seem to have any effect

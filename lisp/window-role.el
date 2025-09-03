@@ -11,7 +11,7 @@
   "List of all window cagetory symbols.")
 
 (cl-defmacro defvar-window-role
-    (role &optional doc &key predicate args-func mode-line new-buffer-func)
+    (role &optional doc &key predicate mode-line new-buffer-func)
   "Define variable ROLE.
 
 PREDICATE is a form for `buffer-match-p', and decides which buffers are
@@ -23,7 +23,6 @@ TODO: a ROLE can have arguments.
 "
   (declare (indent defun) (doc-string 2))
   (let ((alist `((predicate . ,predicate)
-                 (args-func . ,args-func)
                  (mode-line . ,mode-line)
                  (new-buffer-func . ,new-buffer-func))))
     `(progn (defvar ,role ',alist ,doc)
@@ -109,13 +108,18 @@ new-buffer-func on ROLE."
 
 
 (defun mode-line-window-role ()
+  "Mode line struct to show current window role."
   (if-let* ((role-param (window-parameter (selected-window) 'window-role))
             (role (car role-param)))
     (propertize (format-mode-line (alist-get 'mode-line (symbol-value role)))
                 'help-echo (documentation-property role 'variable-documentation))))
 
 ;; TODO: add a display-buffer action to use an existing window of given role.
-;; maybe: add a display-buffer alist item to configure an action of setting role to window; we need to advice `window--display-buffer' for this purpose.
+
+;; MAYBE: add a display-buffer alist item to configure an action of
+;; setting role to window; we need to advice `window--display-buffer'
+;; for this purpose. Alternatively, one can use (window-parameters
+;; (window-role role args)) to specify a role to put into.
 
 ;; TODO: a version of `switch-to-buffer' that respects window-role.
 

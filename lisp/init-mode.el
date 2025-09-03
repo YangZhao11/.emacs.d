@@ -429,9 +429,15 @@ Limit search to a few pages before."
 
 (use-package cc-cmds
   :config
-  (put 'c-electric-lt-gt 'command-semantic 'self-insert-command)
-  (put 'c-electric-brace 'command-semantic 'self-insert-command)
-  (put 'c-electric-slash 'command-semantic 'self-insert-command))
+  (dolist (cmd '(c-electric-brace
+                 c-electric-colon
+                 c-electric-lt-gt
+                 c-electric-paren
+                 c-electric-pound
+                 c-electric-semi&comma
+                 c-electric-slash
+                 c-electric-star))
+    (put cmd 'command-semantic 'self-insert-command)))
 
 (use-package cc-mode
   :config
@@ -443,6 +449,7 @@ Limit search to a few pages before."
           flycheck-gcc-language-standard "c++14")
     (abbrev-mode -1)
     (require 'clang-format nil 't))
+
   (add-hook 'c++-mode-hook #'z-c++-mode-hook))
 
 (use-package clang-format
@@ -501,7 +508,8 @@ Limit search to a few pages before."
   :config
   (defun new-default-r-buffer ()
     (let ((ess-ask-for-ess-directory nil)
-          (ess-startup-directory "~/Projects"))
+          (ess-startup-directory "~/Projects")
+          (default-directory "~/Projects"))
       (run-ess-r)))
 
   (defun ess-smart-pipe (arg)
