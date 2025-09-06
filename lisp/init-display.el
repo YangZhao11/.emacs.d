@@ -9,75 +9,113 @@
   :group 'god)
 
 
+;; e0a 
+;; e0b 
+
 (defmacro z-defface-with-darken (face col)
   "Define two faces, FACE and FACE-dark where bg is col and a dark version
 of it."
-  (let ((face-dark (intern (concat (symbol-name face) "-dark"))))
+  (let ((face-dark (intern (concat (symbol-name face) "-dark")))
+        (face-separator (intern (concat (symbol-name face) "-separator")))
+        (face-separator-dark (intern (concat (symbol-name face) "-separator-dark")))
+        (dark-col (doom-blend col "#353535" .5)))
     `(progn
        (defface ,face
        '((t :inherit god-lighter :background ,col))
        ,(concat "Face for " (symbol-name face))
-       :group 'god)
+       :group 'god )
+       (defface ,face-separator
+         '((t :inherit mode-line-active :foreground ,col))
+         ,(concat "Separator face for " (symbol-name face)))
        (defface ,face-dark
          ;; blend with (face-background 'mode-line-inactive)
-       '((t :inherit god-lighter :background ,(doom-blend col "#353535" .5)))
+       '((t :inherit god-lighter :background ,dark-col))
        ,(concat "Face for " (symbol-name face-dark))
-        :group 'god)))
+        :group 'god)
+       (defface ,face-separator-dark
+         '((t :inherit mode-line-inactive :foreground ,dark-col))
+         ,(concat "Separator face for " (symbol-name face-dark)))))
   )
 
 (z-defface-with-darken god-lighter-emacs "#90E090")
 (z-defface-with-darken god-lighter-mortal "#88E0C0")
+
+(defun z-lighter-emacs ()
+  (let* ((s (mode-line-window-selected-p))
+         (m mortal-mode)
+         (tag-face (if m (if s 'god-lighter-mortal 'god-lighter-mortal-dark)
+                     (if s 'god-lighter-emacs 'god-lighter-emacs-dark)))
+         (sep-face (if m
+                       (if s 'god-lighter-mortal-separator
+                         'god-lighter-mortal-separator-dark)
+                     (if s 'god-lighter-emacs-separator
+                       'god-lighter-emacs-separator-dark))))
+    (propertize
+     (concat
+      (propertize
+       (if mortal-mode " I" " ɛ") 'face tag-face)
+      (propertize "" 'face sep-face))
+     'help-echo (if m
+                    "Insert mode, \\[mortal-mode-exit] to exit"
+                  "Emacs mode"))))
+
 (setq z-lighter-emacs
-      '(:eval
-        (propertize
-         (if mortal-mode " I " " ɛ ")
-         'face (let ((s (mode-line-window-selected-p))
-                     (m mortal-mode))
-                 (if m
-                     (if s 'god-lighter-mortal 'god-lighter-mortal-dark)
-                   (if s 'god-lighter-emacs 'god-lighter-emacs-dark)))
-         'help-echo (if mortal-mode
-                        "Insert mode, \\[mortal-mode-exit] to exit"
-                     "Emacs mode"))))
+      '(:eval (z-lighter-emacs)))
 (put 'z-lighter-emacs 'risky-local-variable t)
-(setq z-lighter-input-method
-      '(:eval
-        (propertize
-         (concat
-              (if (<= (length current-input-method-title) 1) " " "")
-              ;; ref mode-line-mule-info
-              current-input-method-title
-              (if (<= (length current-input-method-title) 2) " " ""))
-         'face (let ((s (mode-line-window-selected-p))
-                     (m mortal-mode))
-                 (if m
-                     (if s 'god-lighter-mortal 'god-lighter-mortal-dark)
-                   (if s 'god-lighter-emacs 'god-lighter-emacs-dark)))
-         'help-echo (concat
-		     (purecopy "Current input method: ")
-		     current-input-method
-		     (purecopy "\n\
+(defun z-lighter-input-method ()
+  (let* ((left-padding (if (<= (length current-input-method-title) 1) " " ""))
+        (s (mode-line-window-selected-p))
+        (m mortal-mode)
+        (tag-face (if m
+                      (if s 'god-lighter-mortal 'god-lighter-mortal-dark)
+                    (if s 'god-lighter-emacs 'god-lighter-emacs-dark)))
+        (sep-face (if m
+                      (if s 'god-lighter-mortal-separator
+                        'god-lighter-mortal-separator-dark)
+                    (if s 'god-lighter-emacs-separator
+                      'god-lighter-emacs-separator-dark))))
+    (propertize
+     (concat
+      (propertize
+       (concat
+        left-padding
+        ;; ref mode-line-mule-info
+        current-input-method-title)
+       'face tag-face)
+      (propertize "" 'face sep-face))
+      'help-echo (concat
+	          (purecopy "Current input method: ")
+	          current-input-method
+	          (purecopy "\n\
 mouse-2: Disable input method\n\
 mouse-3: Describe current input method")
-                     (if mortal-mode
-                         "\nInsert mode, \\[mortal-mode-exit] to exit"))
-         'local-map mode-line-input-method-map)))
+                  (if mortal-mode
+                      "\nInsert mode, \\[mortal-mode-exit] to exit"))
+      'local-map mode-line-input-method-map)))
+
+(setq z-lighter-input-method
+      '(:eval (z-lighter-input-method)))
 (put 'z-lighter-input-method 'risky-local-variable t)
 
 (z-defface-with-darken god-lighter-god "#4DB0FF")
 
 (defun z-lighter-god-mod-char ()
   (let ((m (cdr (assoc nil god-mod-alist))))
-           (cond ((string= m "C-") " ⌘ ")
-                 ((string= m "C-M-") "⌥⌘ ")
-                 ((string= m "M-") " ⌥ ")
-                 ('t " ? "))))
+           (cond ((string= m "C-") " ⌘")
+                 ((string= m "C-M-") "⌥⌘")
+                 ((string= m "M-") " ⌥")
+                 ('t " ?"))))
 (setq z-lighter-god
       '(:eval
         (propertize
-         (z-lighter-god-mod-char)
-         'face (if (mode-line-window-selected-p)
-                   'god-lighter-god 'god-lighter-god-dark)
+         (concat
+          (propertize
+           (z-lighter-god-mod-char)
+           'face (if (mode-line-window-selected-p)
+                     'god-lighter-god 'god-lighter-god-dark))
+          (propertize ""
+                      'face (if (mode-line-window-selected-p)
+                                'god-lighter-god-separator 'god-lighter-god-separator-dark)))
          'help-echo "\\[god-mode-toggle-sticky-meta]: Sticky M-*\n\
 \\[god-mode-toggle-sticky-cm]: Sticky C-M-*")))
 (put 'z-lighter-god 'risky-local-variable t)
@@ -104,14 +142,20 @@ mouse-3: Describe current input method")
      (:else " "))))
 
 (z-defface-with-darken god-lighter-view "#D8E874")
-(setq z-lighter-view
-      '(:eval (propertize
-               (concat
-                (z-lighter-arrow-char)
-                "ν ")
-               'face (if (mode-line-window-selected-p)
-                         'god-lighter-view 'god-lighter-view-dark)
-               'help-echo "View mode (\\[view-mode])")))
+(defun z-lighter-view ()
+  (let* ((s (mode-line-window-selected-p))
+         (tag-face (if s 'god-lighter-view 'god-lighter-view-dark))
+         (sep-face (if s 'god-lighter-view-separator
+                     'god-lighter-view-separator-dark)))
+    (propertize
+     (concat
+      (propertize
+       (concat (z-lighter-arrow-char) "ν")
+       'face tag-face)
+      (propertize "" 'face sep-face))
+     'help-echo "View mode (\\[view-mode])")))
+
+(setq z-lighter-view '(:eval (z-lighter-view)))
 (put 'z-lighter-view 'risky-local-variable t)
 
 (defun z-lighter-xc-char ()
@@ -124,15 +168,20 @@ mouse-3: Describe current input method")
      (:else "•"))))
 
 (z-defface-with-darken god-lighter-special "#6B77FF")
-(setq z-lighter-special
-      '(:eval
-        (propertize
+(defun z-lighter-special ()
+  (let* ((s (mode-line-window-selected-p))
+         (tag-face (if s 'god-lighter-special
+                     'god-lighter-special-dark))
+         (sep-face (if s 'god-lighter-special-separator
+                     'god-lighter-special-separator-dark)))
+    (concat
+     (propertize
          (concat
           (z-lighter-arrow-char)
-          (z-lighter-xc-char)
-          " ")
-         'face (if (mode-line-window-selected-p)
-                   'god-lighter-special 'god-lighter-special-dark))))
+          (z-lighter-xc-char))
+         'face tag-face)
+     (propertize "" 'face sep-face))))
+(setq z-lighter-special '(:eval (z-lighter-special)))
 (put 'z-lighter-special 'risky-local-variable t)
 
 (defvar z-lighter
@@ -204,7 +253,9 @@ mouse-3: Describe current input method")
     (concat "[" (mode-line-window-control) "]"))
    (if (window-parameter (selected-window) 'window-role)
        (mode-line-window-role))
-   (if project-mode-line
+   (if (and project-mode-line
+            buffer-file-name
+            (not (file-remote-p buffer-file-name)))
        (project-mode-line-format))))
 
 
