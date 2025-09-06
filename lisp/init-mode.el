@@ -886,8 +886,7 @@ We use the presence of some prompt to detect this line is an input line."
         (when (> cline line)
           (buffer-substring-no-properties cline (line-end-position))))))
 
-  ;(ansi-color-for-comint-mode-on)
-  (eterm-256color-mode)
+  ;;(ansi-color-for-comint-mode-on)
   (setq comint-terminfo-terminal "eterm-256color")
   (setq comint-scroll-to-bottom-on-output 't
         comint-scroll-show-maximum-output nil))
@@ -902,8 +901,23 @@ We use the presence of some prompt to detect this line is an input line."
      (setq tramp-use-connection-share nil)))
 )
 
-;(use-package eterm-256color
-;  :hook (term-mode . eterm-256color-mode))
+(use-package eterm-256color
+  :hook (term-mode . eterm-256color-mode)
+  :config
+  ;; In emacs 31, (commit 3d60937) variables term-ansi-current-color
+  ;; and term-ansi-current-bg-color can be nil. Patch it here such
+  ;; that eterm-256color-handle-colors see 0 instead.
+  (defun eterm-256color-nil-color-fix (oldfun &rest r)
+    (let ((old-term-ansi-current-color term-ansi-current-color)
+          (old-term-ansi-current-bg-color term-ansi-current-bg-color))
+      (setq term-ansi-current-color (or term-ansi-current-color 0))
+      (setq term-ansi-current-bg-color (or term-ansi-current-bg-color 0))
+      (apply oldfun r)
+      (setq term-ansi-current-color old-term-ansi-current-color)
+      (setq term-ansi-current-bg-color old-term-ansi-current-bg-color)
+      ))
+  (advice-add 'eterm-256color-handle-colors
+              :around 'eterm-256color-nil-color-fix))
 
 (provide 'init-mode)
 ;;; init-mode.el ends here
