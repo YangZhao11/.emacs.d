@@ -59,9 +59,9 @@ of it."
                     "Insert mode, \\[mortal-mode-exit] to exit"
                   "Emacs mode"))))
 
-(setq z-lighter-emacs
-      '(:eval (z-lighter-emacs)))
+(setq z-lighter-emacs '(:eval (z-lighter-emacs)))
 (put 'z-lighter-emacs 'risky-local-variable t)
+
 (defun z-lighter-input-method ()
   (let* ((left-padding (if (<= (length current-input-method-title) 1) " " ""))
         (s (mode-line-window-selected-p))
@@ -76,25 +76,20 @@ of it."
                       'god-lighter-emacs-separator-dark))))
     (propertize
      (concat
-      (propertize
-       (concat
-        left-padding
         ;; ref mode-line-mule-info
-        current-input-method-title)
+      (propertize (concat left-padding current-input-method-title)
        'face tag-face)
       (propertize "" 'face sep-face))
-      'help-echo (concat
-	          (purecopy "Current input method: ")
+      'help-echo (concat "Current input method: "
 	          current-input-method
-	          (purecopy "\n\
+	          "\n\
 mouse-2: Disable input method\n\
-mouse-3: Describe current input method")
+mouse-3: Describe current input method"
                   (if mortal-mode
                       "\nInsert mode, \\[mortal-mode-exit] to exit"))
       'local-map mode-line-input-method-map)))
 
-(setq z-lighter-input-method
-      '(:eval (z-lighter-input-method)))
+(setq z-lighter-input-method '(:eval (z-lighter-input-method)))
 (put 'z-lighter-input-method 'risky-local-variable t)
 
 (z-defface-with-darken god-lighter-god "#4DB0FF")
@@ -105,19 +100,20 @@ mouse-3: Describe current input method")
                  ((string= m "C-M-") "⌥⌘")
                  ((string= m "M-") " ⌥")
                  ('t " ?"))))
-(setq z-lighter-god
-      '(:eval
-        (propertize
+(defun z-lighter-god ()
+  (let* ((s (mode-line-window-selected-p))
+         (tag-face (if s 'god-lighter-god
+                     'god-lighter-god-dark))
+         (sep-face (if s 'god-lighter-god-separator
+                     'god-lighter-god-separator-dark)))
+      (propertize
          (concat
-          (propertize
-           (z-lighter-god-mod-char)
-           'face (if (mode-line-window-selected-p)
-                     'god-lighter-god 'god-lighter-god-dark))
-          (propertize ""
-                      'face (if (mode-line-window-selected-p)
-                                'god-lighter-god-separator 'god-lighter-god-separator-dark)))
-         'help-echo "\\[god-mode-toggle-sticky-meta]: Sticky M-*\n\
-\\[god-mode-toggle-sticky-cm]: Sticky C-M-*")))
+          (propertize (z-lighter-god-mod-char) 'face tag-face)
+          (propertize "" 'face sep-face))
+         'help-echo "\\[god-mode-toggle-sticky-meta]: Sticky M- prefix\n\
+\\[god-mode-toggle-sticky-cm]: Sticky C-M- prefix"))  )
+
+(setq z-lighter-god '(:eval (z-lighter-god)))
 (put 'z-lighter-god 'risky-local-variable t)
 
 (defun z-lighter-arrow-char ()
@@ -270,48 +266,32 @@ mouse-3: Describe current input method")
       'local-map mode-line-coding-system-map)
     (:eval (mode-line-eol-desc))))
 
-(setq-default mode-line-modified
-  '(:eval (z-buffer-status 't)))
+(setq-default mode-line-modified '(:eval (z-buffer-status 't)))
 
-(setq-default mode-line-remote
-  '(:eval (cond
-    ((bound-and-true-p edit-server-edit-mode)
-     (propertize
-      "&"
-      'mouse-face 'mode-line-highlight
-      'help-echo "Editing browser content"))
-
-    ((and (stringp default-directory)
-          (file-remote-p default-directory)
-          (string-prefix-p "/ssh:cloud:" default-directory))
-     (propertize
-      "ℂ"
-      'face 'font-lock-type-face
-      'mouse-face 'mode-line-highlight
-      'help-echo (purecopy (lambda (window _object _point)
-                             (concat "Current directory is on cloud: "
-                                     default-directory)))))
-
-    ((and (stringp default-directory)
-          (file-remote-p default-directory))
-     (propertize
-      "@"
-      'mouse-face 'mode-line-highlight
-      'help-echo (purecopy (lambda (window _object _point)
-                             (concat "Current directory is remote: "
-                                     default-directory)))))
-
-    ((bound-and-true-p crdt--session)
-     (propertize
-      "‰"
-      'mouse-face 'mode-line-highlight
-      'help-echo "CRDT shared buffer"))
-
-    ((bound-and-true-p server-buffer-clients)
-     (propertize
-      "#"
-      'mouse-face 'mode-line-highlight
-      'help-echo "Client waiting for edit")))))
+(defun mode-line-remote ()
+  (let ((char-help
+         (cond
+          ((bound-and-true-p edit-server-edit-mode)
+           '("&" "Editing browser content"))
+          ((and (stringp default-directory)
+                (file-remote-p default-directory)
+                (string-prefix-p "/ssh:cloud:" default-directory))
+           `("ℂ" ,(concat "Current directory is on cloud: "
+                          default-directory)))
+          ((and (stringp default-directory)
+                (file-remote-p default-directory))
+           `("@" ,(concat "Current directory is remote: "
+                          default-directory)))
+          ((bound-and-true-p crdt--session)
+           '("‰" "CRDT shared buffer"))
+          ((bound-and-true-p server-buffer-clients)
+           '("#" "Client waiting for edit")))))
+    (propertize
+     (car char-help)
+     'mouse-face 'mode-line-highlight
+     'help-echo (cadr char-help))
+))
+(setq-default mode-line-remote '(:eval (mode-line-remote)))
 
 
 (setq overlay-arrow-string "‣")
@@ -321,11 +301,11 @@ mouse-3: Describe current input method")
       (mapcar (lambda (x)
                 (if (and (stringp x) (string= x "%n"))
                     `(:propertize (:eval (if (buffer-narrowed-p) " §"))
-                        help-echo "mouse-2: Remove narrowing from buffer"
-                        mouse-face mode-line-highlight
-                        local-map ,(make-mode-line-mouse-map
-                                    'mouse-2 #'mode-line-widen)
-                        face warning)
+                                  help-echo "mouse-2: Remove narrowing from buffer\n\\[narrow-dwim] to toggle narrowing"
+                                  mouse-face mode-line-highlight
+                                  local-map ,(make-mode-line-mouse-map
+                                              'mouse-2 #'mode-line-widen)
+                                  face warning)
                   x))
               mode-line-modes))
 
