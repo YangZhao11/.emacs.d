@@ -204,7 +204,7 @@ mouse-3: Describe current input method"
 (setq-default mode-line-format
 '("%e"
  (:eval z-lighter)
- mode-line-front-space mode-line-mule-info
+ " " mode-line-mule-info
  ;; mode-line-client
  mode-line-modified
  mode-line-remote
