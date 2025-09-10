@@ -17,7 +17,7 @@
 of it."
   (let ((face-dark (intern (concat (symbol-name face) "-dark")))
         (face-separator (intern (concat (symbol-name face) "-separator")))
-        (face-separator-dark (intern (concat (symbol-name face) "-separator-dark")))
+        (face-dark-separator (intern (concat (symbol-name face) "-dark-separator")))
         (dark-col (doom-blend col "#353535" .5)))
     `(progn
        (defface ,face
@@ -32,10 +32,9 @@ of it."
        '((t :inherit god-lighter :background ,dark-col))
        ,(concat "Face for " (symbol-name face-dark))
         :group 'god)
-       (defface ,face-separator-dark
+       (defface ,face-dark-separator
          '((t :inherit mode-line-inactive :foreground ,dark-col))
-         ,(concat "Separator face for " (symbol-name face-dark)))))
-  )
+         ,(concat "Separator face for " (symbol-name face-dark))))))
 
 (z-defface-with-darken god-lighter-emacs "#90E090")
 (z-defface-with-darken god-lighter-mortal "#88E0C0")
@@ -47,13 +46,13 @@ of it."
                      (if s 'god-lighter-emacs 'god-lighter-emacs-dark)))
          (sep-face (if m
                        (if s 'god-lighter-mortal-separator
-                         'god-lighter-mortal-separator-dark)
+                         'god-lighter-mortal-dark-separator)
                      (if s 'god-lighter-emacs-separator
-                       'god-lighter-emacs-separator-dark))))
+                       'god-lighter-emacs-dark-separator))))
     (propertize
      (concat
       (propertize
-       (if mortal-mode " I" " ɛ") 'face tag-face)
+       (if mortal-mode " ɪ" " ɛ") 'face tag-face)
       (propertize "" 'face sep-face))
      'help-echo (if m
                     "Insert mode, \\[mortal-mode-exit] to exit"
@@ -71,9 +70,9 @@ of it."
                     (if s 'god-lighter-emacs 'god-lighter-emacs-dark)))
         (sep-face (if m
                       (if s 'god-lighter-mortal-separator
-                        'god-lighter-mortal-separator-dark)
+                        'god-lighter-mortal-dark-separator)
                     (if s 'god-lighter-emacs-separator
-                      'god-lighter-emacs-separator-dark))))
+                      'god-lighter-emacs-dark-separator))))
     (propertize
      (concat
         ;; ref mode-line-mule-info
@@ -105,13 +104,13 @@ mouse-3: Describe current input method"
          (tag-face (if s 'god-lighter-god
                      'god-lighter-god-dark))
          (sep-face (if s 'god-lighter-god-separator
-                     'god-lighter-god-separator-dark)))
+                     'god-lighter-god-dark-separator)))
       (propertize
          (concat
           (propertize (z-lighter-god-mod-char) 'face tag-face)
           (propertize "" 'face sep-face))
          'help-echo "\\[god-mode-toggle-sticky-meta]: Sticky M- prefix\n\
-\\[god-mode-toggle-sticky-cm]: Sticky C-M- prefix"))  )
+\\[god-mode-toggle-sticky-cm]: Sticky C-M- prefix")))
 
 (setq z-lighter-god '(:eval (z-lighter-god)))
 (put 'z-lighter-god 'risky-local-variable t)
@@ -142,7 +141,7 @@ mouse-3: Describe current input method"
   (let* ((s (mode-line-window-selected-p))
          (tag-face (if s 'god-lighter-view 'god-lighter-view-dark))
          (sep-face (if s 'god-lighter-view-separator
-                     'god-lighter-view-separator-dark)))
+                     'god-lighter-view-dark-separator)))
     (propertize
      (concat
       (propertize
@@ -169,7 +168,7 @@ mouse-3: Describe current input method"
          (tag-face (if s 'god-lighter-special
                      'god-lighter-special-dark))
          (sep-face (if s 'god-lighter-special-separator
-                     'god-lighter-special-separator-dark)))
+                     'god-lighter-special-dark-separator)))
     (concat
      (propertize
          (concat
@@ -286,10 +285,11 @@ mouse-3: Describe current input method"
            '("‰" "CRDT shared buffer"))
           ((bound-and-true-p server-buffer-clients)
            '("#" "Client waiting for edit")))))
-    (propertize
-     (car char-help)
-     'mouse-face 'mode-line-highlight
-     'help-echo (cadr char-help))
+    (when char-help
+      (propertize
+       (car char-help)
+       'mouse-face 'mode-line-highlight
+       'help-echo (cadr char-help)))
 ))
 (setq-default mode-line-remote '(:eval (mode-line-remote)))
 

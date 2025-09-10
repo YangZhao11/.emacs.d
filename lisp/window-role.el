@@ -18,8 +18,6 @@ PREDICATE is a form for `buffer-match-p', and decides which buffers are
 eligible for window with ROLE. MODE-LINE is a mode-line construct that
 can be added using (:eval mode-line-window-role). NEW-BUFFER-FUNC points
 to a function that creates a new buffer for this role.
-
-TODO: a ROLE can have arguments.
 "
   (declare (indent defun) (doc-string 2))
   (let ((alist `((predicate . ,predicate)
@@ -61,6 +59,7 @@ like (category . ROLE)."
     (force-mode-line-update)
     win))
 
+;;;###autoload
 (defun window-role-toggle (role &rest args)
   "Toggle ROLE on current window."
   (let ((role-param (cons role args)))
@@ -71,6 +70,7 @@ like (category . ROLE)."
        role-param))
     (force-mode-line-update)))
 
+;;;###autoload
 (defun window-role-toggle-window (role &rest args)
   "Show / hide window of ROLE.
 

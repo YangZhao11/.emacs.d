@@ -863,7 +863,20 @@ _j_↧  _⇧_/_⇥_:buttons  _I_:lispref  _c_ustomize
   (defun shell-mode:man (&rest args)
     "Shell-mode command line for man"
     (let ((arg-str (mapconcat #'shell-quote-argument args " ")))
-    (man arg-str)))
+      (man arg-str)))
+
+  (defun shell-mode:find (&rest args)
+    "Shell-mode find to use find-dired"
+    (let ((dir default-directory)
+          arg-str)
+      (message "args:%s" args)
+      (when (and (stringp (car args))
+                 (not (memq (aref (car args) 0) '(?\[ ?- ?!))))
+        (setq dir (car args))
+        (setq args (cdr args)))
+      (setq arg-str (mapconcat #'shell-quote-argument args " "))
+      (message "dir:%s arg-str:%s" dir arg-str)
+      (find-dired dir arg-str)))
 
   (bind-keys :map shell-mode-map
              ([remap async-shell-command] . shell-input-async-command)

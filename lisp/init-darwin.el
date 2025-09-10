@@ -37,6 +37,9 @@
 ;; disable native-comp warnings
 (setq comp-async-report-warnings-errors nil)
 
+;; should work automatically but does not
+(setq insert-directory-program "gls")
+
 (defun z-after-init-darwin ()
   (when window-system
     (set-frame-size (selected-frame) 80 46)))
