@@ -61,7 +61,8 @@
                                    perl--Test2 perl--Test::Harness
                                    weblint guile-file guile-line))
  '(custom-safe-themes
-   '("e8bd9bbf6506afca133125b0be48b1f033b1c8647c628652ab7a2fe065c10ef0"
+   '("0325a6b5eea7e5febae709dab35ec8648908af12cf2d2b569bedc8da0a3a81c1"
+     "e8bd9bbf6506afca133125b0be48b1f033b1c8647c628652ab7a2fe065c10ef0"
      "aec7b55f2a13307a55517fdf08438863d694550565dee23181d2ebd973ebd6b8"
      "78e9a3e1c519656654044aeb25acb8bec02579508c145b6db158d2cfad87c44e"
      "d057f0430ba54f813a5d60c1d18f28cf97d271fd35a36be478e20924ea9451bd"
@@ -118,12 +119,12 @@
          embark-consult ess eterm-256color f flx flycheck g4-gutter
          gap-mode git-commit go-eldoc go-mode god-mode goto-chg ialign
          ibuffer-project ido-ubiquitous ido-vertical-mode
-         imenu-anywhere imenu-list julia-mode julia-repl lua-mode lv
-         magit marginalia markdown-mode modus-themes orderless
-         org-bullets pcmpl-args pulsar rainbow-delimiters
+         imenu-anywhere imenu-list julia-mode julia-repl ligature
+         lua-mode lv magit marginalia markdown-mode modus-themes
+         orderless org-bullets pcmpl-args pulsar rainbow-delimiters
          rainbow-identifiers rainbow-mode region-bindings-mode rg
          scala-mode2 squery sr-speedbar string-inflection transient
-         use-package vertico visual-regexp web-mode wgrep yasnippet
+         use-package vertico visual-regexp web-mode yasnippet
          zenburn-theme))
  '(pdf-view-midnight-colors '("#DCDCCC" . "#383838"))
  '(vc-annotate-background "#2B2B2B")
@@ -151,14 +152,16 @@
  '(font-lock-constant-face ((t (:foreground "#BFDBBF"))))
  '(font-lock-keyword-face ((t (:foreground "#ECE4C0" :weight normal))))
  '(font-lock-type-face ((t (:foreground "#90B8BC"))))
- '(help-key-binding ((t (:background "grey19" :foreground "LightBlue" :box (:line-width (-1 . -1) :color "grey35")))))
+ '(help-key-binding ((default (:background "grey19" :foreground "LightBlue" :box (:line-width (-1 . -1) :color "grey35"))) (((type nil)) (:underline t))))
  '(hi-blue ((t (:background "#466880"))))
  '(hi-green ((t (:background "#46802B"))))
  '(hi-pink ((t (:background "#C04662"))))
  '(hi-yellow ((t (:background "#807058"))))
+ '(highlight ((t nil)))
  '(link ((t (:foreground "#D0BF8F" :underline t :weight normal))))
  '(marginalia-key ((t (:inherit font-lock-comment-face))))
  '(marginalia-modified ((t (:inherit font-lock-comment-face))))
+ '(markdown-markup-face ((t (:inherit shadow :foreground "#666"))))
  '(mode-line-active ((t (:inherit mode-line :background "#284460"))))
  '(org-todo ((t (:foreground "#CC9393" :underline t :weight bold))))
  '(pulsar-generic ((t (:inherit pulse-highlight-start-face :extend t :background "#808080"))))
