@@ -125,9 +125,13 @@ root-_D_iff  log _O_utgoing  _~_:revision  i_G_nore  _g_:annotate  _u_:revert
          ("M-_" . easy-pair-slurp)))
 
 (use-package shell
-  ;:bind ("<f6>" . shell)
   :config
   (require 'pcmpl-args nil t))
+
+(use-package inc-num
+  :bind ("M-+" . inc-num-at-point)
+  :bind (:map region-bindings-mode-map
+              ("M-+" . inc-num-in-region)))
 
 (use-package z-misc
   :bind
@@ -364,6 +368,7 @@ instead of inactivate region."
     (string-inflection-underscore-function str)))))
 
 (use-package find-file
+;; TODO: maybe use `find-sibling-file'.
   :bind ("C-x C-r" . ff-find-other-file))
 
 (bind-keys ("C-x C-0")                  ; unbind text-scale-adjust
@@ -602,9 +607,6 @@ Toggle:
          avy-dispatch-alist)
         (unless (eq (mod i 4) 1)
           (insert "\n")))))
-
-  ;; Used in avy, but defined in ace-window
-  ;(put 'aw-key-face 'face-alias 'help-key-binding)
 
   (require 'subword)
   (setq avy-styles-alist '((avy-goto-char . de-bruijn))
