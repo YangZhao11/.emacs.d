@@ -241,17 +241,29 @@ mouse-3: Describe current input method"
                 'local-map mode-line-window-side-keymap
                 'mouse-face 'mode-line-highlight)))
 
+(z-defface-with-darken mode-line-pinned "#DB9F25")
 (defun mode-line-window-state ()
   "Mode line string for window state, including dedicated, project."
-  (or
-   (if (window-dedicated-p)
-    (concat "[" (mode-line-window-control) "]"))
-   (if (window-parameter (selected-window) 'window-role)
-       (mode-line-window-role))
-   (if (and project-mode-line
-            buffer-file-name
-            (not (file-remote-p buffer-file-name)))
-       (project-mode-line-format))))
+  (cond
+   ((or (window-dedicated-p)
+        (window-parameter (selected-window) 'window-role))
+    (let* ((str (cond ((window-dedicated-p)
+                       (concat (mode-line-window-control) " "))
+                      ((window-parameter (selected-window) 'window-role)
+                       (mode-line-window-role))))
+             (s (mode-line-window-selected-p))
+             (tag-face (if s 'mode-line-pinned
+                         'mode-line-pinned-dark))
+             (sep-face (if s 'mode-line-pinned-separator
+                         'mode-line-pinned-dark-separator)))
+       (concat
+        (propertize "" 'face sep-face)
+        (propertize str 'face tag-face))))
+
+   ((and project-mode-line
+         buffer-file-name
+         (not (file-remote-p buffer-file-name)))
+    (project-mode-line-format))))
 
 
 ;; remove input method from mode-line-mule-info, this is already

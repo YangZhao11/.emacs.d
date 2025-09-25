@@ -124,10 +124,6 @@ root-_D_iff  log _O_utgoing  _~_:revision  i_G_nore  _g_:annotate  _u_:revert
          ("M-)" . easy-pair-barf)
          ("M-_" . easy-pair-slurp)))
 
-(use-package shell
-  :config
-  (require 'pcmpl-args nil t))
-
 (use-package inc-num
   :bind ("M-+" . inc-num-at-point)
   :bind (:map region-bindings-mode-map
@@ -390,8 +386,8 @@ instead of inactivate region."
   :config
   (defvar-window-role window-role-repl
     "Window role for REPL buffers"
-    :predicate (derived-mode . comint-mode)
-    :mode-line "[∞]"
+    :predicate (derived-mode comint-mode vterm-mode)
+    :mode-line "∞ "
     :new-buffer-func new-default-r-buffer)
 
   (defun window-toggle-repl ()

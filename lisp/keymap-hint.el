@@ -216,6 +216,7 @@ If LOAD-MAP is a keymap or symbol of a keymap, it is loaded. For other
 non-nil value, KEYMAP is loaded after showing hint.
 
 If KEEP is the symbol `once', the keymap is disabled after one command."
+  (declare (indent defun))
   (setq hint (keymap-hint--format hint))
 
   (let ((show-hint-symbol

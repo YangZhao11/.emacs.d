@@ -481,12 +481,24 @@ Limit search to a few pages before."
 ;;              ("M-." . nil)              ; not needed in 30
 ;;              ([remap xref-find-definitions] . js-find-symbol)))
 
-(use-package julia-repl
-  :hook (julia-mode . julia-repl-mode)
+
+;; (use-package julia-repl
+;;   ;; julia-repl use term, prefer vterm at the moment.
+;;   ;;  :hook (julia-mode . julia-repl-mode)
+;;   :config
+;;   (setq julia-repl-captures
+;;         (list (kbd "M-x") (kbd "<home>")
+;;               (kbd "M-9") (kbd "M-0") (kbd "M-o"))))
+
+
+(use-package julia-vterm
+  :commands (julia-vterm-repl)
+  :hook (julia-mode-hook . julia-vterm-mode)
   :config
-  (setq julia-repl-captures
-        (list (kbd "M-x") (kbd "<home>")
-              (kbd "M-9") (kbd "M-0") (kbd "M-o"))))
+  ;; unbind some terminal keys
+  (bind-keys :map julia-vterm-repl-mode-map
+             ("<f5>")))
+
 
 (use-package pico8-mode
   :config
@@ -555,7 +567,7 @@ Limit search to a few pages before."
   ;; make much sense.
   (setq ess-imenu-S-generic-expression
         '(("Sections" "^\\s-*```{r \\(\\sw[a-zA-Z0-9_.]+\\)" 1)
-          ("Functions" "^\\(.+\\)[      \n]*<-[         \n]*function[ ]*(" 1)))
+          ("Functions" "^\\(.+\\)[ \t\n]*<-[ \t\n]*function[ ]*(" 1)))
 
   (bind-keys :map ess-mode-map
              ("<f7>" . ess-show-traceback)
@@ -823,6 +835,8 @@ _j_↧  _⇧_/_⇥_:buttons  _I_:lispref  _c_ustomize
 
 (use-package shell
   :config
+  (require 'pcmpl-args nil t)
+
   (defun z-shell-mode-hook ()
     (setq dirtrack-list
           '(" \\[[0-9;]*m\\([^]*\\)" 1))
@@ -931,6 +945,17 @@ We use the presence of some prompt to detect this line is an input line."
       ))
   (advice-add 'eterm-256color-handle-colors
               :around 'eterm-256color-nil-color-fix))
+
+
+(use-package vterm
+  :config
+  ;; unbind some keys for emacs
+  (bind-keys :map vterm-mode-map
+             ("<home>")
+             ("M-9")
+             ("M-0")
+             ("C-q" . vterm-send-next-key)))
+
 
 (provide 'init-mode)
 ;;; init-mode.el ends here
