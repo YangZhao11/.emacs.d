@@ -408,8 +408,11 @@ instead of inactivate region."
          ("M-7"     . unbury-buffer)
          ("C-x 4 o" . display-buffer)
          ("C-x 9"   . delete-other-windows-vertically))
+  ;; TODO: maybe just normal bind these
+  :bind* (("M-j" . other-window)
+          ("M-J" . window-swap-states))
   :config
-
+  (setq recenter-positions '(middle top bottom))
   (setq display-buffer-alist
         '(((category . window-role-repl)
            (display-buffer-at-bottom) ; maybe use display-buffer-in-side-window
@@ -691,11 +694,6 @@ in `ctl-j-map' first."
             (:else (avy-goto-nth-char char arg)))))
 )
 
-(use-package window
-  :bind* (("M-j" . other-window)
-          ("M-J" . window-swap-states))
-  :config
-  (setq recenter-positions '(middle top bottom)))
 
 (use-package zap-to-char-dwim
   :bind (("M-z" . zap-to-char-dwim)
