@@ -70,19 +70,38 @@ SPEC could be `box', `bar', or `hbar'."
   (keymap-set god-mode-isearch-map
     (char-to-string i) 'god-mode-self-insert))
 
-(setq god-mod-alist-default '((nil . "C-") (?g . "M-") (?h . "C-M-")))
+(setq god-mod-alist-default '((nil . "C-") (?m . "M-") (?g . "C-M-")))
+(setq god-mod-alist-meta '((nil . "M-") (?g . "C-M-")))
+(setq god-mod-alist-cm '((nil . "C-M-") (?m . "M-")))
 (setq god-mod-alist god-mod-alist-default)
+(defun god-mode-toggle-sticky-meta (arg)
+  (interactive (list (string= "M-" (cdr (assoc nil god-mod-alist)))))
+  (if arg
+      (progn (setq god-mod-alist god-mod-alist-default)
+             (keymap-set god-local-mode-map "m" #'god-mode-self-insert))
+    (setq god-mod-alist god-mod-alist-meta)
+    (keymap-set god-local-mode-map "m" #'god-mode-toggle-sticky-meta))
+  (force-mode-line-update))
+
+(defun god-mode-toggle-sticky-cm (arg)
+  (interactive (list (string= "C-M-" (cdr (assoc nil god-mod-alist)))))
+  (if arg
+      (progn (setq god-mod-alist god-mod-alist-default)
+             (keymap-set god-local-mode-map "g" #'god-mode-self-insert))
+    (setq god-mod-alist god-mod-alist-cm)
+    (keymap-set god-local-mode-map "g" #'god-mode-toggle-sticky-cm))
+    (force-mode-line-update))
+
+(bind-keys :map god-local-mode-map
+           ("i" . mortal-mode)
+           ("M" . god-mode-toggle-sticky-meta)
+           ("G" . god-mode-toggle-sticky-cm))
+
 (setq god-exempt-major-modes nil
       god-exempt-predicates nil
       god-mode-can-omit-literal-key 't)
 
-
-;; Avoid remapped self-insert-command
-(defalias 'true-self-insert-command 'self-insert-command)
-
-(bind-keys ;("(" . true-self-insert-command)
-           ;(")" . true-self-insert-command)
-           ("C-h k" . god-mode-describe-key) ; this works in special mode too
+(bind-keys ("C-h k" . god-mode-describe-key) ; this works in special mode too
 )
 
 (defun god-mode-low-priority-command-semantic (command)
@@ -95,29 +114,6 @@ SPEC could be `box', `bar', or `hbar'."
       '(?z ?# ?q ?\[ ?\] ?U ?`
         ?~ ?! ?@ ?$ ?% ?^ ?& ?* ?{ ?}
         ?< ?> ?: ?| ?\\ ?+ ?= ?? ?/))
-
-(defun god-mode-toggle-sticky-meta (arg)
-  (interactive (list (string= "M-" (cdr (assoc nil god-mod-alist)))))
-  (if arg
-      (progn (setq god-mod-alist god-mod-alist-default)
-             (keymap-set god-local-mode-map "g" #'god-mode-self-insert))
-    (setq god-mod-alist '((nil . "M-") (?h . "C-M-")))
-    (keymap-set god-local-mode-map "g" #'god-mode-toggle-sticky-meta))
-  (force-mode-line-update))
-
-(defun god-mode-toggle-sticky-cm (arg)
-  (interactive (list (string= "C-M-" (cdr (assoc nil god-mod-alist)))))
-  (if arg
-      (progn (setq god-mod-alist god-mod-alist-default)
-             (keymap-set god-local-mode-map "h" #'god-mode-self-insert))
-    (setq god-mod-alist '((nil . "C-M-") (?g . "M-")))
-    (keymap-set god-local-mode-map "h" #'god-mode-toggle-sticky-cm))
-    (force-mode-line-update))
-
-(bind-keys :map god-local-mode-map
-           ("i" . mortal-mode)
-           ("G" . god-mode-toggle-sticky-meta)
-           ("H" . god-mode-toggle-sticky-cm))
 
 (setq god-mode-translate-alist
       '(;; C-[ is a prefix key (ESC), remap here.
@@ -135,9 +131,6 @@ SPEC could be `box', `bar', or `hbar'."
         ("C-:" "M-:") ("C-;" "M-;") ; M-' is for abbrev, not useful in god-mode
         ("C-|" "M-|") ("C-\\" "M-\\")
         ("C-<" "M-<") ("C->" "M->") ("C-," "M-,") ("C-." "M-.")))
-
-(defun window-selected-p (window)
-  (eq (frame-selected-window (window-frame window)) window))
 
 (defun z-god-mode-enabled-hook ()
   (mortal-mode 0)
