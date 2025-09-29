@@ -791,8 +791,9 @@ _j_↧  _⇧_/_⇥_:buttons  _I_:lispref  _c_ustomize
   (bind-keys :map help-mode-map
              ("n" . next-line)
              ("p" . previous-line)
-             ("[" . help-goto-previous-page)
-             ("]" . help-goto-next-page)
+             ;; `describe-mode-outline' set to t, navigate outlines instead
+             ("[" . outline-previous-heading) ; help-goto-previous-page
+             ("]" . outline-next-heading) ; help-goto-next-page
              ("x" . god-mode-self-insert))
   ;; Handle keymap in C-h o. We copied the whole thing from the
   ;; default definition to remove keymap from `describe-variable'.
@@ -914,7 +915,7 @@ We use the presence of some prompt to detect this line is an input line."
           (buffer-substring-no-properties cline (line-end-position))))))
 
   ;;(ansi-color-for-comint-mode-on)
-  (setq comint-terminfo-terminal "eterm-direct")
+  (setq comint-terminfo-terminal "eterm-direct") ; or eterm-color
   (setq comint-scroll-to-bottom-on-output 't
         comint-scroll-show-maximum-output nil))
 
