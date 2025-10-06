@@ -213,7 +213,7 @@ mouse-3: Describe current input method"
  mode-line-buffer-identification "   " mode-line-position
  "  " mode-line-modes mode-line-misc-info
  mode-line-format-right-align
- (vc-mode vc-mode)
+ (vc-mode (:eval (mode-line-vc-mode-transform vc-mode)))
  ;;(project-mode-line project-mode-line-format)
  (:eval (mode-line-window-side))
  (:eval (mode-line-window-state))
@@ -222,6 +222,24 @@ mouse-3: Describe current input method"
 ))
 (setq project-mode-line 't)
 ;(setq project-mode-line-face 'font-lock-comment-face)
+
+(defun mode-line-vc-mode-transform (vc-mode)
+  "Transform vc-mode for mode-line display."
+  (let* ((s (substring-no-properties vc-mode 1))
+         (face (get-text-property 1 'face vc-mode))
+         (mface (get-text-property 1 'mouse-face vc-mode))
+         (map (get-text-property 1 'local-map vc-mode))
+         (help (get-text-property 1 'help-echo vc-mode))
+         result)
+    (setq result
+          (cond ((string-prefix-p "Git" s)
+                 (replace-regexp-in-string "Git" "" s))))
+    (if result
+        (propertize result
+                    'face face 'mouse-face mface
+                    'local-map map 'help-echo help)
+      vc-mode)))
+
 
 (defvar window-side-lighter
   '((top . "⬒")
