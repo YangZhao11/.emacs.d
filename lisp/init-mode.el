@@ -211,6 +211,7 @@ _d_:this  │            │ _l_owercase│ _S__Y_mlink
 " :bind "SPC")
 
   (bind-keys :map dired-mode-map
+             ("`" . dired-hide-details-mode) ; be consistent with ibuffer
              ("[" . backward-page)
              ("]" . forward-page)
              ("{" . dired-prev-marked-file)
@@ -283,6 +284,8 @@ _q_uit │         _s_wap │          │ _r_esolve/_A_ll     _>_: base-low
   ;; otherwise this may generate an autoload pointing to an incorrect
   ;; location, e.g. in site-lisp instead in elpa.
   :bind ("C-x g" . magit-status)
+  :custom
+  (magit-format-file-function #'magit-format-file-nerd-icons)
   :config
   (setq with-editor-mode-lighter "")
 
@@ -497,7 +500,7 @@ Limit search to a few pages before."
   :config
   ;; unbind some terminal keys
   (bind-keys :map julia-vterm-repl-mode-map
-             ("<f5>")))
+             ("<f5>") ("M-9") ("M-0")))
 
 
 (use-package pico8-mode
@@ -629,6 +632,7 @@ _j_↧ _n_ext  _<__>_:buf    │ _l_ine _r_egion│ _w_eb          _i_ndex   │
           ("!=" . ?≠)
           ("%in%" . ?∈)
           ("%*%" . ?×)
+          ("%o%" . ?⊗)
           ;;("function" . ?ƒ)
           ))
   (setenv "ESS_BACKGROUND_MODE" "dark")
@@ -937,6 +941,10 @@ We use the presence of some prompt to detect this line is an input line."
              ("M-9")
              ("M-0")
              ("C-q" . vterm-send-next-key)))
+
+(use-package nerd-icons
+  :config
+  (setq nerd-icons-font-family "JuliaMonoForced Nerd Font"))
 
 (provide 'init-mode)
 ;;; init-mode.el ends here

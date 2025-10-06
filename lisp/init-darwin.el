@@ -1,6 +1,6 @@
 ; -*- lexical-binding: t; coding: utf-8 -*-
 
-(set-frame-font "JuliaMono-17" nil 't)
+(set-frame-font "JuliaMonoForced Nerd Font-17" nil 't)
 ;; (set-fontset-font t 'unicode
 ;;                   (font-spec :name "Apple Color Emoji" :size 11) nil 'prepend)
 
@@ -14,7 +14,6 @@
   (global-ligature-mode t))
 
 (setq ns-use-thin-smoothing t)          ; does not seem to have any effect
-
 (setq mac-option-modifier 'none
       mac-command-modifier 'meta
       mac-right-option-modifier 'super
