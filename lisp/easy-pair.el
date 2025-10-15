@@ -116,14 +116,19 @@ The list boundary is kept."
   "Slurp ARG sexps before current list into current list."
   (interactive "p")
   (if (< arg 0) (easy-pair-backward-barf (- arg))
-    (save-excursion
-      (let (end s)
-        (backward-up-list 1 't 't)
-        (setq end (point))
-        (backward-sexp arg)
-        (setq s (filter-buffer-substring (point) end 'delete))
-        (forward-char)
-        (insert s)))))
+    ;; if the final insert is right at old point, we need to push the
+    ;; saved point in `save-excursion'. That is not the behavior from
+    ;; save-excursion, so we just use plain number to save it.
+    (let (end s (oldp (point)))
+      (unwind-protect
+          (progn
+            (backward-up-list 1 't 't)
+            (setq end (point))
+            (backward-sexp arg)
+            (setq s (filter-buffer-substring (point) end 'delete))
+            (forward-char)
+            (insert s))
+        (goto-char oldp)))))
 
 ;;;###autoload
 (defun easy-pair-barf (&optional arg)
