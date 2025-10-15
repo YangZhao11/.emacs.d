@@ -500,6 +500,7 @@ Limit search to a few pages before."
   :config
   ;; unbind some terminal keys
   (bind-keys :map julia-vterm-repl-mode-map
+             ("M-j") ("M-J")
              ("<f5>") ("M-9") ("M-0")))
 
 
@@ -578,7 +579,7 @@ Limit search to a few pages before."
              ("<f9>" . ess-eval-function-or-paragraph-and-step)
              ("C-x <f8>" . ess-tracebug)
              ("C-c SPC" . ess-render-markdown)
-             ("C-c C-m" . markdown-mode)
+             ("C-c C-m" . gfm-mode)
              ("_")                 ; unbind ess-smart-S-assign
              ("{") ("}")           ; unbind skeleton-pair-insert-maybe
              ("C-M-j")
@@ -938,8 +939,8 @@ We use the presence of some prompt to detect this line is an input line."
   ;; unbind some keys for emacs
   (bind-keys :map vterm-mode-map
              ("<home>")
-             ("M-9")
-             ("M-0")
+             ("M-9") ("M-0")
+             ("M-j") ("M-J")
              ("C-q" . vterm-send-next-key)))
 
 (use-package nerd-icons

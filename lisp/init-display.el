@@ -217,7 +217,7 @@ mouse-3: Describe current input method"
  ;;(project-mode-line project-mode-line-format)
  (:eval (mode-line-window-side))
  (:eval (mode-line-window-state))
- (:eval (if (display-graphic-p) " "))           ;somehow need padding only on graphic?
+ (:eval (if (display-graphic-p) " ")) ;somehow need padding only on graphic?
 ; mode-line-frame-name
 ))
 (setq project-mode-line 't)
@@ -242,10 +242,10 @@ mouse-3: Describe current input method"
 
 
 (defvar window-side-lighter
-  '((top . "⬒")
-    (bottom . "⬓")
-    (left . "◧")
-    (right . "◨")))
+  ;; '((top . "⬒") (bottom . "⬓")
+  ;;   (left . "◧") (right . "◨"))
+  '((top . "󱔓 ") (bottom . "󱂩 ")
+    (left . "󱂪 ") (right . "󱂫 ")))
 
 (defvar-keymap mode-line-window-side-keymap
   :doc "Keymap for what is displayed by `mode-line-window-side'."

@@ -8,7 +8,7 @@
   :config
   (ligature-set-ligatures 'prog-mode '("|>" "::" "->" "=>"))
   (ligature-set-ligatures 'help-mode '("=>"))
-  (ligature-set-ligatures 'inferior-ess-mode '("|>" "::"))
+  (ligature-set-ligatures '(inferior-ess-mode ess-r-mode) '("|>" "::"))
   (ligature-set-ligatures '(julia-repl-mode julia-vterm-mode)
                           '("|>" "::" "->" "=>" "<|"))
   (global-ligature-mode t))

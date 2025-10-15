@@ -16,6 +16,7 @@
     (face . hi-pink)
     (face . hi-green)
     (face . hi-blue)
+    ;; This stopped working in 30.
     (button)
     (thing . email)
     (thing . symbol)

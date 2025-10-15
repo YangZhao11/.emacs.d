@@ -56,7 +56,7 @@
 PROP set to true to add properties for mode line."
   (let ((p (if prop #'propertize #'first-arg)))
     (cond
-     ((derived-mode-p 'comint-mode 'term-mode)
+     ((derived-mode-p 'comint-mode 'term-mode 'vterm-mode)
       (funcall p
        "∞"
        'help-echo "Interactive shell"))
@@ -109,7 +109,7 @@ PROP set to true to add properties for mode line."
 (put 'self-insert-command 'command-semantic 'self-insert-command)
 
 ;; --------------------------------------------------
-(load-theme 'doom-zenburn 't)   ; load this first for many defaults.
+(load-theme 'doom-zenburn 't)     ; load this first for many defaults.
 
 ;; autoload not working yet, load the whole thing
 (require 'keymap-hint)
