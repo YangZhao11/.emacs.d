@@ -382,7 +382,8 @@ instead of inactivate region."
          ("<f9>"   . gud-finish)))
 
 (use-package window-role
-  :bind   ("<f5>" . window-toggle-repl)
+  :bind   (("<f5>" . window-role-repl-toggle)
+           ("<f6>" . window-role-ref-toggle))
   :config
   (defvar-window-role window-role-repl
     "Window role for REPL buffers"
@@ -390,11 +391,21 @@ instead of inactivate region."
     :mode-line "∞ "
     :new-buffer-func new-default-r-buffer)
 
-  (defun window-toggle-repl ()
+  (defun window-role-repl-toggle ()
     "Toggle repl windows"
     (interactive)
     (window-role-toggle-window 'window-role-repl))
-  )
+
+  (defvar-window-role window-role-ref
+    "Window role for reference type buffers"
+    :predicate (or (derived-mode compilation-mode occur-mode xref--xref-buffer-mode)
+                   "\\*scratch\\*")
+    :mode-line "※ ")
+
+  (defun window-role-ref-toggle ()
+    "Toggle repl windows"
+    (interactive)
+    (window-role-toggle-window 'window-role-ref)))
 
 (use-package window
   :bind (("<f11>"   . shrink-window)
@@ -407,12 +418,14 @@ instead of inactivate region."
          ("M-8"     . bury-buffer)
          ("M-7"     . unbury-buffer)
          ("C-x 4 o" . display-buffer)
-         ("C-x 9"   . delete-other-windows-vertically))
-  ;; TODO: maybe just normal bind these
-  :bind* (("M-j" . other-window)
-          ("M-J" . window-swap-states))
+         ("C-x 9"   . delete-other-windows-vertically)
+         ("M-j" . other-window)
+         ("M-J" . window-swap-states))
   :config
   (setq recenter-positions '(middle top bottom))
+  ;; Only in 31.
+  (setq quit-window-kill-buffer
+        '(man-common Custom-mode dired-mode))
   (setq display-buffer-alist
         '(((category . window-role-repl)
            (display-buffer-at-bottom) ; maybe use display-buffer-in-side-window
@@ -430,6 +443,21 @@ _^_ large _v_ shrink  _{_ _}_ horizontal
   (put 'unbury-buffer 'command-semantic 'switch-to-buffer)
   (put 'previous-buffer 'command-semantic 'switch-to-buffer)
   (put 'next-buffer 'command-semantic 'switch-to-buffer))
+
+(use-package windmove
+  :bind (("C-x <left>" . windmove-left)
+         ("C-x <right>" . windmove-right)
+         ("C-x <up>" . windmove-up)
+         ("C-x <down>" . windmove-down))
+  :config
+  (defvar-keymap windmove-repeat-map
+    :doc "Repeat map for windmove commands."
+    :repeat t
+    "<left>" #'windmove-left
+    "<right>" #'windmove-right
+    "<up>" #'windmove-up
+    "<down>" #'windmove-down)
+  )
 
 
 (defun toggle-show-trailing-whitespace ()
@@ -826,8 +854,6 @@ in `ctl-j-map' first."
   (setq register-preview-function #'consult-register-format)
   ;; (advice-add #'register-preview :override #'consult-register-window)
   )
-
-(keymap-global-set "M-M" 'embark-act-all)
 
 (use-package embark :ensure
   :after vertico
