@@ -108,7 +108,7 @@ The list boundary is kept."
         (setq beg (point))
         (forward-sexp arg)
         (setq s (filter-buffer-substring beg (point) 'delete))
-        (backward-char)
+        (backward-down-list 1)
         (insert s)))))
 
 ;;;###autoload
@@ -126,7 +126,7 @@ The list boundary is kept."
             (setq end (point))
             (backward-sexp arg)
             (setq s (filter-buffer-substring (point) end 'delete))
-            (forward-char)
+            (down-list 1)
             (insert s))
         (goto-char oldp)))))
 
@@ -138,12 +138,12 @@ The list boundary is kept."
   (save-excursion
     (let (s end)
       (up-list 1 't 't)
-      (backward-char)
+      (backward-down-list 1)
       (setq end (point))
       (backward-sexp arg)
       (while (looking-back "\\s-\\|\n" (1- (point))) (backward-char))
       (setq s (filter-buffer-substring (point) end 'delete))
-      (forward-char)
+      (up-list 1 't 't)
       (insert s)))))
 
 ;;;###autoload
@@ -154,12 +154,12 @@ The list boundary is kept."
   (save-excursion
     (let (beg s)
       (backward-up-list 1 't 't)
-      (forward-char)
+      (down-list 1)
       (setq beg (point))
       (forward-sexp arg)
       (while (looking-at "\\s-\\|\n") (forward-char))
       (setq s (filter-buffer-substring beg (point) 'delete))
-      (backward-char)
+      (backward-up-list 1 't 't)
       (insert s)))))
 
 (provide 'easy-pair)
