@@ -415,6 +415,8 @@ instead of inactivate region."
          ;; `purpose'.
          ("M-9"     . previous-buffer)
          ("M-0"     . next-buffer)
+         ("C-x C-<left>")
+         ("C-x C-<right>")
          ("M-8"     . bury-buffer)
          ("M-7"     . unbury-buffer)
          ("C-x 4 o" . display-buffer)
