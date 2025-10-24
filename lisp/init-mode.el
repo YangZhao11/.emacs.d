@@ -715,6 +715,9 @@ _j_↧ _n_ext  _<__>_:buf    │ _l_ine _r_egion│ _w_eb          _i_ndex   │
     :repeat t
     "<up>"   #'markdown-move-up
     "<down>" #'markdown-move-down)
+
+  (put 'markdown-electric-backquote
+       'command-semantic 'self-insert-command)
 )
 
 (use-package tex-mode
@@ -735,6 +738,10 @@ _j_↧ _n_ext  _<__>_:buf    │ _l_ine _r_egion│ _w_eb          _i_ndex   │
   (defun z-mhtml-mode-hook ()
     (sgml-electric-tag-pair-mode 1))
   (add-hook 'mhtml-mode-hook #'z-mhtml-mode-hook))
+
+(use-package org
+  :config
+  (put 'org-return-and-maybe-indent 'command-semantic 'self-insert-command))
 
 ;; ----------------------------------------------------------
 (use-package gdb-mi

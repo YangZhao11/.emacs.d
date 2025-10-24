@@ -343,7 +343,7 @@ mouse-3: Describe current input method"
 (or standard-display-table (setq standard-display-table (make-display-table)))
 (set-display-table-slot standard-display-table 'truncation ?›)
 (set-display-table-slot standard-display-table 'wrap ?↵)
-(set-display-table-slot standard-display-table 'selective-display [?…])
+(set-display-table-slot standard-display-table 'selective-display [?· ?· ?·]) ;…
 (set-display-table-slot standard-display-table 'vertical-border ?│)
 ;; tty box unicode from 31
 (when (fboundp #'standard-display-unicode-special-glyphs)

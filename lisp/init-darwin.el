@@ -6,8 +6,8 @@
 
 (use-package ligature
   :config
+  (ligature-set-ligatures nil '("=>"))
   (ligature-set-ligatures 'prog-mode '("|>" "::" "->" "=>"))
-  (ligature-set-ligatures 'help-mode '("=>"))
   (ligature-set-ligatures '(inferior-ess-mode ess-r-mode) '("|>" "::"))
   (ligature-set-ligatures '(julia-repl-mode julia-vterm-mode)
                           '("|>" "::" "->" "=>" "<|"))
