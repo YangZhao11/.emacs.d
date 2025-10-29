@@ -267,8 +267,8 @@ If ARG is non-nil and we are on terminal, then call
 
 (use-package simple
   :diminish (auto-fill-function . " ¶")
-  :diminish (visual-line-mode . " ↵")
-  :diminish (next-error-follow-minor-mode . " ⇅")
+  :diminish (visual-line-mode . " 󰖶 ");↵
+  :diminish (next-error-follow-minor-mode . "  ");⇅
   :hook ((before-save . delete-trailing-whitespace)
          (text-mode . turn-on-auto-fill))
   :commands (cycle-spacing-0)
@@ -556,7 +556,7 @@ Toggle:
   (setq pulsar-iterations 5)
   (pulsar-global-mode 1))
 
-(use-package flyspell :diminish " ⍹"
+(use-package flyspell :diminish "  ";⍹
   :commands (flyspell-mode flyspell-prog-mode)
   :hook (text-mode . turn-on-flyspell)
   :config
@@ -571,7 +571,7 @@ Toggle:
   :diminish (auto-revert-mode . " ↻")
   :commands (auto-revert-mode))
 
-(use-package whitespace :diminish " ␣"
+(use-package whitespace :diminish " 󱁐 " ;␣
   :commands (whitespace-mode))
 
 (use-package abbrev

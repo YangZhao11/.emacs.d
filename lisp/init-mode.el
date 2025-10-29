@@ -322,6 +322,7 @@ _q_uit │         _s_wap │          │ _r_esolve/_A_ll     _>_: base-low
         rainbow-identifiers-cie-l*a*b*-saturation 8))
 
 (use-package outline
+  :diminish (outline-minor-mode . "  ")
   :config
   (bind-keys :map outline-mode-map
              ("C-M-a" . outline-previous-visible-heading)
