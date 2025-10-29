@@ -568,7 +568,7 @@ Toggle:
   :hook (prog-mode . rainbow-delimiters-mode))
 
 (use-package autorevert
-  :diminish (auto-revert-mode . " ↻")
+  :diminish (auto-revert-mode . " 󰑐");↻
   :commands (auto-revert-mode))
 
 (use-package whitespace :diminish " 󱁐 " ;␣
