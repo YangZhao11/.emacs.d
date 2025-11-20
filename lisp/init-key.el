@@ -372,15 +372,6 @@ instead of inactivate region."
            ("<mouse-4>" . mode-line-next-buffer)
            ("C-z"))
 
-;; F1 for help.
-;; F3 and F4 for macros
-(use-package gud
-  :bind (("<f7>"   . gud-up)
-         ("S-<f7>" . gud-down)
-         ("<f8>"   . gud-next)
-         ("S-<f8>" . gud-step)
-         ("<f9>"   . gud-finish)))
-
 (use-package window-role
   :bind   (("<f5>" . window-role-repl-toggle)
            ("<f6>" . window-role-ref-toggle))

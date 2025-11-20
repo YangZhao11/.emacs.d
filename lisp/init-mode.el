@@ -94,7 +94,7 @@ useful when followed by an immediate kill."
 
   (setq isearch-allow-motion 't)
   (setcdr (assq 'isearch-mode minor-mode-alist)
-          '((:eval (if isearch-forward " »" " «")))))
+          '((:eval (if isearch-forward " " " ")))));»«
 
 (use-package format-expand
   :bind ("M-s f" . format-expand))
@@ -228,6 +228,13 @@ _d_:this  │            │ _l_owercase│ _S__Y_mlink
   (put 'dired-jump 'command-semantic 'find-file)
   (put 'dired-jump-other-window 'command-semantic 'display-buffer))
 
+(use-package tabulated-list
+  :config
+  (setq tabulated-list-gui-sort-indicator-asc ?)
+  (setq tabulated-list-gui-sort-indicator-desc ?)
+  (setq tabulated-list-tty-sort-indicator-asc ?)
+  (setq tabulated-list-tty-sort-indicator-desc ?))
+
 (use-package package
   :init
   ;; Make elpa packages available
@@ -260,6 +267,7 @@ _u_pgradable  _v_ersion  _N_ame/desc
   (put 'list-packages 'command-semantic 'display-buffer))
 
 (use-package smerge-mode
+  :diminish (smerge-mode . " ")
   :bind ("C-x m" . smerge-mode)
   :config
   (keymap-hint-set smerge-mode-map "
@@ -279,13 +287,17 @@ _q_uit │         _s_wap │          │ _r_esolve/_A_ll     _>_: base-low
              ("M--") ("M-9") ("M-0") ("M-SPC")
              ("M-l") ("M-o") ("M-v") ("M-x")))
 
+(use-package ediff
+  :config
+  (setq ediff-window-setup-function #'ediff-setup-windows-plain))
+
 (use-package magit
   ;; Make sure when compiling, the correct magit package is loaded.
   ;; otherwise this may generate an autoload pointing to an incorrect
   ;; location, e.g. in site-lisp instead in elpa.
   :bind ("C-x g" . magit-status)
-  :custom
-  (magit-format-file-function #'magit-format-file-nerd-icons)
+  ;; :custom
+  ;; (magit-format-file-function #'magit-format-file-nerd-icons)
   :config
   (setq with-editor-mode-lighter "")
 
@@ -382,7 +394,7 @@ Limit search to a few pages before."
              ("M-g b"   . flymake-goto-prev-error)))
 
 (use-package completion-preview
-  :diminish " ©"
+  :diminish " ɕ"
   :config
   (setq completion-preview-completion-styles '(orderless-first-prefix))
   (bind-keys :map completion-preview-active-mode-map
@@ -650,6 +662,8 @@ _j_↧ _n_ext  _<__>_:buf    │ _l_ine _r_egion│ _w_eb          _i_ndex   │
   (add-hook 'inferior-ess-r-mode-hook #'z-inferior-ess-mode-hook)
 
   (defun z-ess-mode-hook ()
+    (setq prettify-symbols-alist ess-r-prettify-symbols)
+    (prettify-symbols-mode 1)
     ;; Performance issue with `ess-r-project'.
     (kill-local-variable 'project-find-functions))
   (add-hook 'ess-r-mode-hook #'z-ess-mode-hook)
@@ -705,7 +719,7 @@ _j_↧ _n_ext  _<__>_:buf    │ _l_ine _r_egion│ _w_eb          _i_ndex   │
     "<" #'markdown-outdent-region
     ">" #'markdown-indent-region)
 
-  (defvar-keymap markdown-promot-repeat-map
+  (defvar-keymap markdown-promote-repeat-map
     :repeat t
     "-"       #'markdown-promote
     "<left>"  #'markdown-promote
@@ -722,14 +736,16 @@ _j_↧ _n_ext  _<__>_:buf    │ _l_ine _r_egion│ _w_eb          _i_ndex   │
 )
 
 (use-package tex-mode
+  :diminish (latex-electric-env-pair-mode . " 󱃖")
   :config
   (bind-keys :map tex-mode-map
              ("C-j"))                   ; was on tex-handle-newline
-  (add-hook 'tex-mode-hook
-            (lambda ()
-              (prettify-symbols-mode 1))))
+  (defun z-tex-mode-hook ()
+    (prettify-symbols-mode 1))
+  (add-hook 'tex-mode-hook 'z-tex-mode-hook))
 
 (use-package sgml-mode
+  :diminish (sgml-electric-tag-pair-mode . " ")
   :config
   (put 'sgml-slash 'command-semantic 'self-insert-command))
 
@@ -745,6 +761,13 @@ _j_↧ _n_ext  _<__>_:buf    │ _l_ine _r_egion│ _w_eb          _i_ndex   │
   (put 'org-return-and-maybe-indent 'command-semantic 'self-insert-command))
 
 ;; ----------------------------------------------------------
+(use-package gud
+  :bind (("<f7>"   . gud-up)
+         ("S-<f7>" . gud-down)
+         ("<f8>"   . gud-next)
+         ("S-<f8>" . gud-step)
+         ("<f9>"   . gud-finish)))
+
 (use-package gdb-mi
   :config
   (defun z-gdb-mode-hook () (setq gdb-many-windows t))

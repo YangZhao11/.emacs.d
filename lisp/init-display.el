@@ -305,7 +305,7 @@ mouse-3: Describe current input method"
           ((and (stringp default-directory)
                 (file-remote-p default-directory)
                 (string-prefix-p "/ssh:cloud:" default-directory))
-           `("ℂ" ,(concat "Current directory is on cloud: "
+           `("󱇶" ,(concat "Current directory is on cloud: "
                           default-directory)))
           ((and (stringp default-directory)
                 (file-remote-p default-directory))
@@ -324,7 +324,7 @@ mouse-3: Describe current input method"
 (setq-default mode-line-remote '(:eval (mode-line-remote)))
 
 
-(setq overlay-arrow-string "‣")
+(setq overlay-arrow-string "▶")
 
 ;; `Narrow' in mode line changed to §
 (setq mode-line-modes

@@ -6,8 +6,8 @@
 
 (use-package ligature
   :config
-  (ligature-set-ligatures nil '("=>"))
-  (ligature-set-ligatures 'prog-mode '("|>" "::" "->" "=>"))
+  (ligature-set-ligatures nil '("=>" "-->" "<--"))
+  (ligature-set-ligatures 'prog-mode '("|>" "::" "->" "=>" "-->" "<--"))
   (ligature-set-ligatures '(inferior-ess-mode ess-r-mode) '("|>" "::"))
   (ligature-set-ligatures '(julia-repl-mode julia-vterm-mode)
                           '("|>" "::" "->" "=>" "<|"))
@@ -25,8 +25,7 @@
 (add-to-list 'exec-path "~/bin")
 
 ;; Fix environment variables
-(setenv "PATH" (concat "~/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/git/current/bin:/usr/local/bin:"
-                       (getenv "PATH")))
+(setenv "PATH" "/opt/homebrew/bin:/opt/homebrew/sbin:~/bin:/usr/local/git/git-google/bin:/usr/local/git/current/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/opt/X11/bin:/Library/TeX/texbin:/Applications/iTerm.app/Contents/Resources/utilities")
 (setenv "LANG" "en_US.UTF-8")
 ;(setenv "RIPGREP_CONFIG_PATH" (concat (getenv "HOME") "/.config/ripgrep.conf"))
 (cd "~")
