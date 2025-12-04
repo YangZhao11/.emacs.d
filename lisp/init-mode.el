@@ -564,7 +564,8 @@ Limit search to a few pages before."
     (interactive)
     (ess-eval-linewise
      (concat "render(\"" buffer-file-name
-             "\", output_dir = getwd())") nil 'eob))
+             "\", output_dir = getwd())")
+     nil 'eob))
 
   (defun z-ess-mode-hook ()
     (when (string-match "\\.Rmd\\'" buffer-file-name)
@@ -689,6 +690,15 @@ _j_↧ _n_ext  _<__>_:buf    │ _l_ine _r_egion│ _w_eb          _i_ndex   │
   (bind-keys :map text-mode-map
              ("C-M-a" . backward-paragraph)
              ("C-M-e" . forward-paragraph)))
+
+(use-package edit-indirect
+  :diminish (edit-indirect--overlay)
+  :config
+  (defun edit-indirect-buffer-rename ()
+    (rename-buffer
+     (replace-regexp-in-string
+      "\\*edit-indirect \\(.*\\)\\*" "  \\1" (buffer-name))))
+  (add-hook 'edit-indirect-after-creation-hook #'edit-indirect-buffer-rename))
 
 (use-package markdown-mode
   :mode ("\\.md\\'" . gfm-mode)

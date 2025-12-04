@@ -58,12 +58,12 @@ PROP set to true to add properties for mode line."
     (cond
      ((derived-mode-p 'comint-mode 'term-mode 'vterm-mode)
       (funcall p
-       "∞"
+       "∞"                              ; 󰆍
        'help-echo "Interactive shell"))
 
      (buffer-read-only
       (funcall p
-       "∅"
+       "∅"                              ;  󰷢 
        'help-echo 'mode-line-read-only-help-echo
        'local-map (purecopy (make-mode-line-mouse-map
                              'mouse-1
@@ -72,14 +72,14 @@ PROP set to true to add properties for mode line."
 
      ((buffer-modified-p)
       (funcall p
-       "♦"
+       "♦"                              ;   
        'help-echo 'mode-line-modified-help-echo
        'local-map (purecopy (make-mode-line-mouse-map
                              'mouse-1 #'mode-line-toggle-modified))
        'mouse-face 'mode-line-highlight))
      (:else
       (funcall p
-       "♢"
+       "♢"                              ;  
        'help-echo "Buffer is not modified")))))
 
 (when (< emacs-major-version 31)
