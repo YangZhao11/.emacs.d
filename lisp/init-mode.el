@@ -880,6 +880,8 @@ _j_↧  _⇧_/_⇥_:buttons  _I_:lispref  _c_ustomize
     (view-buffer (current-buffer) 'kill-buffer-if-not-modified)
     (current-buffer)))
 
+;; a one-time setup is needed:
+;; tic -o ~/.terminfo $(find $EMACS_PATH -name eterm-color.ti)
 (use-package shell
   :config
   (require 'pcmpl-args nil t)
@@ -899,13 +901,14 @@ _j_↧  _⇧_/_⇥_:buttons  _I_:lispref  _c_ustomize
        (list cmd nil shell-command-default-error-buffer)))
     (async-shell-command command output-buffer error-buffer))
 
-  (defun shell-mode:pager (&rest args)
+  (defun shell-mode:more (&rest args)
     "Shell-mode command line pager"
     (when (let ((l (seq-length args)))
             (or (< l 5)
                 (yes-or-no-p (format "Really view %d files?" l))))
       (dolist (fname (seq-reverse args) args)
         (view-file fname))))
+  (defalias 'shell-mode:bat 'shell-mode:more)
 
   (defun shell-mode:grep (&rest args)
     "Shell-mode command line grep"
@@ -913,6 +916,11 @@ _j_↧  _⇧_/_⇥_:buttons  _I_:lispref  _c_ustomize
     (unless grep-command (grep-compute-defaults))
     (let ((arg-str (mapconcat #'shell-quote-argument args " ")))
       (grep (concat grep-command " " arg-str))))
+
+  (defun shell-mode:info (&rest args)
+    "Shell-mode command line info"
+    (require 'info)
+    (info (car args)))
 
   (defun shell-mode:rg (&rest args)
     "Shell-mode command line rg (ripgrep)"

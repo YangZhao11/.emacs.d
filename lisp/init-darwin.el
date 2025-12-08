@@ -29,6 +29,7 @@
 (setenv "LANG" "en_US.UTF-8")
 ;(setenv "RIPGREP_CONFIG_PATH" (concat (getenv "HOME") "/.config/ripgrep.conf"))
 (cd "~")
+(setq shell-file-name "/opt/homebrew/bin/bash")
 
 ;; (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
 ;; (add-to-list 'default-frame-alist '(ns-appearance . dark))
