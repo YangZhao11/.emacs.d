@@ -109,7 +109,12 @@ PROP set to true to add properties for mode line."
 (put 'self-insert-command 'command-semantic 'self-insert-command)
 
 ;; --------------------------------------------------
-(load-theme 'doom-zenburn 't)     ; load this first for many defaults.
+(use-package doom-themes :ensure t :defer t
+  :config
+  ;; temp fix for cycle inheritance in 31.
+  (setcdr (assoc 'gnus-group-news-low-empty doom-themes-base-faces)
+          '(:inherit 'gnus-group-mail-1-empty :weight 'normal)))
+(load-theme 'doom-zenburn 't)
 
 ;; autoload not working yet, load the whole thing
 (require 'keymap-hint)

@@ -910,6 +910,13 @@ _j_↧  _⇧_/_⇥_:buttons  _I_:lispref  _c_ustomize
         (view-file fname))))
   (defalias 'shell-mode:bat 'shell-mode:more)
 
+  (defun shell-mode:emx (&rest args)
+    "Shell-mode command line emx. Call command interactively."
+    (if-let* ((cmd (intern-soft (car args))))
+        (call-interactively cmd)
+      ;; else
+      (format-message "Emacs command `%s' not found" (car args))))
+
   (defun shell-mode:grep (&rest args)
     "Shell-mode command line grep"
     (require 'grep)
