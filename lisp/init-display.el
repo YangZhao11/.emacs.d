@@ -8,10 +8,6 @@
   "Face for god-lighter"
   :group 'god)
 
-
-;; e0a 
-;; e0b 
-
 (defmacro z-defface-with-darken (face col)
   "Define two faces, FACE and FACE-dark where bg is col and a dark version
 of it."
@@ -179,8 +175,9 @@ mouse-3: Describe current input method"
 (setq z-lighter-special '(:eval (z-lighter-special)))
 (put 'z-lighter-special 'risky-local-variable t)
 
-(defvar z-lighter
-  '(:eval (cond (god-local-mode z-lighter-god)
+(defun z-lighter ()
+  "Bottom left lighter."
+  (cond (god-local-mode z-lighter-god)
                 (view-mode z-lighter-view)
                 ((or (and (eq (get major-mode 'mode-class) 'special)
                           (not (derived-mode-p 'comint-mode)))
@@ -189,6 +186,7 @@ mouse-3: Describe current input method"
                  z-lighter-special)
                 (current-input-method z-lighter-input-method)
                 (:else z-lighter-emacs)))
+(defvar z-lighter '(:eval (z-lighter))
   "Leftmost lighter in mode line")
 (put 'z-lighter 'risky-local-variable t)
 
@@ -259,7 +257,8 @@ mouse-3: Describe current input method"
                 'local-map mode-line-window-side-keymap
                 'mouse-face 'mode-line-highlight)))
 
-(z-defface-with-darken mode-line-pinned "#DB9F25")
+(z-defface-with-darken mode-line-pinned "#2AAD7D")
+(z-defface-with-darken mode-line-project "#0F6DD9")
 (defun mode-line-window-state ()
   "Mode line string for window state, including dedicated, project."
   (cond
@@ -275,13 +274,21 @@ mouse-3: Describe current input method"
              (sep-face (if s 'mode-line-pinned-separator
                          'mode-line-pinned-dark-separator)))
        (concat
-        (propertize "" 'face sep-face)
+        (propertize "" 'face sep-face)
         (propertize str 'face tag-face))))
 
    ((and project-mode-line
          buffer-file-name
          (not (file-remote-p buffer-file-name)))
-    (project-mode-line-format))))
+    (let* ((str (string-trim-left (project-mode-line-format)))
+           (s (mode-line-window-selected-p))
+           (tag-face (if s 'mode-line-project
+                       'mode-line-project-dark))
+           (sep-face (if s 'mode-line-project-separator
+                       'mode-line-project-dark-separator)))
+      (concat
+        (propertize "" 'face sep-face)
+        (propertize str 'face tag-face))))))
 
 
 ;; remove input method from mode-line-mule-info, this is already
