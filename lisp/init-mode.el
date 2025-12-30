@@ -771,6 +771,7 @@ _j_↧ _n_ext  _<__>_:buf    │ _l_ine _r_egion│ _w_eb          _i_ndex   │
   (put 'org-return-and-maybe-indent 'command-semantic 'self-insert-command))
 
 ;; ----------------------------------------------------------
+;; maybe try realgud
 (use-package gud
   :bind (("<f7>"   . gud-up)
          ("S-<f7>" . gud-down)

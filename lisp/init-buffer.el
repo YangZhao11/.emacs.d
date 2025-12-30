@@ -102,7 +102,7 @@
 _m_ark(_*_)╶╮ List      ╶──╮ Buf Ops  ╶─  ─────────┬╴Togl╶    ─╮ Text Ops    ╶───    ─────────╮
 _%_:regexp  │ _s_ort _,_   │ _D_elete  _j_ump      │_T_:∅ _M_:♦│ _Q_uery/r       _!_:shell    │
 _t_oggle/_U_│ _/_filter    │ _S_ave    _v_iew      ╭╴Copy    ╶─┤ _I_:q_r_-regex  _|_:pipe     │
-_d_el/_z_ap │ _g_:↻ _+__-_ │ re_V_ert  _o_ther-win │_B_name    │ _=_:diff        _N_:replace  │
+_d_el/_z_ap │ _g_:↻ _+__-_ │ re_V_ert  _o_ther-win │_B_ufname  │ _=_:diff        _N_:replace  │
 _._old      │ _k_ill-ln    │ _R_ename  _H_:other-f │_w_:Fname  │ _O_ccur         _E_val/vie_W_│
 " :bind "SPC")
 
