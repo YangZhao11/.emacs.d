@@ -4,7 +4,6 @@
 (setq-default indent-tabs-mode nil
               indicate-empty-lines 't
               frame-title-format "Emacs"
-              ispell-program-name "aspell"
               page-delimiter "\\(^\f\\|-\\{20,\\}$\\)")
 (setq inhibit-startup-screen t
       visible-bell 't

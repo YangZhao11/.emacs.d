@@ -215,7 +215,6 @@ mouse-3: Describe current input method"
  ;;(project-mode-line project-mode-line-format)
  (:eval (mode-line-window-side))
  (:eval (mode-line-window-state))
- (:eval (if (display-graphic-p) " ")) ;somehow need padding only on graphic?
 ; mode-line-frame-name
 ))
 (setq project-mode-line 't)

@@ -279,8 +279,7 @@ If ARG is non-nil and we are on terminal, then call
          ("M-="         . z-toggle-activate-mark)
          ("C-?"         . undo-redo)
          ("<XF86Eject>" . keyboard-escape-quit)
-         ("<f6>"        . scratch-buffer)
-         ([remap exchange-point-and-mark] . z-exchange-point-and-mark))
+         ("<f6>"        . scratch-buffer))
   :config
   (setq next-error-message-highlight 't)
 
@@ -291,15 +290,20 @@ If ARG is non-nil and we are on terminal, then call
       (call-interactively #'cycle-spacing)))
 
   ;; Decouple exchange-point-and-mark and activating region.
-  (defun z-exchange-point-and-mark (&optional arg)
-    "Like `exchange-point-and-mark', but ARG means toggle active region,
+  ;; TODO: in 31, just need exchange-point-and-mark-highlight-region
+  (when (< emacs-major-version 31)
+    (defun z-exchange-point-and-mark (&optional arg)
+      "Like `exchange-point-and-mark', but ARG means toggle active region,
 instead of inactivate region."
-    (interactive "P")
-    (let ((active (xor arg (use-region-p))))
-      (if (and (bound-and-true-p rectangle-mark-mode)
-               (fboundp 'rectangle-exchange-point-and-mark))
-          (rectangle-exchange-point-and-mark (not active))
-        (exchange-point-and-mark (not active)))))
+      (interactive "P")
+      (let ((active (xor arg (use-region-p))))
+        (if (and (bound-and-true-p rectangle-mark-mode)
+                 (fboundp 'rectangle-exchange-point-and-mark))
+            (rectangle-exchange-point-and-mark (not active))
+          (exchange-point-and-mark (not active)))))
+    (bind-key [remap exchange-point-and-mark] #'z-exchange-point-and-mark))
+  ;; only in 31
+  (setq exchange-point-and-mark-highlight-region nil)
 
   (defun z-toggle-activate-mark ()
     "Toggle active region, without moving the mark."
@@ -323,7 +327,6 @@ instead of inactivate region."
              ("]" . forward-page)
              ("c" . god-mode-self-insert)
              ("l" . god-mode-self-insert)
-             ("v" . god-mode-self-insert)
              ("x" . god-mode-self-insert))
   (put 'previous-error-no-select 'command-semantic 'previous-line)
   (put 'next-error-no-select 'command-semantic 'next-line))

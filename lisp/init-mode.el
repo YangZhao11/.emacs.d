@@ -841,6 +841,8 @@ _j_↧  _⇧_/_⇥_:buttons  _I_:lispref  _c_ustomize
              ;; `describe-mode-outline' set to t, navigate outlines instead
              ("[" . outline-previous-heading) ; help-goto-previous-page
              ("]" . outline-next-heading) ; help-goto-next-page
+             ([remap forward-page] . help-goto-next-page)
+             ([remap backward-page] . help-goto-previous-page)
              ("x" . god-mode-self-insert))
   ;; Handle keymap in C-h o. We copied the whole thing from the
   ;; default definition to remove keymap from `describe-variable'.
