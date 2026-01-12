@@ -630,7 +630,6 @@ _j_↧ _n_ext  _<__>_:buf    │ _l_ine _r_egion│ _w_eb          _i_ndex   │
 
 
 (use-package ess-r-mode
-  :mode (("\\.Rmd\\'" . ess-r-mode))
   :config
   ;; For Rmd editing, do not treat ` as quote.
   (modify-syntax-entry ?` "." ess-r-mode-syntax-table)
@@ -702,6 +701,7 @@ _j_↧ _n_ext  _<__>_:buf    │ _l_ine _r_egion│ _w_eb          _i_ndex   │
 
 (use-package markdown-mode
   :mode ("\\.md\\'" . gfm-mode)
+  :mode ("\\.Rmd\\'" . gfm-mode)
   :init
   (setq markdown-header-scaling 't
         markdown-header-scaling-values
@@ -890,6 +890,7 @@ _j_↧  _⇧_/_⇥_:buttons  _I_:lispref  _c_ustomize
   (require 'pcmpl-args nil t)
 
   (defun z-shell-mode-hook ()
+    ;; (after 31): use `ansi-osc-directory-tracker'?
     (setq dirtrack-list
           '(" \\[[0-9;]*m\\([^]*\\)" 1))
     (shell-dirtrack-mode -1)

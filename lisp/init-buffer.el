@@ -39,11 +39,10 @@
   :predicate (lambda (buf project)
                (with-current-buffer buf
                  (equal (project-current) project)))
-  :mode-line ("["
+  :mode-line ("⁺"
               (:eval (project-name
-                      (cadr (window-parameter (selected-window) 'window-role))))
-              "]")
-  )
+                      (cadr (window-parameter
+                             (selected-window) 'window-role))))))
 
 (defun window-toggle-role-project ()
     "Toggle window role of current project"
@@ -64,6 +63,7 @@
   (setq ibuffer-show-empty-filter-groups nil
         ibuffer-eliding-string "…"
         ibuffer-expert t)
+  (setq ibuffer-use-header-line 'title)
 
   (defvar long-filename-short-replacements
         '(("/google3/experimental/users/" "/google3/~")

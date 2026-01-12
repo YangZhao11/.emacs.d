@@ -47,11 +47,11 @@
               help-echo "Recording keyboard macro")))))
 
 (keymap-hint-set ctl-x-r-map "
-Rectangle╶─────      ───────╮ Register╶  ┬╴save  ╶─────╮ Bookmark╶─  ─────╮
-_c_lear     _N_umber-lines  │ _+_: inc   │ _␣_:point   │ _m_: set         │
-_d_elete    _o_pen  s_t_ring│ _j_ump     │ _f_rameset  │ _b_: jump        │
-_k_ill      _y_ank          │ _i_nsert   │ _w_indow-cfg│ _l_ist           │
-_M-w_:copy  _r_egister      │ _s_ave text│ _n_umber    │ _M_: no-overwrite│
+Rectangle╶─────      ───────╮ Register╶  ┬╴save  ╶─────  ──────╮ Bookmark╶─  ─────╮
+_c_lear     _N_umber-lines  │ _+_: inc   │ _␣_:point   _B_uffer│ _m_: set         │
+_d_elete    _o_pen  s_t_ring│ _j_ump     │ _n_umber    _F_ile  │ _b_: jump        │
+_k_ill      _y_ank          │ _i_nsert   │ _f_rameset          │ _l_ist           │
+_M-w_:copy  _r_egister      │ _s_ave text│ _w_indow-cfg        │ _M_: no-overwrite│
 " :load-map 't :bind "?")
 
 (keymap-hint-set vc-prefix-map "
@@ -422,8 +422,15 @@ instead of inactivate region."
   ;; Only in 31.
   (setq quit-window-kill-buffer
         '(man-common Custom-mode dired-mode))
+  (defun buffer-edit-indirect-p (buffer-or-name &optional args)
+    "Returns non-nil if BUFFER-OR-NAME is an edit-indirect buffer."
+    (with-current-buffer buffer-or-name
+      edit-indirect--overlay))
+
   (setq display-buffer-alist
-        '(((category . window-role-repl)
+        '((buffer-edit-indirect-p
+           (display-buffer-same-window))
+          ((category . window-role-repl)
            (display-buffer-at-bottom) ; maybe use display-buffer-in-side-window
            (side . bottom) (dedicated . nil))))
 
@@ -735,7 +742,7 @@ in `ctl-j-map' first."
 
 (use-package xref
   :if (not (featurep 'google))
-  :bind (("C-x ." . xref-find-definitions)
+  :bind (("C-x ." . xref-find-definitions) ; `set-fill-prefix' in 31
          ("C-x ?" . xref-find-references)
          ("C-x ," . xref-go-back)))
 
