@@ -8,36 +8,43 @@
 (defvar-local z-god-saved-view-mode nil
   "Saved view-mode before god-mode")
 
-(defun set-cursor-type (spec)
-  "Set cursor type for current frame.
+(defun set-cursor-type (spec &optional frame)
+  "Set cursor type for FRAME.
 
-This also works for terminals with support for setting cursor type.
-
-SPEC could be `box', `bar', or `hbar'."
+SPEC could be `box', `bar', or `hbar'. FRAME defaults to current frame.
+On a text frame, we use xterm compatible escape code."
   (cond
-   ((display-graphic-p)
-    (modify-frame-parameters nil `((cursor-type . ,spec))))
-   ((frame-terminal)
+   ((display-graphic-p frame)
+    (modify-frame-parameters frame `((cursor-type . ,spec))))
+   ((frame-terminal frame)
+    ;; https://unix.stackexchange.com/questions/49485/escape-code-to-change-cursor-shape
     (let* ((shape (or (car-safe spec) spec))
            (param (cond ((eq shape 'bar) "5")
                         ((eq shape 'hbar) "3")
                         (:else "1"))))
       (send-string-to-terminal
-       (concat "\e[" param " q"))))))
+       (concat "\e[" param " q") frame)))))
 
 (defun set-cursor-type-all-frames (spec)
   "Set cursor to SPEC for all frames."
   (dolist (f (frame-list))
-    (with-selected-frame f (set-cursor-type spec))))
+    (set-cursor-type spec f)))
 
 ;; maybe record kmacro during mortal mode, so that the whole action
 ;; can be repeated as a whole. However, emacs macro does not work
 ;; recursively.
 (defun mortal-mode-exit ()
-  "Exit mortal-mode and resume god mode. Bind to RET."
+  "Exit mortal-mode and resume god mode. Bind to RET.
+
+If the local binding of RET has semantic `comint-send-input', then call it."
   (interactive)
   (god-local-mode-resume)
-  (mortal-mode 0))
+  (mortal-mode 0)
+  (let* ((binding (local-key-binding (kbd "RET")))
+         (semantic (get binding 'command-semantic)))
+    (when (eq  semantic 'comint-send-input)
+      (call-interactively binding))))
+
 (defvar-keymap mortal-mode-map
   :doc "Keymap for `mortal-mode'."
   "RET" #'mortal-mode-exit)
