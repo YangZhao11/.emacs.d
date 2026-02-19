@@ -7,8 +7,12 @@
 (use-package ligature
   :config
   (ligature-set-ligatures nil '("=>" "-->" "<--"))
-  (ligature-set-ligatures 'prog-mode '("|>" "::" "->" "=>" "-->" "<--"))
-  (ligature-set-ligatures '(inferior-ess-mode ess-r-mode) '("|>" "::"))
+  (ligature-set-ligatures 'prog-mode
+                          '("|>" "::" "<-" "->" "=>" "-->" "<--"))
+  (ligature-set-ligatures 'markdown-mode
+                          '("|>" "::" "<-" "->" "=>" "-->" "<--"))
+  (ligature-set-ligatures '(inferior-ess-r-mode ess-r-mode)
+                          '("|>" "::" "<-" "->" "<<-" "->>"))
   (ligature-set-ligatures '(julia-repl-mode julia-vterm-mode)
                           '("|>" "::" "->" "=>" "<|"))
   (global-ligature-mode t))
@@ -39,7 +43,7 @@
 (setq comp-async-report-warnings-errors nil)
 
 ;; should work automatically but does not
-(setq insert-directory-program "gls")
+;(setq insert-directory-program "gls")
 
 (defun z-after-init-darwin ()
   (when window-system
