@@ -228,12 +228,13 @@ _d_:this  │            │ _l_owercase│ _S__Y_mlink
   (put 'dired-jump 'command-semantic 'find-file)
   (put 'dired-jump-other-window 'command-semantic 'display-buffer))
 
-(use-package tabulated-list
-  :config
-  (setq tabulated-list-gui-sort-indicator-asc ?)
-  (setq tabulated-list-gui-sort-indicator-desc ?)
-  (setq tabulated-list-tty-sort-indicator-asc ?)
-  (setq tabulated-list-tty-sort-indicator-desc ?))
+;; (use-package tabulated-list
+;;   :config
+;;   (setq tabulated-list-gui-sort-indicator-asc ?)
+;;   (setq tabulated-list-gui-sort-indicator-desc ?)
+;;   ;; somehow this does not work, use the default.
+;;   (setq tabulated-list-tty-sort-indicator-asc ?▼)
+;;   (setq tabulated-list-tty-sort-indicator-desc ?▲))
 
 (use-package package
   :init
@@ -639,8 +640,8 @@ _j_↧ _n_ext  _<__>_:buf    │ _l_ine _r_egion│ _w_eb          _i_ndex   │
         '(("%>%" . ?↦)                  ; magrittr pipe
           ;;("|>" . ?▷)                 ; R pipe - use ligature
           ("\\" . ?λ)
-          ("<-" . ?←)
-          ("->" . ?→)
+          ;("<-" . ?←) ;; use ligature
+          ;("->" . ?→) ;; use ligature
           ("<=" . ?≤)
           (">=" . ?≥)
           ("!=" . ?≠)
@@ -660,6 +661,7 @@ _j_↧ _n_ext  _<__>_:buf    │ _l_ine _r_egion│ _w_eb          _i_ndex   │
     (setq-local scroll-margin 0)
     (setq-local comint-move-point-for-output t))
   (add-hook 'inferior-ess-r-mode-hook #'z-inferior-ess-mode-hook)
+  (put 'inferior-ess-send-input 'command-semantic 'comint-send-input)
 
   (defun z-ess-mode-hook ()
     (setq prettify-symbols-alist ess-r-prettify-symbols)
@@ -690,9 +692,13 @@ _j_↧ _n_ext  _<__>_:buf    │ _l_ine _r_egion│ _w_eb          _i_ndex   │
              ("C-M-a" . backward-paragraph)
              ("C-M-e" . forward-paragraph)))
 
+;; used by markdown-mode for code blocks
 (use-package edit-indirect
   :diminish (edit-indirect--overlay)
   :config
+  (bind-keys :map edit-indirect-mode-map
+             ("C-c C-c")
+             ([remap server-edit] . edit-indirect-commit))
   (defun edit-indirect-buffer-rename ()
     (rename-buffer
      (replace-regexp-in-string
@@ -982,7 +988,8 @@ We use the presence of some prompt to detect this line is an input line."
   ;;(ansi-color-for-comint-mode-on)
   (setq comint-terminfo-terminal "eterm-direct") ; or eterm-color
   (setq comint-scroll-to-bottom-on-output 't
-        comint-scroll-show-maximum-output nil))
+        comint-scroll-show-maximum-output nil)
+  (put 'comint-send-input 'command-semantic 'comint-send-input))
 
 (use-package tramp-sh
   :config
