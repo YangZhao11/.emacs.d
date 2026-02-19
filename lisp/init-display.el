@@ -11,23 +11,26 @@
 (defmacro z-defface-with-darken (face col)
   "Define two faces, FACE and FACE-dark where bg is col and a dark version
 of it."
-  (let ((face-dark (intern (concat (symbol-name face) "-dark")))
-        (face-separator (intern (concat (symbol-name face) "-separator")))
-        (face-dark-separator (intern (concat (symbol-name face) "-dark-separator")))
+  (let ((face-dark (intern
+                    (concat (symbol-name face) "-dark")))
+        (face-separator (intern
+                         (concat (symbol-name face) "-separator")))
+        (face-dark-separator (intern
+                              (concat (symbol-name face) "-dark-separator")))
         (dark-col (doom-blend col "#353535" .5)))
     `(progn
        (defface ,face
-       '((t :inherit god-lighter :background ,col))
-       ,(concat "Face for " (symbol-name face))
-       :group 'god )
+         '((t :inherit god-lighter :background ,col))
+         ,(concat "Face for " (symbol-name face))
+         :group 'god )
        (defface ,face-separator
          '((t :inherit mode-line-active :foreground ,col))
          ,(concat "Separator face for " (symbol-name face)))
        (defface ,face-dark
          ;; blend with (face-background 'mode-line-inactive)
-       '((t :inherit god-lighter :background ,dark-col))
-       ,(concat "Face for " (symbol-name face-dark))
-        :group 'god)
+         '((t :inherit god-lighter :background ,dark-col))
+         ,(concat "Face for " (symbol-name face-dark))
+         :group 'god)
        (defface ,face-dark-separator
          '((t :inherit mode-line-inactive :foreground ,dark-col))
          ,(concat "Separator face for " (symbol-name face-dark))))))
@@ -320,7 +323,9 @@ mouse-3: Describe current input method"
           ((bound-and-true-p crdt--session)
            '("‰" "CRDT shared buffer"))
           ((bound-and-true-p server-buffer-clients)
-           '("#" "Client waiting for edit")))))
+           '("#" "Client waiting for edit"))
+          ((bound-and-true-p edit-indirect--overlay)
+           '("#" "Indirect edit")))))
     (when char-help
       (propertize
        (car char-help)
