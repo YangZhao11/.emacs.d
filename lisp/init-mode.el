@@ -697,12 +697,19 @@ _j_↧ _n_ext  _<__>_:buf    │ _l_ine _r_egion│ _w_eb          _i_ndex   │
   :diminish (edit-indirect--overlay)
   :config
   (bind-keys :map edit-indirect-mode-map
-             ("C-c C-c")
-             ([remap server-edit] . edit-indirect-commit))
+             ("C-c C-c")                ; Too many conflicts
+             ([remap server-edit] . edit-indirect-commit)
+             ([remap kill-buffer] . edit-indirect-abort))
   (defun edit-indirect-buffer-rename ()
-    (rename-buffer
-     (replace-regexp-in-string
-      "\\*edit-indirect \\(.*\\)\\*" "  \\1" (buffer-name))))
+    (let* ((parent (overlay-buffer edit-indirect--overlay))
+           (p (overlay-start edit-indirect--overlay))
+           func-name parent-name)
+      (with-current-buffer parent
+        (save-excursion
+          (goto-char p)
+          (setq func-name (which-function))
+          (setq parent-name (buffer-name))))
+      (rename-buffer (concat func-name "•" parent-name))))
   (add-hook 'edit-indirect-after-creation-hook #'edit-indirect-buffer-rename))
 
 (use-package markdown-mode
