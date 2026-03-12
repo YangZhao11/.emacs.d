@@ -128,7 +128,7 @@ If the local binding of RET has semantic `comint-send-input', then call it."
         ;; use bracket for navigation
         ("C-[" "C-M-a") ("C-]" "C-M-e")
         ;; one-key command that makes most sense
-        ("C-`" "C-x `") ("C-#" "C-x #") ("C-z" "C-x z")
+        ("C-`" "C-x `") ("C-z" "C-x z")
         ;; C-i is interpreted as TAB, remap here.
         ("M-g C-i" "M-g i")
         ;; one-key command that maps to M-?
@@ -136,7 +136,7 @@ If the local binding of RET has semantic `comint-send-input', then call it."
         ("C-^" "M-^") ("C-&" "M-&") ("C-*" "M-*") ("C-(" "M-(") ("C-)" "M-)")
         ("C-_" "M-_") ("C-+" "M-+") ("C-=" "M-=") ("C-{" "M-{") ("C-}" "M-}")
         ("C-:" "M-:") ("C-;" "M-;") ; M-' is for abbrev, not useful in god-mode
-        ("C-|" "M-|") ("C-\\" "M-\\")
+        ("C-|" "M-|") ("C-\\" "M-\\") ("C-#" "M-#")
         ("C-<" "M-<") ("C->" "M->") ("C-," "M-,") ("C-." "M-.")))
 
 (defun z-god-mode-enabled-hook ()
