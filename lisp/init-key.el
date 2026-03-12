@@ -65,7 +65,7 @@ root-_D_iff  log _O_utgoing  _~_:revision  i_G_nore  _g_:annotate  _u_:revert
   (interactive "P")
   (if arg (call-interactively 'kill-buffer)
     (kill-buffer)))
-(keymap-global-set "C-x k" 'z-kill-buffer)
+(define-key (current-global-map) [remap kill-buffer] 'z-kill-buffer)
 (put 'z-kill-buffer 'command-semantic 'kill-buffer)
 
 ;; lisp is not a package
@@ -555,7 +555,12 @@ Toggle:
 (use-package pulsar
   :init
   (setq pulsar-iterations 5)
-  (pulsar-global-mode 1))
+  (pulsar-global-mode 1)
+  :config
+  ;; Author made weird choice to use separate variable
+  ;; `pulsar-tty-color' and replace the background with it, instead of
+  ;; supporting tty frames on that face.
+  (setq pulsar-tty-color (face-background pulsar-face)))
 
 (use-package flyspell :diminish "  ";⍹
   :commands (flyspell-mode flyspell-prog-mode)
@@ -569,7 +574,7 @@ Toggle:
   :hook (prog-mode . rainbow-delimiters-mode))
 
 (use-package autorevert
-  :diminish (auto-revert-mode . " 󰑐");↻
+  :diminish (auto-revert-mode . " 󰑐")   ;↻
   :commands (auto-revert-mode))
 
 (use-package whitespace :diminish " 󱁐 " ;␣
@@ -604,6 +609,14 @@ Toggle:
 ;; For use with avy
 (defvar ctl-j-map (make-sparse-keymap)
   "Keymap behind C-j. Called by `z-goto-char'.")
+
+;; (use-package flash
+;;   :load-path "flash"
+;;   :bind ("C-j" . flash-jump)
+;;   :config
+;;   (setq flash-mode-map ctl-j-map)
+;;   (bind-keys :map ctl-j-map
+;;              ("C-j" . flash-jump-continue)))
 
 (use-package avy :ensure :defer 5
   :bind ("C-j" . z-goto-char)
