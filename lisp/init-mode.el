@@ -709,7 +709,7 @@ _j_↧ _n_ext  _<__>_:buf    │ _l_ine _r_egion│ _w_eb          _i_ndex   │
           (goto-char p)
           (setq func-name (which-function))
           (setq parent-name (buffer-name))))
-      (rename-buffer (concat func-name "•" parent-name))))
+      (rename-buffer (concat func-name "〈" parent-name "〉"))))
   (add-hook 'edit-indirect-after-creation-hook #'edit-indirect-buffer-rename))
 
 (use-package markdown-mode
