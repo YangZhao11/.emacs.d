@@ -370,7 +370,14 @@ instead of inactivate region."
 ;; TODO: maybe use `find-sibling-file'.
   :bind ("C-x C-r" . ff-find-other-file))
 
+(defun global-text-scale-toggle2 ()
+  (interactive)
+  (global-text-scale-adjust
+   (if (< 180 (face-attribute 'default :height))
+       -4 4)))
+
 (bind-keys ("C-x C-0")                  ; unbind text-scale-adjust
+           ("C-x 5 ="   . global-text-scale-toggle2)
            ("<mouse-3>" . mode-line-previous-buffer)
            ("<mouse-4>" . mode-line-next-buffer)
            ("C-z"))

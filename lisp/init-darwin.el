@@ -1,13 +1,6 @@
 ; -*- lexical-binding: t; coding: utf-8 -*-
 
 (set-frame-font "JuliaMonoForced Nerd Font-17" nil 't)
-(defun z-frame-font-size (frame)
-  (let ((monitor-name (frame-monitor-attribute 'name)))
-    (cond ((string= monitor-name "DELL P2723DE")
-           (set-frame-font "JuliaMonoForced Nerd Font-19" nil (list frame)))
-          (:else
-           (set-frame-font "JuliaMonoForced Nerd Font-17" nil (list frame))))))
-(add-hook 'window-size-change-functions 'z-frame-font-size)
 
 (use-package ligature
   :config
