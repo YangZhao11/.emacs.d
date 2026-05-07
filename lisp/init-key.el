@@ -370,11 +370,12 @@ instead of inactivate region."
 ;; TODO: maybe use `find-sibling-file'.
   :bind ("C-x C-r" . ff-find-other-file))
 
-(defun global-text-scale-toggle2 ()
-  (interactive)
-  (global-text-scale-adjust
-   (if (< 180 (face-attribute 'default :height))
-       -4 4)))
+(defun global-text-scale-toggle2 (frame)
+  "Toggle default font between height 17 and 19 for FRAME."
+  (interactive (list (selected-frame)))
+  (let ((new (if (< 180 (face-attribute 'default :height frame))
+                 170 190)))
+      (set-face-attribute 'default frame :height new)))
 
 (bind-keys ("C-x C-0")                  ; unbind text-scale-adjust
            ("C-x 5 ="   . global-text-scale-toggle2)

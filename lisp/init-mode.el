@@ -700,6 +700,7 @@ _j_↧ _n_ext  _<__>_:buf    │ _l_ine _r_egion│ _w_eb          _i_ndex   │
              ("C-c C-c")                ; Too many conflicts
              ([remap server-edit] . edit-indirect-commit)
              ([remap kill-buffer] . edit-indirect-abort))
+  (autoload 'which-function "which-func")
   (defun edit-indirect-buffer-rename ()
     (let* ((parent (overlay-buffer edit-indirect--overlay))
            (p (overlay-start edit-indirect--overlay))
