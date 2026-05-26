@@ -57,11 +57,12 @@ With prefix arg (NO-SPACE), do not leave space before CHAR."
   "Last char used in `z-search-forward-char'")
 (defvar z-search-bound-lines 5
   "Limit number of lines to search")
-(defun z-search-forward-char (arg char)
+
+(defun z-search-forward-char (arg char &optional repeat)
   "Search for next CHAR."
   (interactive (list (prefix-numeric-value current-prefix-arg)
-                     (read-char "char: " t)))
-  (setq z-search-char char)
+                     (read-char "char: " t)
+                     t))
   (let ((direction (if (>= arg 0) 1 -1)))
     (forward-char direction)
     (unwind-protect
@@ -70,18 +71,38 @@ With prefix arg (NO-SPACE), do not leave space before CHAR."
          (and z-search-bound-lines
               (line-end-position z-search-bound-lines))
          nil arg)
-      (backward-char direction))))
+      (backward-char direction)))
+  (if repeat
+      (let ((s (char-to-string char)))
+        (setq z-search-char char)
+        (message "Repeat with %s."
+                 (propertize s 'face 'help-key-binding))
+        (setq z-search-repeat-map
+              (let ((m (make-sparse-keymap)))
+                (define-key m s 'z-search-forward-repeat)
+                m))
+        (set-transient-map z-search-repeat-map t))))
 
-(defun z-search-backward-char (arg char)
+(defun z-search-backward-char (arg char &optional repeat)
   "Search for previous CHAR."
   (interactive (list (prefix-numeric-value current-prefix-arg)
-                     (read-char "char: " t)))
-  (setq z-search-char char)
+                     (read-char "char: " t)
+                     t))
   (search-backward
    (char-to-string char)
    (and z-search-bound-lines
         (line-beginning-position (- z-search-bound-lines)))
-   nil arg))
+   nil arg)
+  (if repeat
+      (let ((s (char-to-string char)))
+        (setq z-search-char char)
+        (message "Repeat with %s."
+                 (propertize s 'face 'help-key-binding))
+        (setq z-search-repeat-map
+              (let ((m (make-sparse-keymap)))
+                (define-key m s 'z-search-backward-repeat)
+                m))
+        (set-transient-map z-search-repeat-map t))))
 
 (defun z-search-forward-repeat (arg)
   (interactive (list (prefix-numeric-value current-prefix-arg)))
@@ -91,12 +112,6 @@ With prefix arg (NO-SPACE), do not leave space before CHAR."
   (interactive (list (prefix-numeric-value current-prefix-arg)))
   (z-search-backward-char arg z-search-char))
 
-(defvar-keymap z-search-repeat-map
-  :repeat t
-  "." #'z-search-forward-repeat
-  "," #'z-search-backward-repeat)
-(put 'z-search-forward-char 'repeat-map 'z-search-repeat-map)
-(put 'z-search-backward-char 'repeat-map 'z-search-repeat-map)
 
 (defun z-shell-command-on-buffer (command
                                   &optional output-buffer replace
