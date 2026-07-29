@@ -377,7 +377,7 @@ instead of inactivate region."
                  170 190)))
       (set-face-attribute 'default frame :height new)))
 
-(bind-keys ("C-x C-0")                  ; unbind text-scale-adjust
+(bind-keys ("C-x C-0")                  ; unbind `text-scale-adjust'
            ("C-x 5 ="   . global-text-scale-toggle2)
            ("<mouse-3>" . mode-line-previous-buffer)
            ("<mouse-4>" . mode-line-next-buffer)

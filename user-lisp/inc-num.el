@@ -1,6 +1,7 @@
 ;;; inc-num -- Increment number at point -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;    Provide command `inc-num-at-point', that increases number at point.
+;;    TODO: inc-date.
 
 ;;; Code:
 

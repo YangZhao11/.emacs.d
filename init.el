@@ -1,8 +1,11 @@
 ; -*- lexical-binding: t; coding: utf-8 -*-
 
+(unless (bound-and-true-p user-lisp-directory)
+  (push (locate-user-emacs-file "user-lisp/")
+        load-path))
+
 ;; Load platform specific inits, including init-gnu-linux /
 ;; init-darwin, init-hostname.
-(push "~/.emacs.d/lisp" load-path)
 (require 'use-package)
 
 (dolist (sub (list
@@ -61,7 +64,9 @@
                                    perl--Test2 perl--Test::Harness
                                    weblint guile-file guile-line))
  '(custom-safe-themes
-   '("0325a6b5eea7e5febae709dab35ec8648908af12cf2d2b569bedc8da0a3a81c1"
+   '("42a6583a45e0f413e3197907aa5acca3293ef33b4d3b388f54fa44435a494739"
+     "3613617b9953c22fe46ef2b593a2e5bc79ef3cc88770602e7e569bbd71de113b"
+     "0325a6b5eea7e5febae709dab35ec8648908af12cf2d2b569bedc8da0a3a81c1"
      "e8bd9bbf6506afca133125b0be48b1f033b1c8647c628652ab7a2fe065c10ef0"
      "aec7b55f2a13307a55517fdf08438863d694550565dee23181d2ebd973ebd6b8"
      "78e9a3e1c519656654044aeb25acb8bec02579508c145b6db158d2cfad87c44e"
@@ -115,17 +120,18 @@
  '(package-selected-packages
    '(avy citc clang-format clipetty color-identifiers-mode consult
          consult-flycheck consult-selectrum corfu csv-mode diminish
-         dired-subtree doom-themes easy-kill edit-server embark
-         embark-consult ess eterm-256color f flx flycheck g4-gutter
-         gap-mode git-commit go-eldoc go-mode god-mode goto-chg ialign
-         ibuffer-project ido-ubiquitous ido-vertical-mode
-         imenu-anywhere imenu-list julia-mode julia-repl ligature
-         lua-mode lv magit marginalia markdown-mode modus-themes
-         orderless org-bullets pcmpl-args pulsar rainbow-delimiters
-         rainbow-identifiers rainbow-mode region-bindings-mode rg
-         scala-mode2 squery sr-speedbar string-inflection transient
-         use-package vertico visual-regexp web-mode yasnippet
-         zenburn-theme))
+         dired-subtree doom-themes easy-kill edit-indirect edit-server
+         embark embark-consult ess eterm-256color f flx flycheck
+         g4-gutter gap-mode git-commit go-eldoc go-mode god-mode
+         goto-chg ialign ibuffer-project ido-ubiquitous
+         ido-vertical-mode imenu-anywhere imenu-list indent-bars
+         julia-mode julia-repl julia-vterm ligature lua-mode lv magit
+         marginalia markdown-mode modus-themes nerd-icons orderless
+         org-bullets pcmpl-args protobuf-mode pulsar
+         rainbow-delimiters rainbow-identifiers rainbow-mode
+         region-bindings-mode rg scala-mode2 squery sr-speedbar
+         string-inflection transient use-package vertico visual-regexp
+         web-mode yasnippet zenburn-theme))
  '(pdf-view-midnight-colors '("#DCDCCC" . "#383838"))
  '(vc-annotate-background "#2B2B2B")
  '(vc-annotate-color-map
@@ -136,7 +142,10 @@
      (280 . "#6CA0A3") (300 . "#7CB8BB") (320 . "#8CD0D3")
      (340 . "#94BFF3") (360 . "#DC8CC3")))
  '(vc-annotate-very-old-color "#DC8CC3")
- '(warning-suppress-types '((use-package) (comp))))
+ '(warning-suppress-types
+   '((files missing-lexbind-cookie
+            "~/.emacs.d/elpa/diminish-0.46/diminish.el")
+     (use-package) (comp))))
 
 (put 'narrow-to-page 'disabled nil)
 (put 'narrow-to-region 'disabled nil)

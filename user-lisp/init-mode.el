@@ -395,7 +395,7 @@ Limit search to a few pages before."
              ("M-g b"   . flymake-goto-prev-error)))
 
 (use-package completion-preview
-  :diminish " ɕ"
+  :diminish " ⇥"
   :config
   (setq completion-preview-completion-styles '(orderless-first-prefix))
   (bind-keys :map completion-preview-active-mode-map
@@ -719,7 +719,7 @@ _j_↧ _n_ext  _<__>_:buf    │ _l_ine _r_egion│ _w_eb          _i_ndex   │
   :init
   (setq markdown-header-scaling 't
         markdown-header-scaling-values
-        '(1.86 1.39 1.24 1 1 0.93))
+        '(1.5 1.35 1.24 1.1 1 0.93))
   :config
   (bind-keys :map markdown-mode-map
              ("C-M-a" . markdown-previous-visible-heading)

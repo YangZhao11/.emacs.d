@@ -18,6 +18,13 @@
       delete-by-moving-to-trash 't
       default-input-method 'TeX)
 
+;; performance tweaks from https://emacsredux.com/blog/2026/04/07/stealing-from-the-best-emacs-configs/
+(setq-default bidi-display-reordering 'left-to-right)
+(setq bidi-inhibit-bpa t)
+(setq redisplay-skip-fontification-on-input t)
+(setq read-process-output-max (* 4 1024 1024)) ; 4MB
+(setq-default cursor-in-non-selected-windows nil)
+
 (defun set-frame-menubar (&optional frame)
   "Enable / disable the menubar in FRAME (default: selected
     frame). Enable only on a graphical display on mac."
