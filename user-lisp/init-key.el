@@ -803,7 +803,7 @@ in `ctl-j-map' first."
   :init
   (marginalia-mode 1)
   :config
-  (defun marginalia--buffer-status (buffer)
+  (defun z-marginalia--buffer-status (buffer)
     "Return the status of BUFFER as a string."
     (format-mode-line '((:propertize
                          (:eval (z-buffer-status))
@@ -814,9 +814,11 @@ in `ctl-j-map' first."
                         ;; Therefore we have to truncate.
                         (20 (-20 (:propertize mode-name face marginalia-mode))))
                       nil nil buffer))
+  (advice-add #'marginalia--buffer-status
+              :override #'z-marginalia--buffer-status)
 
   ;; remove some less interesting info
-  (defun marginalia--annotate-local-file (cand)
+  (defun z-marginalia--annotate-local-file (cand)
     "Annotate local file CAND."
     (when-let (attrs (file-attributes (substitute-in-file-name
                                        (marginalia--full-candidate cand))
@@ -826,6 +828,8 @@ in `ctl-j-map' first."
         :face 'marginalia-size :width -7)
        ((marginalia--time (file-attribute-modification-time attrs))
         :face 'marginalia-date :width -12))))
+  (advice-add #'marginalia--annotate-local-file
+              :override #'z-marginalia--annotate-local-file)
 
   (add-to-list 'marginalia-command-categories
                '(consult-find . file)))
@@ -861,6 +865,13 @@ in `ctl-j-map' first."
 
   (keymap-set consult-narrow-map "C-h" #'consult-narrow-help))
 
+
+;; (keymap-hint-set goto-map "
+;; Loc╶  ──  ────────╮ _`_err╮ _r_egister╮ _i_menu/_M-i_
+;; _l_ine  _g_ #:col │ _n_ext│ _␣_ mark  │ book_m_ark
+;; _c_har  _⇥_ column│ _p_rev│ gl_@_bal  │ _o_utline
+;; " :load-map 't :bind "?")
+
 (use-package consult-imenu
   :bind (("M-g i" . consult-imenu)
          ("M-g M-i" . consult-imenu-multi)))
@@ -876,7 +887,8 @@ in `ctl-j-map' first."
   :init
   ;; Better preview of registers.
   (setq register-preview-function #'consult-register-format)
-  ;; (advice-add #'register-preview :override #'consult-register-window)
+  (setq register-preview-delay 0.5)
+  (advice-add #'register-preview :override #'consult-register-window)
   )
 
 (use-package embark :ensure

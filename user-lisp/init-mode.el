@@ -108,6 +108,10 @@ useful when followed by an immediate kill."
 (use-package replace
   :bind ("M-s O" . multi-occur-in-matching-buffers)
   :config
+  (when (boundp query-replace-show-preview)
+    ;; new in 32
+    (setq query-replace-show-preview 't))
+
   (keymap-hint-set
    occur-mode-map
    (format "
@@ -414,8 +418,9 @@ Limit search to a few pages before."
   :config
   (defun z-setup-imenu-for-elisp ()
     "Recognize `use-package` in imenu, for init files."
-    (let ((emacsd (expand-file-name "~/.emacs.d/lisp/"))
-          (initel (expand-file-name "init.el" "~/.emacs.d")))
+    ;; in 31, use `user-lisp-directory'.
+    (let ((emacsd (expand-file-name "~/.emacs.d/user-lisp/"))
+          (initel (expand-file-name "init.el" user-emacs-directory)))
       (when (and buffer-file-name
                  (or (string= buffer-file-name initel)
                      (string-match (rx-to-string `(: bos ,emacsd) t)
@@ -424,16 +429,13 @@ Limit search to a few pages before."
          'imenu-generic-expression
          '("Packages" "^\\s-*(\\(use-package\\)\\s-+\\(\\(\\sw\\|\\s_\\)+\\)" 2)))))
 
-  (setq emacs-lisp-directory
-        (replace-regexp-in-string "/lisp/.*" "" (symbol-file 'elisp-mode)))
-
   ;; see use-package-core.el; somehow I still need this for emacs 30
   (font-lock-add-keywords 'emacs-lisp-mode use-package-font-lock-keywords)
 
   (defun z-elisp-mode-hook ()
     (z-setup-imenu-for-elisp)
     ; turn on read-only mode for emacs bundled elisp files
-    (when (string-prefix-p emacs-lisp-directory
+    (when (string-prefix-p lisp-directory
                           (buffer-file-name))
       (read-only-mode 1))
     (completion-preview-mode 1))
