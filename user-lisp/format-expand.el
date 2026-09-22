@@ -8,68 +8,98 @@
 ;;; not automatically add a separator.
 
 ;; util functions for date handling
-(defun date-sequence (date1 date2 &optional inc)
-    ;; return a sequence of "days", using `time-to-days' epoch
-    (number-sequence
-     (date-to-day date1)
-     (date-to-day date2)
-     inc))
+(require 'time-date)
 
-(defun format-date (str date)
-  "Format STR, replacing %-constructs with components from DATE."
-  (format-time-string str
-                      (days-to-time (- date (time-to-days 0)))))
+(defconst parse-time-short-alist
+  '((?y 1 :year 1)
+    (?m 1 :month 2)
+    ;; we do not allow mixing w and d for now, not doing math at the moment
+    (?w 7 :day 3)
+    (?d 1 :day 3)
+    (?H 1 :hour 5)
+    (?h 1 :hour 5)
+    (?M 1 :minute 6)
+    (?S 1 :second 7)
+    (?s 1 :second 8))
+  "Units for `parse-time-interval-short'. This is an alist with the unit
+letter, construct used for `make-decoded-time', and an order, which goes
+from large to smaller units."
+  )
 
-(defun format--maybe-date-to-day (x)
-  (let ((str (if (symbolp x)
-                 (symbol-name x)
-               x)))
-    (condition-case nil (date-to-day str) (error nil))))
+(defun parse-time-interval-short (string)
+  "Parse time interval in short format.
 
-(defun format--parse-date (n)
-  "Parse strings that represent date sequence.
-
-date num will be interpreted as date to date+num day.
-date date will be interpreted as date ranges (inclusive).
-optional third argument is INC
+String should be something like 1m14d, here meaning 1 month + 14 days.
+See `parse-time-short-alist' for list of units supported. We expect the
+units go from large to small, so 1M14d is an invalid input and will
+trigger an error.
 "
-  (when (or (= (length n) 2)
-            (and (= (length n) 3)
-                 (numberp (nth 2 n))))
-    (let* ((n0 (nth 0 n))
-           (n1 (nth 1 n))
-           (d0 (format--maybe-date-to-day n0))
-           (d1 (format--maybe-date-to-day n1)))
-      (cond ((and d0 (numberp n1))
-             (number-sequence d0 (+ d0 n1) (nth 2 n)))
-            ((and d0 d1)
-             (number-sequence d0 d1 (nth 2 n)))))))
+  (let ((start 0)
+        (result nil))
+    (while (string-match "\\(-?[0-9]\\)\\([a-zA-Z]\\)" string start)
+      (let* ((order 0)
+             (num (string-to-number (match-string 1 string)))
+             (char (aref (match-string 2 string) 0))
+             (entry (alist-get char parse-time-short-alist)))
+        (unless entry
+          (error "Time interval unit %c not recognized." char))
+        (when (<= (nth 2 entry) order)
+          (error "Time interval unit %c appeared out of order." char))
+        (setq order (nth 2 entry))
+        (push (list (nth 1 entry) (* (nth 0 entry) num)) result))
+      (setq start (match-end 0)))
+    (apply 'make-decoded-time (apply 'append (nreverse result)))))
 
-(defun format--parse-number (n)
-  "Parse strings to number sequence.
+(defun time-sequence (from &optional to inc)
+  "Generate a sequence of time values. The input is decoded time but output
+is encoded.
 
-   10 will be interpreted as 1 to 10.
-   1 10 will be interpreted as 1 to 10.
-   1 10 2 will be interpreted as 1 3 5 7 9."
-  (cond ((not (seq-every-p #'numberp n))
-         nil)
-        ((eq (length n) 1)
-         (number-sequence 1 (nth 0 n)))
-        ((eq (length n) 2)
-         (number-sequence (nth 0 n) (nth 1 n)))
-        ((eq (length n) 3)
-         (number-sequence (nth 0 n) (nth 1 n) (nth 2 n)))))
+FROM, TO and INC are decoded time, coming from `parse-time-string' or
+`make-decoded-time'."
+  (when (stringp from)
+    (setq from (decoded-time-set-defaults (parse-time-string from))))
+  (unless to (setq to from))
+  (when (stringp to)
+      (setq to (decoded-time-set-defaults (parse-time-string to))))
+  (unless inc (setq inc (make-decoded-time :day 1)))
+  (when (stringp inc)
+    (setq inc (parse-time-interval-short inc)))
+  (let* ((current from)
+         (target-time (encode-time to))
+         (result nil))
+    (while (not (time-less-p target-time (encode-time current)))
+      (push (encode-time current) result)
+      (setq current (decoded-time-add current inc)))
+    (nreverse result)))
 
-(defun format--parse-sequence (s)
-  (let* ((n (read (format "(%s)" s))))
-    (or (format--parse-number n)
-        (format--parse-date n)
-        (if (> (length n) 0) n)
-        (user-error "Sequence length is 0"))))
+(defun timestampp (ts)
+  "Returns non-nil if ts is a timestamp."
+  (ignore-errors (time-equal-p ts ts)))
+
+(defun valid-number-string-p (string)
+  "Return t if STRING can be parsed as a number, nil otherwise."
+  (ignore-errors
+    (let ((obj (car (read-from-string string))))
+      (numberp obj))))
+
+(defun valid-time-string-p (string)
+  "Return t if STRING can be parsed as a valid date or time, nil otherwise."
+  (and (not (valid-number-string-p string))
+       (when-let* ((parsed (ignore-errors (parse-time-string string))))
+         (not (null (ignore-errors
+                      (encode-time (decoded-time-set-defaults parsed))))))))
 
 (defun format--read-sequence (prefix)
-  "Read a sequence. With any prefix arg, prompt for lisp. With single `-'
-prefix, also prompt for a transformer."
+  "Read a sequence. With any prefix arg, prompt for lisp. Otherwise we
+accept the following formats:
+number to number [by number]
+time to time [by time-interval]
+
+If a sigle number or time is given, we follow up asking the `to' part,
+which can include an optional `by' part.
+
+The car of the result is a type; can be 'number or 'time.
+"
   (if prefix
       (let* ((exp
               (read--expression
@@ -79,21 +109,31 @@ prefix, also prompt for a transformer."
              (result
               (eval (let ((lexical-binding t)) (macroexpand-all exp))
                     t)))
-        ;; maybe add a transform option?
-        (if (eq prefix '-)
-            (let* ((transform-exp
-                   (read--expression
-                    (format "%s ▷ " (query-replace-descr (format "%s" result)))
-                    "(lambda (x) x)"))
-                   (transform (eval (let ((lexical-binding t))
-                                      (macroexpand-all transform-exp))
-                                    t)))
-              (unless (functionp transform)
-                (user-error "Transformer must be a function"))
-              (mapcar transform result))
-          result))
-    (format--parse-sequence
-     (read-from-minibuffer "Seq [from to inc]: "))))
+        (if (timestampp (car result))
+            (cons 'time result)
+          ;; 'number actually handles strings in the same formatting
+          (cons 'number result)))
+    ;; no prefix, read from-to-inc
+    (let* ((from (read-from-minibuffer "Seq from: "))
+           to inc)
+      (when-let* ((parts (split-string from " to "))
+                 ((cdr parts)))
+          (setq from (car parts))
+          (setq to (cadr parts)))
+      (unless to
+        (setq to (read-from-minibuffer "to: ")))
+      (when-let* ((parts (split-string to " by "))
+                 ((cdr parts)))
+          (setq to (car parts))
+          (setq inc (cadr parts)))
+      (if (valid-time-string-p from)
+          (cons 'time (time-sequence from to inc))
+        (cons 'number (number-sequence
+                       (string-to-number from)
+                       (string-to-number to)
+                       (if (null inc)
+                           inc
+                         (string-to-number inc))))))))
 
 (defconst format--format-str
   (let ((flags "[+ #-0]\\{0,1\\}")
@@ -134,6 +174,14 @@ Each element of FORMS corresponds to a `format'-style % form in STR."
       (error (message "Malformed sexp: %s" (substring str start))))
     (cons str (nreverse forms))))
 
+(defun format-time-string-vars (string &rest objects)
+  ;; TODO: actually implement this. Right now we just
+  (let ((val (car objects)))
+    (mapc (lambda (v) (when (not (equal val v))
+                        (warn "different time value not supported")))
+          objects))
+  (format-time-string string (car objects)))
+
 ;;;###autoload
 (defun format-expand (beg end seq)
   "Expand and repeat region as if it is a format string, using items in SEQ
@@ -166,11 +214,13 @@ Push mark if region is not active."
                (1+ e)))
          (format--read-sequence current-prefix-arg)))
   (let* ((str (filter-buffer-substring beg end t))
-         (parsed (format--parse-template str)))
+         (parsed (format--parse-template str))
+         (type (car seq))
+         (format-fun (if (eq type 'number) 'format 'format-time-string-vars)))
     (or (use-region-p) (push-mark))
-    (dolist (iter seq)
+    (dolist (iter (cdr seq))
       (insert
-       (apply 'format (car parsed)
+       (apply format-fun (car parsed)
               (mapcar (lambda (sexp)
                         (eval sexp (list (cons format-loop-variable iter))))
                       (cdr parsed)))))))
