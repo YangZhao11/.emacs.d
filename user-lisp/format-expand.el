@@ -98,7 +98,7 @@ time to time [by time-interval]
 If a sigle number or time is given, we follow up asking the `to' part,
 which can include an optional `by' part.
 
-The car of the result is a type; can be 'number or 'time.
+The car of the result is a type; can be the symbol `number' or `time'.
 "
   (if prefix
       (let* ((exp
@@ -144,7 +144,7 @@ The car of the result is a type; can be 'number or 'time.
             flags width precision character))
   "Matches format string (stuff after `%').")
 
-(defvar format-loop-variable 'x
+(defvar format-loop-variable 'i
   "Symbol used as loop variable in `format-expand'.")
 
 (defun format--parse-template (str)
@@ -175,7 +175,7 @@ Each element of FORMS corresponds to a `format'-style % form in STR."
     (cons str (nreverse forms))))
 
 (defun format-time-string-vars (string &rest objects)
-  ;; TODO: actually implement this. Right now we just
+  ;; TODO: actually implement this. Right now we just use the first value.
   (let ((val (car objects)))
     (mapc (lambda (v) (when (not (equal val v))
                         (warn "different time value not supported")))
@@ -191,7 +191,7 @@ The format string we support is exactly like what is described in
 `format', except that the field description is not supported. Instead,
 use parenthesis to indicate an expression to evaluate. For example,
 %(identity emacs-version)s should give you the version string. The `s'
-after a sexp can be omitted. In sexps, symbol `x' is available as loop
+after a sexp can be omitted. In sexps, symbol `i' is available as loop
 iterator (configurable using `format-loop-variable').
 
 BEG and END marks the format string, and defaults to active region or
@@ -203,6 +203,12 @@ format, or verbatim, or elisp expression that returns a list. When
 transform the sequence.
 
 Push mark if region is not active."
+  ;; TODO: special form %(j := form) set variable j to form, and it will be used by default in follow up %-constructs.
+  ;; special forms %(j = form) set variable j to form, and it can be referenced in other places.
+  ;; special form %(= j) reference variable j, i.e. top-level = is treated as identity.
+  ;; special form %(:= j) reference variable j, but is sticky.
+  ;; variables are like let-forms, they are evaluated at the beginning and can not reference each other, except the loop variable, and one variable can not be defined twice.
+
   (interactive
    (list (or (use-region-beginning) (line-beginning-position))
          (or (use-region-end)
