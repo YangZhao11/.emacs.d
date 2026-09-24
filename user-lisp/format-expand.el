@@ -103,7 +103,7 @@ The car of the result is a type; can be the symbol `number' or `time'.
   (if prefix
       (let* ((exp
               (read--expression
-               "Seq: "
+               "Seq lisp: "
                (format "(number-sequence 1 %d)"
                        (if (numberp prefix) prefix 4))))
              (result
@@ -121,7 +121,7 @@ The car of the result is a type; can be the symbol `number' or `time'.
           (setq from (car parts))
           (setq to (cadr parts)))
       (unless to
-        (setq to (read-from-minibuffer "to: ")))
+        (setq to (read-from-minibuffer "Seq to [by inc]: ")))
       (when-let* ((parts (split-string to " by "))
                  ((cdr parts)))
           (setq to (car parts))
@@ -148,10 +148,12 @@ The car of the result is a type; can be the symbol `number' or `time'.
   "Symbol used as loop variable in `format-expand'.")
 
 (defun format--parse-template (str)
-  "Parse % forms in STR, return a list of (STR FORMS).
+  "Parse % forms in STR, return a list of (STR VARS FORMS).
 
 Each element of FORMS corresponds to a `format'-style % form in STR."
   (let ((start 0)
+        (default-var format-loop-variable)
+        vars
         forms beg fexp)
     (condition-case nil
         (while (setq beg (string-match "%" str start))
@@ -165,14 +167,27 @@ Each element of FORMS corresponds to a `format'-style % form in STR."
             ((= ?\( (aref str start))
              (cl-destructuring-bind (sexp . end)
                  (read-from-string str start)
+               (cond ((eq (car sexp) 'setq)
+                      (unless (eq (cadr sexp) format-loop-variable)
+                        (push (cadr sexp) vars)))
+                     ((eq (car sexp) 'setq*)
+                      (unless (eq (cadr sexp) format-loop-variable)
+                        (push (cadr sexp) vars))
+                      (setcar sexp 'setq)
+                      (setq default-var (cadr sexp)))
+                     ((eq (car sexp) 'id)
+                      (setq sexp (cadr sexp)))
+                     ((eq (car sexp) 'id*)
+                      (setq default-var (cadr sexp))
+                      (setq sexp (cadr sexp))))
                (push sexp forms)
                (setq fexp (string-match format--format-str str end))
                (setq str (concat (substring str 0 start)
                                  (if (eq fexp end) "" "s")
                                  (substring str end)))))
-            (t (push format-loop-variable forms))))
+            (t (push default-var forms))))
       (error (message "Malformed sexp: %s" (substring str start))))
-    (cons str (nreverse forms))))
+    (list str vars (nreverse forms))))
 
 (defun format-time-string-vars (string &rest objects)
   ;; TODO: actually implement this. Right now we just use the first value.
@@ -194,20 +209,23 @@ use parenthesis to indicate an expression to evaluate. For example,
 after a sexp can be omitted. In sexps, symbol `i' is available as loop
 iterator (configurable using `format-loop-variable').
 
+In %() forms, the following are specially handled:
+- (setq var form) will assign var in a local environment, reset per
+  iteration.
+- (setq* var form) acts like setq, and set the default variable in
+  following %-constructs.
+- (id form) acts like identity.
+- (id* form) acts like id, and set the default variable in following
+  %-constructs.
+
 BEG and END marks the format string, and defaults to active region or
 the current line if region is not active.
 
-SEQ is read through `format--read-sequence'. Accept a [from to inc]
-format, or verbatim, or elisp expression that returns a list. When
-\\[universal-argument] prefix is specified, also prompt for a lambda to
-transform the sequence.
+SEQ is read through `format--read-sequence'. Accept from, to, inc, which
+can be specified using A to B by C format. When prefix is specified,
+accept a lisp expression.
 
 Push mark if region is not active."
-  ;; TODO: special form %(j := form) set variable j to form, and it will be used by default in follow up %-constructs.
-  ;; special forms %(j = form) set variable j to form, and it can be referenced in other places.
-  ;; special form %(= j) reference variable j, i.e. top-level = is treated as identity.
-  ;; special form %(:= j) reference variable j, but is sticky.
-  ;; variables are like let-forms, they are evaluated at the beginning and can not reference each other, except the loop variable, and one variable can not be defined twice.
 
   (interactive
    (list (or (use-region-beginning) (line-beginning-position))
@@ -221,15 +239,21 @@ Push mark if region is not active."
          (format--read-sequence current-prefix-arg)))
   (let* ((str (filter-buffer-substring beg end t))
          (parsed (format--parse-template str))
+         (format-template (car parsed))
+         (vars (cadr parsed))
+         (form-vars-env (mapc (lambda (symbol) (cons symbol nil)) vars))
+         (forms (caddr parsed))
          (type (car seq))
-         (format-fun (if (eq type 'number) 'format 'format-time-string-vars)))
+         (format-fun (if (eq type 'number) 'format 'format-time-string-vars))
+         env)
     (or (use-region-p) (push-mark))
     (dolist (iter (cdr seq))
+      (setq env (cons (cons format-loop-variable iter)
+                      form-vars-env))
       (insert
-       (apply format-fun (car parsed)
-              (mapcar (lambda (sexp)
-                        (eval sexp (list (cons format-loop-variable iter))))
-                      (cdr parsed)))))))
+       (apply format-fun format-template
+              (mapcar (lambda (sexp) (eval sexp env))
+                      forms))))))
 
 (provide 'format-expand)
 ;;; format-expand.el ends here
