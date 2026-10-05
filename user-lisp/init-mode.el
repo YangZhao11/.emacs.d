@@ -76,6 +76,7 @@ _j_↧ _J_   _d_own│ _<__>_  _(__)_ list│ _'_:goto    p_@_p │ regex:_/_ _\
          ("M-s R" . rg-menu)))
 
 (use-package isearch
+  :diminish 'isearch-mode
   :config
   (defun isearch-exit-other-end ()
     "Exit isearch, but at the other end of the search string. This is
@@ -92,9 +93,7 @@ useful when followed by an immediate kill."
              ("M->"   . isearch-end-of-buffer)
              ("C-j"   . avy-isearch))
 
-  (setq isearch-allow-motion 't)
-  (setcdr (assq 'isearch-mode minor-mode-alist)
-          '((:eval (if isearch-forward " " " ")))));»«
+  (setq isearch-allow-motion 't))
 
 (use-package format-expand
   :bind ("M-s f" . format-expand))

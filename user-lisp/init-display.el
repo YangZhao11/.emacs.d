@@ -51,7 +51,9 @@ of it."
     (propertize
      (concat
       (propertize
-       (if mortal-mode " ɪ" " ɛ") 'face tag-face)
+       (if isearch-mode (z-lighter-isearch-char)
+         (if mortal-mode " ɪ" " ɛ"))
+       'face tag-face)
       (propertize "" 'face sep-face))
      'help-echo (if m
                     "Insert mode, \\[mortal-mode-exit] to exit"
@@ -92,12 +94,16 @@ mouse-3: Describe current input method"
 
 (z-defface-with-darken god-lighter-god "#4DB0FF")
 
+(defun z-lighter-isearch-char ()
+  (if isearch-forward " " " "))       ;»«
+
 (defun z-lighter-god-mod-char ()
   (let ((m (cdr (assoc nil god-mod-alist))))
-           (cond ((string= m "C-") " ⌘")
-                 ((string= m "C-M-") "⌥⌘")
-                 ((string= m "M-") " ⌥")
-                 ('t " ?"))))
+    (cond ((string= m "C-") " ⌘")
+          ((string= m "C-M-") "⌥⌘")
+          ((string= m "M-") " ⌥")
+          ('t " ?"))))
+
 (defun z-lighter-god ()
   (let* ((s (mode-line-window-selected-p))
          (tag-face (if s 'god-lighter-god
@@ -106,7 +112,11 @@ mouse-3: Describe current input method"
                      'god-lighter-god-dark-separator)))
       (propertize
          (concat
-          (propertize (z-lighter-god-mod-char) 'face tag-face)
+          (propertize
+           (if isearch-mode
+               (z-lighter-isearch-char)
+             (z-lighter-god-mod-char))
+           'face tag-face)
           (propertize "" 'face sep-face))
          'help-echo "\\[god-mode-toggle-sticky-meta]: Sticky M- prefix\n\
 \\[god-mode-toggle-sticky-cm]: Sticky C-M- prefix")))
@@ -144,7 +154,9 @@ mouse-3: Describe current input method"
     (propertize
      (concat
       (propertize
-       (concat (z-lighter-arrow-char) "ν")
+       (if isearch-mode
+           (z-lighter-isearch-char)
+         (concat (z-lighter-arrow-char) "ν"))
        'face tag-face)
       (propertize "" 'face sep-face))
      'help-echo "View mode (\\[view-mode])")))
@@ -170,10 +182,12 @@ mouse-3: Describe current input method"
                      'god-lighter-special-dark-separator)))
     (concat
      (propertize
-         (concat
-          (z-lighter-arrow-char)
-          (z-lighter-xc-char))
-         'face tag-face)
+      (if isearch-mode
+          (z-lighter-isearch-char)
+        (concat
+         (z-lighter-arrow-char)
+         (z-lighter-xc-char)))
+      'face tag-face)
      (propertize "" 'face sep-face))))
 (setq z-lighter-special '(:eval (z-lighter-special)))
 (put 'z-lighter-special 'risky-local-variable t)
@@ -181,14 +195,14 @@ mouse-3: Describe current input method"
 (defun z-lighter ()
   "Bottom left lighter."
   (cond (god-local-mode z-lighter-god)
-                (view-mode z-lighter-view)
-                ((or (and (eq (get major-mode 'mode-class) 'special)
-                          (not (derived-mode-p 'comint-mode)))
-                     (derived-mode-p 'special-mode
-                                     'emacs-news-view-mode))
-                 z-lighter-special)
-                (current-input-method z-lighter-input-method)
-                (:else z-lighter-emacs)))
+        (view-mode z-lighter-view)
+        ((or (and (eq (get major-mode 'mode-class) 'special)
+                  (not (derived-mode-p 'comint-mode)))
+             (derived-mode-p 'special-mode
+                             'emacs-news-view-mode))
+         z-lighter-special)
+        (current-input-method z-lighter-input-method)
+        (:else z-lighter-emacs)))
 (defvar z-lighter '(:eval (z-lighter))
   "Leftmost lighter in mode line")
 (put 'z-lighter 'risky-local-variable t)
