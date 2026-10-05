@@ -94,8 +94,15 @@ mouse-3: Describe current input method"
 
 (z-defface-with-darken god-lighter-god "#4DB0FF")
 
+;; TODO: add support for password mode. Unfortunately read-passwd is
+;; hard-coded to modify global-mode-string, so I need to ignore that
+;; somehow before adding password indicator to the lighter.
+
 (defun z-lighter-isearch-char ()
-  (if isearch-forward " " " "))       ;»«
+  (concat
+   (if (eq overriding-terminal-local-map god-mode-isearch-map)
+       "⌘" " ")
+   (if isearch-forward "" "")))       ;»«
 
 (defun z-lighter-god-mod-char ()
   (let ((m (cdr (assoc nil god-mod-alist))))
@@ -226,8 +233,9 @@ mouse-3: Describe current input method"
 ; mode-line-window-dedicated
 " " ;mode-line-frame-identification
  mode-line-buffer-identification "   " mode-line-position
- "  " mode-line-modes mode-line-misc-info
+ "  " mode-line-modes
  mode-line-format-right-align
+ mode-line-misc-info
  (vc-mode (:eval (mode-line-vc-mode-transform vc-mode)))
  ;;(project-mode-line project-mode-line-format)
  (:eval (mode-line-window-side))
