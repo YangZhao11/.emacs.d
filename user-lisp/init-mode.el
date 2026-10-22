@@ -879,7 +879,8 @@ _j_↧  _⇧_/_⇥_:buttons  _I_:lispref  _c_ustomize
           ("face" ,#'facep ,(lambda (s _b _f) (describe-face s)))))
   )
 
-(use-package server :diminish (server-buffer-clients . " #")
+;; :diminish (server-buffer-clients . " #")
+(use-package server
   :init (add-hook 'after-init-hook 'server-start)
   ;; :config
   ;; (setq server-use-tcp 't)
@@ -926,6 +927,7 @@ _j_↧  _⇧_/_⇥_:buttons  _I_:lispref  _c_ustomize
             (or (< l 5)
                 (yes-or-no-p (format "Really view %d files?" l))))
       (dolist (fname (seq-reverse args) args)
+        ;; TODO: maybe trigger tmux screen switch in exit action.
         (view-file fname))))
   (defalias 'shell-mode:bat 'shell-mode:more)
 
