@@ -8,7 +8,7 @@
   "Face for god-lighter"
   :group 'god)
 
-(defmacro z-defface-with-darken (face col)
+(defmacro z-defface-with-darken (face col &optional inherit)
   "Define two faces, FACE and FACE-dark where bg is col and a dark version
 of it."
   (let ((face-dark (intern
@@ -18,9 +18,10 @@ of it."
         (face-dark-separator (intern
                               (concat (symbol-name face) "-dark-separator")))
         (dark-col (doom-blend col "#353535" .5)))
+    (setq inherit (or inherit 'god-lighter))
     `(progn
        (defface ,face
-         '((t :inherit god-lighter :background ,col))
+         '((t :inherit ,inherit :background ,col))
          ,(concat "Face for " (symbol-name face))
          :group 'god )
        (defface ,face-separator
@@ -28,7 +29,7 @@ of it."
          ,(concat "Separator face for " (symbol-name face)))
        (defface ,face-dark
          ;; blend with (face-background 'mode-line-inactive)
-         '((t :inherit god-lighter :background ,dark-col))
+         '((t :inherit ,inherit :background ,dark-col))
          ,(concat "Face for " (symbol-name face-dark))
          :group 'god)
        (defface ,face-dark-separator
@@ -223,6 +224,31 @@ mouse-3: Describe current input method"
           "%F")))
 (put 'mode-line-frame-name 'risky-local-variable 't)
 
+(defface mode-line-buffer-name-base
+  '((t :inherit mode-line :foreground "#284460"
+       :weight bold))
+  "Face for god-lighter"
+  :group 'mode-line-faces)
+(z-defface-with-darken
+ mode-line-buffer "#8Fb28F" mode-line-buffer-name-base)
+(defun mode-line-buffer-name ()
+  (let* ((s (mode-line-window-selected-p))
+         (tag-face (if s 'mode-line-buffer
+                     'mode-line-buffer-dark))
+         (sep-face (if s 'mode-line-buffer-separator
+                     'mode-line-buffer-dark-separator)))
+    (concat
+     (propertize "" 'face sep-face)
+     (propertize
+      (format-mode-line mode-line-buffer-identification) 'face tag-face)
+     (propertize "" 'face sep-face))))
+
+(setq-default mode-line-buffer-identification
+  (propertized-buffer-identification "%b"))
+(setq mode-line-buffer-name
+      '(:eval (mode-line-buffer-name)))
+(put 'mode-line-buffer-name 'risky-local-variable t)
+
 (setq-default mode-line-format
 '("%e"
  (:eval z-lighter)
@@ -232,7 +258,8 @@ mouse-3: Describe current input method"
  mode-line-remote
 ; mode-line-window-dedicated
 " " ;mode-line-frame-identification
- mode-line-buffer-identification "   " mode-line-position
+mode-line-buffer-name ;mode-line-buffer-identification
+"   " mode-line-position
  "  " mode-line-modes
  mode-line-format-right-align
  mode-line-misc-info
@@ -241,7 +268,8 @@ mouse-3: Describe current input method"
  (:eval (mode-line-window-side))
  (:eval (mode-line-window-state))
 ; mode-line-frame-name
-))
+ ))
+
 (setq project-mode-line 't)
 ;(setq project-mode-line-face 'font-lock-comment-face)
 
