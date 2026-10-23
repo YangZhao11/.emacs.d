@@ -224,19 +224,28 @@ mouse-3: Describe current input method"
           "%F")))
 (put 'mode-line-frame-name 'risky-local-variable 't)
 
-(defface mode-line-buffer-name-base
-  '((t :inherit mode-line :foreground "#284460"
-       :weight bold))
-  "Face for god-lighter"
-  :group 'mode-line-faces)
-(z-defface-with-darken
- mode-line-buffer "#8Fb28F" mode-line-buffer-name-base)
+
+(defface mode-line-buffer
+  '((t :inherit mode-line-active :inverse-video t :weight bold))
+  "Face for mode-line buffer tag" :group 'mode-line-faces)
+(let ((inactive-fg (doom-blend
+                    (face-foreground 'mode-line-inactive) "#353535" .7))
+      (inactive-bg (doom-blend
+                    (face-background 'mode-line-inactive) "#353535" .7)))
+  (defface mode-line-buffer-inactive
+    `((t :inherit mode-line :weight bold
+         :background ,inactive-fg :foreground ,inactive-bg))
+    "Face for mode-line buffer tag" :group 'mode-line-faces)
+  (defface mode-line-buffer-inactive-separator
+    `((t :inherit mode-line-inactive
+         :foreground ,inactive-fg :background ,inactive-bg))
+    "Face for mode-line buffer tag" :group 'mode-line-faces))
 (defun mode-line-buffer-name ()
   (let* ((s (mode-line-window-selected-p))
          (tag-face (if s 'mode-line-buffer
-                     'mode-line-buffer-dark))
-         (sep-face (if s 'mode-line-buffer-separator
-                     'mode-line-buffer-dark-separator)))
+                     'mode-line-buffer-inactive))
+         (sep-face (if s 'mode-line-active
+                     'mode-line-buffer-inactive-separator)))
     (concat
      (propertize "" 'face sep-face)
      (propertize
