@@ -268,7 +268,67 @@ _u_pgradable  _v_ersion  _N_ame/desc
              ("s" . consult-line)
              ("j" . scroll-up-command)
              ("k" . scroll-down-command))
-  (put 'list-packages 'command-semantic 'display-buffer))
+  (put 'list-packages 'command-semantic 'display-buffer)
+
+
+  (defun z-package-menu--set-mode-line-format ()
+  "Display package-menu mode-line."
+  (when-let* ((buf (get-buffer "*Packages*"))
+              ((buffer-live-p buf)))
+    (with-current-buffer buf
+      (setq mode-line-window-state ;package-menu-mode-line-info
+            (let ((installed 0)
+                  (new 0)
+                  (total (length package-archive-contents))
+                  (to-upgrade (length (package-menu--find-upgrades)))
+                  (total-help "Total number of packages of all package archives")
+                  (installed-help "Total number of packages installed")
+                  (upgrade-help "Total number of packages to upgrade")
+                  (new-help "Total number of packages added recently"))
+
+              (save-excursion
+                (goto-char (point-min))
+                (while (not (eobp))
+                  (let ((status (package-menu-get-status)))
+                    (cond
+                     ((member status
+                              '("installed" "dependency" "unsigned"))
+                      (setq installed (1+ installed)))
+                     ((equal status "new")
+                      (setq new (1+ new)))))
+                  (forward-line)))
+
+              (setq installed (number-to-string installed))
+              (setq total (number-to-string total))
+              (setq to-upgrade (number-to-string to-upgrade))
+
+              (list
+               ;; " ["
+               (propertize "Σ " 'help-echo total-help)
+               (propertize total
+                           'help-echo total-help
+                           'face 'package-mode-line-total)
+               " ❘ "
+               (propertize "ℹ " 'help-echo installed-help)
+               (propertize installed
+                           'help-echo installed-help
+                           'face 'package-mode-line-installed)
+               " ❘ "
+               (propertize "⇡ " 'help-echo upgrade-help)
+               (propertize to-upgrade
+                           'help-echo upgrade-help
+                           'face 'package-mode-line-to-upgrade)
+               (when (> new 0)
+                 (concat
+                  " ❘ "
+                  (propertize "★ " 'help-echo new-help)
+                  (propertize (number-to-string new)
+                              'help-echo new-help
+                              'face 'package-mode-line-new)))
+               ;;"] "
+               ))))))
+  (advice-add #'package-menu--set-mode-line-format
+              :override #'z-package-menu--set-mode-line-format))
 
 (use-package smerge-mode
   :diminish (smerge-mode . " ")
@@ -711,7 +771,7 @@ _j_↧ _n_ext  _<__>_:buf    │ _l_ine _r_egion│ _w_eb          _i_ndex   │
           (goto-char p)
           (setq func-name (which-function))
           (setq parent-name (buffer-name))))
-      (rename-buffer (concat func-name "〈" parent-name "〉"))))
+      (rename-buffer (concat parent-name "/" func-name))))
   (add-hook 'edit-indirect-after-creation-hook #'edit-indirect-buffer-rename))
 
 (use-package markdown-mode

@@ -23,18 +23,20 @@ of it."
        (defface ,face
          '((t :inherit ,inherit :background ,col))
          ,(concat "Face for " (symbol-name face))
-         :group 'god )
+         :group 'mode-line-faces)
        (defface ,face-separator
          '((t :inherit mode-line-active :foreground ,col))
-         ,(concat "Separator face for " (symbol-name face)))
+         ,(concat "Separator face for " (symbol-name face))
+         :group 'mode-line-faces)
        (defface ,face-dark
          ;; blend with (face-background 'mode-line-inactive)
          '((t :inherit ,inherit :background ,dark-col))
          ,(concat "Face for " (symbol-name face-dark))
-         :group 'god)
+         :group 'mode-line-faces)
        (defface ,face-dark-separator
          '((t :inherit mode-line-inactive :foreground ,dark-col))
-         ,(concat "Separator face for " (symbol-name face-dark))))))
+         ,(concat "Separator face for " (symbol-name face-dark))
+         :group 'mode-line-faces))))
 
 (z-defface-with-darken god-lighter-emacs "#90E090")
 (z-defface-with-darken god-lighter-mortal "#88E0C0")
@@ -229,9 +231,9 @@ mouse-3: Describe current input method"
   '((t :inherit mode-line-active :inverse-video t :weight bold))
   "Face for mode-line buffer tag" :group 'mode-line-faces)
 (let ((inactive-fg (doom-blend
-                    (face-foreground 'mode-line-inactive) "#353535" .7))
+                    (face-foreground 'mode-line-inactive nil t) "#353535" .7))
       (inactive-bg (doom-blend
-                    (face-background 'mode-line-inactive) "#353535" .7)))
+                    (face-background 'mode-line-inactive nil t) "#353535" .7)))
   (defface mode-line-buffer-inactive
     `((t :inherit mode-line :weight bold
          :background ,inactive-fg :foreground ,inactive-bg))
@@ -320,9 +322,23 @@ mode-line-buffer-name ;mode-line-buffer-identification
 
 (z-defface-with-darken mode-line-pinned "#2AAD7D")
 (z-defface-with-darken mode-line-project "#0F6DD9")
+(defvar-local mode-line-window-state nil
+  "Rightmost window state construct")
+(put 'mode-line-window-state 'risky-local-variable t)
+
 (defun mode-line-window-state ()
   "Mode line string for window state, including dedicated, project."
   (cond
+   (mode-line-window-state
+     (let* ((str (format-mode-line mode-line-window-state))
+            (s (mode-line-window-selected-p))
+            (tag-face (if s 'mode-line-project
+                        'mode-line-project-dark))
+            (sep-face (if s 'mode-line-project-separator
+                        'mode-line-project-dark-separator)))
+       (concat
+        (propertize "" 'face sep-face)
+        (propertize str 'face tag-face))))
    ((or (window-dedicated-p)
         (window-parameter (selected-window) 'window-role))
     (let* ((str (cond ((window-dedicated-p)
