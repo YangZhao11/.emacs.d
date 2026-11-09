@@ -37,6 +37,13 @@
 
 (repeat-mode 1)
 
+(use-package repeat-select-edit
+  :bind ("C-." . repeat-select-edit)
+  :config
+  (put 'mortal-mode 'group-edit-start t)
+  (put 'mortal-mode-exit 'group-edit-end t)
+  )
+
 (use-package kmacro
   :config
   (setcdr (assq 'defining-kbd-macro minor-mode-alist)

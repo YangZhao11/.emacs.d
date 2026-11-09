@@ -137,7 +137,8 @@ If the local binding of RET has semantic `comint-send-input', then call it."
         ("C-_" "M-_") ("C-+" "M-+") ("C-=" "M-=") ("C-{" "M-{") ("C-}" "M-}")
         ("C-:" "M-:") ("C-;" "M-;") ; M-' is for abbrev, not useful in god-mode
         ("C-|" "M-|") ("C-\\" "M-\\") ("C-#" "M-#")
-        ("C-<" "M-<") ("C->" "M->") ("C-," "M-,") ("C-." "M-.")))
+        ("C-<" "M-<") ("C->" "M->"); ("C-," "M-,") ("C-." "M-.")
+))
 
 (defun z-god-mode-enabled-hook ()
   (mortal-mode 0)
