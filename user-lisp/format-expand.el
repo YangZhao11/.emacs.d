@@ -23,8 +23,7 @@
     (?s 1 :second 8))
   "Units for `parse-time-interval-short'. This is an alist with the unit
 letter, construct used for `make-decoded-time', and an order, which goes
-from large to smaller units."
-  )
+from large to smaller units.")
 
 (defun parse-time-interval-short (string)
   "Parse time interval in short format.
@@ -89,6 +88,35 @@ FROM, TO and INC are decoded time, coming from `parse-time-string' or
          (not (null (ignore-errors
                       (encode-time (decoded-time-set-defaults parsed))))))))
 
+(defun number-sequence-str (from &optional to inc)
+  "Like `number-sequence', but takes string input"
+  (number-sequence (string-to-number from)
+                   (and to (string-to-number to))
+                   (and inc (string-to-number inc))))
+
+;; TODO: use this
+(defvar format-seq-type-alist
+  '((time
+     ;; non-nil if input can be interpreted as time
+     :valid-string-p valid-time-string-p
+     ;; non-nil if value is a time
+     :valid-value-p timestampp
+     ;; default inc string
+     :default-inc-string "1d"
+     ;; sequence function taking from, to, inc, as string.
+     :seq-fun time-sequence
+     ;; format
+     :format-fun format-time-string-vars)
+    (number
+    :valid-string-p valid-number-string-p
+    :valid-value-p numberp
+    :default-inc-string "1"
+    :seq-fun number-sequence-str
+    :format-fun format)))
+
+;; TODO: support page-number style input like 3-5,8,11-20. Maybe 3-5/2
+;; means 3 to 5 by 2? This would only work for numbers, not for time.
+;; This is simply another separator.
 (defun format--read-sequence (prefix)
   "Read a sequence. With any prefix arg, prompt for lisp. Otherwise we
 accept the following formats:
@@ -114,14 +142,16 @@ The car of the result is a type; can be the symbol `number' or `time'.
           ;; 'number actually handles strings in the same formatting
           (cons 'number result)))
     ;; no prefix, read from-to-inc
-    (let* ((from (read-from-minibuffer "Seq from: "))
-           to inc)
+    (let* (from to inc)
+      (setq from (read-from-minibuffer "Seq from: "))
       (when-let* ((parts (split-string from " to "))
                  ((cdr parts)))
           (setq from (car parts))
           (setq to (cadr parts)))
       (unless to
-        (setq to (read-from-minibuffer "Seq to [by inc]: ")))
+        (let* ((default-inc (if (valid-number-string-p from) "1" "1d"))
+              (prompt (format "Seq to [by %s]: " default-inc)))
+          (setq to (read-from-minibuffer prompt))))
       (when-let* ((parts (split-string to " by "))
                  ((cdr parts)))
           (setq to (car parts))
